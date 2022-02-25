@@ -3,7 +3,7 @@ import TokenService from './token.service';
 
 class AuthService {
   login(creadentials) {
-    return api.post('auth/login', creadentials).then((response) => {
+    return api.post('/auth/login', creadentials).then((response) => {
       if (response.data) {
         TokenService.setAuthInfo(response.data);
       }

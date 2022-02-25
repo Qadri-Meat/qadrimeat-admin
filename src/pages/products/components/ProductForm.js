@@ -162,28 +162,7 @@ const ProductForm = ({ preloadedValues }) => {
             helperText={errors?.shortDescription?.message}
           />
         </Grid>
-        <Grid item md={4} xs={12}>
-          <Input
-            ref={register}
-            id="fullDescriptionGerman"
-            type="text"
-            label="Full Description German"
-            name="fullDescriptionGerman"
-            error={!!errors.fullDescriptionGerman}
-            helperText={errors?.fullDescriptionGerman?.message}
-          />
-        </Grid>
-        <Grid item md={4} xs={12}>
-          <Input
-            ref={register}
-            id="shortDescriptionGerman"
-            type="text"
-            label="Short Description German"
-            name="shortDescriptionGerman"
-            error={!!errors.shortDescriptionGerman}
-            helperText={errors?.shortDescriptionGerman?.message}
-          />
-        </Grid>
+
         <Grid item md={4} xs={12}>
           <SelectInput
             ref={register}
@@ -198,9 +177,9 @@ const ProductForm = ({ preloadedValues }) => {
             error={!!errors.category}
             helperText={errors?.category?.message}
           >
-            <MenuItem value="tags">Tags</MenuItem>
-            <MenuItem value="cards">Cards</MenuItem>
-            <MenuItem value="keychains">Keychains</MenuItem>
+            <MenuItem value="chicken">Chicken</MenuItem>
+            <MenuItem value="mutton">Mutton</MenuItem>
+            <MenuItem value="beef">Beef</MenuItem>
           </SelectInput>
         </Grid>
         <Grid item md={2} xs={12}>

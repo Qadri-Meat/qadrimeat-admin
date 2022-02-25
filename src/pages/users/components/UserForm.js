@@ -13,11 +13,7 @@ import Loader from 'components/Loader/Loader';
 import Message from 'components/Message/Message';
 
 const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required(),
-  password: yup.string().required(),
+  email: yup.string().email().required(),
   username: yup.string().required(),
   role: yup.string().required(),
 });
@@ -84,17 +80,6 @@ const UserForm = ({ preloadedValues }) => {
             name="email"
             error={!!errors.email}
             helperText={errors?.email?.message}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <Input
-            ref={register}
-            id="password"
-            type="password"
-            label="Password"
-            name="password"
-            error={!!errors.password}
-            helperText={errors?.password?.message}
           />
         </Grid>
         <Grid item xs={4}>

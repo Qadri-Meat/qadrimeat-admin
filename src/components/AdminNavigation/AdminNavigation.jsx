@@ -50,7 +50,7 @@ const AdminNavigation = (props) => {
           component="h1"
           align="center"
         >
-          &copy; Wiz
+          &copy; QADRI MEAT
           <span>Admin</span>
         </Typography>
       </div>

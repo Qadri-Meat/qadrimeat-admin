@@ -2,11 +2,11 @@ import api from './api';
 
 class PlatformService {
   getAll(page, limit) {
-    return api.get(`platforms?page=${page}&limit=${limit}`);
+    return api.get(`/platforms?page=${page}&limit=${limit}`);
   }
 
   get(id) {
-    return api.get(`platforms/${id}`);
+    return api.get(`/platforms/${id}`);
   }
 
   create(data) {
@@ -17,18 +17,20 @@ class PlatformService {
     };
 
     const formData = new FormData();
-    Object.entries(data).forEach((entry) => {
-      const [key, value] = entry;
-      if (key === 'image') {
-        if (value[0]) {
-          formData.append('image', value[0]);
-        }
-      } else {
-        formData.append(key, value);
-      }
-    });
+    formData.append('category', data.category);
+    formData.append('title', data.title);
+    formData.append('headline', data.headline);
+    formData.append('webBaseURL', data.webBaseURL);
+    formData.append('iOSBaseURL', data.iOSBaseURL);
+    formData.append('androidBaseURL', data.androidBaseURL);
+    formData.append('packageName', data.packageName);
+    formData.append('isUrl', data.isUrl);
+    formData.append('isContact', data.isContact);
+    if (data.image[0]) {
+      formData.append('image', data.image[0]);
+    }
 
-    return api.post('platforms/', formData, config);
+    return api.post('/platforms/', formData, config);
   }
 
   update(id, data) {
@@ -39,22 +41,23 @@ class PlatformService {
     };
 
     const formData = new FormData();
-    Object.entries(data).forEach((entry) => {
-      const [key, value] = entry;
-      if (key === 'image') {
-        if (value[0]) {
-          formData.append('image', value[0]);
-        }
-      } else {
-        formData.append(key, value);
-      }
-    });
+    formData.append('title', data.title);
+    formData.append('headline', data.headline);
+    formData.append('webBaseURL', data.webBaseURL);
+    formData.append('iOSBaseURL', data.iOSBaseURL);
+    formData.append('androidBaseURL', data.androidBaseURL);
+    formData.append('packageName', data.packageName);
+    formData.append('isUrl', data.isUrl);
+    formData.append('isContact', data.isContact);
+    if (data.image[0]) {
+      formData.append('image', data.image[0]);
+    }
 
-    return api.patch(`platforms/${id}`, formData, config);
+    return api.patch(`/platforms/${id}`, formData, config);
   }
 
   delete(id) {
-    return api.delete(`platforms/${id}`);
+    return api.delete(`/platforms/${id}`);
   }
 }
 

@@ -135,6 +135,7 @@ const InvoicePage = (props) => {
                                       item.image.length > 0
                                         ? ''
                                         : process.env.REACT_APP_API_URL +
+                                          '/uploads/' +
                                           item.image[0]
                                     }
                                   />
@@ -181,8 +182,12 @@ const InvoicePage = (props) => {
 
             <div className="text-dark mt-5 mb-5 text-center small">
               by :{' '}
-              <a className="text-dark" target="_blank" href="https://mywiz.eu">
-                Wiz (mywiz.eu)
+              <a
+                className="text-dark"
+                target="_blank"
+                href="http://qadrimeat.com"
+              >
+                QADRI MEAT (qadrimeat.com)
               </a>
             </div>
           </div>

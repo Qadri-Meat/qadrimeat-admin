@@ -5,7 +5,6 @@ import { DashboardPageConfig } from '../pages/dashboard/DashboardPageConfig';
 import { UsersPageConfig } from '../pages/users/UsersPageConfig';
 import { ProductsPageConfig } from '../pages/products/ProductsPageConfig';
 import { OrdersPageConfig } from '../pages/orders/OrdersPageConfig';
-import { CategoriesPageConfig } from '../pages/categories/CategoriesPageConfig';
 import { LoginPageConfig } from '../pages/auth/login/LoginPageConfig';
 import { Error404PageConfig } from '../pages/errors/404/Error404PageConfig';
 import { Error500PageConfig } from '../pages/errors/500/Error500PageConfig';
@@ -16,7 +15,6 @@ const routeConfigs = [
   ...UsersPageConfig.routes,
   ...OrdersPageConfig.routes,
   ...ProductsPageConfig.routes,
-  ...CategoriesPageConfig.routes,
   ...LoginPageConfig.routes,
   ...Error404PageConfig.routes,
   ...Error500PageConfig.routes,

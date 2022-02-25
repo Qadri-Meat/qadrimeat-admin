@@ -13,10 +13,7 @@ import Loader from '../../../components/Loader/Loader';
 import { login } from 'state/ducks/auth/actions';
 
 const schema = yup.object().shape({
-  email: yup
-    .string()
-    .email()
-    .required(),
+  email: yup.string().email().required(),
   password: yup.string().required(),
 });
 
@@ -119,7 +116,7 @@ const LoginPage = (props) => {
             </Button>
           </div>
         </Form>
-        <Typography variant="caption">&copy; Wiz | Admin</Typography>
+        <Typography variant="caption">&copy; QADRI MEAT | Admin</Typography>
       </div>
     </div>
   );

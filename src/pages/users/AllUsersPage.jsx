@@ -127,14 +127,14 @@ const AllUsersPage = (props) => {
           </Typography>
         </Grid>
         <Grid item>
-          <Button
+          {/* <Button
             onClick={() => history.push('/users/add-user')}
             variant="outlined"
             color="primary"
             size="small"
           >
             Add User
-          </Button>
+          </Button> */}
         </Grid>
       </Grid>
       <AdminBreadcrumbs path={history} />

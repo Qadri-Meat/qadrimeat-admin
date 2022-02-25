@@ -71,8 +71,8 @@ export default function OrderPageRightPanels() {
                   </p>
                   <p>
                     <strong>Email: </strong>{' '}
-                    <a href={`mailto:${selectedOrder.shippingDetails.email}`}>
-                      {selectedOrder.user.email}
+                    <a href={`mailto:${selectedOrder.email}`}>
+                      {selectedOrder.email}
                     </a>
                   </p>
                   <p>

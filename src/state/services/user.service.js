@@ -2,23 +2,23 @@ import api from './api';
 
 class UserService {
   getAll(page, limit) {
-    return api.get(`users?page=${page}&limit=${limit}`);
+    return api.get(`/users?page=${page}&limit=${limit}`);
   }
 
   get(id) {
-    return api.get(`users/${id}`);
+    return api.get(`/users/${id}`);
   }
 
   create(data) {
-    return api.post('users', data);
+    return api.post('/users', data);
   }
 
   update(id, data) {
-    return api.patch(`users/${id}`, data);
+    return api.patch(`/users/${id}`, data);
   }
 
   delete(id) {
-    return api.delete(`users/${id}`);
+    return api.delete(`/users/${id}`);
   }
 
   // deleteAll() {

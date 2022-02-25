@@ -23,14 +23,6 @@ const navigationConfig = [
         exact: true,
       },
       {
-        id: 'categories',
-        title: 'Categories',
-        type: 'item',
-        icon: 'category',
-        url: '/categories',
-        exact: true,
-      },
-      {
         id: 'products',
         title: 'Products',
         type: 'item',
