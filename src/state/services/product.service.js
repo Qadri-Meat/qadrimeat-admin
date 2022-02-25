@@ -19,9 +19,9 @@ class ProductService {
     Object.entries(data).forEach((entry) => {
       const [key, value] = entry;
       if (key === 'image') {
-        if (value[0]) {
-          formData.append('image', value[0]);
-        }
+        value.forEach((item) => {
+          formData.append(key, item);
+        });
       } else {
         formData.append(key, value);
       }
@@ -40,9 +40,9 @@ class ProductService {
     Object.entries(data).forEach((entry) => {
       const [key, value] = entry;
       if (key === 'image') {
-        if (value[0]) {
-          formData.append('image', value[0]);
-        }
+        value.forEach((item) => {
+          formData.append(key, item);
+        });
       } else {
         formData.append(key, value);
       }
