@@ -13,7 +13,7 @@ import Loader from '../../../components/Loader/Loader';
 import { login } from 'state/ducks/auth/actions';
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
+  phone: yup.string().required(),
   password: yup.string().required(),
 });
 
@@ -55,7 +55,7 @@ const LoginPage = (props) => {
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
   const { register, handleSubmit, errors } = useForm({
-    defaultValues: { email: data.email, password: data.password },
+    defaultValues: { phone: data.phone, password: data.password },
     mode: 'onBlur',
     resolver: yupResolver(schema),
   });
@@ -87,12 +87,12 @@ const LoginPage = (props) => {
           {message && <Message severity="error">{message}</Message>}
           <Input
             ref={register}
-            id="email"
-            type="text"
-            label="Email"
-            name="email"
-            error={!!errors.email}
-            helperText={errors?.email?.message}
+            id="phone"
+            type="tel"
+            label="Phone"
+            name="phone"
+            error={!!errors.phone}
+            helperText={errors?.phone?.message}
           />
           <Input
             ref={register}
