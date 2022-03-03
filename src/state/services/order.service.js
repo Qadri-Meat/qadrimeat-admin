@@ -12,6 +12,9 @@ class OrderService {
   update(id, data) {
     return api.patch(`/orders/${id}`, data);
   }
+  addTransaction(id, data) {
+    return api.patch(`/orders/${id}/transactions`, data);
+  }
 }
 
 export default new OrderService();

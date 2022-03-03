@@ -6,39 +6,38 @@ export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case types.ORDER_REQUEST:
+    case types.TRANSACTION_REQUEST:
       return {
         ...state,
         loading: true,
       };
-    case types.ORDER_FAIL:
+    case types.TRANSACTION_FAIL:
       return {
         ...state,
         loading: false,
         error: payload,
       };
-    case types.GET_ORDERS_SUCCESS:
+    case types.CREATE_TRANSACTION_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case types.GET_TRANSACTIONS_SUCCESS:
       return {
         loading: false,
         ...payload,
       };
-    case types.UPDATE_ORDER_SUCCESS:
-      var totalPaid = payload.transactions.reduce(function (a, b) {
-        return a + b.amount;
-      }, 0);
+    case types.UPDATE_TRANSACTION_SUCCESS:
       return {
         loading: false,
-        selectedOrder: payload,
+        selectedTransaction: payload,
       };
-    case types.GET_ORDER_SUCCESS:
-      var totalPaid = payload.transactions.reduce(function (a, b) {
-        return a + b.amount;
-      }, 0);
+    case types.GET_TRANSACTION_SUCCESS:
       return {
         loading: false,
-        selectedOrder: { ...payload, totalPaid: totalPaid || 0 },
+        selectedTransaction: payload,
       };
-    case types.ORDER_RESET:
+    case types.TRANSACTION_RESET:
       return {};
     default:
       return state;

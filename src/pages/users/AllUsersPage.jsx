@@ -41,8 +41,8 @@ const columns = [
     },
   },
   {
-    name: 'email',
-    label: 'Email',
+    name: 'phone',
+    label: 'Phone',
     options: {
       filter: true,
       sort: false,
@@ -57,8 +57,8 @@ const columns = [
     },
   },
   {
-    name: 'isEmailVerified',
-    label: 'Email Verified',
+    name: 'isPhoneVerified',
+    label: 'Verified',
     options: {
       filter: false,
       customBodyRender: (value, tableMeta, updateValue) => {

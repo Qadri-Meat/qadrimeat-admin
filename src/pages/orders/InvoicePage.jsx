@@ -87,17 +87,23 @@ const InvoicePage = (props) => {
 
                       <div className="col-md-6 text-right">
                         <p className="font-weight-bold mb-4">Payment Details</p>
-                        <p className="mb-1">
+                        {/* <p className="mb-1">
                           <span className="text-muted">ID: </span>{' '}
-                          {selectedOrder.paymentResult.id}
-                        </p>
+                          {selectedOrder.paymentResult
+                            ? selectedOrder.paymentResult.id
+                            : ''}
+                        </p> */}
                         <p className="mb-1">
                           <span className="text-muted">Payment Type: </span>
-                          {selectedOrder.paymentMethod}
+                          {selectedOrder.paymentResult
+                            ? selectedOrder.paymentMethod
+                            : ''}
                         </p>
                         <p className="mb-1">
                           <span className="text-muted">Email: </span>{' '}
-                          {selectedOrder.paymentResult.emailAddress}
+                          {selectedOrder.paymentResult
+                            ? selectedOrder.paymentResult.emailAddress
+                            : ''}
                         </p>
                       </div>
                     </div>

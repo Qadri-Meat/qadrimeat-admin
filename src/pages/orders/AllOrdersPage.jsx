@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useDebugValue, useEffect, useState } from 'react';
 import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
 import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
@@ -24,11 +24,10 @@ const useStyles = makeStyles((theme) => ({
 
 const columns = [
   {
-    name: 'id',
-    label: 'Id',
+    name: 'phone',
+    label: 'Phone',
     options: {
-      filter: true,
-      sort: true,
+      filter: false,
     },
   },
   {
@@ -37,17 +36,22 @@ const columns = [
     options: {
       filter: false,
       customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value.name}</>;
+        return <>{value.firstName + ' ' + value.lastName}</>;
       },
     },
   },
   {
-    name: 'createdAt',
-    label: 'Date',
+    name: 'deliveryTime',
+    label: 'Delivery Time',
     options: {
       filter: false,
       customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value.substring(0, 10)}</>;
+        return (
+          <>
+            {new Date(value).toLocaleDateString()},{' '}
+            {new Date(value).toLocaleTimeString()}
+          </>
+        );
       },
     },
   },
@@ -60,22 +64,32 @@ const columns = [
     },
   },
   {
+    name: 'approvedAt',
+    label: 'Approved',
+    options: {
+      filter: false,
+      customBodyRender: (value, tableMeta, updateValue) => {
+        return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+      },
+    },
+  },
+  {
+    name: 'deliveredAt',
+    label: 'Delivered',
+    options: {
+      filter: false,
+      customBodyRender: (value, tableMeta, updateValue) => {
+        return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+      },
+    },
+  },
+  {
     name: 'isPaid',
     label: 'Paid',
     options: {
       filter: false,
       customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value === true ? <CheckIcon /> : <ClearIcon />}</>;
-      },
-    },
-  },
-  {
-    name: 'isDelivered',
-    label: 'Delivered',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value === true ? <CheckIcon /> : <ClearIcon />}</>;
+        return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
       },
     },
   },
@@ -108,7 +122,8 @@ const AllOrdersPage = (props) => {
     page: page,
     serverSide: true,
     onRowClick: (rowData, rowState) => {
-      history.push(`/orders/${rowData[0]}`);
+      console.log(rowState.rowIndex);
+      history.push(`/orders/${results[rowState.rowIndex].id}`);
     },
     onTableChange: (action, tableState) => {
       switch (action) {

@@ -11,10 +11,17 @@ import { Grid, makeStyles, Button, MenuItem } from '@material-ui/core';
 import { createUser, updateUser } from 'state/ducks/user/actions';
 import Loader from 'components/Loader/Loader';
 import Message from 'components/Message/Message';
+import PhoneNumberInput from 'components/Input/PhoneNumberInput';
 
 const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  username: yup.string().required(),
+  phone: yup
+    .string()
+    .matches(
+      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+      'Phone number is not valid'
+    )
+    .required(),
+  name: yup.string(),
   role: yup.string().required(),
 });
 
@@ -59,30 +66,33 @@ const UserForm = ({ preloadedValues }) => {
     <Form onSubmit={handleSubmit(onSubmit)}>
       {error && <Message severity="error">{error}</Message>}
 
-      <Grid container spacing={3}>
-        <Grid item xs={4}>
+      <Grid container spacing={3} alignItems="center">
+        <Grid item xs={12} md={4}>
           <Input
             ref={register}
-            id="username"
+            id="name"
             type="text"
-            label="Username"
-            name="username"
-            error={!!errors.username}
-            helperText={errors?.username?.message}
+            label="Name"
+            name="name"
+            className={classes.textField}
+            error={!!errors.name}
+            helperText={errors?.name?.message}
           />
         </Grid>
-        <Grid item xs={4}>
-          <Input
+        <Grid item xs={12} md={4}>
+          <PhoneNumberInput
             ref={register}
-            id="email"
-            type="text"
-            label="Email"
-            name="email"
-            error={!!errors.email}
-            helperText={errors?.email?.message}
+            country={'pk'}
+            name="phone"
+            id="phone"
+            label="Phone"
+            className={classes.textField}
+            control={control}
+            error={!!errors.phone}
+            helperText={errors?.phone?.message}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           <SelectInput
             ref={register}
             id="role"

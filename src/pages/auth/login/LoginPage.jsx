@@ -11,9 +11,16 @@ import Input from '../../../components/Input/Input';
 import Message from '../../../components/Message/Message';
 import Loader from '../../../components/Loader/Loader';
 import { login } from 'state/ducks/auth/actions';
+import PhoneNumberInput from 'components/Input/PhoneNumberInput';
 
 const schema = yup.object().shape({
-  phone: yup.string().required(),
+  phone: yup
+    .string()
+    .matches(
+      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+      'Phone number is not valid'
+    )
+    .required(),
   password: yup.string().required(),
 });
 
@@ -35,10 +42,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '.85rem',
   },
   loginCard: {
-    width: '275px',
+    width: '300px',
     borderRadius: 5,
     background: '#fff',
     padding: '.85rem',
+  },
+  textField: {
+    width: '100%',
   },
 }));
 
@@ -54,7 +64,7 @@ const LoginPage = (props) => {
 
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
-  const { register, handleSubmit, errors } = useForm({
+  const { register, handleSubmit, errors, control } = useForm({
     defaultValues: { phone: data.phone, password: data.password },
     mode: 'onBlur',
     resolver: yupResolver(schema),
@@ -85,12 +95,13 @@ const LoginPage = (props) => {
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
           {message && <Message severity="error">{message}</Message>}
-          <Input
+          <PhoneNumberInput
             ref={register}
-            id="phone"
-            type="tel"
-            label="Phone"
+            country={'pk'}
             name="phone"
+            id="phone"
+            label="Phone"
+            control={control}
             error={!!errors.phone}
             helperText={errors?.phone?.message}
           />

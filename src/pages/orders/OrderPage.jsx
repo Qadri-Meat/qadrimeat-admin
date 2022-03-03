@@ -2,18 +2,12 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
-import {
-  Typography,
-  Grid,
-  makeStyles,
-  Avatar,
-  Card,
-  CardContent,
-} from '@material-ui/core';
+import { Typography, Grid, makeStyles, Avatar, Box } from '@material-ui/core';
 import OrderPageRightPanels from 'components/extra/OrderPageRightPanels/OrderPageRightPanels';
 import { getOrder } from 'state/ducks/order/actions';
-
+import * as types from 'state/ducks/transaction/types';
 import MUIDataTable from 'mui-datatables';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -32,6 +26,9 @@ const useStyles = makeStyles((theme) => ({
   },
   p1: {
     padding: '.85rem',
+  },
+  card: {
+    width: '100%',
   },
 }));
 
@@ -85,17 +82,18 @@ const OrderPage = (props) => {
 
   const dispatch = useDispatch();
   const { selectedOrder } = useSelector((state) => state.order);
+  const { success } = useSelector((state) => state.transaction);
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
-      if (!selectedOrder || selectedOrder.id !== orderId) {
-        dispatch(getOrder(orderId));
-      }
+    if (success) {
+      dispatch({ type: types.TRANSACTION_RESET });
+    } else if (isLoggedIn) {
+      dispatch(getOrder(orderId));
     } else {
       history.push('/login');
     }
-  }, [history, isLoggedIn, selectedOrder, orderId, dispatch]);
+  }, [history, isLoggedIn, orderId, dispatch, success]);
 
   const options = {
     filterType: 'checkbox',
@@ -105,6 +103,39 @@ const OrderPage = (props) => {
     download: false,
     viewColumns: false,
     filter: false,
+    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
+      return (
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            m: 3,
+          }}
+        >
+          <Box>
+            <Typography variant="h6">Sub Total</Typography>
+            <Typography variant="body1">
+              Rs
+              {' ' + selectedOrder.totalPrice - selectedOrder.shippingPrice}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h6">Shipping Price</Typography>
+            <Typography variant="body1">
+              Rs{' ' + selectedOrder.shippingPrice}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h6">Grand Total</Typography>
+            <Typography variant="body1">
+              Rs{' ' + selectedOrder.totalPrice}
+            </Typography>
+          </Box>
+        </Box>
+      );
+    },
   };
 
   return (
@@ -120,7 +151,7 @@ const OrderPage = (props) => {
       <div className={classes.root}>
         {selectedOrder ? (
           <Grid container spacing={3}>
-            <Grid container item xs={12} md={8}>
+            <Grid container item md={8} spacing={3}>
               <Grid item xs={12}>
                 <MUIDataTable
                   title={'Order Items'}
@@ -128,47 +159,6 @@ const OrderPage = (props) => {
                   columns={columns}
                   options={options}
                 />
-              </Grid>
-              <Grid container item justify="space-between">
-                <Grid item xs={3}>
-                  <Card sx={{ minWidth: 275 }}>
-                    <CardContent>
-                      <Typography gutterBottom variant="h6" component="div">
-                        Sub Total
-                      </Typography>
-                      <Typography gutterBottom variant="body1" component="div">
-                        {selectedOrder.currency}
-                        {selectedOrder.totalPrice}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={4}>
-                  <Card sx={{ minWidth: 275 }}>
-                    <CardContent>
-                      <Typography gutterBottom variant="h6" component="div">
-                        Shipping Price
-                      </Typography>
-                      <Typography gutterBottom variant="body1" component="div">
-                        {selectedOrder.currency}
-                        {selectedOrder.shippingPrice}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
-                <Grid item xs={4}>
-                  <Card sx={{ minWidth: 275 }}>
-                    <CardContent>
-                      <Typography gutterBottom variant="h6" component="div">
-                        Grand Total
-                      </Typography>
-                      <Typography gutterBottom variant="body1" component="div">
-                        {selectedOrder.currency}
-                        {selectedOrder.totalPrice - selectedOrder.shippingPrice}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Grid>
               </Grid>
             </Grid>
             <Grid item xs={12} md={4}>
