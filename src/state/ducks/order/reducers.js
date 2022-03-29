@@ -22,6 +22,11 @@ export default (state = initialState, action) => {
         loading: false,
         ...payload,
       };
+    case types.CREATE_ORDER_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
     case types.UPDATE_ORDER_SUCCESS:
       var totalPaid = payload.transactions.reduce(function (a, b) {
         return a + b.amount;

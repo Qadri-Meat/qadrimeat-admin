@@ -12,8 +12,6 @@ import MUIDataTable from 'mui-datatables';
 import { getProducts, deleteProduct } from 'state/ducks/product/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
-import CheckIcon from '@material-ui/icons/Check';
-import ClearIcon from '@material-ui/icons/Clear';
 const useStyles = makeStyles((theme) => ({
   my3: {
     margin: '1.3rem 0',

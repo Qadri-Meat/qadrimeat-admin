@@ -1,3 +1,4 @@
+import AddOrderPage from './AddOrderPage';
 import AllOrdersPage from './AllOrdersPage';
 import InvoicePage from './InvoicePage';
 
@@ -9,6 +10,11 @@ export const OrdersPageConfig = {
       path: '/orders',
       exact: true,
       component: AllOrdersPage,
+    },
+    {
+      path: '/orders/add-order',
+      exact: true,
+      component: AddOrderPage,
     },
     {
       path: '/orders/:id',

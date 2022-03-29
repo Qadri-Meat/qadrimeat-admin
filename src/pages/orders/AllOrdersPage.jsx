@@ -2,6 +2,9 @@ import React, { useDebugValue, useEffect, useState } from 'react';
 import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
 import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+
 import MUIDataTable from 'mui-datatables';
 import { getOrders } from 'state/ducks/order/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: 0,
   },
   mRight: {
+    marginRight: '.85rem',
+  },
+  mLeft: {
     marginRight: '.85rem',
   },
   p1: {
@@ -103,17 +109,18 @@ const AllOrdersPage = (props) => {
   const [selectedPage, setSelectedPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState('');
+  const [type, setType] = useState('online');
   const { results, page, totalResults } = useSelector((state) => state.order);
 
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(getOrders(selectedPage, limit, search));
+      dispatch(getOrders(selectedPage, limit, type));
     } else {
       history.push('/login');
     }
-  }, [history, isLoggedIn, dispatch, selectedPage]);
+  }, [history, isLoggedIn, dispatch, selectedPage, limit, type]);
 
   const options = {
     filterType: 'checkbox',
@@ -150,7 +157,41 @@ const AllOrdersPage = (props) => {
             Orders
           </Typography>
         </Grid>
-        <Grid item></Grid>
+
+        <Grid
+          item
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          xs={10}
+        >
+          <Grid item>
+            <Button
+              onClick={() => history.push('/orders/add-order')}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Add Order
+            </Button>
+          </Grid>
+
+          <Grid item>
+            <ToggleButtonGroup
+              color="primary"
+              value={type}
+              size="small"
+              exclusive
+              onChange={(event, value) => {
+                setType(value);
+              }}
+            >
+              <ToggleButton value="online">Online</ToggleButton>
+              <ToggleButton value="retail">Retail</ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+        </Grid>
       </Grid>
       <AdminBreadcrumbs path={history} />
       <MUIDataTable
