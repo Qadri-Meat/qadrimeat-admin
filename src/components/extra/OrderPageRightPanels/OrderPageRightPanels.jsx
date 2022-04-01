@@ -129,6 +129,7 @@ export default function OrderPageRightPanels() {
                         label="Delivery Time"
                         style={{ width: '250px' }}
                         value={deliveryTime}
+                        disabled
                         onChange={(date) => {
                           dispatch(
                             updateOrder(selectedOrder.id, {

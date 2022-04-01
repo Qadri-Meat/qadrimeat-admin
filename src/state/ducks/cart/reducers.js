@@ -8,7 +8,7 @@ export default (state = initialState, action) => {
 
   switch (type) {
     case types.ADD_ALL_TO_CART:
-      return cartItems.map((item) => {
+      return product.map((item) => {
         delete item.createdAt;
         delete item.id;
         return item;
