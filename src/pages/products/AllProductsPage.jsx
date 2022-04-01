@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
 import {
@@ -92,26 +92,21 @@ const AllProductsPage = (props) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const [selectedPage, setSelectedPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [search, setSearch] = useState('');
-  const { results, page, totalResults } = useSelector((state) => state.product);
+  // const [search, setSearch] = useState('');
+  const { results } = useSelector((state) => state.product);
 
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(getProducts(selectedPage, limit, search));
+      dispatch(getProducts(1, 100));
     } else {
       history.push('/login');
     }
-  }, [history, isLoggedIn, dispatch, selectedPage]);
+  }, [history, isLoggedIn, dispatch]);
 
   const options = {
     filterType: 'checkbox',
-    count: totalResults,
-    page: page,
-    serverSide: true,
     onRowsDelete: (rowsDeleted, dataRows) => {
       rowsDeleted.data.forEach((row) => {
         dispatch(deleteProduct(results[row.dataIndex].id));
@@ -119,21 +114,6 @@ const AllProductsPage = (props) => {
     },
     onRowClick: (rowData, rowState) => {
       history.push(`/products/${rowData[0]}`);
-    },
-    onTableChange: (action, tableState) => {
-      switch (action) {
-        case 'changePage':
-          setSelectedPage(tableState.page + 1);
-          break;
-        case 'changeRowsPerPage':
-          setLimit(tableState.rowsPerPage);
-          setSelectedPage(1);
-          break;
-        case 'search':
-          break;
-        default:
-          break;
-      }
     },
   };
 

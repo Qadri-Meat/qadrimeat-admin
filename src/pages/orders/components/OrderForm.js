@@ -17,10 +17,12 @@ import {
 import { createOrder, updateOrder } from 'state/ducks/order/actions';
 import Loader from 'components/Loader/Loader';
 import Message from 'components/Message/Message';
+import OrderItemForm from './OrderItemForm';
+
 import MUIDataTable from 'mui-datatables';
 import { getProducts } from 'state/ducks/product/actions';
-import OrderItemForm from './OrderItemForm';
 import { getDiscountPrice } from 'helpers/product';
+import { deleteFromCart } from 'state/ducks/cart/actions';
 
 const schema = yup.object().shape({
   firstName: yup.string().required(),
@@ -39,6 +41,9 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'center',
   },
+  mTop: {
+    marginTop: '20px',
+  },
   button: {
     padding: '10px',
   },
@@ -47,95 +52,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns = [
-  {
-    name: 'id',
-    label: 'Id',
-    options: {
-      filter: true,
-      sort: true,
-      display: false,
-    },
-  },
-  {
-    name: 'image',
-    label: 'Image',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const image = value.length > 0 ? value[0] : '';
-        return (
-          <Avatar
-            variant="rounded"
-            src={image === '' ? '' : process.env.REACT_APP_API_URL + image}
-          />
-        );
-      },
-    },
-  },
-  {
-    name: 'name',
-    label: 'Name',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'price',
-    label: 'Price',
-    options: {
-      filter: true,
-      sort: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const { rowData: product } = tableMeta;
-        const price = product[3];
-        const discount = product[4];
-        const discountedPrice = getDiscountPrice(price, discount);
-        const finalProductPrice = (price * 1).toFixed(2);
-        const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
-        return (
-          <>
-            {discountedPrice !== null ? (
-              <>
-                <span style={{ textDecoration: 'line-through', color: 'gray' }}>
-                  {'PKR ' + finalProductPrice}
-                </span>
-                <span className="amount">
-                  {'    PKR ' + finalDiscountedPrice}
-                </span>
-              </>
-            ) : (
-              <span>{'PKR ' + finalProductPrice}</span>
-            )}
-          </>
-        );
-      },
-    },
-  },
-  {
-    name: 'discount',
-    label: 'Discount',
-    options: {
-      filter: true,
-      sort: true,
-      display: false,
-    },
-  },
-];
-
 const OrderForm = ({ preloadedValues }) => {
   const classes = useStyles();
-
   const dispatch = useDispatch();
   let cartTotalPrice = 0;
+
+  const { error, loading } = useSelector((state) => state.order);
 
   const [orderItem, setOrderItem] = useState({});
   const [key, setKey] = useState(Math.random());
 
-  const { error, loading } = useSelector((state) => state.order);
   const items = useSelector((state) => state.cart);
   const { results } = useSelector((state) => state.product);
+
   const {
     register,
     handleSubmit,
@@ -156,42 +85,47 @@ const OrderForm = ({ preloadedValues }) => {
     resolver: yupResolver(schema),
   });
 
+  const onSubmit = (data) => {
+    const newOrder = {
+      phone: data.phone,
+      orderItems: items,
+      shippingDetails: data,
+      shippingPrice: 0,
+      totalPrice: cartTotalPrice,
+      type: 'retail',
+      deliveryTime: Date.now(),
+    };
+    if (preloadedValues) {
+      dispatch(updateOrder(preloadedValues.id, newOrder));
+    } else {
+      dispatch(createOrder(newOrder));
+    }
+  };
+
   useEffect(() => {
     dispatch(getProducts(1, 100));
   }, [dispatch]);
 
-  const onSubmit = (data) => {
-    if (preloadedValues) {
-      dispatch(updateOrder(preloadedValues.id, data));
-    } else {
-      dispatch(createOrder(data));
-    }
-  };
   const options = {
     filterType: 'checkbox',
     onRowClick: (rowData, rowState) => {
       setOrderItem({
-        name: results[rowState.rowIndex].name,
-        quantity: 1,
-        price: results[rowState.rowIndex].price,
-        discount: results[rowState.rowIndex].discount,
+        ...results[rowState.rowIndex],
         product: results[rowState.rowIndex].id,
-        image: results[rowState.rowIndex].image,
+        quantity: 1,
       });
       setKey(Math.random());
     },
   };
   const options1 = {
     filterType: 'checkbox',
-    onRowClick: (rowData, rowState) => {
-      setOrderItem({
-        name: items[rowState.rowIndex].name,
-        quantity: items[rowState.rowIndex].quantity,
-        price: items[rowState.rowIndex].price,
-        discount: items[rowState.rowIndex].discount,
-        product: items[rowState.rowIndex].id,
-        image: items[rowState.rowIndex].image,
+    onRowsDelete: (rowsDeleted, dataRows) => {
+      rowsDeleted.data.forEach(({ index }) => {
+        dispatch(deleteFromCart(items[index]));
       });
+    },
+    onRowClick: (rowData, rowState) => {
+      setOrderItem(items[rowState.rowIndex]);
       setKey(Math.random());
     },
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
@@ -217,6 +151,84 @@ const OrderForm = ({ preloadedValues }) => {
     },
   };
 
+  const columns = [
+    {
+      name: 'id',
+      label: 'Id',
+      options: {
+        filter: true,
+        sort: true,
+        display: false,
+      },
+    },
+    {
+      name: 'image',
+      label: 'Image',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const image = value.length > 0 ? value[0] : '';
+          return (
+            <Avatar
+              variant="rounded"
+              src={image === '' ? '' : process.env.REACT_APP_API_URL + image}
+            />
+          );
+        },
+      },
+    },
+    {
+      name: 'name',
+      label: 'Name',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: 'price',
+      label: 'Price',
+      options: {
+        filter: true,
+        sort: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData: product } = tableMeta;
+          const price = product[3];
+          const discount = product[4];
+          const discountedPrice = getDiscountPrice(price, discount);
+          const finalProductPrice = (price * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+          return (
+            <>
+              {discountedPrice !== null ? (
+                <>
+                  <span
+                    style={{ textDecoration: 'line-through', color: 'gray' }}
+                  >
+                    {'PKR ' + finalProductPrice}
+                  </span>
+                  <span className="amount">
+                    {'    PKR ' + finalDiscountedPrice}
+                  </span>
+                </>
+              ) : (
+                <span>{'PKR ' + finalProductPrice}</span>
+              )}
+            </>
+          );
+        },
+      },
+    },
+    {
+      name: 'discount',
+      label: 'Discount',
+      options: {
+        filter: true,
+        sort: true,
+        display: false,
+      },
+    },
+  ];
   const columns1 = [
     {
       name: 'id',
@@ -258,15 +270,14 @@ const OrderForm = ({ preloadedValues }) => {
         filter: true,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowData: cartItem } = tableMeta;
-          console.log(cartItem);
+          const { rowData: cartItem, rowIndex } = tableMeta;
           const price = cartItem[3];
           const discount = cartItem[4];
           const quantity = cartItem[5];
           const discountedPrice = getDiscountPrice(price, discount);
           const finalProductPrice = (price * 1).toFixed(2);
           const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
-
+          cartTotalPrice = rowIndex === 0 ? 0 : cartTotalPrice;
           discountedPrice != null
             ? (cartTotalPrice += finalDiscountedPrice * quantity)
             : (cartTotalPrice += finalProductPrice * quantity);
@@ -336,27 +347,29 @@ const OrderForm = ({ preloadedValues }) => {
   return (
     <Fragment>
       {error && <Message severity="error">{error}</Message>}
+      <Grid container spacing={3} style={{ marginTop: '20px' }}>
+        <Grid container spacing={3}>
+          <Grid item xs={6}>
+            <MUIDataTable
+              title={'Products'}
+              data={results}
+              columns={columns}
+              options={options}
+            />
+          </Grid>
+          <Grid item xs={6}>
+            <OrderItemForm preloadedValues={orderItem} key={key} />
+          </Grid>
+          <Grid item xs={12}>
+            <MUIDataTable
+              title={'Order Items'}
+              data={items}
+              columns={columns1}
+              options={options1}
+            />
+          </Grid>
+        </Grid>
 
-      <Grid container spacing={3}>
-        <Grid item xs={6}>
-          <MUIDataTable
-            title={'Products'}
-            data={results}
-            columns={columns}
-            options={options}
-          />
-        </Grid>
-        <Grid item xs={6} key={key}>
-          <OrderItemForm preloadedValues={orderItem} />
-        </Grid>
-        <Grid item xs={12}>
-          <MUIDataTable
-            title={'Order Items'}
-            data={items}
-            columns={columns1}
-            options={options1}
-          />
-        </Grid>
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={3}>
             <Grid item md={4} xs={12}>
@@ -366,7 +379,6 @@ const OrderForm = ({ preloadedValues }) => {
                 type="text"
                 label="First Name"
                 name="firstName"
-                disabled
                 error={!!errors.firstName}
                 helperText={errors?.firstName?.message}
               />
@@ -378,7 +390,6 @@ const OrderForm = ({ preloadedValues }) => {
                 type="text"
                 label="Last Name"
                 name="lastName"
-                disabled
                 error={!!errors.lastName}
                 helperText={errors?.lastName?.message}
               />
@@ -390,7 +401,6 @@ const OrderForm = ({ preloadedValues }) => {
                 type="email"
                 label="Email"
                 name="email"
-                disabled
                 error={!!errors.email}
                 helperText={errors?.email?.message}
               />
@@ -402,7 +412,6 @@ const OrderForm = ({ preloadedValues }) => {
                 type="phone"
                 label="phone"
                 name="phone"
-                disabled
                 error={!!errors.phone}
                 helperText={errors?.phone?.message}
               />
@@ -414,7 +423,6 @@ const OrderForm = ({ preloadedValues }) => {
                 type="text"
                 label="address"
                 name="address"
-                disabled
                 error={!!errors.address}
                 helperText={errors?.address?.message}
               />
@@ -426,7 +434,6 @@ const OrderForm = ({ preloadedValues }) => {
                 type="text"
                 label="city"
                 name="city"
-                disabled
                 error={!!errors.city}
                 helperText={errors?.city?.message}
               />
@@ -438,7 +445,6 @@ const OrderForm = ({ preloadedValues }) => {
                 type="text"
                 label="country"
                 name="country"
-                disabled
                 error={!!errors.country}
                 helperText={errors?.country?.message}
               />

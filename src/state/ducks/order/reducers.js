@@ -26,6 +26,7 @@ export default (state = initialState, action) => {
       return {
         loading: false,
         success: true,
+        selectedOrder: payload,
       };
     case types.UPDATE_ORDER_SUCCESS:
       var totalPaid = payload.transactions.reduce(function (a, b) {
@@ -33,15 +34,16 @@ export default (state = initialState, action) => {
       }, 0);
       return {
         loading: false,
-        selectedOrder: payload,
+        success: true,
+        selectedOrder: { ...payload, totalPaid: totalPaid || 0 },
       };
     case types.GET_ORDER_SUCCESS:
-      var totalPaid = payload.transactions.reduce(function (a, b) {
+      var totalPaid1 = payload.transactions.reduce(function (a, b) {
         return a + b.amount;
       }, 0);
       return {
         loading: false,
-        selectedOrder: { ...payload, totalPaid: totalPaid || 0 },
+        selectedOrder: { ...payload, totalPaid: totalPaid1 || 0 },
       };
     case types.ORDER_RESET:
       return {};
@@ -49,21 +51,3 @@ export default (state = initialState, action) => {
       return state;
   }
 };
-
-function flattenObject(ob) {
-  const toReturn = {};
-
-  Object.keys(ob).map((i) => {
-    if (typeof ob[i] === 'object' && ob[i] !== null) {
-      const flatObject = flattenObject(ob[i]);
-      Object.keys(flatObject).map((x) => {
-        toReturn[`${i}.${x}`] = flatObject[x];
-        return x;
-      });
-    } else {
-      toReturn[i] = ob[i];
-    }
-    return i;
-  });
-  return toReturn;
-}

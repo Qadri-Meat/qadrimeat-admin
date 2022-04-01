@@ -79,7 +79,7 @@ const LoginPage = (props) => {
     if (isLoggedIn) {
       history.push(redirect);
     }
-  }, [history, user, redirect]);
+  }, [history, user, redirect, isLoggedIn]);
 
   return (
     <div className={classes.root}>

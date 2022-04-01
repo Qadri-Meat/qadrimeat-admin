@@ -43,21 +43,3 @@ export default (state = initialState, action) => {
       return state;
   }
 };
-
-function flattenObject(ob) {
-  const toReturn = {};
-
-  Object.keys(ob).map((i) => {
-    if (typeof ob[i] === 'object' && ob[i] !== null) {
-      const flatObject = flattenObject(ob[i]);
-      Object.keys(flatObject).map((x) => {
-        toReturn[`${i}.${x}`] = flatObject[x];
-        return x;
-      });
-    } else {
-      toReturn[i] = ob[i];
-    }
-    return i;
-  });
-  return toReturn;
-}

@@ -10,11 +10,10 @@ const DashboardPage = (props) => {
   const { isLoggedIn, user } = auth;
 
   useEffect(() => {
-    if (isLoggedIn) {
-    } else {
+    if (!isLoggedIn) {
       history.push('/login');
     }
-  }, [history, user]);
+  }, [history, user, isLoggedIn]);
 
   return (
     <AdminLayout>

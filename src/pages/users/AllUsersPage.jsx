@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
-import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
+import { Typography, Grid, makeStyles } from '@material-ui/core';
 import MUIDataTable from 'mui-datatables';
 import { getUsers, deleteUser } from 'state/ducks/user/actions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -75,18 +75,18 @@ const AllUsersPage = (props) => {
   const dispatch = useDispatch();
   const [selectedPage, setSelectedPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
   const { results, page, totalResults } = useSelector((state) => state.user);
 
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(getUsers(selectedPage, limit, search));
+      dispatch(getUsers(selectedPage, limit));
     } else {
       history.push('/login');
     }
-  }, [history, isLoggedIn, dispatch, selectedPage]);
+  }, [history, isLoggedIn, dispatch, selectedPage, limit]);
 
   const options = {
     filterType: 'checkbox',
@@ -149,11 +149,3 @@ const AllUsersPage = (props) => {
 };
 
 export default AllUsersPage;
-
-const debounce = (callback, delay) => {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => callback(...args), delay);
-  };
-};

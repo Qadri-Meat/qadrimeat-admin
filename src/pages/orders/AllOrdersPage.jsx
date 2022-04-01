@@ -1,4 +1,4 @@
-import React, { useDebugValue, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
 import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
@@ -108,7 +108,7 @@ const AllOrdersPage = (props) => {
   const dispatch = useDispatch();
   const [selectedPage, setSelectedPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [search, setSearch] = useState('');
+  // const [search, setSearch] = useState('');
   const [type, setType] = useState('online');
   const { results, page, totalResults } = useSelector((state) => state.order);
 

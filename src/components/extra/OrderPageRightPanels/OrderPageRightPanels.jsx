@@ -53,7 +53,7 @@ export default function OrderPageRightPanels() {
       const date = new Date(selectedOrder.deliveryTime);
       setDeliveryTime(date);
     }
-  }, [dispatch, selectedOrder]);
+  }, [dispatch, selectedOrder, deliveryTime]);
 
   const handleExpandedChange = () => {
     setExpanded(!expanded);
@@ -244,10 +244,27 @@ export default function OrderPageRightPanels() {
                     }}
                   >
                     <p>
-                      <strong>Total: </strong>
+                      <strong>Total Paid: </strong>
                     </p>
                     <p>
                       <span>{selectedOrder.totalPaid}</span>
+                    </p>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}
+                  >
+                    <p>
+                      <strong>Balance: </strong>
+                    </p>
+                    <p>
+                      <span>
+                        {(
+                          selectedOrder.totalPrice - selectedOrder.totalPaid
+                        ).toFixed(2)}
+                      </span>
                     </p>
                   </Box>
                 </div>

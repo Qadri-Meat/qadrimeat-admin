@@ -23,19 +23,19 @@ const AddOrderPage = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { success } = useSelector((state) => state.order);
+  const { success, selectedOrder } = useSelector((state) => state.order);
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isLoggedIn) {
       if (success) {
+        history.push(`/orders/${selectedOrder.id}`);
         dispatch({ type: types.ORDER_RESET });
-        history.push('/orders');
       }
     } else {
       history.push('/login');
     }
-  }, [dispatch, history, success, isLoggedIn]);
+  }, [dispatch, history, success, isLoggedIn, selectedOrder]);
 
   return (
     <AdminLayout>

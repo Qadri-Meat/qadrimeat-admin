@@ -5,11 +5,19 @@ const initialState = [];
 export default (state = initialState, action) => {
   const { type, payload: product } = action;
   const cartItems = state;
+
   switch (type) {
+    case types.ADD_ALL_TO_CART:
+      return cartItems.map((item) => {
+        delete item.createdAt;
+        delete item.id;
+        return item;
+      });
     case types.ADD_TO_CART:
-      const cartItem = cartItems.filter(
-        (item) => item.product === product.product
-      )[0];
+      const cartItem = cartItems.filter((item) => {
+        return item.product === product.product;
+      })[0];
+
       if (cartItem === undefined) {
         return [
           ...cartItems,
@@ -24,7 +32,7 @@ export default (state = initialState, action) => {
             ? {
                 ...item,
                 quantity: product.quantity
-                  ? item.quantity + product.quantity
+                  ? product.quantity
                   : item.quantity + 1,
               }
             : item

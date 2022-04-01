@@ -2,11 +2,19 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
-import { Typography, Grid, makeStyles, Avatar, Box } from '@material-ui/core';
+import {
+  Typography,
+  Grid,
+  makeStyles,
+  Avatar,
+  Box,
+  Button,
+} from '@material-ui/core';
 import OrderPageRightPanels from 'components/extra/OrderPageRightPanels/OrderPageRightPanels';
 import { getOrder } from 'state/ducks/order/actions';
 import * as types from 'state/ducks/transaction/types';
 import MUIDataTable from 'mui-datatables';
+import { getDiscountPrice } from 'helpers/product';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,6 +66,48 @@ const columns = [
     },
   },
   {
+    name: 'price',
+    label: 'Price',
+    options: {
+      filter: true,
+      sort: false,
+      customBodyRender: (value, tableMeta, updateValue) => {
+        const { rowData: cartItem } = tableMeta;
+        const price = cartItem[2];
+        const discount = cartItem[3];
+        const discountedPrice = getDiscountPrice(price, discount);
+        const finalProductPrice = (price * 1).toFixed(2);
+        const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+
+        return (
+          <>
+            {discountedPrice !== null ? (
+              <>
+                <span style={{ textDecoration: 'line-through', color: 'gray' }}>
+                  {'PKR ' + finalProductPrice}
+                </span>
+                <span className="amount">
+                  {'    PKR ' + finalDiscountedPrice}
+                </span>
+              </>
+            ) : (
+              <span>{'PKR ' + finalProductPrice}</span>
+            )}
+          </>
+        );
+      },
+    },
+  },
+  {
+    name: 'discount',
+    label: 'Discount',
+    options: {
+      filter: true,
+      sort: false,
+      display: false,
+    },
+  },
+  {
     name: 'quantity',
     label: 'Quantity',
     options: {
@@ -67,10 +117,25 @@ const columns = [
   },
   {
     name: 'price',
-    label: 'Price',
+    label: 'Sub Total',
     options: {
-      filter: true,
-      sort: false,
+      filter: false,
+      customBodyRender: (value, tableMeta, updateValue) => {
+        const { rowData: cartItem } = tableMeta;
+        const price = cartItem[2];
+        const discount = cartItem[3];
+        const quantity = cartItem[4];
+        const discountedPrice = getDiscountPrice(price, discount);
+        const finalProductPrice = (price * 1).toFixed(2);
+        const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+        return (
+          <>
+            {discountedPrice !== null
+              ? 'PKR ' + (finalDiscountedPrice * quantity).toFixed(2)
+              : 'PKR ' + (finalProductPrice * quantity).toFixed(2)}
+          </>
+        );
+      },
     },
   },
 ];
@@ -145,6 +210,30 @@ const OrderPage = (props) => {
           <Typography variant="h5" component="h1">
             Order Details
           </Typography>
+        </Grid>
+        <Grid item>
+          {selectedOrder && selectedOrder.type === 'retail' ? (
+            <Button
+              onClick={() =>
+                history.push(`/orders/update-order/${selectedOrder.id}`)
+              }
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Update Order
+            </Button>
+          ) : (
+            <></>
+          )}
+          <Button
+            onClick={() => history.push(`/orders/invoice/${selectedOrder.id}`)}
+            variant="outlined"
+            color="primary"
+            size="small"
+          >
+            Invoice
+          </Button>
         </Grid>
       </Grid>
       <AdminBreadcrumbs path={history} />

@@ -46,7 +46,7 @@ const UpdateUserPage = (props) => {
     } else {
       history.push('/login');
     }
-  }, [dispatch, history, success, isLoggedIn, userId, selectedUser]);
+  }, [dispatch, history, success, isLoggedIn, userId, selectedUser, setValues]);
 
   return (
     <AdminLayout>

@@ -37,6 +37,7 @@ const OrderItemForm = ({ preloadedValues }) => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: preloadedValues,
@@ -51,8 +52,10 @@ const OrderItemForm = ({ preloadedValues }) => {
         name: preloadedValues.name,
         price: preloadedValues.price,
         image: preloadedValues.image,
+        product: preloadedValues.product,
       })
     );
+    reset({});
   };
 
   return (
@@ -87,7 +90,7 @@ const OrderItemForm = ({ preloadedValues }) => {
             ref={register}
             id="discount"
             type="number"
-            label="Discount"
+            label="Discount %"
             name="discount"
             error={!!errors.discount}
             helperText={errors?.discount?.message}

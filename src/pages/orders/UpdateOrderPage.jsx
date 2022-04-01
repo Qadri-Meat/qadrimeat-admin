@@ -3,9 +3,10 @@ import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
 import { Typography, Grid, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProduct } from 'state/ducks/product/actions';
-import * as types from 'state/ducks/product/types';
-import ProductForm from './components/ProductForm';
+import { getOrder } from 'state/ducks/order/actions';
+import * as types from 'state/ducks/order/types';
+import OrderForm from './components/OrderForm';
+import { ADD_ALL_TO_CART } from 'state/ducks/cart/types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,47 +20,45 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UpdateProductPage = (props) => {
+const UpdateOrderPage = (props) => {
   const { history, match } = props;
-  const productId = match.params.id;
+  const orderId = match.params.id;
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { success, selectedProduct } = useSelector((state) => state.product);
+  const { success, selectedOrder } = useSelector((state) => state.order);
   const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (isLoggedIn) {
       if (success) {
-        dispatch({ type: types.PRODUCT_RESET });
-        history.push('/products');
-      } else if (!selectedProduct) {
-        dispatch(getProduct(productId));
+        dispatch({ type: types.ORDER_RESET });
+        history.push(`/orders/${orderId}`);
+      } else if (!selectedOrder) {
+        dispatch(getOrder(orderId));
+      } else if (selectedOrder) {
+        dispatch({ type: ADD_ALL_TO_CART, payload: selectedOrder.orderItems });
       }
     } else {
       history.push('/login');
     }
-  }, [history, success, isLoggedIn, productId, selectedProduct, dispatch]);
+  }, [history, success, isLoggedIn, orderId, selectedOrder, dispatch]);
 
   return (
     <AdminLayout>
       <Grid container className={classes.my3} alignItems="center">
         <Grid item className={classes.mRight}>
           <Typography variant="h5" component="h1">
-            Update Product
+            Update Order
           </Typography>
         </Grid>
       </Grid>
       <AdminBreadcrumbs path={history} />
       <div className={classes.root}>
-        {selectedProduct ? (
-          <ProductForm preloadedValues={selectedProduct} />
-        ) : (
-          <></>
-        )}
+        {selectedOrder ? <OrderForm preloadedValues={selectedOrder} /> : <></>}
       </div>
     </AdminLayout>
   );
 };
 
-export default UpdateProductPage;
+export default UpdateOrderPage;

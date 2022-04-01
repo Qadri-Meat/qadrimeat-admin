@@ -13,7 +13,7 @@ class OrderService {
     return api.get(`/orders/${id}`);
   }
   create(data) {
-    return api.patch(`/orders`, data);
+    return api.post(`/orders`, data);
   }
 
   update(id, data) {

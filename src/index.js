@@ -2,11 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import './index.css';
-import store from './state/store';
+import { store } from './state/store';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter as Router } from 'react-router-dom';
-
 import { DataProvider } from './context/DataContext';
 
 import setupInterceptors from './state/services/setupInterceptors';

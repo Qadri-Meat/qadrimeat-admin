@@ -3,6 +3,7 @@ import AllOrdersPage from './AllOrdersPage';
 import InvoicePage from './InvoicePage';
 
 import OrderPage from './OrderPage';
+import UpdateOrderPage from './UpdateOrderPage';
 
 export const OrdersPageConfig = {
   routes: [
@@ -15,6 +16,16 @@ export const OrdersPageConfig = {
       path: '/orders/add-order',
       exact: true,
       component: AddOrderPage,
+    },
+    {
+      path: '/orders/update-order/:id',
+      exact: true,
+      component: UpdateOrderPage,
+    },
+    {
+      path: '/orders/invoice/:id',
+      exact: true,
+      component: InvoicePage,
     },
     {
       path: '/orders/:id',
