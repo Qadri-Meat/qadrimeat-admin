@@ -234,6 +234,15 @@ const OrderPage = (props) => {
           >
             Invoice
           </Button>
+
+          <Button
+            onClick={() => history.push(`/orders/receipt/${selectedOrder.id}`)}
+            variant="outlined"
+            color="primary"
+            size="small"
+          >
+            Receipt
+          </Button>
         </Grid>
       </Grid>
       <AdminBreadcrumbs path={history} />

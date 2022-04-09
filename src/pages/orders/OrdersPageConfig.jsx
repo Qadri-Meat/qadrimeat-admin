@@ -3,6 +3,7 @@ import AllOrdersPage from './AllOrdersPage';
 import InvoicePage from './InvoicePage';
 
 import OrderPage from './OrderPage';
+import ReceiptPage from './ReceiptPage';
 import UpdateOrderPage from './UpdateOrderPage';
 
 export const OrdersPageConfig = {
@@ -36,6 +37,11 @@ export const OrdersPageConfig = {
       path: '/orders/invoice/:id',
       exact: true,
       component: InvoicePage,
+    },
+    {
+      path: '/orders/receipt/:id',
+      exact: true,
+      component: ReceiptPage,
     },
   ],
 };
