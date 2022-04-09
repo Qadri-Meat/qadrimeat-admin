@@ -79,7 +79,7 @@ const ReceiptPage = (props) => {
                 <tr>
                   <td class="quantity"></td>
                   <td class="description">TOTAL</td>
-                  <td class="price">{selectedOrder.totalPrice}</td>
+                  <td class="price">{selectedOrder.totalPrice.toFixed(2)}</td>
                 </tr>
               </tbody>
             </table>
