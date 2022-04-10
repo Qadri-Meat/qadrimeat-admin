@@ -27,7 +27,14 @@ const ReceiptPage = (props) => {
       {!selectedOrder ? (
         <></>
       ) : (
-        <>
+        <div>
+          <link
+            href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
+            rel="stylesheet"
+            id="bootstrap-css"
+          />
+          <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+          <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
           <button
             id="btnPrint"
             class="hidden-print"
@@ -36,21 +43,35 @@ const ReceiptPage = (props) => {
             Print
           </button>
           <div class="ticket">
-            <h1>Qadri Meat</h1>
+            <h5 class="centered">Qadri Meat</h5>
 
             <p class="centered">
+              qadrimeat.com
+              <br />
               qadrimeat@gmail.com
               <br />
-              +92 304-4014345
+              PH# +92 304-4014345
               <br />
-              Street 113, Sector N Dha Phase 1, Lahore, Punjab , Pakistan
+              11-N Phase 1, DHA Lahore
             </p>
-            <table>
+            <div
+              className="d-flex justify-content-between"
+              style={{ marginRight: '4px' }}
+            >
+              <div>{new Date().toLocaleDateString()}</div>
+              <div>{new Date().toLocaleTimeString()}</div>
+            </div>
+            <table class="centered">
               <thead>
                 <tr>
-                  <th class="quantity">Q.</th>
                   <th class="description">Description</th>
-                  <th class="price">PKR</th>
+                  <th class="price">
+                    Sale
+                    <br />
+                    Price
+                  </th>
+                  <th class="quantity">Q.</th>
+                  <th class="amount">Amount</th>
                 </tr>
               </thead>
               <tbody>
@@ -63,8 +84,15 @@ const ReceiptPage = (props) => {
                   const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
                   return (
                     <tr>
-                      <td class="quantity">{item.quantity}</td>
                       <td class="description">{item.name}</td>
+                      <td class="price">
+                        <>
+                          {discountedPrice !== null
+                            ? (finalDiscountedPrice * item.quantity).toFixed(2)
+                            : (finalProductPrice * item.quantity).toFixed(2)}
+                        </>
+                      </td>
+                      <td class="quantity">{item.quantity}</td>
                       <td class="price">
                         <>
                           {discountedPrice !== null
@@ -75,21 +103,34 @@ const ReceiptPage = (props) => {
                     </tr>
                   );
                 })}
-
-                <tr>
-                  <td class="quantity"></td>
-                  <td class="description">TOTAL</td>
-                  <td class="price">{selectedOrder.totalPrice.toFixed(2)}</td>
-                </tr>
               </tbody>
             </table>
+            <div className="d-flex justify-content-end">
+              <div
+                className="d-flex justify-content-between"
+                style={{ marginRight: '4px', width: '100px' }}
+              >
+                <div>Sub Total</div>
+                <div>{selectedOrder.totalPrice.toFixed(2)}</div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-end">
+              <div
+                className="d-flex justify-content-between"
+                style={{ marginRight: '4px', width: '100px' }}
+              >
+                <div>Grand Total</div>
+                <div>{selectedOrder.totalPrice.toFixed(2)}</div>
+              </div>
+            </div>
+
             <p class="centered">
               Thanks for your purchase!
               <br />
-              qadrimeat.com
+              Software provided by devprotocols.com
             </p>
           </div>
-        </>
+        </div>
       )}
     </>
   );

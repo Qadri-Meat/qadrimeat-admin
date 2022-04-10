@@ -1,7 +1,7 @@
 .ticket {
     width: 155px;
     max-width: 155px;
-    font-size: 10px;
+    font-size: 8px;
     font-family: 'Times New Roman';
     margin-bottom: 3000px;
 }
@@ -13,20 +13,23 @@
 .ticket th,
 .ticket tr,
 .ticket table {
-    border-top: 1px solid black;
-    border-collapse: collapse;
+    border: 1px solid black;
+}
+
+.ticket tr {
+    font-size: 5px;
 }
 
 .ticket td.description,
 .ticket th.description {
-    width: 75px;
-    max-width: 75px;
+    width: 50px;
+    max-width: 50px;
 }
 
 .ticket td.quantity,
 .ticket th.quantity {
-    width: 30px;
-    max-width: 30px;
+    width: 20px;
+    max-width: 20px;
     word-break: break-all;
 
     text-align: center;
@@ -35,8 +38,14 @@
 
 .ticket td.price,
 .ticket th.price {
-    width: 50px;
-    max-width: 50px;
+    width: 40px;
+    max-width: 40px;
+    word-break: break-all;
+}
+.ticket td.total,
+.ticket th.total {
+    width: 70px;
+    max-width: 70px;
     word-break: break-all;
 }
 
