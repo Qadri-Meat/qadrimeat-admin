@@ -47,7 +47,7 @@ const InvoicePage = (props) => {
                           <p className="text-muted">
                             <strong>Email:</strong> qadrimeat@gmail.com
                             <br />
-                            <strong>Phone:</strong> +92 304-4014345
+                            <strong>Phone:</strong> +92 302-4000719
                             <br />
                             <strong>Address:</strong> Street 113, Sector N Dha
                             Phase 1, Lahore, Punjab , Pakistan
