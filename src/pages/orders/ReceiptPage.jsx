@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import './styles/receipt.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrder } from 'state/ducks/order/actions';
-import { Avatar } from '@material-ui/core';
 import { getDiscountPrice } from 'helpers/product';
 
 const ReceiptPage = (props) => {

@@ -16,10 +16,6 @@
     border: 1px solid black;
 }
 
-.ticket tr {
-    font-size: 5px;
-}
-
 .ticket td.description,
 .ticket th.description {
     width: 50px;
