@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import './styles/receipt.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrder } from 'state/ducks/order/actions';
+import { Avatar } from '@material-ui/core';
 import { getDiscountPrice } from 'helpers/product';
 
 const ReceiptPage = (props) => {
@@ -26,14 +27,7 @@ const ReceiptPage = (props) => {
       {!selectedOrder ? (
         <></>
       ) : (
-        <div>
-          <link
-            href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css"
-            rel="stylesheet"
-            id="bootstrap-css"
-          />
-          <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-          <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <>
           <button
             id="btnPrint"
             class="hidden-print"
@@ -42,35 +36,21 @@ const ReceiptPage = (props) => {
             Print
           </button>
           <div class="ticket">
-            <h5 class="centered">Qadri Meat</h5>
+            <h1>Qadri Meat</h1>
 
             <p class="centered">
-              qadrimeat.com
-              <br />
               qadrimeat@gmail.com
               <br />
               PH# +92 304-4014345
               <br />
-              11-N Phase 1, DHA Lahore
+              11 N Phase 1, DHA Lahore
             </p>
-            <div
-              className="d-flex justify-content-between"
-              style={{ marginRight: '4px' }}
-            >
-              <div>{new Date().toLocaleDateString()}</div>
-              <div>{new Date().toLocaleTimeString()}</div>
-            </div>
-            <table class="centered">
+            <table>
               <thead>
                 <tr>
                   <th class="description">Description</th>
-                  <th class="price">
-                    Sale
-                    <br />
-                    Price
-                  </th>
                   <th class="quantity">Q.</th>
-                  <th class="amount">Amount</th>
+                  <th class="price">PKR</th>
                 </tr>
               </thead>
               <tbody>
@@ -84,13 +64,6 @@ const ReceiptPage = (props) => {
                   return (
                     <tr>
                       <td class="description">{item.name}</td>
-                      <td class="price">
-                        <>
-                          {discountedPrice !== null
-                            ? (finalDiscountedPrice * item.quantity).toFixed(2)
-                            : (finalProductPrice * item.quantity).toFixed(2)}
-                        </>
-                      </td>
                       <td class="quantity">{item.quantity}</td>
                       <td class="price">
                         <>
@@ -104,24 +77,10 @@ const ReceiptPage = (props) => {
                 })}
               </tbody>
             </table>
-            <div className="d-flex justify-content-end">
-              <div
-                className="d-flex justify-content-between"
-                style={{ marginRight: '4px', width: '100px' }}
-              >
-                <div>Sub Total</div>
-                <div>{selectedOrder.totalPrice.toFixed(2)}</div>
-              </div>
-            </div>
-            <div className="d-flex justify-content-end">
-              <div
-                className="d-flex justify-content-between"
-                style={{ marginRight: '4px', width: '100px' }}
-              >
-                <div>Grand Total</div>
-                <div>{selectedOrder.totalPrice.toFixed(2)}</div>
-              </div>
-            </div>
+            <p>
+              SUB TOTAL {selectedOrder.totalPrice.toFixed(2)} <br /> TOTAL{' '}
+              {selectedOrder.totalPrice.toFixed(2)}
+            </p>
 
             <p class="centered">
               Thanks for your purchase!
@@ -129,7 +88,7 @@ const ReceiptPage = (props) => {
               Software provided by devprotocols.com
             </p>
           </div>
-        </div>
+        </>
       )}
     </>
   );
