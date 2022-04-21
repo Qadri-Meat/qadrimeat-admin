@@ -109,9 +109,10 @@ const OrderForm = ({ preloadedValues }) => {
   const options = {
     filterType: 'checkbox',
     onRowClick: (rowData, rowState) => {
+      let obj = results.find((o) => o.id === rowData[0]);
       setOrderItem({
-        ...results[rowState.rowIndex],
-        product: results[rowState.rowIndex].id,
+        ...obj,
+        product: obj.id,
         quantity: 1,
       });
       setKey(Math.random());
@@ -119,13 +120,16 @@ const OrderForm = ({ preloadedValues }) => {
   };
   const options1 = {
     filterType: 'checkbox',
+    count: 100,
     onRowsDelete: (rowsDeleted, dataRows) => {
       rowsDeleted.data.forEach(({ index }) => {
         dispatch(deleteFromCart(items[index]));
       });
     },
     onRowClick: (rowData, rowState) => {
-      setOrderItem(items[rowState.rowIndex]);
+      console.log(rowData);
+      let obj = items.find((o) => o.product === rowData[0]);
+      setOrderItem(obj);
       setKey(Math.random());
     },
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
@@ -231,8 +235,8 @@ const OrderForm = ({ preloadedValues }) => {
   ];
   const columns1 = [
     {
-      name: 'id',
-      label: 'Id',
+      name: 'product',
+      label: 'product',
       options: {
         filter: true,
         sort: true,
