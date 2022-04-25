@@ -7,13 +7,13 @@ const DashboardPage = (props) => {
   const { history } = props;
 
   const auth = useSelector((state) => state.auth);
-  const { isLoggedIn, user } = auth;
+  const { user: authUser } = auth;
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    if (!authUser) {
       history.push('/login');
     }
-  }, [history, user, isLoggedIn]);
+  }, [history, authUser]);
 
   return (
     <AdminLayout>

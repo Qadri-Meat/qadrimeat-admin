@@ -78,15 +78,15 @@ const AllUsersPage = (props) => {
   // const [search, setSearch] = useState('');
   const { results, page, totalResults } = useSelector((state) => state.user);
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (authUser) {
       dispatch(getUsers(selectedPage, limit));
     } else {
       history.push('/login');
     }
-  }, [history, isLoggedIn, dispatch, selectedPage, limit]);
+  }, [history, authUser, dispatch, selectedPage, limit]);
 
   const options = {
     filterType: 'checkbox',

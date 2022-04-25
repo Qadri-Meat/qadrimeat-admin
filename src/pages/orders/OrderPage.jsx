@@ -148,17 +148,17 @@ const OrderPage = (props) => {
   const dispatch = useDispatch();
   const { selectedOrder } = useSelector((state) => state.order);
   const { success } = useSelector((state) => state.transaction);
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (success) {
       dispatch({ type: types.TRANSACTION_RESET });
-    } else if (isLoggedIn) {
+    } else if (authUser) {
       dispatch(getOrder(orderId));
     } else {
       history.push('/login');
     }
-  }, [history, isLoggedIn, orderId, dispatch, success]);
+  }, [history, authUser, orderId, dispatch, success]);
 
   const options = {
     filterType: 'checkbox',

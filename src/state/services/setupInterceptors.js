@@ -1,6 +1,7 @@
 import axiosInstance from './api';
 import TokenService from './token.service';
 import { refreshToken } from '../ducks/auth/actions';
+import { LOGOUT } from 'state/ducks/auth/types';
 
 const setup = (store) => {
   axiosInstance.interceptors.request.use(
@@ -47,8 +48,8 @@ const setup = (store) => {
           }
         }
       } else if (originalConfig.url === '/auth/refresh-tokens') {
-        TokenService.removeAuthData();
-        window.open('/login-register');
+        dispatch({ type: LOGOUT });
+        window.open('/login', '_self');
       }
 
       return Promise.reject(err);

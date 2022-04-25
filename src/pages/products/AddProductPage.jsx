@@ -24,10 +24,10 @@ const AddProductPage = (props) => {
   const dispatch = useDispatch();
 
   const { success } = useSelector((state) => state.product);
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (authUser) {
       if (success) {
         dispatch({ type: types.PRODUCT_RESET });
         history.push('/products');
@@ -35,7 +35,7 @@ const AddProductPage = (props) => {
     } else {
       history.push('/login');
     }
-  }, [dispatch, history, success, isLoggedIn]);
+  }, [dispatch, history, success, authUser]);
 
   return (
     <AdminLayout>

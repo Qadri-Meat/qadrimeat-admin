@@ -27,10 +27,10 @@ const UpdateOrderPage = (props) => {
   const dispatch = useDispatch();
 
   const { success, selectedOrder } = useSelector((state) => state.order);
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (authUser) {
       if (success) {
         dispatch({ type: types.ORDER_RESET });
         history.push(`/orders/${orderId}`);
@@ -43,7 +43,7 @@ const UpdateOrderPage = (props) => {
     } else {
       history.push('/login');
     }
-  }, [history, success, isLoggedIn, orderId, selectedOrder, dispatch]);
+  }, [history, success, authUser, orderId, selectedOrder, dispatch]);
 
   return (
     <AdminLayout>

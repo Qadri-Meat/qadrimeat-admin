@@ -112,15 +112,15 @@ const AllOrdersPage = (props) => {
   const [type, setType] = useState('online');
   const { results, page, totalResults } = useSelector((state) => state.order);
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { use: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (authUser) {
       dispatch(getOrders(selectedPage, limit, type));
     } else {
       history.push('/login');
     }
-  }, [history, isLoggedIn, dispatch, selectedPage, limit, type]);
+  }, [history, authUser, dispatch, selectedPage, limit, type]);
 
   const options = {
     filterType: 'checkbox',

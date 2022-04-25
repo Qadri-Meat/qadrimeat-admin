@@ -1,33 +1,20 @@
 import * as types from './types';
 
-const authInfo = JSON.parse(localStorage.getItem('authInfo'));
-
-const initialState = authInfo
-  ? { isLoggedIn: true, ...authInfo }
-  : { isLoggedIn: false };
-
-export default function (state = initialState, action) {
+export default function (state = {}, action) {
   const { type, payload } = action;
 
   switch (type) {
     case types.LOGIN_SUCCESS:
-      return {
-        isLoggedIn: true,
-        ...payload,
-      };
+      return payload;
     case types.LOGIN_FAIL:
       return {
-        isLoggedIn: false,
         message: payload,
       };
     case types.LOGOUT:
-      return {
-        isLoggedIn: false,
-      };
+      return {};
     case types.REFRESH_TOKEN:
       return {
         ...state,
-        ...authInfo,
         tokens: payload,
       };
     default:

@@ -95,15 +95,15 @@ const AllProductsPage = (props) => {
   // const [search, setSearch] = useState('');
   const { results } = useSelector((state) => state.product);
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (authUser) {
       dispatch(getProducts(1, 100));
     } else {
       history.push('/login');
     }
-  }, [history, isLoggedIn, dispatch]);
+  }, [history, authUser, dispatch]);
 
   const options = {
     filterType: 'checkbox',
@@ -113,7 +113,8 @@ const AllProductsPage = (props) => {
       });
     },
     onRowClick: (rowData, rowState) => {
-      history.push(`/products/${rowData[0]}`);
+      let product = results.find((o) => o.id === rowData[0]);
+      history.push(`/products/${product.id}`);
     },
   };
 

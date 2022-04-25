@@ -60,7 +60,7 @@ const LoginPage = (props) => {
   const dispatch = useDispatch();
 
   const auth = useSelector((state) => state.auth);
-  const { isLoggedIn, user, message, loading } = auth;
+  const { user: authUser, message, loading } = auth;
 
   const redirect = location.search ? location.search.split('=')[1] : '/';
 
@@ -76,10 +76,10 @@ const LoginPage = (props) => {
   };
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (authUser) {
       history.push(redirect);
     }
-  }, [history, user, redirect, isLoggedIn]);
+  }, [history, authUser, redirect]);
 
   return (
     <div className={classes.root}>

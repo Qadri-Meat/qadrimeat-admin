@@ -11,17 +11,17 @@ const ReceiptPage = (props) => {
 
   const dispatch = useDispatch();
   const { selectedOrder } = useSelector((state) => state.order);
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (authUser) {
       if (!selectedOrder || selectedOrder.id !== orderId) {
         dispatch(getOrder(orderId));
       }
     } else {
       history.push('/login');
     }
-  }, [history, isLoggedIn, selectedOrder, orderId, dispatch]);
+  }, [history, authUser, selectedOrder, orderId, dispatch]);
   return (
     <>
       {!selectedOrder ? (

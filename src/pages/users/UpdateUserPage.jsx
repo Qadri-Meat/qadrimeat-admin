@@ -29,10 +29,10 @@ const UpdateUserPage = (props) => {
   const { setValues, data } = useData();
 
   const { success, selectedUser } = useSelector((state) => state.user);
-  const { isLoggedIn } = useSelector((state) => state.auth);
+  const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (authUser) {
       if (success) {
         dispatch({ type: types.USER_RESET });
         history.push('/users');
@@ -46,7 +46,7 @@ const UpdateUserPage = (props) => {
     } else {
       history.push('/login');
     }
-  }, [dispatch, history, success, isLoggedIn, userId, selectedUser, setValues]);
+  }, [dispatch, history, success, authUser, userId, selectedUser, setValues]);
 
   return (
     <AdminLayout>
