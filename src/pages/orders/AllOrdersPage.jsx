@@ -112,7 +112,7 @@ const AllOrdersPage = (props) => {
   const [type, setType] = useState('online');
   const { results, page, totalResults } = useSelector((state) => state.order);
 
-  const { use: authUser } = useSelector((state) => state.auth);
+  const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (authUser) {
