@@ -4,6 +4,7 @@ import { Redirect } from 'react-router-dom';
 import { DashboardPageConfig } from '../pages/dashboard/DashboardPageConfig';
 import { UsersPageConfig } from '../pages/users/UsersPageConfig';
 import { ProductsPageConfig } from '../pages/products/ProductsPageConfig';
+import { DealsPageConfig } from '../pages/deals/DealsPageConfig';
 import { OrdersPageConfig } from '../pages/orders/OrdersPageConfig';
 import { LoginPageConfig } from '../pages/auth/login/LoginPageConfig';
 import { Error404PageConfig } from '../pages/errors/404/Error404PageConfig';
@@ -15,6 +16,7 @@ const routeConfigs = [
   ...UsersPageConfig.routes,
   ...OrdersPageConfig.routes,
   ...ProductsPageConfig.routes,
+  ...DealsPageConfig.routes,
   ...LoginPageConfig.routes,
   ...Error404PageConfig.routes,
   ...Error500PageConfig.routes,

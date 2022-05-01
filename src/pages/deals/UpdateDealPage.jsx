@@ -3,8 +3,9 @@ import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
 import { Typography, Grid, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import * as types from 'state/ducks/product/types';
-import ProductForm from './components/ProductForm';
+import { getDeal } from 'state/ducks/deal/actions';
+import * as types from 'state/ducks/deal/types';
+import DealForm from './components/DealForm';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,41 +19,43 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddProductPage = (props) => {
-  const { history } = props;
+const UpdateDealPage = (props) => {
+  const { history, match } = props;
+  const dealId = match.params.id;
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { success } = useSelector((state) => state.product);
+  const { success, selectedDeal } = useSelector((state) => state.deal);
   const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    console.log(authUser);
     if (authUser) {
       if (success) {
-        dispatch({ type: types.PRODUCT_RESET });
-        history.push('/products');
+        dispatch({ type: types.DEAL_RESET });
+        history.push('/deals');
+      } else if (!selectedDeal) {
+        dispatch(getDeal(dealId));
       }
     } else {
       history.push('/login');
     }
-  }, [dispatch, history, success, authUser]);
+  }, [history, success, authUser, dealId, selectedDeal, dispatch]);
 
   return (
     <AdminLayout>
       <Grid container className={classes.my3} alignItems="center">
         <Grid item className={classes.mRight}>
           <Typography variant="h5" component="h1">
-            Add New Product
+            Update Deal
           </Typography>
         </Grid>
       </Grid>
       <AdminBreadcrumbs path={history} />
       <div className={classes.root}>
-        <ProductForm />
+        {selectedDeal ? <DealForm preloadedValues={selectedDeal} /> : <></>}
       </div>
     </AdminLayout>
   );
 };
 
-export default AddProductPage;
+export default UpdateDealPage;

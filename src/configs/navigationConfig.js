@@ -31,6 +31,14 @@ const navigationConfig = [
         exact: true,
       },
       {
+        id: 'deals',
+        title: 'Deals',
+        type: 'item',
+        icon: 'inventory',
+        url: '/deals',
+        exact: true,
+      },
+      {
         id: 'orders',
         title: 'Orders',
         type: 'item',

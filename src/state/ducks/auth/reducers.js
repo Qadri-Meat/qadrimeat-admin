@@ -1,6 +1,10 @@
 import * as types from './types';
 
-export default function (state = {}, action) {
+const initialState = localStorage.getItem('authInfo')
+  ? JSON.parse(localStorage.getItem('authInfo'))
+  : {};
+
+export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {

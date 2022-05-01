@@ -3,8 +3,8 @@ import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
 import { Typography, Grid, makeStyles } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import * as types from 'state/ducks/product/types';
-import ProductForm from './components/ProductForm';
+import * as types from 'state/ducks/deal/types';
+import DealForm from './components/DealForm';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,20 +18,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AddProductPage = (props) => {
+const AddDealPage = (props) => {
   const { history } = props;
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const { success } = useSelector((state) => state.product);
+  const { success } = useSelector((state) => state.deal);
   const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
     console.log(authUser);
     if (authUser) {
       if (success) {
-        dispatch({ type: types.PRODUCT_RESET });
-        history.push('/products');
+        dispatch({ type: types.DEAL_RESET });
+        history.push('/deals');
       }
     } else {
       history.push('/login');
@@ -43,16 +43,16 @@ const AddProductPage = (props) => {
       <Grid container className={classes.my3} alignItems="center">
         <Grid item className={classes.mRight}>
           <Typography variant="h5" component="h1">
-            Add New Product
+            Add New Deal
           </Typography>
         </Grid>
       </Grid>
       <AdminBreadcrumbs path={history} />
       <div className={classes.root}>
-        <ProductForm />
+        <DealForm />
       </div>
     </AdminLayout>
   );
 };
 
-export default AddProductPage;
+export default AddDealPage;

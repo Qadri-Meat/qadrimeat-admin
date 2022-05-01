@@ -8,7 +8,7 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 import { Grid, makeStyles, Button, MenuItem } from '@material-ui/core';
-import { createProduct, updateProduct } from 'state/ducks/product/actions';
+import { createDeal, updateDeal } from 'state/ducks/deal/actions';
 import Loader from 'components/Loader/Loader';
 import Message from 'components/Message/Message';
 
@@ -19,7 +19,6 @@ const schema = yup.object().shape({
   name: yup.string().required(),
   sku: yup.string().required(),
   price: yup.number().required(),
-  stock: yup.number().required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -35,13 +34,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProductForm = ({ preloadedValues }) => {
+const DealForm = ({ preloadedValues }) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
 
-  const { error, loading } = useSelector((state) => state.product);
+  const { error, loading } = useSelector((state) => state.deal);
   const {
     register,
     handleSubmit,
@@ -49,7 +48,6 @@ const ProductForm = ({ preloadedValues }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      new: false,
       ...preloadedValues,
     },
     mode: 'onBlur',
@@ -63,9 +61,9 @@ const ProductForm = ({ preloadedValues }) => {
   const onSubmit = (data) => {
     data.image = files;
     if (preloadedValues) {
-      dispatch(updateProduct(preloadedValues.id, data));
+      dispatch(updateDeal(preloadedValues.id, data));
     } else {
-      dispatch(createProduct(data));
+      dispatch(createDeal(data));
     }
   };
 
@@ -107,39 +105,7 @@ const ProductForm = ({ preloadedValues }) => {
             helperText={errors?.price?.message}
           />
         </Grid>
-        <Grid item md={4} xs={12}>
-          <Input
-            ref={register}
-            id="stock"
-            type="number"
-            label="Stock"
-            name="stock"
-            error={!!errors.stock}
-            helperText={errors?.stock?.message}
-          />
-        </Grid>
-        <Grid item md={4} xs={12}>
-          <Input
-            ref={register}
-            id="discount"
-            type="number"
-            label="Discount"
-            name="discount"
-            error={!!errors.discount}
-            helperText={errors?.discount?.message}
-          />
-        </Grid>
-        <Grid item md={4} xs={12}>
-          <Input
-            ref={register}
-            id="saleCount"
-            type="number"
-            label="Sale Count"
-            name="saleCount"
-            error={!!errors.saleCount}
-            helperText={errors?.saleCount?.message}
-          />
-        </Grid>
+
         <Grid item md={4} xs={12}>
           <Input
             ref={register}
@@ -182,17 +148,6 @@ const ProductForm = ({ preloadedValues }) => {
             <MenuItem value="beef">Beef</MenuItem>
           </SelectInput>
         </Grid>
-        <Grid item md={2} xs={12}>
-          <CheckBoxInput
-            ref={register}
-            id="new"
-            name="new"
-            label="New"
-            control={control}
-            error={!!errors.new}
-            helperText={errors?.new?.message}
-          />
-        </Grid>
 
         <Grid item xs={12}>
           <DropzoneArea
@@ -216,9 +171,9 @@ const ProductForm = ({ preloadedValues }) => {
               {loading ? (
                 <Loader />
               ) : preloadedValues ? (
-                'Update Product'
+                'Update Deal'
               ) : (
-                'Save Product'
+                'Save Deal'
               )}
             </Button>
           </div>
@@ -228,4 +183,4 @@ const ProductForm = ({ preloadedValues }) => {
   );
 };
 
-export default ProductForm;
+export default DealForm;
