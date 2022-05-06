@@ -6,6 +6,7 @@ import { UsersPageConfig } from '../pages/users/UsersPageConfig';
 import { ProductsPageConfig } from '../pages/products/ProductsPageConfig';
 import { DealsPageConfig } from '../pages/deals/DealsPageConfig';
 import { OrdersPageConfig } from '../pages/orders/OrdersPageConfig';
+import { BookingsPageConfig } from '../pages/bookings/BookingsPageConfig';
 import { LoginPageConfig } from '../pages/auth/login/LoginPageConfig';
 import { Error404PageConfig } from '../pages/errors/404/Error404PageConfig';
 import { Error500PageConfig } from '../pages/errors/500/Error500PageConfig';
@@ -17,6 +18,7 @@ const routeConfigs = [
   ...OrdersPageConfig.routes,
   ...ProductsPageConfig.routes,
   ...DealsPageConfig.routes,
+  ...BookingsPageConfig.routes,
   ...LoginPageConfig.routes,
   ...Error404PageConfig.routes,
   ...Error500PageConfig.routes,

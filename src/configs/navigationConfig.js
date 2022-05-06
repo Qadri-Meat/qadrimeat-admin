@@ -46,6 +46,14 @@ const navigationConfig = [
         url: '/orders',
         exact: true,
       },
+      {
+        id: 'bookings',
+        title: 'Bookings',
+        type: 'item',
+        icon: 'receipt',
+        url: '/bookings',
+        exact: true,
+      },
     ],
   },
 ];
