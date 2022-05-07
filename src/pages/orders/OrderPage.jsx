@@ -12,7 +12,7 @@ import {
 } from '@material-ui/core';
 import OrderPageRightPanels from 'components/extra/OrderPageRightPanels/OrderPageRightPanels';
 import { getOrder } from 'state/ducks/order/actions';
-import * as types from 'state/ducks/transaction/types';
+
 import MUIDataTable from 'mui-datatables';
 import { getDiscountPrice } from 'helpers/product';
 
@@ -147,18 +147,15 @@ const OrderPage = (props) => {
 
   const dispatch = useDispatch();
   const { selectedOrder } = useSelector((state) => state.order);
-  const { success } = useSelector((state) => state.transaction);
   const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (success) {
-      dispatch({ type: types.TRANSACTION_RESET });
-    } else if (authUser) {
+    if (authUser) {
       dispatch(getOrder(orderId));
     } else {
       history.push('/login');
     }
-  }, [history, authUser, orderId, dispatch, success]);
+  }, [history, authUser, orderId, dispatch]);
 
   const options = {
     filterType: 'checkbox',

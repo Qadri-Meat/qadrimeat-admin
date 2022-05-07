@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Grid, Button, Divider, Box, TextField } from '@material-ui/core';
 import Message from 'components/Message/Message';
-import { updateOrder } from 'state/ducks/order/actions';
-import { createTransaction } from 'state/ducks/transaction/actions';
+import { updateOrder, addTransaction } from 'state/ducks/order/actions';
+
 import Loader from 'components/Loader/Loader';
 import SaveIcon from '@material-ui/icons/Save';
 
@@ -60,8 +60,7 @@ export default function OrderPageRightPanels() {
   };
   const handleCreateTransaction = () => {
     dispatch(
-      createTransaction({
-        order: selectedOrder.id,
+      addTransaction(selectedOrder.id, {
         amount,
         paymentMethod: 'cash',
       })

@@ -2,6 +2,9 @@ import React, { useState, useEffect, Fragment } from 'react';
 import Form from 'components/Form/Form';
 import Input from 'components/Input/Input';
 import { useDispatch, useSelector } from 'react-redux';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import SaveIcon from '@material-ui/icons/Save';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
@@ -21,7 +24,11 @@ import Message from 'components/Message/Message';
 
 import MUIDataTable from 'mui-datatables';
 import { getDiscountPrice } from 'helpers/product';
-import { deleteFromCart } from 'state/ducks/cart/actions';
+import {
+  addToCart,
+  decreaseQuantity,
+  deleteFromCart,
+} from 'state/ducks/cart/actions';
 import { Autocomplete } from '@material-ui/lab';
 import { getDeals } from 'state/ducks/deal/actions';
 
@@ -57,7 +64,7 @@ const BookingForm = ({ preloadedValues }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   let cartTotalPrice = 0;
-
+  const [searchBar, setSearchBar] = useState(1);
   const { error, loading } = useSelector((state) => state.booking);
 
   const items = useSelector((state) => state.cart);
@@ -228,15 +235,26 @@ const BookingForm = ({ preloadedValues }) => {
           style: { minWidth: '50px', maxWidth: '50px' },
         }),
         customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData: cartItem } = tableMeta;
+
           return (
-            <Input
-              type="text"
-              value={value}
-              onChange={(event) => {
-                const { rowData: cartItem } = tableMeta;
-                console.log(event.target.value, cartItem[0]);
-              }}
-            />
+            <>
+              <IconButton
+                onClick={() => {
+                  dispatch(addToCart(cartItem));
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+              {value}
+              <IconButton
+                onClick={() => {
+                  dispatch(decreaseQuantity(cartItem));
+                }}
+              >
+                <RemoveIcon />
+              </IconButton>
+            </>
           );
         },
       },
@@ -272,12 +290,24 @@ const BookingForm = ({ preloadedValues }) => {
         <Grid container spacing={3}>
           <Grid item xs={12}>
             <Autocomplete
+              key={searchBar}
               disablePortal
               id="combo-box-demo"
               options={results}
               getOptionLabel={(option) => option.name}
               onChange={(event, values) => {
-                console.log(values.id);
+                if (values) {
+                  const item = {
+                    name: values.name,
+                    quantity: values.quantity,
+                    price: values.price,
+                    discount: values.discount,
+                    image: values.image,
+                    deal: values.id,
+                  };
+                  dispatch(addToCart(item));
+                  setSearchBar(Math.random());
+                }
               }}
               renderInput={(params) => (
                 <TextField {...params} label="Search Deals" />

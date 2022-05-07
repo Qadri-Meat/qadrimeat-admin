@@ -100,3 +100,26 @@ export const createBooking = (data) => async (dispatch) => {
     });
   }
 };
+
+export const addTransaction = (id, data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: types.BOOKING_REQUEST,
+    });
+    const res = await BookingService.addTransaction(id, data);
+
+    dispatch({
+      type: types.CREATE_BOOKING_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({
+      type: types.BOOKING_FAIL,
+      payload: message,
+    });
+  }
+};

@@ -147,18 +147,15 @@ const BookingPage = (props) => {
 
   const dispatch = useDispatch();
   const { selectedBooking } = useSelector((state) => state.booking);
-  const { success } = useSelector((state) => state.transaction);
   const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (success) {
-      dispatch({ type: types.TRANSACTION_RESET });
-    } else if (authUser) {
+    if (authUser) {
       dispatch(getBooking(bookingId));
     } else {
       history.push('/login');
     }
-  }, [history, authUser, bookingId, dispatch, success]);
+  }, [history, authUser, bookingId, dispatch]);
 
   const options = {
     filterType: 'checkbox',

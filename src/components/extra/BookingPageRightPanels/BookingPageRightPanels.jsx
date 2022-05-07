@@ -8,8 +8,8 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Grid, Button, Divider, Box, TextField } from '@material-ui/core';
 import Message from 'components/Message/Message';
-import { updateBooking } from 'state/ducks/booking/actions';
-import { createTransaction } from 'state/ducks/transaction/actions';
+import { updateBooking, addTransaction } from 'state/ducks/booking/actions';
+
 import Loader from 'components/Loader/Loader';
 import SaveIcon from '@material-ui/icons/Save';
 
@@ -60,8 +60,7 @@ export default function BookingPageRightPanels() {
   };
   const handleCreateTransaction = () => {
     dispatch(
-      createTransaction({
-        booking: selectedBooking.id,
+      addTransaction(selectedBooking.id, {
         amount,
         paymentMethod: 'cash',
       })

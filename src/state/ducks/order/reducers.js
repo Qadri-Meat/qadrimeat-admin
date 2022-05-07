@@ -23,10 +23,13 @@ export default (state = initialState, action) => {
         ...payload,
       };
     case types.CREATE_ORDER_SUCCESS:
+      var totalPaid2 = payload.transactions.reduce(function (a, b) {
+        return a + b.amount;
+      }, 0);
       return {
         loading: false,
         success: true,
-        selectedOrder: payload,
+        selectedOrder: { ...payload, totalPaid: totalPaid2 || 0 },
       };
     case types.UPDATE_ORDER_SUCCESS:
       var totalPaid = payload.transactions.reduce(function (a, b) {

@@ -100,3 +100,26 @@ export const createOrder = (data) => async (dispatch) => {
     });
   }
 };
+
+export const addTransaction = (id, data) => async (dispatch) => {
+  try {
+    dispatch({
+      type: types.ORDER_REQUEST,
+    });
+    const res = await OrderService.addTransaction(id, data);
+
+    dispatch({
+      type: types.CREATE_ORDER_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({
+      type: types.ORDER_FAIL,
+      payload: message,
+    });
+  }
+};

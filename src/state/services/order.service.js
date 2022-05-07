@@ -12,6 +12,7 @@ class OrderService {
   get(id) {
     return api.get(`/orders/${id}`);
   }
+
   create(data) {
     return api.post(`/orders`, data);
   }
@@ -19,6 +20,7 @@ class OrderService {
   update(id, data) {
     return api.patch(`/orders/${id}`, data);
   }
+
   addTransaction(id, data) {
     return api.patch(`/orders/${id}/transactions`, data);
   }
