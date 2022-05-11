@@ -8,7 +8,11 @@ class BookingService {
       }`
     );
   }
-
+  getBookingItems(day, deal) {
+    return api.get(
+      `/bookings/booking-items?day=${day}${deal ? `&deal=${deal}` : ''}`
+    );
+  }
   get(id) {
     return api.get(`/bookings/${id}`);
   }

@@ -3,6 +3,9 @@ import Form from 'components/Form/Form';
 import Input from 'components/Input/Input';
 import { useDispatch, useSelector } from 'react-redux';
 import SaveIcon from '@material-ui/icons/Save';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
+import RemoveIcon from '@material-ui/icons/Remove';
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
@@ -13,16 +16,21 @@ import {
   Avatar,
   Typography,
   Box,
+  TextField,
 } from '@material-ui/core';
 import { createOrder, updateOrder } from 'state/ducks/order/actions';
 import Loader from 'components/Loader/Loader';
 import Message from 'components/Message/Message';
-import OrderItemForm from './OrderItemForm';
 
+import { Autocomplete } from '@material-ui/lab';
 import MUIDataTable from 'mui-datatables';
 import { getProducts } from 'state/ducks/product/actions';
 import { getDiscountPrice } from 'helpers/product';
-import { deleteFromCart } from 'state/ducks/cart/actions';
+import {
+  addToCart,
+  deleteFromCart,
+  decreaseQuantity,
+} from 'state/ducks/cart/actions';
 
 const schema = yup.object().shape({
   firstName: yup.string().required(),
@@ -59,8 +67,7 @@ const OrderForm = ({ preloadedValues }) => {
 
   const { error, loading } = useSelector((state) => state.order);
 
-  const [orderItem, setOrderItem] = useState({});
-  const [key, setKey] = useState(Math.random());
+  const [searchBar, setSearchBar] = useState(1);
 
   const items = useSelector((state) => state.cart);
   const { results } = useSelector((state) => state.product);
@@ -108,29 +115,11 @@ const OrderForm = ({ preloadedValues }) => {
 
   const options = {
     filterType: 'checkbox',
-    onRowClick: (rowData, rowState) => {
-      let obj = results.find((o) => o.id === rowData[0]);
-      setOrderItem({
-        ...obj,
-        product: obj.id,
-        quantity: 1,
-      });
-      setKey(Math.random());
-    },
-  };
-  const options1 = {
-    filterType: 'checkbox',
     count: 100,
     onRowsDelete: (rowsDeleted, dataRows) => {
       rowsDeleted.data.forEach(({ index }) => {
         dispatch(deleteFromCart(items[index]));
       });
-    },
-    onRowClick: (rowData, rowState) => {
-      console.log(rowData);
-      let obj = items.find((o) => o.product === rowData[0]);
-      setOrderItem(obj);
-      setKey(Math.random());
     },
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
       return (
@@ -156,84 +145,6 @@ const OrderForm = ({ preloadedValues }) => {
   };
 
   const columns = [
-    {
-      name: 'id',
-      label: 'Id',
-      options: {
-        filter: true,
-        sort: true,
-        display: false,
-      },
-    },
-    {
-      name: 'image',
-      label: 'Image',
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const image = value.length > 0 ? value[0] : '';
-          return (
-            <Avatar
-              variant="rounded"
-              src={image === '' ? '' : process.env.REACT_APP_API_URL + image}
-            />
-          );
-        },
-      },
-    },
-    {
-      name: 'name',
-      label: 'Name',
-      options: {
-        filter: true,
-        sort: false,
-      },
-    },
-    {
-      name: 'price',
-      label: 'Price',
-      options: {
-        filter: true,
-        sort: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowData: product } = tableMeta;
-          const price = product[3];
-          const discount = product[4];
-          const discountedPrice = getDiscountPrice(price, discount);
-          const finalProductPrice = (price * 1).toFixed(2);
-          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
-          return (
-            <>
-              {discountedPrice !== null ? (
-                <>
-                  <span
-                    style={{ textDecoration: 'line-through', color: 'gray' }}
-                  >
-                    {'PKR ' + finalProductPrice}
-                  </span>
-                  <span className="amount">
-                    {'    PKR ' + finalDiscountedPrice}
-                  </span>
-                </>
-              ) : (
-                <span>{'PKR ' + finalProductPrice}</span>
-              )}
-            </>
-          );
-        },
-      },
-    },
-    {
-      name: 'discount',
-      label: 'Discount',
-      options: {
-        filter: true,
-        sort: true,
-        display: false,
-      },
-    },
-  ];
-  const columns1 = [
     {
       name: 'product',
       label: 'product',
@@ -320,8 +231,40 @@ const OrderForm = ({ preloadedValues }) => {
       name: 'quantity',
       label: 'Quantity',
       options: {
-        filter: true,
+        filter: false,
         sort: false,
+        setCellProps: () => ({
+          style: { minWidth: '50px', maxWidth: '50px' },
+        }),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cartItem = items.filter((item) => {
+            return item.product === rowData[0];
+          })[0];
+          return (
+            <>
+              <IconButton
+                onClick={() => {
+                  dispatch(addToCart(cartItem));
+                }}
+              >
+                <AddIcon />
+              </IconButton>
+              {value}
+              <IconButton
+                onClick={() => {
+                  if (cartItem.quantity === 1) {
+                    dispatch(deleteFromCart(cartItem));
+                  } else {
+                    dispatch(decreaseQuantity(cartItem));
+                  }
+                }}
+              >
+                <RemoveIcon />
+              </IconButton>
+            </>
+          );
+        },
       },
     },
     {
@@ -353,23 +296,38 @@ const OrderForm = ({ preloadedValues }) => {
       {error && <Message severity="error">{error}</Message>}
       <Grid container spacing={3} style={{ marginTop: '20px' }}>
         <Grid container spacing={3}>
-          <Grid item xs={6}>
-            <MUIDataTable
-              title={'Products'}
-              data={results}
-              columns={columns}
-              options={options}
+          <Grid item xs={12}>
+            <Autocomplete
+              key={searchBar}
+              disablePortal
+              id="combo-box-demo"
+              options={results}
+              getOptionLabel={(option) => option.name}
+              onChange={(event, values) => {
+                if (values) {
+                  const item = {
+                    name: values.name,
+                    quantity: values.quantity,
+                    price: values.price,
+                    discount: values.discount,
+                    image: values.image,
+                    product: values.id,
+                  };
+                  dispatch(addToCart(item));
+                  setSearchBar(Math.random());
+                }
+              }}
+              renderInput={(params) => (
+                <TextField {...params} label="Search Products" />
+              )}
             />
-          </Grid>
-          <Grid item xs={6}>
-            <OrderItemForm preloadedValues={orderItem} key={key} />
           </Grid>
           <Grid item xs={12}>
             <MUIDataTable
               title={'Order Items'}
               data={items}
-              columns={columns1}
-              options={options1}
+              columns={columns}
+              options={options}
             />
           </Grid>
         </Grid>

@@ -1,46 +1,43 @@
 import * as types from './types';
 
-export default (state = {}, action) => {
+const initialState = {};
+
+export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case types.USER_REQUEST:
+    case types.EXPENSE_REQUEST:
       return {
         ...state,
         loading: true,
       };
-    case types.USER_FAIL:
+    case types.EXPENSE_FAIL:
       return {
         ...state,
         loading: false,
         error: payload,
       };
-    case types.GET_USERS_SUCCESS:
+    case types.GET_EXPENSES_SUCCESS:
       return {
         loading: false,
         ...payload,
       };
-    case types.CREATE_USER_SUCCESS:
+    case types.CREATE_EXPENSE_SUCCESS:
       return {
         loading: false,
         success: true,
       };
-    case types.UPDATE_USER_SUCCESS:
+    case types.UPDATE_EXPENSE_SUCCESS:
       return {
         loading: false,
         success: true,
       };
-    case types.GET_USER_SUCCESS:
+    case types.GET_EXPENSE_SUCCESS:
       return {
         loading: false,
-        selectedUser: payload,
+        expense: payload,
       };
-    case types.GET_DASHBOARD_SUCCESS:
-      return {
-        loading: false,
-        ...payload,
-      };
-    case types.USER_RESET:
+    case types.EXPENSE_RESET:
       return {};
     default:
       return state;

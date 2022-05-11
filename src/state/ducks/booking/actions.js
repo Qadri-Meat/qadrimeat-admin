@@ -26,6 +26,29 @@ export const getBookings = (page, limit, type) => async (dispatch) => {
   }
 };
 
+export const getBookingItems = (day, deal) => async (dispatch) => {
+  try {
+    dispatch({
+      type: types.BOOKING_REQUEST,
+    });
+    const res = await BookingService.getBookingItems(day, deal);
+
+    dispatch({
+      type: types.GET_BOOKING_ITEMS_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({
+      type: types.BOOKING_FAIL,
+      payload: message,
+    });
+  }
+};
+
 export const getBooking = (id) => async (dispatch) => {
   try {
     dispatch({
@@ -80,6 +103,7 @@ export const createBooking = (data) => async (dispatch) => {
     dispatch({
       type: types.BOOKING_REQUEST,
     });
+
     const res = await BookingService.create(data);
 
     dispatch({

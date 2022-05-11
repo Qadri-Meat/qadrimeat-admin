@@ -4,4 +4,6 @@ export { default as product } from './product';
 export { default as deal } from './deal';
 export { default as booking } from './booking';
 export { default as cart } from './cart';
+export { default as cart1 } from './cart1';
+export { default as expenses } from './expenses';
 export { default as auth } from './auth';

@@ -108,3 +108,26 @@ export const deleteUser = (id) => async (dispatch) => {
     });
   }
 };
+
+export const getDashboard = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: types.USER_REQUEST,
+    });
+    const res = await UserService.getDashboard();
+
+    dispatch({
+      type: types.GET_DASHBOARD_SUCCESS,
+      payload: res.data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({
+      type: types.USER_FAIL,
+      payload: message,
+    });
+  }
+};

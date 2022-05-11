@@ -49,9 +49,36 @@ const navigationConfig = [
       {
         id: 'bookings',
         title: 'Bookings',
+        type: 'collapse',
+        icon: 'file_copy',
+        badge: {
+          title: '2',
+          bg: '#525E8A',
+          fg: '#FFFFFF',
+        },
+        children: [
+          {
+            id: 'all bookings',
+            title: 'All Bookings',
+            type: 'item',
+            url: '/bookings',
+            exact: true,
+          },
+          {
+            id: 'booking items',
+            title: 'Booking items',
+            type: 'item',
+            url: '/bookings/booking-items',
+            exact: true,
+          },
+        ],
+      },
+      {
+        id: 'expenses',
+        title: 'Expenses',
         type: 'item',
         icon: 'receipt',
-        url: '/bookings',
+        url: '/expenses',
         exact: true,
       },
     ],

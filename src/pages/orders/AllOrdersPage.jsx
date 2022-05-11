@@ -102,14 +102,15 @@ const columns = [
 ];
 
 const AllOrdersPage = (props) => {
-  const { history } = props;
+  const { history, location } = props;
+  const type = location.search ? location.search.split('=')[1] : 'online';
   const classes = useStyles();
 
   const dispatch = useDispatch();
   const [selectedPage, setSelectedPage] = useState(1);
   const [limit, setLimit] = useState(10);
   // const [search, setSearch] = useState('');
-  const [type, setType] = useState('online');
+
   const { results, page, totalResults } = useSelector((state) => state.order);
 
   const { user: authUser } = useSelector((state) => state.auth);
@@ -184,7 +185,7 @@ const AllOrdersPage = (props) => {
               size="small"
               exclusive
               onChange={(event, value) => {
-                setType(value);
+                history.push(`/orders?type=${value}`);
               }}
             >
               <ToggleButton value="online">Online</ToggleButton>

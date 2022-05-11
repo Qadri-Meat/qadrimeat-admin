@@ -3,8 +3,8 @@ import AllBookingsPage from './AllBookingsPage';
 import InvoicePage from './InvoicePage';
 
 import BookingPage from './BookingPage';
-import ReceiptPage from './ReceiptPage';
 import UpdateBookingPage from './UpdateBookingPage';
+import AllBookingItemsPage from './AllBookingItemsPage';
 
 export const BookingsPageConfig = {
   routes: [
@@ -12,6 +12,12 @@ export const BookingsPageConfig = {
       path: '/bookings',
       exact: true,
       component: AllBookingsPage,
+    },
+
+    {
+      path: '/bookings/booking-items',
+      exact: true,
+      component: AllBookingItemsPage,
     },
     {
       path: '/bookings/add-booking',
@@ -37,11 +43,6 @@ export const BookingsPageConfig = {
       path: '/bookings/invoice/:id',
       exact: true,
       component: InvoicePage,
-    },
-    {
-      path: '/bookings/receipt/:id',
-      exact: true,
-      component: ReceiptPage,
     },
   ],
 };

@@ -12,7 +12,6 @@ import {
 } from '@material-ui/core';
 import BookingPageRightPanels from 'components/extra/BookingPageRightPanels/BookingPageRightPanels';
 import { getBooking } from 'state/ducks/booking/actions';
-import * as types from 'state/ducks/transaction/types';
 import MUIDataTable from 'mui-datatables';
 import { getDiscountPrice } from 'helpers/product';
 
@@ -40,106 +39,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns = [
-  {
-    name: 'image',
-    label: 'Image',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const image = value.length > 0 ? value[0] : '';
-        return (
-          <Avatar
-            variant="rounded"
-            src={image === '' ? '' : process.env.REACT_APP_API_URL + image}
-          />
-        );
-      },
-    },
-  },
-  {
-    name: 'name',
-    label: 'Name',
-    options: {
-      filter: true,
-      sort: true,
-    },
-  },
-  {
-    name: 'price',
-    label: 'Price',
-    options: {
-      filter: true,
-      sort: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const { rowData: cartItem } = tableMeta;
-        const price = cartItem[2];
-        const discount = cartItem[3];
-        const discountedPrice = getDiscountPrice(price, discount);
-        const finalProductPrice = (price * 1).toFixed(2);
-        const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
-
-        return (
-          <>
-            {discountedPrice !== null ? (
-              <>
-                <span style={{ textDecoration: 'line-through', color: 'gray' }}>
-                  {'PKR ' + finalProductPrice}
-                </span>
-                <span className="amount">
-                  {'    PKR ' + finalDiscountedPrice}
-                </span>
-              </>
-            ) : (
-              <span>{'PKR ' + finalProductPrice}</span>
-            )}
-          </>
-        );
-      },
-    },
-  },
-  {
-    name: 'discount',
-    label: 'Discount',
-    options: {
-      filter: true,
-      sort: false,
-      display: false,
-    },
-  },
-  {
-    name: 'quantity',
-    label: 'Quantity',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'price',
-    label: 'Sub Total',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const { rowData: cartItem } = tableMeta;
-        const price = cartItem[2];
-        const discount = cartItem[3];
-        const quantity = cartItem[4];
-        const discountedPrice = getDiscountPrice(price, discount);
-        const finalProductPrice = (price * 1).toFixed(2);
-        const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
-        return (
-          <>
-            {discountedPrice !== null
-              ? 'PKR ' + (finalDiscountedPrice * quantity).toFixed(2)
-              : 'PKR ' + (finalProductPrice * quantity).toFixed(2)}
-          </>
-        );
-      },
-    },
-  },
-];
-
 const BookingPage = (props) => {
   const { history, match } = props;
   const bookingId = match.params.id;
@@ -156,6 +55,109 @@ const BookingPage = (props) => {
       history.push('/login');
     }
   }, [history, authUser, bookingId, dispatch]);
+
+  const columns = [
+    {
+      name: 'image',
+      label: 'Image',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const image = value.length > 0 ? value[0] : '';
+          return (
+            <Avatar
+              variant="rounded"
+              src={image === '' ? '' : process.env.REACT_APP_API_URL + image}
+            />
+          );
+        },
+      },
+    },
+    {
+      name: 'name',
+      label: 'Name',
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: 'price',
+      label: 'Price',
+      options: {
+        filter: true,
+        sort: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData: cartItem } = tableMeta;
+          const price = cartItem[2];
+          const discount = cartItem[3];
+          const discountedPrice = getDiscountPrice(price, discount);
+          const finalProductPrice = (price * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+
+          return (
+            <>
+              {discountedPrice !== null ? (
+                <>
+                  <span
+                    style={{ textDecoration: 'line-through', color: 'gray' }}
+                  >
+                    {'PKR ' + finalProductPrice}
+                  </span>
+                  <br />
+                  <span className="amount">
+                    {'    PKR ' + finalDiscountedPrice}
+                  </span>
+                </>
+              ) : (
+                <span>{'PKR ' + finalProductPrice}</span>
+              )}
+            </>
+          );
+        },
+      },
+    },
+    {
+      name: 'discount',
+      label: 'Discount',
+      options: {
+        filter: true,
+        sort: false,
+        display: false,
+      },
+    },
+    {
+      name: 'quantity',
+      label: 'Quantity',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: 'price',
+      label: 'Sub Total',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData: cartItem } = tableMeta;
+          const price = cartItem[2];
+          const discount = cartItem[3];
+          const quantity = cartItem[4];
+          const discountedPrice = getDiscountPrice(price, discount);
+          const finalProductPrice = (price * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+          return (
+            <>
+              {discountedPrice !== null
+                ? 'PKR ' + (finalDiscountedPrice * quantity).toFixed(2)
+                : 'PKR ' + (finalProductPrice * quantity).toFixed(2)}
+            </>
+          );
+        },
+      },
+    },
+  ];
 
   const options = {
     filterType: 'checkbox',
@@ -180,13 +182,22 @@ const BookingPage = (props) => {
             <Typography variant="h6">Sub Total</Typography>
             <Typography variant="body1">
               Rs
-              {' ' + selectedBooking.totalPrice - selectedBooking.shippingPrice}
+              {' ' +
+                selectedBooking.totalPrice -
+                selectedBooking.shippingPrice +
+                (selectedBooking.discount || 0)}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Shipping Price</Typography>
             <Typography variant="body1">
               Rs{' ' + selectedBooking.shippingPrice}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h6">Discount</Typography>
+            <Typography variant="body1">
+              Rs{' ' + (selectedBooking.discount || 0)}
             </Typography>
           </Box>
           <Box>
@@ -232,17 +243,6 @@ const BookingPage = (props) => {
             size="small"
           >
             Invoice
-          </Button>
-
-          <Button
-            onClick={() =>
-              history.push(`/bookings/receipt/${selectedBooking.id}`)
-            }
-            variant="outlined"
-            color="primary"
-            size="small"
-          >
-            Receipt
           </Button>
         </Grid>
       </Grid>

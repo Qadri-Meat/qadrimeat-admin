@@ -121,44 +121,6 @@ export default function BookingPageRightPanels() {
                     {selectedBooking.shippingDetails.postalCode},{' '}
                     {selectedBooking.shippingDetails.country}
                   </p>
-                  {deliveryTime ? (
-                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                      <KeyboardDateTimePicker
-                        id="time-picker"
-                        label="Delivery Time"
-                        style={{ width: '250px' }}
-                        value={deliveryTime}
-                        disabled
-                        onChange={(date) => {
-                          dispatch(
-                            updateBooking(selectedBooking.id, {
-                              deliveryTime: date,
-                            })
-                          );
-                          setDeliveryTime(date);
-                        }}
-                      />
-                    </MuiPickersUtilsProvider>
-                  ) : (
-                    ''
-                  )}
-
-                  <p>
-                    {/* {new Date(selectedBooking.deliveryTime).toLocaleDateString()},{' '}
-                    {new Date(selectedBooking.deliveryTime).toLocaleTimeString()},{' '} */}
-                    <strong>Minutes Remaining:</strong> (
-                    {(
-                      (new Date(selectedBooking.deliveryTime) - new Date()) /
-                      60000
-                    ).toFixed() > 0
-                      ? (
-                          (new Date(selectedBooking.deliveryTime) -
-                            new Date()) /
-                          60000
-                        ).toFixed()
-                      : '0'}
-                    )
-                  </p>
                 </>
               ) : (
                 <></>

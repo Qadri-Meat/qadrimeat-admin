@@ -22,6 +22,11 @@ export default (state = initialState, action) => {
         loading: false,
         ...payload,
       };
+    case types.GET_BOOKING_ITEMS_SUCCESS:
+      return {
+        loading: false,
+        bookingItems: payload,
+      };
     case types.CREATE_BOOKING_SUCCESS:
       var totalPaid2 = payload.transactions.reduce(function (a, b) {
         return a + b.amount;

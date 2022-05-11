@@ -8,6 +8,9 @@ class UserService {
   get(id) {
     return api.get(`/users/${id}`);
   }
+  getDashboard() {
+    return api.get(`/users/dashboard`);
+  }
 
   create(data) {
     return api.post('/users', data);

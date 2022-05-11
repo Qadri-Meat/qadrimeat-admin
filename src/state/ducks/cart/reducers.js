@@ -23,7 +23,7 @@ export default (state = initialState, action) => {
           ...cartItems,
           {
             ...product,
-            quantity: product.quantity ? product.quantity : 1,
+            quantity: 1,
           },
         ];
       } else {
@@ -31,9 +31,7 @@ export default (state = initialState, action) => {
           item.product === cartItem.product
             ? {
                 ...item,
-                quantity: product.quantity
-                  ? product.quantity
-                  : item.quantity + 1,
+                quantity: item.quantity + 1,
               }
             : item
         );

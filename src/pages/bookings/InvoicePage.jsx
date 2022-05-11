@@ -220,27 +220,30 @@ const InvoicePage = (props) => {
                       </div>
                     </div>
 
-                    <div className="d-flex flex-row-reverse bg-dark text-white p-4">
-                      <div className="py-3 px-5 text-right">
-                        <div className="mb-2">Grand Total</div>
-                        <div className="h2 font-weight-light">
-                          Rs {selectedBooking.totalPrice}
+                    <div className="d-flex flex-row-reverse p-2">
+                      <div className=" px-5 text-right">
+                        <div className="mb-2">
+                          <strong>
+                            Sub - Total amount: Rs{' '}
+                            {selectedBooking.totalPrice -
+                              selectedBooking.shippingPrice +
+                              (selectedBooking.discount || 0)}
+                          </strong>
                         </div>
-                      </div>
-
-                      <div className="py-3 px-5 text-right">
-                        <div className="mb-2">Shipping Price</div>
-                        <div className="h2 font-weight-light">
-                          Rs {selectedBooking.shippingPrice}
+                        <div className="mb-2">
+                          <strong>
+                            Shipping Price: Rs {selectedBooking.shippingPrice}
+                          </strong>
                         </div>
-                      </div>
-
-                      <div className="py-3 px-5 text-right">
-                        <div className="mb-2">Sub - Total amount</div>
-                        <div className="h2 font-weight-light">
-                          Rs{' '}
-                          {selectedBooking.totalPrice -
-                            selectedBooking.shippingPrice}
+                        <div className="mb-2">
+                          <strong>
+                            Discount: Rs {selectedBooking.discount || 0}
+                          </strong>
+                        </div>
+                        <div className="mb-2">
+                          <strong>
+                            Grand Total: Rs {selectedBooking.totalPrice}
+                          </strong>
                         </div>
                       </div>
                     </div>
@@ -249,7 +252,7 @@ const InvoicePage = (props) => {
               </div>
             </div>
 
-            <div className="text-dark mt-5 mb-5 text-center small">
+            <div className="text-dark mt-2 mb-2 text-center small">
               by :{' '}
               <a
                 className="text-dark"
