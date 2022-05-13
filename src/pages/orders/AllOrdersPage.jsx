@@ -10,6 +10,7 @@ import { getOrders } from 'state/ducks/order/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
+import { pick } from 'helpers/pick';
 const useStyles = makeStyles((theme) => ({
   my3: {
     margin: '1.3rem 0',
@@ -28,82 +29,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns = [
-  {
-    name: 'phone',
-    label: 'Phone',
-    options: {
-      filter: false,
-    },
-  },
-  {
-    name: 'shippingDetails',
-    label: 'Name',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value.firstName + ' ' + value.lastName}</>;
-      },
-    },
-  },
-  {
-    name: 'deliveryTime',
-    label: 'Delivery Time',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return (
-          <>
-            {new Date(value).toLocaleDateString()},{' '}
-            {new Date(value).toLocaleTimeString()}
-          </>
-        );
-      },
-    },
-  },
-  {
-    name: 'totalPrice',
-    label: 'TOTAL',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'approvedAt',
-    label: 'Approved',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-      },
-    },
-  },
-  {
-    name: 'deliveredAt',
-    label: 'Delivered',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-      },
-    },
-  },
-  {
-    name: 'isPaid',
-    label: 'Paid',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-      },
-    },
-  },
-];
-
 const AllOrdersPage = (props) => {
   const { history, location } = props;
-  const type = location.search ? location.search.split('=')[1] : 'online';
+  const { type, paid } = pick(location.search);
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -117,11 +45,110 @@ const AllOrdersPage = (props) => {
 
   useEffect(() => {
     if (authUser) {
-      dispatch(getOrders(selectedPage, limit, type));
+      const query = `?page=${selectedPage}&limit=${limit}&type=${
+        type || 'online'
+      }${paid !== undefined ? `&paid=${paid}` : ''}`;
+      dispatch(getOrders(query));
     } else {
       history.push('/login');
     }
-  }, [history, authUser, dispatch, selectedPage, limit, type]);
+  }, [history, authUser, dispatch, selectedPage, limit, type, paid]);
+
+  const columns = [
+    {
+      name: 'phone',
+      label: 'Phone',
+      options: {
+        filter: false,
+      },
+    },
+    {
+      name: 'shippingDetails',
+      label: 'Name',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{value.firstName + ' ' + value.lastName}</>;
+        },
+      },
+    },
+    {
+      name: 'deliveryTime',
+      label: 'Delivery Time',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <>
+              {new Date(value).toLocaleDateString()},{' '}
+              {new Date(value).toLocaleTimeString()}
+            </>
+          );
+        },
+      },
+    },
+    {
+      name: 'totalPrice',
+      label: 'TOTAL',
+      options: {
+        filter: false,
+        sort: false,
+      },
+    },
+    {
+      name: 'approvedAt',
+      label: 'Approved',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+        },
+      },
+    },
+    {
+      name: 'deliveredAt',
+      label: 'Delivered',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+        },
+      },
+    },
+    {
+      name: 'isPaid',
+      label: 'Paid',
+      options: {
+        filter: true,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+        },
+        filterType: 'custom',
+        filterOptions: {
+          names: [],
+          display: (filterList, onChange, index, column) => (
+            <div>
+              <ToggleButtonGroup
+                color="primary"
+                size="small"
+                value={paid}
+                exclusive
+                onChange={(event, value) => {
+                  console.log(value);
+                  history.push(
+                    `/orders?type=${type || 'online'}&paid=${value}`
+                  );
+                }}
+              >
+                <ToggleButton value="true">Paid</ToggleButton>
+                <ToggleButton value="false">Not Paid</ToggleButton>
+              </ToggleButtonGroup>
+            </div>
+          ),
+        },
+      },
+    },
+  ];
 
   const options = {
     filterType: 'checkbox',
@@ -130,7 +157,6 @@ const AllOrdersPage = (props) => {
     page: page,
     serverSide: true,
     onRowClick: (rowData, rowState) => {
-      console.log(rowState.rowIndex);
       history.push(`/orders/${results[rowState.rowIndex].id}`);
     },
     onTableChange: (action, tableState) => {
@@ -142,7 +168,8 @@ const AllOrdersPage = (props) => {
           setLimit(tableState.rowsPerPage);
           setSelectedPage(1);
           break;
-        case 'search':
+        case 'resetFilters':
+          history.push(`/orders?type=${type || 'online'}`);
           break;
         default:
           break;

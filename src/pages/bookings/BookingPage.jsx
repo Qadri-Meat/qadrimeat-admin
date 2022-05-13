@@ -213,7 +213,7 @@ const BookingPage = (props) => {
 
   return (
     <AdminLayout>
-      <Grid container className={classes.my3} alignItems="center">
+      <Grid container className={classes.my3} alignItems="center" spacing={1}>
         <Grid item className={classes.mRight}>
           <Typography variant="h5" component="h1">
             Booking Details
@@ -234,6 +234,8 @@ const BookingPage = (props) => {
           ) : (
             <></>
           )}
+        </Grid>
+        <Grid item>
           <Button
             onClick={() =>
               history.push(`/bookings/invoice/${selectedBooking.id}`)

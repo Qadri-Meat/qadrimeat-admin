@@ -3,12 +3,12 @@ import * as types from './types';
 import OrderService from '../../services/order.service';
 import { DELETE_ALL_FROM_CART } from '../cart/types';
 
-export const getOrders = (page, limit, type) => async (dispatch) => {
+export const getOrders = (query) => async (dispatch) => {
   try {
     dispatch({
       type: types.ORDER_REQUEST,
     });
-    const res = await OrderService.getAll(page, limit, type);
+    const res = await OrderService.getAll(query);
 
     dispatch({
       type: types.GET_ORDERS_SUCCESS,

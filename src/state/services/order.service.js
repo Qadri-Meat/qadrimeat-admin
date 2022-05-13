@@ -1,12 +1,8 @@
 import api from './api';
 
 class OrderService {
-  getAll(page, limit, type, search) {
-    return api.get(
-      `/orders?page=${page}&limit=${limit}&type=${type}${
-        search && search !== '' ? `&phone=${search}` : ''
-      }`
-    );
+  getAll(query) {
+    return api.get(`/orders${query}`);
   }
 
   get(id) {

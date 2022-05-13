@@ -38,10 +38,9 @@ const schema = yup.object().shape({
   email: yup.string().required(),
   phone: yup.string().required(),
   address: yup.string().required(),
-  city: yup.string().required(),
   postalCode: yup.string(),
-  country: yup.string().required(),
   notes: yup.string(),
+  discount: yup.number(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -86,6 +85,7 @@ const OrderForm = ({ preloadedValues }) => {
       firstName: 'Qadri',
       lastName: 'Meat',
       postalCode: '54030',
+      discount: 0,
       ...preloadedValues,
     },
     mode: 'onBlur',
@@ -93,12 +93,20 @@ const OrderForm = ({ preloadedValues }) => {
   });
 
   const onSubmit = (data) => {
+    const discount = data.discount;
+    delete data.discount;
+
     const newOrder = {
       phone: data.phone,
       orderItems: items,
-      shippingDetails: data,
+      shippingDetails: {
+        ...data,
+        city: 'Lahore',
+        country: 'Pakistan',
+      },
       shippingPrice: 0,
-      totalPrice: cartTotalPrice,
+      totalPrice: cartTotalPrice - Number(discount),
+      discount: Number(discount),
       type: 'retail',
       deliveryTime: Date.now(),
     };
@@ -309,7 +317,7 @@ const OrderForm = ({ preloadedValues }) => {
                     name: values.name,
                     quantity: values.quantity,
                     price: values.price,
-                    discount: values.discount,
+                    discount: 0,
                     image: values.image,
                     product: values.id,
                   };
@@ -396,6 +404,7 @@ const OrderForm = ({ preloadedValues }) => {
                 type="text"
                 label="city"
                 name="city"
+                disabled
                 error={!!errors.city}
                 helperText={errors?.city?.message}
               />
@@ -407,6 +416,7 @@ const OrderForm = ({ preloadedValues }) => {
                 type="text"
                 label="country"
                 name="country"
+                disabled
                 error={!!errors.country}
                 helperText={errors?.country?.message}
               />
@@ -422,7 +432,17 @@ const OrderForm = ({ preloadedValues }) => {
                 helperText={errors?.notes?.message}
               />
             </Grid>
-
+            <Grid item md={4} xs={12}>
+              <Input
+                ref={register}
+                id="discount"
+                type="number"
+                label="Discount"
+                name="discount"
+                error={!!errors.discount}
+                helperText={errors?.discount?.message}
+              />
+            </Grid>
             <Grid item xs={12}>
               <div className={classes.mBottom}>
                 <Button

@@ -48,6 +48,7 @@ const columns = [
       filter: false,
       customBodyRender: (value, tableMeta, updateValue) => {
         const image = value.length > 0 ? value[0] : '';
+        console.log(image);
         return (
           <Avatar
             variant="rounded"
@@ -180,13 +181,22 @@ const OrderPage = (props) => {
             <Typography variant="h6">Sub Total</Typography>
             <Typography variant="body1">
               Rs
-              {' ' + selectedOrder.totalPrice - selectedOrder.shippingPrice}
+              {' ' +
+                selectedOrder.totalPrice -
+                selectedOrder.shippingPrice +
+                (selectedOrder.discount || 0)}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Shipping Price</Typography>
             <Typography variant="body1">
               Rs{' ' + selectedOrder.shippingPrice}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h6">Discount</Typography>
+            <Typography variant="body1">
+              Rs{' ' + (selectedOrder.discount || 0)}
             </Typography>
           </Box>
           <Box>
@@ -202,7 +212,7 @@ const OrderPage = (props) => {
 
   return (
     <AdminLayout>
-      <Grid container className={classes.my3} alignItems="center">
+      <Grid container className={classes.my3} alignItems="center" spacing={1}>
         <Grid item className={classes.mRight}>
           <Typography variant="h5" component="h1">
             Order Details
@@ -223,6 +233,8 @@ const OrderPage = (props) => {
           ) : (
             <></>
           )}
+        </Grid>
+        <Grid item>
           <Button
             onClick={() => history.push(`/orders/invoice/${selectedOrder.id}`)}
             variant="outlined"
@@ -231,7 +243,8 @@ const OrderPage = (props) => {
           >
             Invoice
           </Button>
-
+        </Grid>
+        <Grid item>
           <Button
             onClick={() => history.push(`/orders/receipt/${selectedOrder.id}`)}
             variant="outlined"
