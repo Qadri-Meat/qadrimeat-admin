@@ -13,12 +13,12 @@ import Loader from 'components/Loader/Loader';
 import Message from 'components/Message/Message';
 
 import { DropzoneArea } from 'material-ui-dropzone';
-import CheckBoxInput from 'components/Input/CheckBoxInput';
 
 const schema = yup.object().shape({
   name: yup.string().required(),
   sku: yup.string().required(),
   price: yup.number().required(),
+  stock: yup.number().required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -105,7 +105,17 @@ const DealForm = ({ preloadedValues }) => {
             helperText={errors?.price?.message}
           />
         </Grid>
-
+        <Grid item md={4} xs={12}>
+          <Input
+            ref={register}
+            id="stock"
+            type="number"
+            label="Stock"
+            name="stock"
+            error={!!errors.stock}
+            helperText={errors?.stock?.message}
+          />
+        </Grid>
         <Grid item md={4} xs={12}>
           <Input
             ref={register}
