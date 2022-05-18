@@ -11,11 +11,10 @@ import {
   CardActions,
   Button,
 } from '@material-ui/core';
-import AdminBarChart from '../../components/AdminChart/AdminBarChart';
-import AdminPieChart from '../../components/AdminChart/AdminPieChart';
 import clsx from 'clsx';
 import { getDashboard } from 'state/ducks/user/actions';
 import BookingTable from './components/BookingTable';
+import ReportsTable from './components/ReportsTable';
 
 const useStyles = makeStyles((them) => ({
   paddingPaper: {
@@ -37,7 +36,7 @@ const DashboardPage = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { user: authUser } = useSelector((state) => state.auth);
-  const { data, deals } = useSelector((state) => state.user);
+  const { todayReport, deals, reports } = useSelector((state) => state.user);
 
   useEffect(() => {
     console.log(authUser);
@@ -58,10 +57,10 @@ const DashboardPage = (props) => {
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  Orders
+                  Today's Orders
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {data ? data.totalOrders : 0}
+                  {todayReport ? todayReport.totalOrders || 0 : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -75,10 +74,10 @@ const DashboardPage = (props) => {
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  Bookings
+                  Today's Bookings
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  {data ? data.totalBookings : 0}
+                  {todayReport ? todayReport.totalBookings || 0 : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -95,7 +94,11 @@ const DashboardPage = (props) => {
                   Today's Sales
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Rs {data ? data.ordersSales + data.bookingsSales : 0}
+                  Rs{' '}
+                  {todayReport
+                    ? (todayReport.orderSales || 0) +
+                      (todayReport.bookingSales || 0)
+                    : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -111,7 +114,7 @@ const DashboardPage = (props) => {
                   Today's Expenses
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Rs {data ? data.expenses : 0}
+                  Rs {todayReport ? todayReport.expenses || 0 : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -124,6 +127,17 @@ const DashboardPage = (props) => {
         </Grid>
         <Grid item container spacing={2}>
           <Grid item xs={12}>
+            <Paper
+              className={clsx(classes.paddingPaper, classes.mt)}
+              variant="outlined"
+            >
+              <Typography className={classes.titlePaper} variant="h5">
+                Reports
+              </Typography>
+              {reports ? <ReportsTable reports={reports} /> : <></>}
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={4}>
             <Paper
               className={clsx(classes.paddingPaper, classes.mt)}
               variant="outlined"

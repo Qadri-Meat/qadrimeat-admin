@@ -25,7 +25,6 @@ const BookingTable = ({ deals }) => {
       >
         <TableHead>
           <TableRow>
-            <TableCell>Deal</TableCell>
             <TableCell align="right">Name</TableCell>
             <TableCell align="right">Bookings</TableCell>
           </TableRow>
@@ -34,9 +33,6 @@ const BookingTable = ({ deals }) => {
           <TableBody>
             {deals.map((deal) => (
               <TableRow key={deal._id}>
-                <TableCell component="th" scope="row">
-                  {deal._id}
-                </TableCell>
                 <TableCell align="right">{deal.name}</TableCell>
                 <TableCell align="right">{deal.bookings}</TableCell>
               </TableRow>

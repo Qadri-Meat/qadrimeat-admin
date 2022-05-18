@@ -2,12 +2,12 @@ import * as types from './types';
 
 import ExpenseService from '../../services/expense.service';
 
-export const getExpenses = (page, limit) => async (dispatch) => {
+export const getExpenses = (query) => async (dispatch) => {
   try {
     dispatch({
       type: types.EXPENSE_REQUEST,
     });
-    const res = await ExpenseService.getAll(page, limit);
+    const res = await ExpenseService.getAll(query);
 
     dispatch({
       type: types.GET_EXPENSES_SUCCESS,

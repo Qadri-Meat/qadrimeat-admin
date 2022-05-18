@@ -1,8 +1,8 @@
 import api from './api';
 
 class ExpenseService {
-  getAll(page, limit) {
-    return api.get(`/expenses?page=${page}&limit=${limit}`);
+  getAll(query) {
+    return api.get(`/expenses${query}`);
   }
 
   get(id) {

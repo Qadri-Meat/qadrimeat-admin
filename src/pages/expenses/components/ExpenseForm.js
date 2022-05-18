@@ -99,8 +99,8 @@ const ExpenseForm = ({ preloadedValues }) => {
             error={!!errors.type}
             helperText={errors?.type?.message}
           >
-            <MenuItem value="meat">Meat</MenuItem>
-            <MenuItem value="rent">Rent</MenuItem>
+            <MenuItem value="booking">Qurbani</MenuItem>
+            <MenuItem value="order">Order</MenuItem>
           </SelectInput>
         </Grid>
         <Grid item xs={12}>

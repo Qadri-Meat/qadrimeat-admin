@@ -2,6 +2,7 @@ import axiosInstance from './api';
 import TokenService from './token.service';
 import { refreshToken } from '../ducks/auth/actions';
 import { LOGOUT } from 'state/ducks/auth/types';
+import tokenService from './token.service';
 
 const setup = (store) => {
   axiosInstance.interceptors.request.use(
@@ -44,10 +45,14 @@ const setup = (store) => {
 
             return axiosInstance(originalConfig);
           } catch (_error) {
+            tokenService.removeAuthInfo();
+            dispatch({ type: LOGOUT });
+            window.open('/login', '_self');
             return Promise.reject(_error);
           }
         }
       } else if (originalConfig.url === '/auth/refresh-tokens') {
+        tokenService.removeAuthInfo();
         dispatch({ type: LOGOUT });
         window.open('/login', '_self');
       }

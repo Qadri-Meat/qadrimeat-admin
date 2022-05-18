@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import AdminLayout from 'components/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
+import ToggleButton from '@material-ui/lab/ToggleButton';
+import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { Typography, Grid, makeStyles, Button } from '@material-ui/core';
 import MUIDataTable from 'mui-datatables';
 import { getExpenses, deleteExpense } from 'state/ducks/expenses/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { pick } from 'helpers/pick';
 
 const useStyles = makeStyles((theme) => ({
   my3: {
@@ -46,18 +49,11 @@ const columns = [
       sort: false,
     },
   },
-  {
-    name: 'type',
-    label: 'Type',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
 ];
 
 const AllExpensesPage = (props) => {
-  const { history } = props;
+  const { history, location } = props;
+  const { type = 'order' } = pick(location.search);
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -72,11 +68,12 @@ const AllExpensesPage = (props) => {
 
   useEffect(() => {
     if (authUser) {
-      dispatch(getExpenses(selectedPage, limit));
+      const query = `?page=${selectedPage}&limit=${limit}&type=${type}`;
+      dispatch(getExpenses(query));
     } else {
       history.push('/login');
     }
-  }, [history, authUser, dispatch, selectedPage, limit]);
+  }, [history, authUser, dispatch, selectedPage, limit, type]);
 
   const options = {
     filterType: 'checkbox',
@@ -116,15 +113,39 @@ const AllExpensesPage = (props) => {
             Expenses
           </Typography>
         </Grid>
-        <Grid item>
-          <Button
-            onClick={() => history.push('/expenses/add-expense')}
-            variant="outlined"
-            color="primary"
-            size="small"
-          >
-            Add Expense
-          </Button>
+        <Grid
+          item
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          xs={10}
+        >
+          <Grid item>
+            <Button
+              onClick={() => history.push('/expenses/add-expense')}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Add Expense
+            </Button>
+          </Grid>
+
+          <Grid item>
+            <ToggleButtonGroup
+              color="primary"
+              value={type}
+              size="small"
+              exclusive
+              onChange={(event, value) => {
+                history.push(`/expenses?type=${value}`);
+              }}
+            >
+              <ToggleButton value="order">Order</ToggleButton>
+              <ToggleButton value="booking">Qurbani</ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
         </Grid>
       </Grid>
       <AdminBreadcrumbs path={history} />
