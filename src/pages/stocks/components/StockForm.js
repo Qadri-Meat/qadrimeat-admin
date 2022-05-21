@@ -8,14 +8,15 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 import { Grid, makeStyles, Button, MenuItem } from '@material-ui/core';
-import { createUser, updateUser } from 'state/ducks/user/actions';
+import { createStock, updateStock } from 'state/ducks/stocks/actions';
 import Loader from 'components/Loader/Loader';
 import Message from 'components/Message/Message';
 
 const schema = yup.object().shape({
-  phone: yup.string().required(),
-  name: yup.string().required(),
-  role: yup.string().required(),
+  description: yup.string().required(),
+  category: yup.string().required(),
+  cost: yup.number().required(),
+  weight: yup.number().required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -31,11 +32,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const UserForm = ({ preloadedValues }) => {
+const StockForm = ({ preloadedValues }) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const { error, loading } = useSelector((state) => state.user);
+  const { error, loading } = useSelector((state) => state.stocks);
   const {
     register,
     handleSubmit,
@@ -49,12 +50,9 @@ const UserForm = ({ preloadedValues }) => {
 
   const onSubmit = (data) => {
     if (preloadedValues) {
-      if (data.password === '') {
-        delete data.password;
-      }
-      dispatch(updateUser(preloadedValues.id, data));
+      dispatch(updateStock(preloadedValues.id, data));
     } else {
-      dispatch(createUser(data));
+      dispatch(createStock(data));
     }
   };
 
@@ -66,55 +64,56 @@ const UserForm = ({ preloadedValues }) => {
         <Grid item xs={12} md={4}>
           <Input
             ref={register}
-            id="name"
+            id="description"
             type="text"
-            label="Name"
-            name="name"
+            label="description"
+            name="description"
             className={classes.textField}
-            error={!!errors.name}
-            helperText={errors?.name?.message}
+            error={!!errors.description}
+            helperText={errors?.description?.message}
           />
         </Grid>
         <Grid item xs={12} md={4}>
           <Input
             ref={register}
-            id="phone"
-            type="phone"
-            label="Phone"
-            name="phone"
+            id="cost"
+            type="number"
+            label="cost"
+            name="cost"
             className={classes.textField}
-            error={!!errors.phone}
-            helperText={errors?.phone?.message}
+            error={!!errors.cost}
+            helperText={errors?.cost?.message}
           />
         </Grid>
         <Grid item xs={12} md={4}>
           <Input
             ref={register}
-            id="password"
-            type="text"
-            label="Password"
-            name="password"
+            id="weight"
+            type="number"
+            label="weight"
+            name="weight"
             className={classes.textField}
-            error={!!errors.password}
-            helperText={errors?.password?.message}
+            error={!!errors.weight}
+            helperText={errors?.weight?.message}
           />
         </Grid>
         <Grid item xs={12} md={4}>
           <SelectInput
             ref={register}
-            id="role"
-            name="role"
+            id="category"
+            name="category"
             className={classes.textField}
-            label="Role"
+            label="category"
             control={control}
             defaultValue={''}
             variant="outlined"
             margin="normal"
-            error={!!errors.role}
-            helperText={errors?.role?.message}
+            error={!!errors.category}
+            helperText={errors?.category?.message}
           >
-            <MenuItem value="user">User</MenuItem>
-            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="chicken">Chicken</MenuItem>
+            <MenuItem value="mutton">Mutton</MenuItem>
+            <MenuItem value="beef">Beef</MenuItem>
           </SelectInput>
         </Grid>
         <Grid item xs={12}>
@@ -129,9 +128,9 @@ const UserForm = ({ preloadedValues }) => {
               {loading ? (
                 <Loader />
               ) : preloadedValues ? (
-                'Update User'
+                'Update Stock'
               ) : (
-                'Save User'
+                'Save Stock'
               )}
             </Button>
           </div>
@@ -141,4 +140,4 @@ const UserForm = ({ preloadedValues }) => {
   );
 };
 
-export default UserForm;
+export default StockForm;

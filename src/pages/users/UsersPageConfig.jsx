@@ -1,6 +1,5 @@
 import AllUsersPage from './AllUsersPage';
 import AddUserPage from './AddUserPage';
-import UpdateUserPage from './UpdateUserPage';
 
 export const UsersPageConfig = {
   routes: [
@@ -17,7 +16,7 @@ export const UsersPageConfig = {
     {
       path: '/users/:id',
       exact: true,
-      component: UpdateUserPage,
+      component: AddUserPage,
     },
   ],
 };

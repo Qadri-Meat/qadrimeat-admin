@@ -81,6 +81,14 @@ const navigationConfig = [
         url: '/expenses',
         exact: true,
       },
+      {
+        id: 'stocks',
+        title: 'Stocks',
+        type: 'item',
+        icon: 'receipt',
+        url: '/stocks',
+        exact: true,
+      },
     ],
   },
 ];
