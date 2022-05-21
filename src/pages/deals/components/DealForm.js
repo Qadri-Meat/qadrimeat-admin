@@ -18,7 +18,7 @@ const schema = yup.object().shape({
   name: yup.string().required(),
   sku: yup.string().required(),
   price: yup.number().required(),
-  inventory: yup.number().required(),
+  stock: yup.number().required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -108,12 +108,12 @@ const DealForm = ({ preloadedValues }) => {
         <Grid item md={4} xs={12}>
           <Input
             ref={register}
-            id="inventory"
+            id="stock"
             type="number"
             label="Inventory"
-            name="inventory"
-            error={!!errors.inventory}
-            helperText={errors?.inventory?.message}
+            name="stock"
+            error={!!errors.stock}
+            helperText={errors?.stock?.message}
           />
         </Grid>
         <Grid item md={4} xs={12}>
