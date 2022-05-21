@@ -5,7 +5,10 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import { Typography, Grid, makeStyles, Button } from '@material-ui/core';
 import MUIDataTable from 'mui-datatables';
-import { getStocks, deleteStock } from 'state/ducks/stocks/actions';
+import {
+  getInventories,
+  deleteInventory,
+} from 'state/ducks/inventories/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { pick } from 'helpers/pick';
 
@@ -74,7 +77,7 @@ const columns = [
   },
 ];
 
-const AllStocksPage = (props) => {
+const AllInventoriesPage = (props) => {
   const { history, location } = props;
   const { category = 'chicken' } = pick(location.search);
   const classes = useStyles();
@@ -83,14 +86,16 @@ const AllStocksPage = (props) => {
   const [selectedPage, setSelectedPage] = useState(1);
   const [limit, setLimit] = useState(10);
   // const [search, setSearch] = useState('');
-  const { results, page, totalResults } = useSelector((state) => state.stocks);
+  const { results, page, totalResults } = useSelector(
+    (state) => state.inventories
+  );
 
   const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (authUser) {
       const query = `?page=${selectedPage}&limit=${limit}&category=${category}`;
-      dispatch(getStocks(query));
+      dispatch(getInventories(query));
     } else {
       history.push('/login');
     }
@@ -103,11 +108,11 @@ const AllStocksPage = (props) => {
     serverSide: true,
     onRowsDelete: (rowsDeleted, dataRows) => {
       rowsDeleted.data.forEach((row) => {
-        dispatch(deleteStock(results[row.dataIndex].id));
+        dispatch(deleteInventory(results[row.dataIndex].id));
       });
     },
     onRowClick: (rowData, rowState) => {
-      history.push(`/stocks/${rowData[0]}`);
+      history.push(`/inventories/${rowData[0]}`);
     },
     onTableChange: (action, tableState) => {
       switch (action) {
@@ -131,7 +136,7 @@ const AllStocksPage = (props) => {
       <Grid container className={classes.my3} alignItems="center">
         <Grid item className={classes.mRight}>
           <Typography variant="h5" component="h1">
-            Stocks
+            Inventories
           </Typography>
         </Grid>
         <Grid
@@ -144,12 +149,12 @@ const AllStocksPage = (props) => {
         >
           <Grid item>
             <Button
-              onClick={() => history.push('/stocks/add-stock')}
+              onClick={() => history.push('/inventories/add-inventory')}
               variant="outlined"
               color="primary"
               size="small"
             >
-              Add Stock
+              Add Inventory
             </Button>
           </Grid>
 
@@ -160,7 +165,7 @@ const AllStocksPage = (props) => {
               size="small"
               exclusive
               onChange={(event, value) => {
-                history.push(`/stocks?category=${value}`);
+                history.push(`/inventories?category=${value}`);
               }}
             >
               <ToggleButton value="chicken">Chicken</ToggleButton>
@@ -172,7 +177,7 @@ const AllStocksPage = (props) => {
       </Grid>
       <AdminBreadcrumbs path={history} />
       <MUIDataTable
-        title={'Stocks List'}
+        title={'Inventories List'}
         data={results}
         columns={columns}
         options={options}
@@ -181,4 +186,4 @@ const AllStocksPage = (props) => {
   );
 };
 
-export default AllStocksPage;
+export default AllInventoriesPage;

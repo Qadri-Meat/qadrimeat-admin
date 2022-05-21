@@ -1,16 +1,16 @@
 import * as types from './types';
 
-import StockService from '../../services/stock.service';
+import InventoryService from '../../services/inventory.service';
 
-export const getStocks = (query) => async (dispatch) => {
+export const getInventories = (query) => async (dispatch) => {
   try {
     dispatch({
-      type: types.STOCK_REQUEST,
+      type: types.INVENTORY_REQUEST,
     });
-    const res = await StockService.getAll(query);
+    const res = await InventoryService.getAll(query);
 
     dispatch({
-      type: types.GET_STOCKS_SUCCESS,
+      type: types.GET_INVENTORIES_SUCCESS,
       payload: res.data,
     });
   } catch (error) {
@@ -19,21 +19,21 @@ export const getStocks = (query) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     dispatch({
-      type: types.STOCK_FAIL,
+      type: types.INVENTORY_FAIL,
       payload: message,
     });
   }
 };
 
-export const getStock = (id) => async (dispatch) => {
+export const getInventory = (id) => async (dispatch) => {
   try {
     dispatch({
-      type: types.STOCK_REQUEST,
+      type: types.INVENTORY_REQUEST,
     });
-    const res = await StockService.get(id);
+    const res = await InventoryService.get(id);
 
     dispatch({
-      type: types.GET_STOCK_SUCCESS,
+      type: types.GET_INVENTORY_SUCCESS,
       payload: res.data,
     });
   } catch (error) {
@@ -42,21 +42,21 @@ export const getStock = (id) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     dispatch({
-      type: types.STOCK_FAIL,
+      type: types.INVENTORY_FAIL,
       payload: message,
     });
   }
 };
 
-export const createStock = (data) => async (dispatch) => {
+export const createInventory = (data) => async (dispatch) => {
   try {
     dispatch({
-      type: types.STOCK_REQUEST,
+      type: types.INVENTORY_REQUEST,
     });
-    const res = await StockService.create(data);
+    const res = await InventoryService.create(data);
 
     dispatch({
-      type: types.CREATE_STOCK_SUCCESS,
+      type: types.CREATE_INVENTORY_SUCCESS,
       payload: res.data,
     });
   } catch (error) {
@@ -65,21 +65,21 @@ export const createStock = (data) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     dispatch({
-      type: types.STOCK_FAIL,
+      type: types.INVENTORY_FAIL,
       payload: message,
     });
   }
 };
 
-export const updateStock = (id, data) => async (dispatch) => {
+export const updateInventory = (id, data) => async (dispatch) => {
   try {
     dispatch({
-      type: types.STOCK_REQUEST,
+      type: types.INVENTORY_REQUEST,
     });
-    const res = await StockService.update(id, data);
+    const res = await InventoryService.update(id, data);
 
     dispatch({
-      type: types.UPDATE_STOCK_SUCCESS,
+      type: types.UPDATE_INVENTORY_SUCCESS,
       payload: res.data,
     });
   } catch (error) {
@@ -88,22 +88,22 @@ export const updateStock = (id, data) => async (dispatch) => {
         ? error.response.data.message
         : error.message;
     dispatch({
-      type: types.STOCK_FAIL,
+      type: types.INVENTORY_FAIL,
       payload: message,
     });
   }
 };
 
-export const deleteStock = (id) => async (dispatch) => {
+export const deleteInventory = (id) => async (dispatch) => {
   try {
-    await StockService.delete(id);
+    await InventoryService.delete(id);
   } catch (error) {
     const message =
       error.response && error.response.data.message
         ? error.response.data.message
         : error.message;
     dispatch({
-      type: types.STOCK_FAIL,
+      type: types.INVENTORY_FAIL,
       payload: message,
     });
   }

@@ -8,7 +8,10 @@ import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers';
 import { Grid, makeStyles, Button, MenuItem } from '@material-ui/core';
-import { createStock, updateStock } from 'state/ducks/stocks/actions';
+import {
+  createInventory,
+  updateInventory,
+} from 'state/ducks/inventories/actions';
 import Loader from 'components/Loader/Loader';
 import Message from 'components/Message/Message';
 
@@ -32,11 +35,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const StockForm = ({ preloadedValues }) => {
+const InventoryForm = ({ preloadedValues }) => {
   const classes = useStyles();
 
   const dispatch = useDispatch();
-  const { error, loading } = useSelector((state) => state.stocks);
+  const { error, loading } = useSelector((state) => state.inventories);
   const {
     register,
     handleSubmit,
@@ -50,9 +53,9 @@ const StockForm = ({ preloadedValues }) => {
 
   const onSubmit = (data) => {
     if (preloadedValues) {
-      dispatch(updateStock(preloadedValues.id, data));
+      dispatch(updateInventory(preloadedValues.id, data));
     } else {
-      dispatch(createStock(data));
+      dispatch(createInventory(data));
     }
   };
 
@@ -128,9 +131,9 @@ const StockForm = ({ preloadedValues }) => {
               {loading ? (
                 <Loader />
               ) : preloadedValues ? (
-                'Update Stock'
+                'Update Inventory'
               ) : (
-                'Save Stock'
+                'Save Inventory'
               )}
             </Button>
           </div>
@@ -140,4 +143,4 @@ const StockForm = ({ preloadedValues }) => {
   );
 };
 
-export default StockForm;
+export default InventoryForm;

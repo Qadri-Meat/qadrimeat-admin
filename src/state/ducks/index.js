@@ -6,5 +6,5 @@ export { default as booking } from './booking';
 export { default as cart } from './cart';
 export { default as cart1 } from './cart1';
 export { default as expenses } from './expenses';
-export { default as stocks } from './stocks';
+export { default as inventories } from './inventories';
 export { default as auth } from './auth';

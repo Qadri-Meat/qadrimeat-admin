@@ -78,8 +78,8 @@ const columns = [
     },
   },
   {
-    name: 'stock',
-    label: 'Stock',
+    name: 'inventory',
+    label: 'Inventory',
     options: {
       filter: true,
       sort: false,

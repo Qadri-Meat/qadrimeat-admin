@@ -6,38 +6,38 @@ export default (state = initialState, action) => {
   const { type, payload } = action;
 
   switch (type) {
-    case types.STOCK_REQUEST:
+    case types.INVENTORY_REQUEST:
       return {
         ...state,
         loading: true,
       };
-    case types.STOCK_FAIL:
+    case types.INVENTORY_FAIL:
       return {
         ...state,
         loading: false,
         error: payload,
       };
-    case types.GET_STOCKS_SUCCESS:
+    case types.GET_INVENTORIES_SUCCESS:
       return {
         loading: false,
         ...payload,
       };
-    case types.CREATE_STOCK_SUCCESS:
+    case types.CREATE_INVENTORY_SUCCESS:
       return {
         loading: false,
         success: true,
       };
-    case types.UPDATE_STOCK_SUCCESS:
+    case types.UPDATE_INVENTORY_SUCCESS:
       return {
         loading: false,
         success: true,
       };
-    case types.GET_STOCK_SUCCESS:
+    case types.GET_INVENTORY_SUCCESS:
       return {
         loading: false,
-        stock: payload,
+        inventory: payload,
       };
-    case types.STOCK_RESET:
+    case types.INVENTORY_RESET:
       return {};
     default:
       return state;

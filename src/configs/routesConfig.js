@@ -8,7 +8,7 @@ import { DealsPageConfig } from '../pages/deals/DealsPageConfig';
 import { OrdersPageConfig } from '../pages/orders/OrdersPageConfig';
 import { BookingsPageConfig } from '../pages/bookings/BookingsPageConfig';
 import { ExpensesPageConfig } from '../pages/expenses/ExpensesPageConfig';
-import { StocksPageConfig } from '../pages/stocks/StocksPageConfig';
+import { InventoriesPageConfig } from '../pages/inventories/InventoriesPageConfig';
 import { LoginPageConfig } from '../pages/auth/login/LoginPageConfig';
 import { Error404PageConfig } from '../pages/errors/404/Error404PageConfig';
 import { Error500PageConfig } from '../pages/errors/500/Error500PageConfig';
@@ -22,7 +22,7 @@ const routeConfigs = [
   ...DealsPageConfig.routes,
   ...BookingsPageConfig.routes,
   ...ExpensesPageConfig.routes,
-  ...StocksPageConfig.routes,
+  ...InventoriesPageConfig.routes,
   ...LoginPageConfig.routes,
   ...Error404PageConfig.routes,
   ...Error500PageConfig.routes,
