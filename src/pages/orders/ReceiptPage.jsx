@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import './styles/receipt.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { getOrder } from 'state/ducks/order/actions';
-import { Avatar } from '@material-ui/core';
 import { getDiscountPrice } from 'helpers/product';
 
 const ReceiptPage = (props) => {
@@ -56,6 +55,7 @@ const ReceiptPage = (props) => {
                   <th class="description">Description</th>
                   <th class="price">Price</th>
                   <th class="quantity">Q.</th>
+                  <th class="quantity">Kg.</th>
                   <th class="price">Total</th>
                 </tr>
               </thead>
@@ -67,6 +67,11 @@ const ReceiptPage = (props) => {
                   );
                   const finalProductPrice = (item.price * 1).toFixed(2);
                   const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+                  let productPrice =
+                    discountedPrice !== null
+                      ? finalDiscountedPrice * item.quantity
+                      : finalProductPrice * item.quantity;
+                  productPrice = productPrice * item.weight;
                   return (
                     <tr>
                       <td class="description">{item.name}</td>
@@ -90,11 +95,8 @@ const ReceiptPage = (props) => {
                         )}
                       </td>
                       <td class="quantity">{item.quantity}</td>
-                      <td class="price">
-                        {discountedPrice !== null
-                          ? (finalDiscountedPrice * item.quantity).toFixed(2)
-                          : (finalProductPrice * item.quantity).toFixed(2)}
-                      </td>
+                      <td class="quantity">{item.weight}</td>
+                      <td class="price">{productPrice.toFixed(2)}</td>
                     </tr>
                   );
                 })}
@@ -105,7 +107,13 @@ const ReceiptPage = (props) => {
                 <td>
                   <strong>SUB TOTAL</strong>
                 </td>
-                <td>{selectedOrder.totalPrice.toFixed(2)}</td>
+                <td>
+                  {(
+                    selectedOrder.totalPrice -
+                    selectedOrder.shippingPrice +
+                    (selectedOrder.discount || 0)
+                  ).toFixed(2)}
+                </td>
               </tr>
               <tr>
                 <td>

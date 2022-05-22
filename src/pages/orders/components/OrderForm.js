@@ -30,6 +30,7 @@ import {
   addToCart,
   deleteFromCart,
   decreaseQuantity,
+  changeWeight,
 } from 'state/ducks/cart/actions';
 
 const schema = yup.object().shape({
@@ -193,17 +194,24 @@ const OrderForm = ({ preloadedValues }) => {
         filter: true,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowData: cartItem, rowIndex } = tableMeta;
-          const price = cartItem[3];
-          const discount = cartItem[4];
-          const quantity = cartItem[5];
-          const discountedPrice = getDiscountPrice(price, discount);
-          const finalProductPrice = (price * 1).toFixed(2);
+          const { rowData, rowIndex } = tableMeta;
+          const cartItem = items.filter((item) => {
+            return item.product === rowData[0];
+          })[0];
+          const discountedPrice = getDiscountPrice(
+            cartItem.price,
+            cartItem.discount
+          );
+          const finalProductPrice = (cartItem.price * 1).toFixed(2);
           const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
           cartTotalPrice = rowIndex === 0 ? 0 : cartTotalPrice;
-          discountedPrice != null
-            ? (cartTotalPrice += finalDiscountedPrice * quantity)
-            : (cartTotalPrice += finalProductPrice * quantity);
+
+          let productPrice =
+            discountedPrice !== null
+              ? finalDiscountedPrice * cartItem.quantity
+              : finalProductPrice * cartItem.quantity;
+          productPrice = productPrice * cartItem.weight;
+          cartTotalPrice += productPrice;
 
           return (
             <>
@@ -276,25 +284,50 @@ const OrderForm = ({ preloadedValues }) => {
       },
     },
     {
+      name: 'weight',
+      label: 'Weight',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cartItem = items.filter((item) => {
+            return item.product === rowData[0];
+          })[0];
+          return (
+            <input
+              type="number"
+              value={value}
+              style={{ minWidth: '70px', maxWidth: '70px' }}
+              onChange={(e) => {
+                dispatch(changeWeight(cartItem, e.target.value));
+              }}
+            />
+          );
+        },
+      },
+    },
+    {
       name: 'price',
       label: 'Sub Total',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowData: cartItem } = tableMeta;
-          const price = cartItem[3];
-          const discount = cartItem[4];
-          const quantity = cartItem[5];
-          const discountedPrice = getDiscountPrice(price, discount);
-          const finalProductPrice = (price * 1).toFixed(2);
-          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
-          return (
-            <>
-              {discountedPrice !== null
-                ? 'PKR ' + (finalDiscountedPrice * quantity).toFixed(2)
-                : 'PKR ' + (finalProductPrice * quantity).toFixed(2)}
-            </>
+          const { rowData } = tableMeta;
+          const cartItem = items.filter((item) => {
+            return item.product === rowData[0];
+          })[0];
+          const discountedPrice = getDiscountPrice(
+            cartItem.price,
+            cartItem.discount
           );
+          const finalProductPrice = (cartItem.price * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+          let productPrice =
+            discountedPrice !== null
+              ? finalDiscountedPrice * cartItem.quantity
+              : finalProductPrice * cartItem.quantity;
+          productPrice = productPrice * cartItem.weight;
+          return <>{'PKR ' + productPrice.toFixed(2)}</>;
         },
       },
     },
@@ -320,6 +353,7 @@ const OrderForm = ({ preloadedValues }) => {
                     discount: 0,
                     image: values.image,
                     product: values.id,
+                    weight: 1,
                   };
                   dispatch(addToCart(item));
                   setSearchBar(Math.random());

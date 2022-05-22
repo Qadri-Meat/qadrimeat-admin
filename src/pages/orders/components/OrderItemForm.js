@@ -53,6 +53,7 @@ const OrderItemForm = ({ preloadedValues }) => {
         price: preloadedValues.price,
         image: preloadedValues.image,
         product: preloadedValues.product,
+        weight: preloadedValues.weight,
       })
     );
     reset({});

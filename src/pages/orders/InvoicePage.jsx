@@ -141,6 +141,9 @@ const InvoicePage = (props) => {
                                 Quantity
                               </th>
                               <th className="border-0 text-uppercase small font-weight-bold">
+                                Weight (Kg)
+                              </th>
+                              <th className="border-0 text-uppercase small font-weight-bold">
                                 Unit Cost
                               </th>
                               <th className="border-0 text-uppercase small font-weight-bold">
@@ -160,6 +163,13 @@ const InvoicePage = (props) => {
                               const finalDiscountedPrice = (
                                 discountedPrice * 1
                               ).toFixed(2);
+                              let productPrice =
+                                discountedPrice !== null
+                                  ? finalDiscountedPrice * item.quantity
+                                  : finalProductPrice * item.quantity;
+                              productPrice = (
+                                productPrice * item.weight
+                              ).toFixed(2);
                               return (
                                 <tr>
                                   <td>
@@ -176,6 +186,7 @@ const InvoicePage = (props) => {
                                   </td>
                                   <td>{item.name}</td>
                                   <td>{item.quantity}</td>
+                                  <td>{item.weight}</td>
                                   <td>
                                     <>
                                       {discountedPrice !== null ? (
@@ -200,17 +211,7 @@ const InvoicePage = (props) => {
                                     </>
                                   </td>
                                   <td>
-                                    <>
-                                      {discountedPrice !== null
-                                        ? 'PKR ' +
-                                          (
-                                            finalDiscountedPrice * item.quantity
-                                          ).toFixed(2)
-                                        : 'PKR ' +
-                                          (
-                                            finalProductPrice * item.quantity
-                                          ).toFixed(2)}
-                                    </>
+                                    <>{'PKR ' + productPrice}</>
                                   </td>
                                 </tr>
                               );

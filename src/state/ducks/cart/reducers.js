@@ -48,6 +48,16 @@ export default (state = initialState, action) => {
             : item
         );
       }
+    case types.CHANGE_WEIGHT:
+      return cartItems.map((item) =>
+        item.product === product.product
+          ? {
+              ...item,
+              weight: product.weight,
+            }
+          : item
+      );
+
     case types.DELETE_FROM_CART:
       const remainingItems = (cartItems, product) =>
         cartItems.filter((cartItem) => cartItem.product !== product.product);

@@ -40,107 +40,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns = [
-  {
-    name: 'image',
-    label: 'Image',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const image = value.length > 0 ? value[0] : '';
-        console.log(image);
-        return (
-          <Avatar
-            variant="rounded"
-            src={image === '' ? '' : process.env.REACT_APP_API_URL + image}
-          />
-        );
-      },
-    },
-  },
-  {
-    name: 'name',
-    label: 'Name',
-    options: {
-      filter: true,
-      sort: true,
-    },
-  },
-  {
-    name: 'price',
-    label: 'Price',
-    options: {
-      filter: true,
-      sort: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const { rowData: cartItem } = tableMeta;
-        const price = cartItem[2];
-        const discount = cartItem[3];
-        const discountedPrice = getDiscountPrice(price, discount);
-        const finalProductPrice = (price * 1).toFixed(2);
-        const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
-
-        return (
-          <>
-            {discountedPrice !== null ? (
-              <>
-                <span style={{ textDecoration: 'line-through', color: 'gray' }}>
-                  {'PKR ' + finalProductPrice}
-                </span>
-                <span className="amount">
-                  {'    PKR ' + finalDiscountedPrice}
-                </span>
-              </>
-            ) : (
-              <span>{'PKR ' + finalProductPrice}</span>
-            )}
-          </>
-        );
-      },
-    },
-  },
-  {
-    name: 'discount',
-    label: 'Discount',
-    options: {
-      filter: true,
-      sort: false,
-      display: false,
-    },
-  },
-  {
-    name: 'quantity',
-    label: 'Quantity',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'price',
-    label: 'Sub Total',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const { rowData: cartItem } = tableMeta;
-        const price = cartItem[2];
-        const discount = cartItem[3];
-        const quantity = cartItem[4];
-        const discountedPrice = getDiscountPrice(price, discount);
-        const finalProductPrice = (price * 1).toFixed(2);
-        const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
-        return (
-          <>
-            {discountedPrice !== null
-              ? 'PKR ' + (finalDiscountedPrice * quantity).toFixed(2)
-              : 'PKR ' + (finalProductPrice * quantity).toFixed(2)}
-          </>
-        );
-      },
-    },
-  },
-];
-
 const OrderPage = (props) => {
   const { history, match } = props;
   const orderId = match.params.id;
@@ -157,6 +56,132 @@ const OrderPage = (props) => {
       history.push('/login');
     }
   }, [history, authUser, orderId, dispatch]);
+
+  const columns = [
+    {
+      name: 'product',
+      label: 'Product',
+      options: {
+        filter: true,
+        sort: true,
+        display: false,
+      },
+    },
+    {
+      name: 'image',
+      label: 'Image',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const image = value.length > 0 ? value[0] : '';
+          console.log(image);
+          return (
+            <Avatar
+              variant="rounded"
+              src={image === '' ? '' : process.env.REACT_APP_API_URL + image}
+            />
+          );
+        },
+      },
+    },
+    {
+      name: 'name',
+      label: 'Name',
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: 'price',
+      label: 'Price',
+      options: {
+        filter: true,
+        sort: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cartItem = selectedOrder.orderItems.filter((item) => {
+            return item.product === rowData[0];
+          })[0];
+          const discountedPrice = getDiscountPrice(
+            cartItem.price,
+            cartItem.discount
+          );
+          const finalProductPrice = (cartItem.price * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+
+          return (
+            <>
+              {discountedPrice !== null ? (
+                <>
+                  <span
+                    style={{ textDecoration: 'line-through', color: 'gray' }}
+                  >
+                    {'PKR ' + finalProductPrice}
+                  </span>
+                  <span className="amount">
+                    {'    PKR ' + finalDiscountedPrice}
+                  </span>
+                </>
+              ) : (
+                <span>{'PKR ' + finalProductPrice}</span>
+              )}
+            </>
+          );
+        },
+      },
+    },
+    {
+      name: 'discount',
+      label: 'Discount',
+      options: {
+        filter: true,
+        sort: false,
+        display: false,
+      },
+    },
+    {
+      name: 'quantity',
+      label: 'Quantity',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: 'weight',
+      label: 'Weight',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: 'price',
+      label: 'Sub Total',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cartItem = selectedOrder.orderItems.filter((item) => {
+            return item.product === rowData[0];
+          })[0];
+          const discountedPrice = getDiscountPrice(
+            cartItem.price,
+            cartItem.discount
+          );
+          const finalProductPrice = (cartItem.price * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+          let productPrice =
+            discountedPrice !== null
+              ? finalDiscountedPrice * cartItem.quantity
+              : finalProductPrice * cartItem.quantity;
+          productPrice = productPrice * cartItem.weight;
+          return <>{'PKR ' + productPrice.toFixed(2)}</>;
+        },
+      },
+    },
+  ];
 
   const options = {
     filterType: 'checkbox',

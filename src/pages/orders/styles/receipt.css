@@ -19,8 +19,8 @@
 
 .ticket td.description,
 .ticket th.description {
-    width: 75px;
-    max-width: 75px;
+    width: 55px;
+    max-width: 55px;
 }
 
 .ticket td.quantity,

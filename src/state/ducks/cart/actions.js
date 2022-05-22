@@ -17,6 +17,13 @@ export const decreaseQuantity = (item) => {
   };
 };
 
+//decrease from cart
+export const changeWeight = (item, weight) => {
+  return (dispatch) => {
+    dispatch({ type: types.CHANGE_WEIGHT, payload: { ...item, weight } });
+  };
+};
+
 //delete from cart
 export const deleteFromCart = (item) => {
   return (dispatch) => {

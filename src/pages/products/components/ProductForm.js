@@ -20,6 +20,7 @@ const schema = yup.object().shape({
   sku: yup.string().required(),
   price: yup.number().required(),
   stock: yup.number().required(),
+  weight: yup.number().required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -105,6 +106,17 @@ const ProductForm = ({ preloadedValues }) => {
             name="price"
             error={!!errors.price}
             helperText={errors?.price?.message}
+          />
+        </Grid>
+        <Grid item md={4} xs={12}>
+          <Input
+            ref={register}
+            id="weight"
+            type="number"
+            label="Weight (Kg)"
+            name="weight"
+            error={!!errors.weight}
+            helperText={errors?.weight?.message}
           />
         </Grid>
         <Grid item md={4} xs={12}>
