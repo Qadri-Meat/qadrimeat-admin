@@ -135,6 +135,22 @@ const BookingPage = (props) => {
       },
     },
     {
+      name: 'day',
+      label: 'Day',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: 'time',
+      label: 'Time',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
       name: 'price',
       label: 'Sub Total',
       options: {

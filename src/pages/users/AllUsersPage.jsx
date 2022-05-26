@@ -94,9 +94,9 @@ const AllUsersPage = (props) => {
     page: page,
     serverSide: true,
     onRowsDelete: (rowsDeleted, dataRows) => {
-      rowsDeleted.data.forEach((row) => {
-        dispatch(deleteUser(results[row.dataIndex].id));
-      });
+      // rowsDeleted.data.forEach((row) => {
+      //   dispatch(deleteUser(results[row.dataIndex].id));
+      // });
     },
     onRowClick: (rowData, rowState) => {
       history.push(`/users/${rowData[0]}`);

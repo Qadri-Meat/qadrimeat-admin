@@ -141,6 +141,12 @@ const InvoicePage = (props) => {
                                 Quantity
                               </th>
                               <th className="bbooking-0 text-uppercase small font-weight-bold">
+                                Day
+                              </th>
+                              <th className="bbooking-0 text-uppercase small font-weight-bold">
+                                Time
+                              </th>
+                              <th className="bbooking-0 text-uppercase small font-weight-bold">
                                 Unit Cost
                               </th>
                               <th className="bbooking-0 text-uppercase small font-weight-bold">
@@ -176,6 +182,8 @@ const InvoicePage = (props) => {
                                   </td>
                                   <td>{item.name}</td>
                                   <td>{item.quantity}</td>
+                                  <td>{item.day}</td>
+                                  <td>{item.time}</td>
                                   <td>
                                     <>
                                       {discountedPrice !== null ? (
