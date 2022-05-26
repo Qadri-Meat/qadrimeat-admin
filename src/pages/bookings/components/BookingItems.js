@@ -130,7 +130,6 @@ const BookingItems = ({ preloadedValues }) => {
                 dispatch(
                   updateCart1Item({
                     ...cart1Item,
-                    discount: Number(e.target.value),
                     day: e.target.value,
                   })
                 );
@@ -288,7 +287,7 @@ const BookingItems = ({ preloadedValues }) => {
                 name: values.name,
                 quantity: values.quantity,
                 price: values.price,
-                discount: 1,
+                discount: 0,
                 image: values.image,
                 deal: values.id,
                 day: 1,
