@@ -15,7 +15,6 @@ export default (state = initialState, action) => {
     case types.ADD_ALL_TO_CART1:
       return booking.map((item) => {
         delete item.createdAt;
-        delete item.id;
         return item;
       });
     case types.ADD_TO_CART1:

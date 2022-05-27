@@ -5,11 +5,12 @@ import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
-import MUIDataTable from 'mui-datatables';
+import MUIDataTable, { debounceSearchRender } from 'mui-datatables';
 import { getBookings } from 'state/ducks/booking/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
+import { pick } from 'helpers/pick';
 const useStyles = makeStyles((theme) => ({
   my3: {
     margin: '1.3rem 0',
@@ -103,13 +104,13 @@ const columns = [
 
 const AllBookingsPage = (props) => {
   const { history, location } = props;
-  const type = location.search ? location.search.split('=')[1] : 'online';
+  const { type = 'retail', paid } = pick(location.search);
   const classes = useStyles();
 
   const dispatch = useDispatch();
   const [selectedPage, setSelectedPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
 
   const { results, page, totalResults } = useSelector((state) => state.booking);
 
@@ -117,11 +118,14 @@ const AllBookingsPage = (props) => {
 
   useEffect(() => {
     if (authUser) {
-      dispatch(getBookings(selectedPage, limit, type));
+      const query = `?page=${selectedPage}&limit=${limit}&type=${type}${
+        paid !== undefined ? `&paid=${paid}` : ''
+      }${search !== '' ? `&phone=${search}` : ''}`;
+      dispatch(getBookings(query));
     } else {
       history.push('/login');
     }
-  }, [history, authUser, dispatch, selectedPage, limit, type]);
+  }, [history, authUser, dispatch, selectedPage, limit, paid, type, search]);
 
   const options = {
     filterType: 'checkbox',
@@ -129,6 +133,7 @@ const AllBookingsPage = (props) => {
     count: totalResults,
     page: page,
     serverSide: true,
+    customSearchRender: debounceSearchRender(2000),
     onRowClick: (rowData, rowState) => {
       console.log(rowState.rowIndex);
       history.push(`/bookings/${results[rowState.rowIndex].id}`);
@@ -143,6 +148,12 @@ const AllBookingsPage = (props) => {
           setSelectedPage(1);
           break;
         case 'search':
+          setSearch(
+            tableState.searchText !== undefined &&
+              tableState.searchText !== null
+              ? tableState.searchText
+              : ''
+          );
           break;
         default:
           break;
@@ -181,11 +192,36 @@ const AllBookingsPage = (props) => {
           <Grid item>
             <ToggleButtonGroup
               color="primary"
+              style={{ marginRight: '10px' }}
+              value={paid}
+              size="small"
+              exclusive
+              onChange={(event, value) => {
+                history.push(
+                  `/orders?type=${type}${
+                    value !== undefined && value !== null
+                      ? `&paid=${value}`
+                      : ''
+                  }`
+                );
+              }}
+            >
+              <ToggleButton value="true">Paid</ToggleButton>
+              <ToggleButton value="false">No Paid</ToggleButton>
+            </ToggleButtonGroup>
+            <ToggleButtonGroup
+              color="primary"
               value={type}
               size="small"
               exclusive
               onChange={(event, value) => {
-                history.push(`/bookings?type=${value}`);
+                history.push(
+                  `/bookings?type=${
+                    value !== undefined && value !== null
+                      ? `${value}`
+                      : `${type}`
+                  }`
+                );
               }}
             >
               <ToggleButton value="online">Online</ToggleButton>

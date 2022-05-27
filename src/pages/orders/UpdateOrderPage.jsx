@@ -37,7 +37,6 @@ const UpdateOrderPage = (props) => {
       } else if (!selectedOrder) {
         dispatch(getOrder(orderId));
       } else if (selectedOrder) {
-        console.log('test', selectedOrder.orderItems);
         dispatch({ type: ADD_ALL_TO_CART, payload: selectedOrder.orderItems });
       }
     } else {

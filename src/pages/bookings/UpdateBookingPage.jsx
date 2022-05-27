@@ -6,7 +6,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getBooking } from 'state/ducks/booking/actions';
 import * as types from 'state/ducks/booking/types';
 import BookingForm from './components/BookingForm';
-import { ADD_ALL_TO_CART } from 'state/ducks/cart/types';
+
+import { ADD_ALL_TO_CART1 } from 'state/ducks/cart1/types';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -39,7 +40,7 @@ const UpdateBookingPage = (props) => {
       } else if (selectedBooking) {
         console.log('test', selectedBooking.bookingItems);
         dispatch({
-          type: ADD_ALL_TO_CART,
+          type: ADD_ALL_TO_CART1,
           payload: selectedBooking.bookingItems,
         });
       }

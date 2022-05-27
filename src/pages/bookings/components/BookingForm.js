@@ -56,7 +56,8 @@ const BookingForm = ({ preloadedValues }) => {
     defaultValues: {
       city: 'Lahore',
       country: 'Pakistan',
-      ...preloadedValues,
+      ...preloadedValues.shippingDetails,
+      discount: preloadedValues.discount,
     },
     mode: 'onBlur',
     resolver: yupResolver(schema),

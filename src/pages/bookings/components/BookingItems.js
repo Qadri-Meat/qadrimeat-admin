@@ -125,7 +125,7 @@ const BookingItems = ({ preloadedValues }) => {
             <select
               name="day"
               id="day"
-              value={String(value)}
+              value={value}
               onChange={(e) => {
                 dispatch(
                   updateCart1Item({

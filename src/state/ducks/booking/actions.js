@@ -3,12 +3,12 @@ import * as types from './types';
 import BookingService from '../../services/booking.service';
 import { DELETE_ALL_FROM_CART } from '../cart/types';
 
-export const getBookings = (page, limit, type) => async (dispatch) => {
+export const getBookings = (query) => async (dispatch) => {
   try {
     dispatch({
       type: types.BOOKING_REQUEST,
     });
-    const res = await BookingService.getAll(page, limit, type);
+    const res = await BookingService.getAll(query);
 
     dispatch({
       type: types.GET_BOOKINGS_SUCCESS,

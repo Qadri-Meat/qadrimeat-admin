@@ -1,12 +1,8 @@
 import api from './api';
 
 class BookingService {
-  getAll(page, limit, type, search) {
-    return api.get(
-      `/bookings?page=${page}&limit=${limit}&type=${type}${
-        search && search !== '' ? `&phone=${search}` : ''
-      }`
-    );
+  getAll(query) {
+    return api.get(`/bookings${query}`);
   }
   getBookingItems(day, deal) {
     return api.get(

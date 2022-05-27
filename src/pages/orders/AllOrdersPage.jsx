@@ -5,7 +5,7 @@ import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
-import MUIDataTable from 'mui-datatables';
+import MUIDataTable, { debounceSearchRender } from 'mui-datatables';
 import { getOrders } from 'state/ducks/order/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckIcon from '@material-ui/icons/Check';
@@ -31,13 +31,13 @@ const useStyles = makeStyles((theme) => ({
 
 const AllOrdersPage = (props) => {
   const { history, location } = props;
-  const { type, paid } = pick(location.search);
+  const { type = 'retail', paid } = pick(location.search);
   const classes = useStyles();
 
   const dispatch = useDispatch();
   const [selectedPage, setSelectedPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  // const [search, setSearch] = useState('');
+  const [search, setSearch] = useState('');
 
   const { results, page, totalResults } = useSelector((state) => state.order);
 
@@ -45,14 +45,14 @@ const AllOrdersPage = (props) => {
 
   useEffect(() => {
     if (authUser) {
-      const query = `?page=${selectedPage}&limit=${limit}&type=${
-        type || 'online'
-      }${paid !== undefined ? `&paid=${paid}` : ''}`;
+      const query = `?page=${selectedPage}&limit=${limit}&type=${type}${
+        paid !== undefined ? `&paid=${paid}` : ''
+      }${search !== '' ? `&phone=${search}` : ''}`;
       dispatch(getOrders(query));
     } else {
       history.push('/login');
     }
-  }, [history, authUser, dispatch, selectedPage, limit, type, paid]);
+  }, [history, authUser, dispatch, selectedPage, limit, type, paid, search]);
 
   const columns = [
     {
@@ -123,29 +123,6 @@ const AllOrdersPage = (props) => {
         customBodyRender: (value, tableMeta, updateValue) => {
           return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
         },
-        filterType: 'custom',
-        filterOptions: {
-          names: [],
-          display: (filterList, onChange, index, column) => (
-            <div>
-              <ToggleButtonGroup
-                color="primary"
-                size="small"
-                value={paid}
-                exclusive
-                onChange={(event, value) => {
-                  console.log(value);
-                  history.push(
-                    `/orders?type=${type || 'online'}&paid=${value}`
-                  );
-                }}
-              >
-                <ToggleButton value="true">Paid</ToggleButton>
-                <ToggleButton value="false">Not Paid</ToggleButton>
-              </ToggleButtonGroup>
-            </div>
-          ),
-        },
       },
     },
   ];
@@ -156,6 +133,7 @@ const AllOrdersPage = (props) => {
     count: totalResults,
     page: page,
     serverSide: true,
+    customSearchRender: debounceSearchRender(2000),
     onRowClick: (rowData, rowState) => {
       history.push(`/orders/${results[rowState.rowIndex].id}`);
     },
@@ -168,8 +146,13 @@ const AllOrdersPage = (props) => {
           setLimit(tableState.rowsPerPage);
           setSelectedPage(1);
           break;
-        case 'resetFilters':
-          history.push(`/orders?type=${type || 'online'}`);
+        case 'search':
+          setSearch(
+            tableState.searchText !== undefined &&
+              tableState.searchText !== null
+              ? tableState.searchText
+              : ''
+          );
           break;
         default:
           break;
@@ -208,11 +191,36 @@ const AllOrdersPage = (props) => {
           <Grid item>
             <ToggleButtonGroup
               color="primary"
+              style={{ marginRight: '10px' }}
+              value={paid}
+              size="small"
+              exclusive
+              onChange={(event, value) => {
+                history.push(
+                  `/orders?type=${type}${
+                    value !== undefined && value !== null
+                      ? `&paid=${value}`
+                      : ''
+                  }`
+                );
+              }}
+            >
+              <ToggleButton value="true">Paid</ToggleButton>
+              <ToggleButton value="false">No Paid</ToggleButton>
+            </ToggleButtonGroup>
+            <ToggleButtonGroup
+              color="primary"
               value={type}
               size="small"
               exclusive
               onChange={(event, value) => {
-                history.push(`/orders?type=${value}`);
+                history.push(
+                  `/orders?type=${
+                    value !== undefined && value !== null
+                      ? `${value}`
+                      : `${type}`
+                  }`
+                );
               }}
             >
               <ToggleButton value="online">Online</ToggleButton>

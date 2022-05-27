@@ -222,30 +222,72 @@ const InvoicePage = (props) => {
                     </div>
 
                     <div className="d-flex flex-row-reverse p-2">
-                      <div className=" px-5 text-right">
-                        <div className="mb-2">
-                          <strong>
-                            Sub - Total amount: Rs{' '}
-                            {selectedOrder.totalPrice -
-                              selectedOrder.shippingPrice +
-                              (selectedOrder.discount || 0)}
-                          </strong>
-                        </div>
-                        <div className="mb-2">
-                          <strong>
-                            Shipping Price: Rs {selectedOrder.shippingPrice}
-                          </strong>
-                        </div>
-                        <div className="mb-2">
-                          <strong>
-                            Discount: Rs {selectedOrder.discount || 0}
-                          </strong>
-                        </div>
-                        <div className="mb-2">
-                          <strong>
-                            Grand Total: Rs {selectedOrder.totalPrice}
-                          </strong>
-                        </div>
+                      <div className="px-5">
+                        <table>
+                          <tbody>
+                            <tr>
+                              <td className="pr-3 text-right">
+                                <strong>Sub - Total amount:</strong>
+                              </td>
+                              <td>
+                                <strong>
+                                  Rs{' '}
+                                  {selectedOrder.totalPrice -
+                                    selectedOrder.shippingPrice +
+                                    (selectedOrder.discount || 0)}
+                                </strong>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="pr-3 text-right">
+                                <strong>Shipping Price:</strong>
+                              </td>
+                              <td>
+                                <strong>
+                                  Rs {selectedOrder.shippingPrice}
+                                </strong>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="pr-3 text-right">
+                                <strong>Discount:</strong>
+                              </td>
+                              <td>
+                                <strong>
+                                  Rs {selectedOrder.discount || 0}
+                                </strong>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="pr-3 text-right">
+                                <strong>Grand Total:</strong>
+                              </td>
+                              <td>
+                                <strong>Rs {selectedOrder.totalPrice}</strong>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="pr-3 text-right">
+                                <strong>Total Paid:</strong>
+                              </td>
+                              <td>
+                                <strong>Rs {selectedOrder.totalPaid}</strong>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td className="pr-3 text-right">
+                                <strong>Balance:</strong>
+                              </td>
+                              <td>
+                                <strong>
+                                  Rs{' '}
+                                  {selectedOrder.totalPrice -
+                                    selectedOrder.totalPaid}
+                                </strong>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
