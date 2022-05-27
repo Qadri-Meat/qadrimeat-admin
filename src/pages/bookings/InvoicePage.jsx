@@ -76,31 +76,32 @@ const InvoicePage = (props) => {
                     </div>
 
                     <hr />
-                    {selectedBooking.type === 'online' ? (
-                      <div className="row">
-                        <div className="col-md-6">
-                          <p className="font-weight-bold mb-4">
-                            To:{' '}
-                            {selectedBooking.shippingDetails.firstName +
-                              ' ' +
-                              selectedBooking.shippingDetails.lastName}
-                          </p>
-                          <p className="text-muted">
-                            <strong>Email:</strong>{' '}
-                            {selectedBooking.shippingDetails.email}
-                            <br />
-                            <strong>Phone:</strong>{' '}
-                            {selectedBooking.shippingDetails.phone}
-                            <br />
-                            <strong>Address:</strong>{' '}
-                            {selectedBooking.shippingDetails.address},{' '}
-                            {selectedBooking.shippingDetails.city}{' '}
-                            {selectedBooking.shippingDetails.postalCode},{' '}
-                            {selectedBooking.shippingDetails.country}
-                          </p>
-                        </div>
+                    {/* {selectedBooking.type === 'online' ? ( */}
+                    <div className="row">
+                      <div className="col-md-6">
+                        <p className="font-weight-bold">
+                          To:{' '}
+                          {selectedBooking.shippingDetails.firstName +
+                            ' ' +
+                            selectedBooking.shippingDetails.lastName}
+                        </p>
+                        <p className="text-muted">
+                          {/* <strong>Email:</strong>{' '}
+                          {selectedBooking.shippingDetails.email}
+                          <br /> */}
+                          <strong>Phone:</strong>
+                          {' +'}
+                          {selectedBooking.shippingDetails.phone}
+                          <br />
+                          <strong>Address:</strong>{' '}
+                          {selectedBooking.shippingDetails.address},{' '}
+                          {selectedBooking.shippingDetails.city}{' '}
+                          {selectedBooking.shippingDetails.postalCode},{' '}
+                          {selectedBooking.shippingDetails.country}
+                        </p>
+                      </div>
 
-                        {/* <div className="col-md-6 text-right">
+                      {/* <div className="col-md-6 text-right">
     <p className="font-weight-bold mb-4">Payment Details</p>
     <p className="mb-1">
       <span className="text-muted">ID: </span>{' '}
@@ -121,10 +122,10 @@ const InvoicePage = (props) => {
         : ''}
     </p>
   </div> */}
-                      </div>
-                    ) : (
+                    </div>
+                    {/* ) : (
                       <></>
-                    )}
+                    )} */}
 
                     <div className="row ">
                       <div className="col-md-12">

@@ -16,8 +16,7 @@ import { getDiscountPrice } from 'helpers/product';
 
 const schema = yup.object().shape({
   firstName: yup.string().required(),
-  lastName: yup.string().required(),
-  email: yup.string().required(),
+  lastName: yup.string(),
   phone: yup.string().required(),
   address: yup.string().required(),
   postalCode: yup.string(),
@@ -133,7 +132,7 @@ const BookingForm = ({ preloadedValues }) => {
                 helperText={errors?.lastName?.message}
               />
             </Grid>
-            <Grid item md={4} xs={12}>
+            {/* <Grid item md={4} xs={12}>
               <Input
                 ref={register}
                 id="email"
@@ -143,7 +142,7 @@ const BookingForm = ({ preloadedValues }) => {
                 error={!!errors.email}
                 helperText={errors?.email?.message}
               />
-            </Grid>
+            </Grid> */}
             <Grid item md={4} xs={12}>
               <Input
                 ref={register}

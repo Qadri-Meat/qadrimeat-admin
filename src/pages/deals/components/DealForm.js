@@ -110,7 +110,7 @@ const DealForm = ({ preloadedValues }) => {
             ref={register}
             id="stock"
             type="number"
-            label="Inventory"
+            label="stock"
             name="stock"
             error={!!errors.stock}
             helperText={errors?.stock?.message}
