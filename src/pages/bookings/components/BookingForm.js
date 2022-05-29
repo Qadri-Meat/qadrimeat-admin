@@ -47,18 +47,24 @@ const BookingForm = ({ preloadedValues }) => {
   const { error, loading } = useSelector((state) => state.booking);
 
   const items = useSelector((state) => state.cart1);
-
+  let shippingDetails = {
+    city: 'Lahore, Punjab',
+    country: 'Pakistan',
+    postalCode: '54030',
+    discount: 0,
+  };
+  if (preloadedValues !== undefined) {
+    shippingDetails = {
+      ...preloadedValues.shippingDetails,
+      discount: preloadedValues.discount,
+    };
+  }
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      city: 'Lahore',
-      country: 'Pakistan',
-      ...preloadedValues.shippingDetails,
-      discount: preloadedValues.discount,
-    },
+    defaultValues: shippingDetails,
     mode: 'onBlur',
     resolver: yupResolver(schema),
   });

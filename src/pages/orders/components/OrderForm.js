@@ -71,24 +71,29 @@ const OrderForm = ({ preloadedValues }) => {
 
   const items = useSelector((state) => state.cart);
   const { results } = useSelector((state) => state.product);
-
+  let shippingDetails = {
+    city: 'Lahore, Punjab',
+    country: 'Pakistan',
+    address: 'Street 113, Sector N Dha Phase 1',
+    phone: '923044014345',
+    email: 'qadrimeat@gmail.com',
+    firstName: 'Qadri',
+    lastName: 'Meat',
+    postalCode: '54030',
+    discount: 0,
+  };
+  if (preloadedValues !== undefined) {
+    shippingDetails = {
+      ...preloadedValues.shippingDetails,
+      discount: preloadedValues.discount,
+    };
+  }
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      city: 'Lahore, Punjab',
-      country: 'Pakistan',
-      address: 'Street 113, Sector N Dha Phase 1',
-      phone: '+923044014345',
-      email: 'qadrimeat@gmail.com',
-      firstName: 'Qadri',
-      lastName: 'Meat',
-      postalCode: '54030',
-      discount: 0,
-      ...preloadedValues,
-    },
+    defaultValues: shippingDetails,
     mode: 'onBlur',
     resolver: yupResolver(schema),
   });
