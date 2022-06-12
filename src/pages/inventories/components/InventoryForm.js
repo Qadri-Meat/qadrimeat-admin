@@ -18,8 +18,10 @@ import Message from 'components/Message/Message';
 const schema = yup.object().shape({
   description: yup.string().required(),
   category: yup.string().required(),
-  cost: yup.number().required(),
-  weight: yup.number().required(),
+  type: yup.string().required(),
+  cost: yup.string().required(),
+  weight: yup.string().required(),
+  quantity: yup.string().required(),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -93,11 +95,23 @@ const InventoryForm = ({ preloadedValues }) => {
             ref={register}
             id="weight"
             type="number"
-            label="weight"
+            label="Weight (Kg)"
             name="weight"
             className={classes.textField}
             error={!!errors.weight}
             helperText={errors?.weight?.message}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Input
+            ref={register}
+            id="quantity"
+            type="number"
+            label="Quantity"
+            name="quantity"
+            className={classes.textField}
+            error={!!errors.quantity}
+            helperText={errors?.quantity?.message}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -117,6 +131,24 @@ const InventoryForm = ({ preloadedValues }) => {
             <MenuItem value="chicken">Chicken</MenuItem>
             <MenuItem value="mutton">Mutton</MenuItem>
             <MenuItem value="beef">Beef</MenuItem>
+          </SelectInput>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <SelectInput
+            ref={register}
+            id="type"
+            name="type"
+            className={classes.textField}
+            label="Type"
+            control={control}
+            defaultValue={''}
+            variant="outlined"
+            margin="normal"
+            error={!!errors.type}
+            helperText={errors?.type?.message}
+          >
+            <MenuItem value="order">Order</MenuItem>
+            <MenuItem value="booking">Booking</MenuItem>
           </SelectInput>
         </Grid>
         <Grid item xs={12}>

@@ -46,7 +46,7 @@ const AllOrdersPage = (props) => {
   useEffect(() => {
     if (authUser) {
       const query = `?page=${selectedPage}&limit=${limit}&type=${type}${
-        paid !== undefined ? `&paid=${paid}` : ''
+        paid !== undefined ? `&isPaid=${paid}` : ''
       }${search !== '' ? `&phone=${search}` : ''}`;
       dispatch(getOrders(query));
     } else {

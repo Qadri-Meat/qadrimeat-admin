@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AllBookingItemsPage = (props) => {
   const { history, location } = props;
-  const { day, deal } = pick(location.search);
+  const { day = '1', deal } = pick(location.search);
 
   const classes = useStyles();
 
@@ -83,48 +83,59 @@ const AllBookingItemsPage = (props) => {
         </Grid>
       </Grid>
       <AdminBreadcrumbs path={history} />
+
       <FormControl fullWidth size="small">
-        <InputLabel id="deal-label">Deal</InputLabel>
-        {results && results.length > 0 ? (
-          <Select
-            labelId="deal-label"
-            id="deal"
-            name="deal"
-            variant="outlined"
-            value={deal}
-            label="Deal"
-            onChange={(event) => {
+        <Grid
+          item
+          container
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+          xs={12}
+          spacing={1}
+        >
+          <InputLabel id="deal-label">Deal</InputLabel>
+          {results && results.length > 0 ? (
+            <Select
+              labelId="deal-label"
+              id="deal"
+              name="deal"
+              variant="outlined"
+              value={deal}
+              label="Deal"
+              style={{ width: '300px' }}
+              onChange={(event) => {
+                history.push(
+                  `/bookings/booking-items?day=${day}&deal=${event.target.value}`
+                );
+              }}
+            >
+              {results.map((item) => (
+                <MenuItem value={item.id}>{item.name}</MenuItem>
+              ))}
+            </Select>
+          ) : (
+            <></>
+          )}
+          <ToggleButtonGroup
+            color="primary"
+            value={day}
+            size="small"
+            exclusive
+            onChange={(event, value) => {
               history.push(
-                `/bookings/booking-items?day=${day}&deal=${event.target.value}`
+                `/bookings/booking-items?day=${value}${
+                  deal ? `&deal=${deal}` : ''
+                }`
               );
             }}
           >
-            {results.map((item) => (
-              <MenuItem value={item.id}>{item.name}</MenuItem>
-            ))}
-          </Select>
-        ) : (
-          <></>
-        )}
-        <ToggleButtonGroup
-          color="primary"
-          value={day}
-          size="small"
-          exclusive
-          onChange={(event, value) => {
-            history.push(
-              `/bookings/booking-items?day=${value}${
-                deal ? `&deal=${deal}` : ''
-              }`
-            );
-          }}
-        >
-          <ToggleButton value="1">Day 1</ToggleButton>
-          <ToggleButton value="2">Day 2</ToggleButton>
-          <ToggleButton value="3">Day 3</ToggleButton>
-        </ToggleButtonGroup>
+            <ToggleButton value="1">Day 1</ToggleButton>
+            <ToggleButton value="2">Day 2</ToggleButton>
+            <ToggleButton value="3">Day 3</ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
       </FormControl>
-
       <TableContainer>
         <Table
           className={classes.table}

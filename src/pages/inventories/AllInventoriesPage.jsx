@@ -27,59 +27,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns = [
-  {
-    name: 'id',
-    label: 'Id',
-    options: {
-      filter: true,
-      sort: true,
-    },
-  },
-  {
-    name: 'description',
-    label: 'Description',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'cost',
-    label: 'Cost',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'weight',
-    label: 'Weight (Kg)',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'createdAt',
-    label: 'Date Added',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return (
-          <>
-            {new Date(value).toLocaleDateString()},{' '}
-            {new Date(value).toLocaleTimeString()}
-          </>
-        );
-      },
-    },
-  },
-];
-
 const AllInventoriesPage = (props) => {
   const { history, location } = props;
-  const { category = 'chicken' } = pick(location.search);
+  const { category = 'chicken', type = 'order' } = pick(location.search);
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -94,12 +44,62 @@ const AllInventoriesPage = (props) => {
 
   useEffect(() => {
     if (authUser) {
-      const query = `?page=${selectedPage}&limit=${limit}&category=${category}`;
+      const query = `?page=${selectedPage}&limit=${limit}&category=${category}&type=${type}`;
       dispatch(getInventories(query));
     } else {
       history.push('/login');
     }
-  }, [history, authUser, dispatch, selectedPage, limit, category]);
+  }, [history, authUser, dispatch, selectedPage, limit, category, type]);
+
+  const columns = [
+    {
+      name: 'id',
+      label: 'Id',
+      options: {
+        filter: true,
+        sort: true,
+      },
+    },
+    {
+      name: 'description',
+      label: 'Description',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: 'cost',
+      label: 'Cost',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: type === 'order' ? 'weight' : 'quantity',
+      label: type === 'order' ? 'Weight (Kg)' : 'Quantity',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: 'createdAt',
+      label: 'Date Added',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <>
+              {new Date(value).toLocaleDateString()},{' '}
+              {new Date(value).toLocaleTimeString()}
+            </>
+          );
+        },
+      },
+    },
+  ];
 
   const options = {
     filterType: 'checkbox',
@@ -162,6 +162,7 @@ const AllInventoriesPage = (props) => {
             <ToggleButtonGroup
               color="primary"
               value={category}
+              style={{ marginRight: '10px' }}
               size="small"
               exclusive
               onChange={(event, value) => {
@@ -171,6 +172,24 @@ const AllInventoriesPage = (props) => {
               <ToggleButton value="chicken">Chicken</ToggleButton>
               <ToggleButton value="mutton">Mutton</ToggleButton>
               <ToggleButton value="beef">Beef</ToggleButton>
+            </ToggleButtonGroup>
+            <ToggleButtonGroup
+              color="primary"
+              value={type}
+              size="small"
+              exclusive
+              onChange={(event, value) => {
+                history.push(
+                  `/inventories?category=${category}&type=${
+                    value !== undefined && value !== null
+                      ? `${value}`
+                      : `${type}`
+                  }`
+                );
+              }}
+            >
+              <ToggleButton value="order">Order</ToggleButton>
+              <ToggleButton value="booking">Booking</ToggleButton>
             </ToggleButtonGroup>
           </Grid>
         </Grid>

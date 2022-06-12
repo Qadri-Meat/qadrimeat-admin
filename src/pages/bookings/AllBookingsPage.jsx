@@ -119,7 +119,7 @@ const AllBookingsPage = (props) => {
   useEffect(() => {
     if (authUser) {
       const query = `?page=${selectedPage}&limit=${limit}&type=${type}${
-        paid !== undefined ? `&paid=${paid}` : ''
+        paid !== undefined ? `&isPaid=${paid}` : ''
       }${search !== '' ? `&phone=${search}` : ''}`;
       dispatch(getBookings(query));
     } else {
@@ -198,7 +198,7 @@ const AllBookingsPage = (props) => {
               exclusive
               onChange={(event, value) => {
                 history.push(
-                  `/orders?type=${type}${
+                  `/bookings?type=${type}${
                     value !== undefined && value !== null
                       ? `&paid=${value}`
                       : ''

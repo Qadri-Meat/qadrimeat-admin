@@ -114,7 +114,7 @@ const UserForm = ({ preloadedValues }) => {
             helperText={errors?.role?.message}
           >
             <MenuItem value="user">User</MenuItem>
-            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="manager">Manager</MenuItem>
           </SelectInput>
         </Grid>
         <Grid item xs={12}>

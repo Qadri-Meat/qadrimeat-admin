@@ -14,7 +14,8 @@ import {
 import clsx from 'clsx';
 import { getDashboard } from 'state/ducks/user/actions';
 import BookingTable from './components/BookingTable';
-import ReportsTable from './components/ReportsTable';
+import BookingReportsTable from './components/BookingReportsTable';
+import OrderReportsTable from './components/OrderReportsTable';
 
 const useStyles = makeStyles((them) => ({
   paddingPaper: {
@@ -126,18 +127,31 @@ const DashboardPage = (props) => {
           </Grid>
         </Grid>
         <Grid item container spacing={2}>
-          <Grid item xs={12}>
-            <Paper
-              className={clsx(classes.paddingPaper, classes.mt)}
-              variant="outlined"
-            >
-              <Typography className={classes.titlePaper} variant="h5">
-                Reports
-              </Typography>
-              {reports ? <ReportsTable reports={reports} /> : <></>}
-            </Paper>
+          <Grid item xs={12} md={7}>
+            <Grid item xs={12}>
+              <Paper
+                className={clsx(classes.paddingPaper, classes.mt)}
+                variant="outlined"
+              >
+                <Typography className={classes.titlePaper} variant="h5">
+                  Order Reports
+                </Typography>
+                {reports ? <OrderReportsTable reports={reports} /> : <></>}
+              </Paper>
+            </Grid>
+            <Grid item xs={12}>
+              <Paper
+                className={clsx(classes.paddingPaper, classes.mt)}
+                variant="outlined"
+              >
+                <Typography className={classes.titlePaper} variant="h5">
+                  Booking Reports
+                </Typography>
+                {reports ? <BookingReportsTable reports={reports} /> : <></>}
+              </Paper>
+            </Grid>
           </Grid>
-          <Grid item xs={12} md={4}>
+          <Grid item xs={12} md={5}>
             <Paper
               className={clsx(classes.paddingPaper, classes.mt)}
               variant="outlined"

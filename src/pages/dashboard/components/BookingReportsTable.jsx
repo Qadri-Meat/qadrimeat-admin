@@ -6,6 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import { numberWithCommas } from 'helpers/numbers';
 
 const useStyles = makeStyles({
   table: {
@@ -13,7 +14,7 @@ const useStyles = makeStyles({
   },
 });
 
-const ReportsTable = ({ reports }) => {
+const BookingReportsTable = ({ reports }) => {
   const classes = useStyles();
   console.log(reports);
   return (
@@ -26,11 +27,8 @@ const ReportsTable = ({ reports }) => {
         <TableHead>
           <TableRow>
             <TableCell>Month/Year</TableCell>
-            <TableCell align="right">Orders</TableCell>
             <TableCell align="right">Bookings</TableCell>
             <TableCell align="right">Sales</TableCell>
-            <TableCell align="right">Expenses</TableCell>
-            <TableCell align="right">Profit</TableCell>
           </TableRow>
         </TableHead>
         {reports ? (
@@ -40,12 +38,9 @@ const ReportsTable = ({ reports }) => {
                 <TableCell component="th" scope="row">
                   {report.month + '/' + report.year}
                 </TableCell>
-                <TableCell align="right">{report.totalOrders || 0}</TableCell>
                 <TableCell align="right">{report.totalBookings || 0}</TableCell>
-                <TableCell align="right">{report.totalSales || 0}</TableCell>
-                <TableCell align="right">{report.totalExpenses || 0}</TableCell>
                 <TableCell align="right">
-                  {(report.totalSales || 0) - (report.totalExpenses || 0)}
+                  {numberWithCommas(report.totalBookingSales || 0)}
                 </TableCell>
               </TableRow>
             ))}
@@ -58,4 +53,4 @@ const ReportsTable = ({ reports }) => {
   );
 };
 
-export default ReportsTable;
+export default BookingReportsTable;
