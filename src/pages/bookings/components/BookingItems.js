@@ -126,6 +126,7 @@ const BookingItems = ({ preloadedValues }) => {
               name="day"
               id="day"
               value={value}
+              hidden={!cart1Item.isPackage}
               onChange={(e) => {
                 dispatch(
                   updateCart1Item({
@@ -159,6 +160,7 @@ const BookingItems = ({ preloadedValues }) => {
               id="appt"
               name="appt"
               value={value}
+              hidden={!cart1Item.isPackage}
               onChange={(e) => {
                 dispatch(
                   updateCart1Item({
@@ -168,6 +170,41 @@ const BookingItems = ({ preloadedValues }) => {
                 );
               }}
             />
+          );
+        },
+      },
+    },
+    {
+      name: 'isPackage',
+      label: 'Package',
+      options: {
+        filter: false,
+        setCellProps: () => ({
+          style: { minWidth: '50px', maxWidth: '50px' },
+        }),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cart1Item = items.filter((item) => {
+            return item.id === rowData[0];
+          })[0];
+          return (
+            <select
+              name="isPackage"
+              id="isPackage"
+              value={value}
+              style={{ minWidth: '80px', maxWidth: '80px' }}
+              onChange={(e) => {
+                dispatch(
+                  updateCart1Item({
+                    ...cart1Item,
+                    isPackage: e.target.value,
+                  })
+                );
+              }}
+            >
+              <option value="true">Package</option>
+              <option value="false">Non Package</option>
+            </select>
           );
         },
       },
@@ -292,6 +329,7 @@ const BookingItems = ({ preloadedValues }) => {
                 deal: values.id,
                 day: 1,
                 time: '10 am',
+                isPackage: true,
               };
               dispatch(addToCart1(item));
               setSearchBar(Math.random());

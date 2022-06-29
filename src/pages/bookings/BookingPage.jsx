@@ -14,6 +14,8 @@ import BookingPageRightPanels from 'components/extra/BookingPageRightPanels/Book
 import { getBooking } from 'state/ducks/booking/actions';
 import MUIDataTable from 'mui-datatables';
 import { getDiscountPrice } from 'helpers/product';
+import CheckIcon from '@material-ui/icons/Check';
+import ClearIcon from '@material-ui/icons/Clear';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -140,6 +142,11 @@ const BookingPage = (props) => {
       options: {
         filter: true,
         sort: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowIndex } = tableMeta;
+          console.log(rowIndex);
+          return selectedBooking.bookingItems[rowIndex].isPackage ? value : '';
+        },
       },
     },
     {
@@ -148,6 +155,21 @@ const BookingPage = (props) => {
       options: {
         filter: true,
         sort: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowIndex } = tableMeta;
+          console.log(rowIndex);
+          return selectedBooking.bookingItems[rowIndex].isPackage ? value : '';
+        },
+      },
+    },
+    {
+      name: 'isPackage',
+      label: 'Package',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+        },
       },
     },
     {

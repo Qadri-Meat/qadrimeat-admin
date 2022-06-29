@@ -29,79 +29,6 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const columns = [
-  {
-    name: 'phone',
-    label: 'Phone',
-    options: {
-      filter: false,
-    },
-  },
-  {
-    name: 'shippingDetails',
-    label: 'Name',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value.firstName + ' ' + value.lastName}</>;
-      },
-    },
-  },
-  {
-    name: 'deliveryTime',
-    label: 'Delivery Time',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return (
-          <>
-            {new Date(value).toLocaleDateString()},{' '}
-            {new Date(value).toLocaleTimeString()}
-          </>
-        );
-      },
-    },
-  },
-  {
-    name: 'totalPrice',
-    label: 'TOTAL',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'approvedAt',
-    label: 'Approved',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-      },
-    },
-  },
-  {
-    name: 'deliveredAt',
-    label: 'Delivered',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-      },
-    },
-  },
-  {
-    name: 'isPaid',
-    label: 'Paid',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-      },
-    },
-  },
-];
-
 const AllBookingsPage = (props) => {
   const { history, location } = props;
   const { type = 'retail', paid } = pick(location.search);
@@ -160,6 +87,87 @@ const AllBookingsPage = (props) => {
       }
     },
   };
+
+  const columns = [
+    {
+      name: 'phone',
+      label: 'Phone',
+      options: {
+        filter: false,
+      },
+    },
+    {
+      name: 'shippingDetails',
+      label: 'Name',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{value.firstName + ' ' + value.lastName}</>;
+        },
+      },
+    },
+    // {
+    //   name: 'deliveryTime',
+    //   label: 'Delivery Time',
+    //   options: {
+    //     filter: false,
+    //     customBodyRender: (value, tableMeta, updateValue) => {
+    //       return (
+    //         <>
+    //           {new Date(value).toLocaleDateString()},{' '}
+    //           {new Date(value).toLocaleTimeString()}
+    //         </>
+    //       );
+    //     },
+    //   },
+    // },
+    {
+      name: 'totalPrice',
+      label: 'TOTAL',
+      options: {
+        filter: true,
+        sort: false,
+      },
+    },
+    {
+      name: 'totalPrice',
+      label: 'Balance',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowIndex } = tableMeta;
+          var totalPaid = results[rowIndex].transactions.reduce(function (
+            a,
+            b
+          ) {
+            return a + b.amount;
+          },
+          0);
+          return <>{value - totalPaid}</>;
+        },
+      },
+    },
+    {
+      name: 'approvedAt',
+      label: 'Approved',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+        },
+      },
+    },
+    {
+      name: 'deliveredAt',
+      label: 'Delivered',
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+        },
+      },
+    },
+  ];
 
   return (
     <AdminLayout>

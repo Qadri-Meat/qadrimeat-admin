@@ -6,7 +6,9 @@ class BookingService {
   }
   getBookingItems(day, deal) {
     return api.get(
-      `/bookings/booking-items?day=${day}${deal ? `&deal=${deal}` : ''}`
+      `/bookings/booking-items?isPackage=true&day=${day}${
+        deal ? `&deal=${deal}` : ''
+      }`
     );
   }
   get(id) {
