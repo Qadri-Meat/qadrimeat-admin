@@ -77,7 +77,14 @@ const AllBookingItemsPage = (props) => {
         >
           <Grid item className={classes.mRight}>
             <Typography variant="h5" component="h1">
-              Booking Items
+              Booking Items (
+              {bookingItems
+                ? bookingItems.reduce(
+                    (partialSum, a) => partialSum + a.quantity,
+                    0
+                  )
+                : 0}
+              )
             </Typography>
           </Grid>
         </Grid>
