@@ -147,3 +147,45 @@ export const addTransaction = (id, data) => async (dispatch) => {
     });
   }
 };
+
+export const deleteTransaction =
+  (bookingId, transactionId) => async (dispatch) => {
+    try {
+      dispatch({
+        type: types.BOOKING_REQUEST,
+      });
+      const res = await BookingService.deleteTransaction(
+        bookingId,
+        transactionId
+      );
+
+      dispatch({
+        type: types.CREATE_BOOKING_SUCCESS,
+        payload: res.data,
+      });
+    } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: types.BOOKING_FAIL,
+        payload: message,
+      });
+    }
+  };
+
+export const deleteBooking = (id) => async (dispatch) => {
+  try {
+    await BookingService.delete(id);
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({
+      type: types.BOOKING_FAIL,
+      payload: message,
+    });
+  }
+};

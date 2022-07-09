@@ -6,7 +6,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 import MUIDataTable, { debounceSearchRender } from 'mui-datatables';
-import { getBookings } from 'state/ducks/booking/actions';
+import { getBookings, deleteBooking } from 'state/ducks/booking/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckIcon from '@material-ui/icons/Check';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -38,6 +38,7 @@ const AllBookingsPage = (props) => {
   const [selectedPage, setSelectedPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState('');
+  const [selectedBookings, setSelectedBookings] = useState([]);
 
   const { results, page, totalResults } = useSelector((state) => state.booking);
 
@@ -54,9 +55,14 @@ const AllBookingsPage = (props) => {
     }
   }, [history, authUser, dispatch, selectedPage, limit, paid, type, search]);
 
+  const handleDeleteBookings = async () => {
+    selectedBookings.forEach((item) => {
+      dispatch(deleteBooking(results[item.index].id));
+    });
+  };
+
   const options = {
     filterType: 'checkbox',
-    selectableRows: false,
     count: totalResults,
     page: page,
     serverSide: true,
@@ -66,7 +72,14 @@ const AllBookingsPage = (props) => {
       history.push(`/bookings/${results[rowState.rowIndex].id}`);
     },
     onTableChange: (action, tableState) => {
+      const { selectedRows } = tableState;
       switch (action) {
+        case 'rowsSelect':
+          setSelectedBookings(selectedRows.data);
+          break;
+        case 'rowDelete':
+          handleDeleteBookings();
+          break;
         case 'changePage':
           setSelectedPage(tableState.page + 1);
           break;

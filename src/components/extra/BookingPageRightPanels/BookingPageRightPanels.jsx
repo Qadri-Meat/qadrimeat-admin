@@ -8,10 +8,15 @@ import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { Grid, Button, Divider, Box, TextField } from '@material-ui/core';
 import Message from 'components/Message/Message';
-import { updateBooking, addTransaction } from 'state/ducks/booking/actions';
+import {
+  updateBooking,
+  addTransaction,
+  deleteTransaction,
+} from 'state/ducks/booking/actions';
 
 import Loader from 'components/Loader/Loader';
 import SaveIcon from '@material-ui/icons/Save';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -185,6 +190,9 @@ export default function BookingPageRightPanels() {
                     <p>
                       <strong>Amount</strong>
                     </p>
+                    <p>
+                      <strong></strong>
+                    </p>
                   </Box>
                   {selectedBooking.transactions.map((tran) => (
                     <Box
@@ -198,6 +206,15 @@ export default function BookingPageRightPanels() {
                         {new Date(tran.createdAt).toLocaleTimeString()}
                       </p>
                       <p>{tran.amount}</p>
+                      <Button
+                        endIcon={<DeleteIcon />}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          dispatch(
+                            deleteTransaction(selectedBooking.id, tran.id)
+                          );
+                        }}
+                      ></Button>
                     </Box>
                   ))}
                   <Divider />
