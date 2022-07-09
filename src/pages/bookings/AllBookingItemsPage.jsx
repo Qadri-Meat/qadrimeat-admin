@@ -16,6 +16,7 @@ import {
   Select,
   InputLabel,
   FormControl,
+  Button,
 } from '@material-ui/core';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -151,7 +152,7 @@ const AllBookingItemsPage = (props) => {
         >
           <TableHead>
             <TableRow>
-              <TableCell>Deal</TableCell>
+              <TableCell>Booking</TableCell>
               <TableCell align="right">Name</TableCell>
               <TableCell align="right">Quantity</TableCell>
               <TableCell align="right">Time</TableCell>
@@ -162,7 +163,14 @@ const AllBookingItemsPage = (props) => {
               {bookingItems.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell component="th" scope="row">
-                    {item.deal}
+                    <Button
+                      onClick={() => history.push(`/bookings/${item.id}`)}
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                    >
+                      Open Booking
+                    </Button>
                   </TableCell>
                   <TableCell align="right">{item.name}</TableCell>
                   <TableCell align="right">{item.quantity}</TableCell>
