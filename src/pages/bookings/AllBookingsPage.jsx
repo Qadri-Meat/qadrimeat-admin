@@ -1,43 +1,43 @@
-import React, { useEffect, useState } from 'react';
-import AdminLayout from 'components/AdminLayout/AdminLayout';
-import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
-import { Typography, Grid, Button, makeStyles } from '@material-ui/core';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
+import React, { useEffect, useState } from "react";
+import AdminLayout from "components/AdminLayout/AdminLayout";
+import AdminBreadcrumbs from "components/AdminBreadcrumbs/AdminBreadcrumbs";
+import { Typography, Grid, Button, makeStyles } from "@material-ui/core";
+import ToggleButton from "@material-ui/lab/ToggleButton";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 
-import MUIDataTable, { debounceSearchRender } from 'mui-datatables';
-import { getBookings, deleteBooking } from 'state/ducks/booking/actions';
-import { useDispatch, useSelector } from 'react-redux';
-import CheckIcon from '@material-ui/icons/Check';
-import ClearIcon from '@material-ui/icons/Clear';
-import { pick } from 'helpers/pick';
+import MUIDataTable, { debounceSearchRender } from "mui-datatables";
+import { getBookings, deleteBooking } from "state/ducks/booking/actions";
+import { useDispatch, useSelector } from "react-redux";
+import CheckIcon from "@material-ui/icons/Check";
+import ClearIcon from "@material-ui/icons/Clear";
+import { pick } from "helpers/pick";
 const useStyles = makeStyles((theme) => ({
   my3: {
-    margin: '1.3rem 0',
+    margin: "1.3rem 0",
   },
   mb0: {
     marginBottom: 0,
   },
   mRight: {
-    marginRight: '.85rem',
+    marginRight: ".85rem",
   },
   mLeft: {
-    marginRight: '.85rem',
+    marginRight: ".85rem",
   },
   p1: {
-    padding: '.85rem',
+    padding: ".85rem",
   },
 }));
 
 const AllBookingsPage = (props) => {
   const { history, location } = props;
-  const { type = 'retail', paid } = pick(location.search);
+  const { type = "retail", paid } = pick(location.search);
   const classes = useStyles();
 
   const dispatch = useDispatch();
   const [selectedPage, setSelectedPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [selectedBookings, setSelectedBookings] = useState([]);
 
   const { results, page, totalResults } = useSelector((state) => state.booking);
@@ -46,12 +46,12 @@ const AllBookingsPage = (props) => {
 
   useEffect(() => {
     if (authUser) {
-      const query = `?page=${selectedPage}&limit=${limit}&type=${type}${
-        paid !== undefined ? `&isPaid=${paid}` : ''
-      }${search !== '' ? `&phone=${search}` : ''}`;
+      const query = `?page=${selectedPage}&limit=${limit}&sortBy=createdAt:desc&type=${type}${
+        paid !== undefined ? `&isPaid=${paid}` : ""
+      }${search !== "" ? `&search=${search}` : ""}`;
       dispatch(getBookings(query));
     } else {
-      history.push('/login');
+      history.push("/login");
     }
   }, [history, authUser, dispatch, selectedPage, limit, paid, type, search]);
 
@@ -62,7 +62,7 @@ const AllBookingsPage = (props) => {
   };
 
   const options = {
-    filterType: 'checkbox',
+    filterType: "checkbox",
     count: totalResults,
     page: page,
     serverSide: true,
@@ -74,25 +74,25 @@ const AllBookingsPage = (props) => {
     onTableChange: (action, tableState) => {
       const { selectedRows } = tableState;
       switch (action) {
-        case 'rowsSelect':
+        case "rowsSelect":
           setSelectedBookings(selectedRows.data);
           break;
-        case 'rowDelete':
+        case "rowDelete":
           handleDeleteBookings();
           break;
-        case 'changePage':
+        case "changePage":
           setSelectedPage(tableState.page + 1);
           break;
-        case 'changeRowsPerPage':
+        case "changeRowsPerPage":
           setLimit(tableState.rowsPerPage);
           setSelectedPage(1);
           break;
-        case 'search':
+        case "search":
           setSearch(
             tableState.searchText !== undefined &&
               tableState.searchText !== null
               ? tableState.searchText
-              : ''
+              : ""
           );
           break;
         default:
@@ -103,19 +103,34 @@ const AllBookingsPage = (props) => {
 
   const columns = [
     {
-      name: 'phone',
-      label: 'Phone',
+      name: "phone",
+      label: "Phone",
       options: {
         filter: false,
       },
     },
     {
-      name: 'shippingDetails',
-      label: 'Name',
+      name: "shippingDetails",
+      label: "Name",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value.firstName + ' ' + value.lastName}</>;
+          return <>{value.firstName + " " + value.lastName}</>;
+        },
+      },
+    },
+    {
+      name: "createdAt",
+      label: "Created At",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <>
+              {new Date(value).toLocaleDateString()},{" "}
+              {new Date(value).toLocaleTimeString()}
+            </>
+          );
         },
       },
     },
@@ -135,16 +150,16 @@ const AllBookingsPage = (props) => {
     //   },
     // },
     {
-      name: 'totalPrice',
-      label: 'TOTAL',
+      name: "totalPrice",
+      label: "TOTAL",
       options: {
         filter: true,
         sort: false,
       },
     },
     {
-      name: 'totalPrice',
-      label: 'Balance',
+      name: "totalPrice",
+      label: "Balance",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -161,8 +176,8 @@ const AllBookingsPage = (props) => {
       },
     },
     {
-      name: 'approvedAt',
-      label: 'Approved',
+      name: "approvedAt",
+      label: "Approved",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -171,8 +186,8 @@ const AllBookingsPage = (props) => {
       },
     },
     {
-      name: 'deliveredAt',
-      label: 'Delivered',
+      name: "deliveredAt",
+      label: "Delivered",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -201,7 +216,7 @@ const AllBookingsPage = (props) => {
         >
           <Grid item>
             <Button
-              onClick={() => history.push('/bookings/add-booking')}
+              onClick={() => history.push("/bookings/add-booking")}
               variant="outlined"
               color="primary"
               size="small"
@@ -213,7 +228,7 @@ const AllBookingsPage = (props) => {
           <Grid item>
             <ToggleButtonGroup
               color="primary"
-              style={{ marginRight: '10px' }}
+              style={{ marginRight: "10px" }}
               value={paid}
               size="small"
               exclusive
@@ -222,7 +237,7 @@ const AllBookingsPage = (props) => {
                   `/bookings?type=${type}${
                     value !== undefined && value !== null
                       ? `&paid=${value}`
-                      : ''
+                      : ""
                   }`
                 );
               }}
@@ -253,7 +268,7 @@ const AllBookingsPage = (props) => {
       </Grid>
       <AdminBreadcrumbs path={history} />
       <MUIDataTable
-        title={'Bookings List'}
+        title={"Bookings List"}
         data={results}
         columns={columns}
         options={options}
