@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
-import AdminLayout from '../../components/AdminLayout/AdminLayout';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect } from "react";
+import AdminLayout from "../../components/AdminLayout/AdminLayout";
+import { useDispatch, useSelector } from "react-redux";
 import {
   Paper,
   Grid,
@@ -10,22 +10,23 @@ import {
   CardContent,
   CardActions,
   Button,
-} from '@material-ui/core';
-import clsx from 'clsx';
-import { getDashboard } from 'state/ducks/user/actions';
-import BookingTable from './components/BookingTable';
-import BookingReportsTable from './components/BookingReportsTable';
-import OrderReportsTable from './components/OrderReportsTable';
+} from "@material-ui/core";
+import clsx from "clsx";
+import { getDashboard } from "state/ducks/user/actions";
+import BookingTable from "./components/BookingTable";
+import BookingReportsTable from "./components/BookingReportsTable";
+import OrderReportsTable from "./components/OrderReportsTable";
+import StockReportsTable from "./components/StockReportsTable";
 
 const useStyles = makeStyles((them) => ({
   paddingPaper: {
-    padding: '10px 5px 5px 10px',
+    padding: "10px 5px 5px 10px",
   },
   mt: {
     marginTop: 13,
   },
   titlePaper: {
-    marginBottom: '16px',
+    marginBottom: "16px",
   },
   visitorChart: {
     // height: "150px"
@@ -37,12 +38,14 @@ const DashboardPage = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { user: authUser } = useSelector((state) => state.auth);
-  const { todayReport, deals, reports } = useSelector((state) => state.user);
+  const { todayReport, deals, reports, stocks } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     console.log(authUser);
     if (!authUser) {
-      history.push('/login');
+      history.push("/login");
     } else {
       dispatch(getDashboard());
     }
@@ -95,7 +98,7 @@ const DashboardPage = (props) => {
                   Today's Sales
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Rs{' '}
+                  Rs{" "}
                   {todayReport
                     ? (todayReport.orderSales || 0) +
                       (todayReport.bookingSales || 0)
@@ -152,6 +155,15 @@ const DashboardPage = (props) => {
             </Grid>
           </Grid>
           <Grid item xs={12} md={5}>
+            <Paper
+              className={clsx(classes.paddingPaper, classes.mt)}
+              variant="outlined"
+            >
+              <Typography className={classes.titlePaper} variant="h5">
+                Total Stocks
+              </Typography>
+              {stocks ? <StockReportsTable stocks={stocks} /> : <></>}
+            </Paper>
             <Paper
               className={clsx(classes.paddingPaper, classes.mt)}
               variant="outlined"
