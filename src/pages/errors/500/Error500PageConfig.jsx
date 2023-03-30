@@ -4,8 +4,8 @@ export const Error500PageConfig = {
   routes: [
     {
       path: "/pages/errors/error-500",
-      exact: true,
-      component: Error500Page
-    }
-  ]
+      exact: "true",
+      component: Error500Page,
+    },
+  ],
 };

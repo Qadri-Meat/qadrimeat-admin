@@ -4,8 +4,8 @@ export const DashboardPageConfig = {
   routes: [
     {
       path: "/",
-      exact: true,
-      component: DashboardPage
-    }
-  ]
+      exact: "true",
+      element: <DashboardPage />,
+    },
+  ],
 };

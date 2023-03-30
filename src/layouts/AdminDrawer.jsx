@@ -1,9 +1,9 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+import React from "react";
+import { makeStyles } from "@mui/styles";
+import Drawer from "@mui/material/Drawer";
 
-import AdminNavigation from '../components/AdminNavigation/AdminNavigation';
-import NavigationContext from '../context/NavigationContext';
+import AdminNavigation from "@core/components/admin/AdminNavigation/AdminNavigation";
+import NavigationContext from "context/NavigationContext";
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -12,8 +12,8 @@ const useStyles = makeStyles((theme) => ({
   },
   drawerPaper: {
     width: (props) => props.drawerWidth,
-    '& *': {
-      color: 'rgba(255, 255, 255, 0.7)',
+    "& *": {
+      color: "rgba(255, 255, 255, 0.7)",
     },
   },
 }));

@@ -1,11 +1,10 @@
-import React from 'react';
+import React from "react";
 
-import NavigationContext from '../context/NavigationContext';
-import AdminDrawer from './AdminDrawer';
+import NavigationContext from "../context/NavigationContext";
+import AdminDrawer from "./AdminDrawer";
 
-import Main from './Main';
-import Header from './Header';
-import AdminRightPanel from '../components/AdminRightPanel/AdminRightPanel';
+import Main from "./Main";
+import Header from "./Header";
 
 const handleDrawerResponsive = () => {
   if (window.innerWidth < 900) {
@@ -19,10 +18,10 @@ const Layout = (props) => {
   const [open, setOpen] = React.useState(() => handleDrawerResponsive());
 
   React.useEffect(() => {
-    window.addEventListener('resize', resizeChecker);
+    window.addEventListener("resize", resizeChecker);
 
     return () => {
-      window.addEventListener('resize', resizeChecker);
+      window.addEventListener("resize", resizeChecker);
     };
   }, []);
 
@@ -64,7 +63,7 @@ const Layout = (props) => {
     >
       <Header />
       <AdminDrawer drawerWidth={240} />
-      <AdminRightPanel />
+
       <Main drawerWidth={240} />
     </NavigationContext.Provider>
   );

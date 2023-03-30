@@ -1,85 +1,74 @@
-import React, { useEffect } from 'react';
-import { makeStyles, Typography, Button } from '@material-ui/core';
+import React, { useEffect } from "react";
 
-import { useDispatch, useSelector } from 'react-redux';
-import * as yup from 'yup';
-import { useData } from '../../../context/DataContext';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers';
-import Form from '../../../components/Form/Form';
-import Input from '../../../components/Input/Input';
-import Message from '../../../components/Message/Message';
-import Loader from '../../../components/Loader/Loader';
-import { login } from 'state/ducks/auth/actions';
-import PhoneNumberInput from 'components/Input/PhoneNumberInput';
+import { useDispatch, useSelector } from "react-redux";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Form from "@core/components/forms/Form";
+import Message from "@core/components/ui/Message";
+import Loader from "@core/components/ui/Loader";
+import { loginUser } from "store/auth";
+import { useNavigate } from "react-router-dom";
+import FormInput from "@core/components/forms/FormInput";
+import { Typography, Button } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 const schema = yup.object().shape({
-  phone: yup
-    .string()
-    .matches(
-      /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
-      'Phone number is not valid'
-    )
-    .required(),
+  email: yup.string().email().required(),
   password: yup.string().required(),
 });
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    background: '#0d131d',
-    width: '100vw',
-    height: '100vh',
-    display: 'flex',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    alignItems: 'center',
-    textAlign: 'center',
+    background: "#0d131d",
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
   },
   mBottom: {
-    marginBottom: '.5rem',
+    marginBottom: ".5rem",
   },
   button: {
-    marginTop: '.85rem',
+    marginTop: ".85rem",
   },
   loginCard: {
-    width: '300px',
+    width: "275px",
     borderRadius: 5,
-    background: '#fff',
-    padding: '.85rem',
-  },
-  textField: {
-    width: '100%',
+    background: "#fff",
+    padding: ".85rem",
   },
 }));
 
-const LoginPage = (props) => {
-  const { setValues, data } = useData();
+const LoginPage = () => {
   const classes = useStyles();
-  const { history, location } = props;
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
-  const auth = useSelector((state) => state.auth);
-  const { user: authUser, message, loading } = auth;
+  const { message, loading, user } = useSelector((state) => state.auth);
 
-  const redirect = location.search ? location.search.split('=')[1] : '/';
-
-  const { register, handleSubmit, errors, control } = useForm({
-    defaultValues: { phone: data.phone, password: data.password },
-    mode: 'onBlur',
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
   const onSubmit = (data) => {
-    dispatch(login(data));
-    setValues(data);
+    dispatch(loginUser(data));
   };
 
   useEffect(() => {
-    if (authUser) {
-      history.push(redirect);
+    if (user) {
+      navigate("/");
     }
-  }, [history, authUser, redirect]);
+  }, [user, navigate]);
 
   return (
     <div className={classes.root}>
@@ -95,18 +84,17 @@ const LoginPage = (props) => {
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
           {message && <Message severity="error">{message}</Message>}
-          <PhoneNumberInput
-            ref={register}
-            country={'pk'}
-            name="phone"
-            id="phone"
-            label="Phone"
-            control={control}
-            error={!!errors.phone}
-            helperText={errors?.phone?.message}
+          <FormInput
+            {...register("email")}
+            id="email"
+            type="text"
+            label="Email"
+            name="email"
+            error={!!errors.email}
+            helperText={errors?.email?.message}
           />
-          <Input
-            ref={register}
+          <FormInput
+            {...register("password")}
             id="password"
             type="password"
             label="Password"
@@ -123,11 +111,11 @@ const LoginPage = (props) => {
               fullWidth
               className={classes.button}
             >
-              {loading ? <Loader /> : 'Login'}
+              {loading ? <Loader /> : "Login"}
             </Button>
           </div>
         </Form>
-        <Typography variant="caption">&copy; QADRI MEAT | Admin</Typography>
+        <Typography variant="caption">&copy; QadriMeat | Admin</Typography>
       </div>
     </div>
   );
