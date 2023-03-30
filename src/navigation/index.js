@@ -22,14 +22,6 @@ const navigation = [
         url: "/users",
         exact: "true",
       },
-      {
-        id: "batches",
-        title: "Batches",
-        type: "item",
-        icon: <PersonIcon />,
-        url: "/batches",
-        exact: "true",
-      },
     ],
   },
 ];
