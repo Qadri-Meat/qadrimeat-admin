@@ -6,34 +6,27 @@ import { useDispatch, useSelector } from "react-redux";
 import DataTable from "@core/components/ui/DataTable";
 import { getUsers } from "store/user";
 import { Button, Grid, Typography } from "@mui/material";
-
+import { deleteUser } from "store/user";
 const AllUsersPage = (props) => {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
   const data = useSelector((state) => state.user);
-
   useEffect(() => {
     dispatch(getUsers(query));
   }, [dispatch, query]);
-
   const columns = [
     {
       name: "id",
       label: "Id",
     },
     {
-      name: "uid",
-      label: "UID",
+      name: "name",
+      label: "Name",
     },
     {
       name: "email",
       label: "Email",
-    },
-    {
-      name: "phone",
-      label: "Phone",
     },
     {
       name: "role",
@@ -66,6 +59,9 @@ const AllUsersPage = (props) => {
         setQuery={setQuery}
         onEdit={(value) => {
           navigate(`/users/${value}`);
+        }}
+        onDelete={(value) => {
+          dispatch(deleteUser(value));
         }}
       />
     </AdminLayout>

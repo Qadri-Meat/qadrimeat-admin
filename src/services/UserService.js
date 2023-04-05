@@ -34,8 +34,30 @@ class UserService extends ApiService {
    * @param {ObjectId} id - The ID of the user to update
    * @returns {Promise<User>}
    */
-  updateById(id, data) {
-    return this.instance.patch(`/v1/users/${id}`, data);
+  updateById({ id, data }) {
+    const postData = {
+      name: data.name,
+      email: data.email,
+      password: data.password,
+      role: data.role,
+    };
+    return this.instance.patch(`/v1/users/${id}`, postData);
+  }
+  /**
+   * Create a user with the given data
+   * @param {object} data - The data to update the user with
+   * @returns {Promise<User>}
+   */
+  create(data) {
+    return this.instance.post(`/v1/users`, data);
+  }
+  /**
+   * Delete a user with the given id
+   *  @param {ObjectId} id - The ID of the user to delete
+   * @returns {Promise<User>}
+   */
+  delete(id) {
+    return this.instance.delete(`/v1/users/${id}`);
   }
 }
 

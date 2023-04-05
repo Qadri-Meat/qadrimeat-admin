@@ -42,8 +42,34 @@ export const createUser = createAsyncThunk(
 export const updateUser = createAsyncThunk(
   "users/updateUser",
   async ({ id, data }, { rejectWithValue }) => {
+    console.log(id, data);
     try {
-      await UserService.update(id, data);
+      await UserService.updateById({ id, data });
+      return { success: true };
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+// export const updateUser = createAsyncThunk(
+//   "users/updateUser",
+//   async (id, data, { rejectWithValue }) => {
+//     console.log(id, data);
+//     try {
+//       await UserService.updateById(id, data);
+//       return { success: true };
+//     } catch (err) {
+//       return rejectWithValue(err.response.data);
+//     }
+//   }
+// );
+
+export const deleteUser = createAsyncThunk(
+  "user/delete",
+  async (id, { rejectWithValue }) => {
+    try {
+      await UserService.delete(id);
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
