@@ -107,6 +107,7 @@ const UserForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
+            {...register("Cpassword")}
             id="Cpassword"
             type="password"
             label="Confirm Password"
