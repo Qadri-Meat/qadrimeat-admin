@@ -1,6 +1,6 @@
 import PersonIcon from "@mui/icons-material/Person";
 import InventoryIcon from "@mui/icons-material/Inventory";
-
+import DashboardIcon from "@mui/icons-material/Dashboard";
 const navigation = [
   {
     id: "Main",
@@ -11,7 +11,7 @@ const navigation = [
         id: "dashboard",
         title: "Dashboard",
         type: "item",
-        icon: <PersonIcon />,
+        icon: <DashboardIcon />,
         url: "/",
         exact: "true",
       },
