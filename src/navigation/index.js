@@ -1,4 +1,5 @@
 import PersonIcon from "@mui/icons-material/Person";
+import InventoryIcon from "@mui/icons-material/Inventory";
 
 const navigation = [
   {
@@ -20,6 +21,14 @@ const navigation = [
         type: "item",
         icon: <PersonIcon />,
         url: "/users",
+        exact: "true",
+      },
+      {
+        id: "deals",
+        title: "Deals",
+        type: "item",
+        icon: <InventoryIcon />,
+        url: "/deals",
         exact: "true",
       },
     ],
