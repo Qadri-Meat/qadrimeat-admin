@@ -34,6 +34,7 @@ export const createUser = createAsyncThunk(
       await UserService.create(data);
       return { success: true };
     } catch (err) {
+      console.log("Error is", err.response.data.message);
       return rejectWithValue(err.response.data);
     }
   }
