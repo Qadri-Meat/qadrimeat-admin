@@ -69,6 +69,7 @@ const AllDealsPage = () => {
         </Grid>
       </Grid>
       <DataTable
+        title={"Deals List"}
         data={data}
         columns={columns}
         setQuery={setQuery}

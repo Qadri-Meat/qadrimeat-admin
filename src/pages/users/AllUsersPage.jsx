@@ -54,6 +54,7 @@ const AllUsersPage = (props) => {
         </Grid>
       </Grid>
       <DataTable
+        title={"Users List"}
         data={data}
         columns={columns}
         setQuery={setQuery}

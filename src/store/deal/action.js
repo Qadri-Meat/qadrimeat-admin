@@ -2,7 +2,7 @@ import * as types from "./types";
 
 import DealService from "../../services/deal.service";
 
-export const getUsers = (page, limit) => async (dispatch) => {
+export const getDeals = (page, limit) => async (dispatch) => {
   try {
     dispatch({
       type: types.DEAL_REQUEST,
@@ -25,7 +25,7 @@ export const getUsers = (page, limit) => async (dispatch) => {
   }
 };
 
-export const getUser = (id) => async (dispatch) => {
+export const getDeal = (id) => async (dispatch) => {
   try {
     dispatch({
       type: types.DEAL_REQUEST,
@@ -48,7 +48,7 @@ export const getUser = (id) => async (dispatch) => {
   }
 };
 
-export const createUser = (data) => async (dispatch) => {
+export const createDeal = (data) => async (dispatch) => {
   try {
     dispatch({
       type: types.DEAL_REQUEST,
@@ -71,7 +71,7 @@ export const createUser = (data) => async (dispatch) => {
   }
 };
 
-export const updateUser = (id, data) => async (dispatch) => {
+export const updatDeal = (id, data) => async (dispatch) => {
   try {
     dispatch({
       type: types.DEAL_REQUEST,
@@ -94,7 +94,7 @@ export const updateUser = (id, data) => async (dispatch) => {
   }
 };
 
-export const deleteUser = (id) => async (dispatch) => {
+export const deleteDeal = (id) => async (dispatch) => {
   try {
     await DealService.delete(id);
   } catch (error) {

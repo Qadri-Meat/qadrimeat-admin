@@ -3,7 +3,9 @@ import { Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
 import { getDeal } from "store/deal";
+import DealForm from "./components/DealForm";
 
 const AddDealPage = () => {
   const params = useParams();
@@ -29,6 +31,10 @@ const AddDealPage = () => {
           </Typography>
         </Grid>
       </Grid>
+      <AdminBreadcrumbs />
+      <div>
+        <DealForm defaultValues={details} key={details ? details.id : 1} />
+      </div>
     </AdminLayout>
   );
 };

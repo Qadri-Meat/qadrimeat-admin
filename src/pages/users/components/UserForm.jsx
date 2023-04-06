@@ -7,7 +7,7 @@ import Loader from "@core/components/ui/Loader";
 import Message from "@core/components/ui/Message";
 import { createUser, updateUser } from "store/user";
 import FormInput from "@core/components/forms/FormInput";
-import { Button, Grid } from "@mui/material";
+import { Button, Grid, MenuItem } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
 
@@ -125,7 +125,10 @@ const UserForm = ({ defaultValues }) => {
             control={control}
             error={!!errors.role}
             helperText={errors?.role?.message}
-          ></SelectInput>
+          >
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="user">User</MenuItem>
+          </SelectInput>
         </Grid>
 
         <Grid item xs={12} sx={{ textAlign: "center" }}>

@@ -2,7 +2,7 @@ import ApiService from "./ApiService";
 
 class DealService extends ApiService {
   /**
-   * Get all users with optional query parameters
+   * Get all Deals with optional query parameters
    * @param {string} query - Optional query parameters
    * @returns {Promise<User>}
    */
@@ -11,8 +11,8 @@ class DealService extends ApiService {
   }
 
   /**
-   * Get a user by their ID
-   * @param {ObjectId} id - The ID of the user to get
+   * Get a deal by their ID
+   * @param {ObjectId} id - The ID of the deal to get
    * @returns {Promise<User>}
    */
   get(id) {
@@ -20,8 +20,8 @@ class DealService extends ApiService {
   }
 
   /**
-   * Update the current user with the given data
-   * @param {object} data - The data to update the user with
+   * Update the current deal with the given data
+   * @param {object} data - The data to update the deal with
    * @returns {Promise<User>}
    */
   update(data) {
@@ -29,9 +29,9 @@ class DealService extends ApiService {
   }
 
   /**
-   * Update a user with the given ID with the given data
-   * @param {object} data - The data to update the user with
-   * @param {ObjectId} id - The ID of the user to update
+   * Update a deal with the given ID with the given data
+   * @param {object} data - The data to update the deal with
+   * @param {ObjectId} id - The ID of the deal to update
    * @returns {Promise<User>}
    */
   updateById({ id, data }) {
@@ -44,16 +44,16 @@ class DealService extends ApiService {
     return this.instance.patch(`/v1/products/${id}`, postData);
   }
   /**
-   * Create a user with the given data
-   * @param {object} data - The data to update the user with
+   * Create a deal with the given data
+   * @param {object} data - The data to update the deal with
    * @returns {Promise<User>}
    */
   create(data) {
     return this.instance.post(`/v1/products`, data);
   }
   /**
-   * Delete a user with the given id
-   *  @param {ObjectId} id - The ID of the user to delete
+   * Delete a deal with the given id
+   *  @param {ObjectId} id - The ID of the deal to delete
    * @returns {Promise<User>}
    */
   delete(id) {
