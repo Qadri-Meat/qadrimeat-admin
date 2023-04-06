@@ -13,5 +13,9 @@ export const DealsPageConfig = {
       exact: true,
       element: <AddDealPage />,
     },
+    {
+      path: "/deals/:id",
+      element: <AddDealPage />,
+    },
   ],
 };
