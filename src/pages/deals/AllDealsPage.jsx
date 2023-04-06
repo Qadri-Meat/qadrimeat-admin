@@ -3,7 +3,7 @@ import { Avatar, Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getDeals } from "store/deal";
+import { deleteDeal, getDeals } from "store/deal";
 import DataTable from "@core/components/ui/DataTable";
 const AllDealsPage = () => {
   const navigate = useNavigate();
@@ -74,6 +74,9 @@ const AllDealsPage = () => {
         setQuery={setQuery}
         onEdit={(value) => {
           navigate(`/deals/${value}`);
+        }}
+        onDelete={(value) => {
+          dispatch(deleteDeal(value));
         }}
       />
     </AdminLayout>
