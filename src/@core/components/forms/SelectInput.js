@@ -8,7 +8,11 @@ const SelectInput = forwardRef(
       <FormControl variant="outlined" margin="normal" fullWidth {...props}>
         <InputLabel id={labelId}>{label}</InputLabel>
         <Controller
-          render={({ field }) => <Select {...field}>{children}</Select>}
+          render={({ field }) => (
+            <Select labelId={labelId} label={label} {...field}>
+              {children}
+            </Select>
+          )}
           name={name}
           control={control}
         />

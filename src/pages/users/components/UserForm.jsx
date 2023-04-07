@@ -10,7 +10,6 @@ import FormInput from "@core/components/forms/FormInput";
 import { Button, Grid, MenuItem } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
-
 const emailRegExp =
   /^$|^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
