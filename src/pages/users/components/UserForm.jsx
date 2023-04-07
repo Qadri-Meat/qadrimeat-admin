@@ -34,8 +34,8 @@ const schema = yup.object().shape({
     .max(12, "Password cannot exceed more than 12 characters"),
   Cpassword: yup
     .string()
-    .min(4, "Password length should be at least 4 characters")
-    .max(12, "Password cannot exceed more than 12 characters")
+    .min(4, "Confirm Password length should be at least 4 characters")
+    .max(12, "Confirm Password cannot exceed more than 12 characters")
     .oneOf([yup.ref("password")], "Passwords do not match"),
 });
 

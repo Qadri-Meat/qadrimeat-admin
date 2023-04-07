@@ -37,9 +37,11 @@ class DealService extends ApiService {
   updateById({ id, data }) {
     const postData = {
       name: data.name,
-      email: data.email,
-      password: data.password,
-      role: data.role,
+      sku: data.sku,
+      price: data.price,
+      fullDescription: data.fullDescription,
+      shortDescription: data.shortDescription,
+      category: data.category,
     };
     return this.instance.patch(`/v1/products/${id}`, postData);
   }

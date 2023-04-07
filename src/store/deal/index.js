@@ -43,7 +43,6 @@ export const createDeal = createAsyncThunk(
 export const updateDeal = createAsyncThunk(
   "deal/updateDeal",
   async ({ id, data }, { rejectWithValue }) => {
-    console.log(id, data);
     try {
       await DealService.updateById({ id, data });
       return { success: true };
@@ -113,7 +112,7 @@ const userSlice = createSlice({
       ),
       (state, action) => {
         state.loading = false;
-        // state.message = action.payload.message;
+        state.message = action.payload.message;
       }
     );
   },
