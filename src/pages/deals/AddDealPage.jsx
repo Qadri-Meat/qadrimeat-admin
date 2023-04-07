@@ -14,7 +14,7 @@ const AddDealPage = () => {
   const dispatch = useDispatch();
   const { details, success } = useSelector((state) => state.deal);
   useEffect(() => {
-    if (userId !== "add-deal") dispatch(getDeal(userId));
+    if (userId) dispatch(getDeal(userId));
   }, [dispatch, userId]);
 
   useEffect(() => {

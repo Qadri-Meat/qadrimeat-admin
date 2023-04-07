@@ -11,6 +11,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
 import { createDeal, updateDeal } from "store/deal";
 import { DropzoneArea } from "material-ui-dropzone";
+import { useState } from "react";
 const schema = yup.object().shape({
   name: yup.string().required(),
   sku: yup.string().required(),
@@ -19,26 +20,28 @@ const schema = yup.object().shape({
 });
 
 const DealForm = ({ defaultValues }) => {
+  const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
-  const { message, loading } = useSelector((state) => state.user);
+  const { message, loading } = useSelector((state) => state.deal);
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({
-    defaultValues,
+    defaultValues: {
+      ...defaultValues,
+    },
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
+  const handleChange = (files) => {
+    setFiles(files);
+  };
+
   const onSubmit = (data) => {
-    // const postData = {
-    //   name: data.name,
-    //   email: data.email,
-    //   password: data.password,
-    //   role: data.role,
-    // };
+    data.image = files;
     if (defaultValues) {
       dispatch(updateDeal({ id: defaultValues.id, data }));
     } else {
@@ -169,7 +172,13 @@ const DealForm = ({ defaultValues }) => {
         </Grid>
 
         <Grid item xs={12}>
-          <DropzoneArea />
+          <DropzoneArea
+            initialFiles={defaultValues ? defaultValues.image : []}
+            onChange={handleChange}
+            dropzoneText="Drag and drop images here or click"
+            showAlerts={false}
+            filesLimit={5}
+          />
         </Grid>
 
         <Grid item xs={12} sx={{ textAlign: "center" }}>

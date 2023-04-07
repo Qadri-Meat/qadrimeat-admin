@@ -35,15 +35,23 @@ class DealService extends ApiService {
    * @returns {Promise<User>}
    */
   updateById({ id, data }) {
-    const postData = {
-      name: data.name,
-      sku: data.sku,
-      price: data.price,
-      fullDescription: data.fullDescription,
-      shortDescription: data.shortDescription,
-      category: data.category,
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     };
-    return this.instance.patch(`/v1/products/${id}`, postData);
+    const formData = new FormData();
+    Object.entries(data).forEach((entry) => {
+      const [key, value] = entry;
+      if (key === "image") {
+        value.forEach((item) => {
+          formData.append(key, item);
+        });
+      } else {
+        formData.append(key, value);
+      }
+    });
+    return this.instance.patch(`/v1/products/${id}`, data, config);
   }
   /**
    * Create a deal with the given data
@@ -51,7 +59,23 @@ class DealService extends ApiService {
    * @returns {Promise<User>}
    */
   create(data) {
-    return this.instance.post(`/v1/products`, data);
+    const config = {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    const formData = new FormData();
+    Object.entries(data).forEach((entry) => {
+      const [key, value] = entry;
+      if (key === "image") {
+        value.forEach((item) => {
+          formData.append(key, item);
+        });
+      } else {
+        formData.append(key, value);
+      }
+    });
+    return this.instance.post(`/v1/products`, formData, config);
   }
   /**
    * Delete a deal with the given id
