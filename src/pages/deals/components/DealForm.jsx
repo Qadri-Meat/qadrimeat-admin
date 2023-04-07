@@ -12,7 +12,10 @@ import SelectInput from "@core/components/forms/SelectInput";
 import { createDeal, updateDeal } from "store/deal";
 import { DropzoneArea } from "material-ui-dropzone";
 const schema = yup.object().shape({
-  name: yup.string(),
+  name: yup.string().required(),
+  sku: yup.string().required(),
+  price: yup.number().required(),
+  stock: yup.number().required(),
 });
 
 const DealForm = ({ defaultValues }) => {
@@ -30,7 +33,6 @@ const DealForm = ({ defaultValues }) => {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
     // const postData = {
     //   name: data.name,
     //   email: data.email,
@@ -64,45 +66,45 @@ const DealForm = ({ defaultValues }) => {
           <FormInput
             {...register("sku")}
             id="sku"
-            type="email"
+            type="text"
             label="SKU"
             name="sku"
-            error={!!errors.email}
-            helperText={errors?.email?.message}
+            error={!!errors.sku}
+            helperText={errors?.sku?.message}
           />
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
             {...register("price")}
             id="price"
-            type="price"
+            type="number"
             label="Price"
             name="price"
-            error={!!errors.password}
-            helperText={errors?.password?.message}
+            error={!!errors.price}
+            helperText={errors?.price?.message}
           />
         </Grid>
 
-        <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} md={4}>
           <FormInput
             {...register("weight")}
             id="weight"
-            type="weight"
+            type="number"
             label="Weight"
             name="weight"
             error={!!errors.Cpassword}
             helperText={errors?.Cpassword?.message}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} md={4}>
           <FormInput
             {...register("stock")}
             id="stock"
-            type="stock"
+            type="number"
             label="Stock"
             name="stock"
-            error={!!errors.Cpassword}
-            helperText={errors?.Cpassword?.message}
+            error={!!errors.stock}
+            helperText={errors?.stock?.message}
           />
         </Grid>
         {/* <Grid item xs={12} md={4}>
@@ -116,17 +118,17 @@ const DealForm = ({ defaultValues }) => {
             helperText={errors?.Cpassword?.message}
           />
         </Grid> */}
-        <Grid item xs={12} md={4}>
+        {/* <Grid item xs={12} md={4}>
           <FormInput
             {...register("saleCount")}
             id="saleCount"
-            type="saleCount"
+            type="number"
             label="Sale Count"
             name="saleCount"
             error={!!errors.Cpassword}
             helperText={errors?.Cpassword?.message}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={12} md={4}>
           <FormInput
             {...register("fullDescription")}
@@ -134,8 +136,8 @@ const DealForm = ({ defaultValues }) => {
             type="fullDescription"
             label="Full Description"
             name="fullDescription"
-            error={!!errors.Cpassword}
-            helperText={errors?.Cpassword?.message}
+            error={!!errors.fullDescription}
+            helperText={errors?.fullDescription?.message}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -145,8 +147,8 @@ const DealForm = ({ defaultValues }) => {
             type="shortDescription"
             label="Short Description"
             name="shortDescription"
-            error={!!errors.Cpassword}
-            helperText={errors?.Cpassword?.message}
+            error={!!errors.shortDescription}
+            helperText={errors?.shortDescription?.message}
           />
         </Grid>
 
