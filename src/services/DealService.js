@@ -7,7 +7,7 @@ class DealService extends ApiService {
    * @returns {Promise<User>}
    */
   getAll(query) {
-    return this.instance.get(`/v1/products?${query}`);
+    return this.instance.get(`/v1/deals?${query}`);
   }
 
   /**
@@ -16,7 +16,7 @@ class DealService extends ApiService {
    * @returns {Promise<User>}
    */
   get(id) {
-    return this.instance.get(`/v1/products/${id}`);
+    return this.instance.get(`/v1/deals/${id}`);
   }
 
   /**
@@ -25,7 +25,7 @@ class DealService extends ApiService {
    * @returns {Promise<User>}
    */
   update(data) {
-    return this.instance.patch("/v1/products/", data);
+    return this.instance.patch("/v1/deals/", data);
   }
 
   /**
@@ -51,7 +51,7 @@ class DealService extends ApiService {
         formData.append(key, value);
       }
     });
-    return this.instance.patch(`/v1/products/${id}`, data, config);
+    return this.instance.patch(`/v1/deals/${id}`, data, config);
   }
   /**
    * Create a deal with the given data
@@ -75,7 +75,7 @@ class DealService extends ApiService {
         formData.append(key, value);
       }
     });
-    return this.instance.post(`/v1/products`, formData, config);
+    return this.instance.post(`/v1/deals`, formData, config);
   }
   /**
    * Delete a deal with the given id
@@ -83,7 +83,7 @@ class DealService extends ApiService {
    * @returns {Promise<User>}
    */
   delete(id) {
-    return this.instance.delete(`/v1/products/${id}`);
+    return this.instance.delete(`/v1/deals/${id}`);
   }
 }
 
