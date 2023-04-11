@@ -1,4 +1,5 @@
 import { Autocomplete, Grid, TextField } from "@mui/material";
+import MUIDataTable from "mui-datatables";
 import { useSelector } from "react-redux";
 
 const BookingItem = () => {
@@ -16,6 +17,9 @@ const BookingItem = () => {
             <TextField {...params} label="Search Deals" />
           )}
         />
+      </Grid>
+      <Grid item xs={12}>
+        <MUIDataTable title={"Booking Items"} />
       </Grid>
     </Grid>
   );
