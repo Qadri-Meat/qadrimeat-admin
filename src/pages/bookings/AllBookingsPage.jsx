@@ -103,7 +103,7 @@ const AllBookingsPage = () => {
         >
           <Grid item>
             <Button
-              onClick={() => navigate("/bookings/add-booking")}
+              onClick={() => navigate("/add-booking")}
               variant="outlined"
               color="primary"
               size="small"
@@ -142,7 +142,7 @@ const AllBookingsPage = () => {
         columns={columns}
         setQuery={setQuery}
         onEdit={(value) => {
-          navigate(`/deals/${value}`);
+          navigate(`/bookings/${value}`);
         }}
       />
     </AdminLayout>
