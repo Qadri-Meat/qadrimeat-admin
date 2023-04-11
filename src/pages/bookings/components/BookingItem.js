@@ -1,8 +1,15 @@
 import { Autocomplete, Grid, TextField } from "@mui/material";
 import MUIDataTable from "mui-datatables";
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getDeals } from "store/deal";
 
 const BookingItem = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDeals(""));
+  }, [dispatch]);
+
   const { results } = useSelector((state) => state.deal);
   return (
     <Grid container spacing={3}>

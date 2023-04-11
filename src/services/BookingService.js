@@ -7,7 +7,7 @@ class BookingService extends ApiService {
    * @returns {Promise<User>}
    */
   getAll(query) {
-    return this.instance.get(`/v1/booking?${query}`);
+    return this.instance.get(`/v1/bookings${query}`);
   }
 
   getBookingItems(day, deal) {
