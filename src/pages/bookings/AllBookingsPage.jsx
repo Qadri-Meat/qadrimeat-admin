@@ -144,6 +144,7 @@ const AllBookingsPage = () => {
         onEdit={(value) => {
           navigate(`/bookings/${value}`);
         }}
+        onDelete={(value) => {}}
       />
     </AdminLayout>
   );
