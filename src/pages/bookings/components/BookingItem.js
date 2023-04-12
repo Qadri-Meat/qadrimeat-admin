@@ -1,16 +1,23 @@
 import { Autocomplete, Avatar, Grid, TextField } from "@mui/material";
 import MUIDataTable from "mui-datatables";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { getDeals } from "store/deal";
-
+import { addToCart } from "store/cart";
 const BookingItem = () => {
+  const [searchBar, setSearchBar] = useState(0);
   const dispatch = useDispatch();
+  const { results } = useSelector((state) => state.deal);
+  const items = useSelector((state) => state.reducer.cart);
   useEffect(() => {
     dispatch(getDeals(""));
   }, [dispatch]);
 
-  const { results } = useSelector((state) => state.deal);
+  useEffect(() => {
+    console.log(items.cart);
+  }, [items]);
+
   const columns = [
     {
       name: "id",
@@ -65,6 +72,24 @@ const BookingItem = () => {
       label: "Day",
       options: {
         filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cart1Item = items.filter((item) => {
+            return item.id === rowData[0];
+          })[0];
+          return (
+            <select
+              name="day"
+              id="day"
+              value={value}
+              hidden={!cart1Item.isPackage}
+            >
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          );
+        },
       },
     },
     {
@@ -72,6 +97,21 @@ const BookingItem = () => {
       label: "Time",
       options: {
         filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cart1Item = items.filter((item) => {
+            return item.id === rowData[0];
+          })[0];
+          return (
+            <input
+              type="time"
+              id="appt"
+              name="appt"
+              value={value}
+              hidden={!cart1Item.isPackage}
+            />
+          );
+        },
       },
     },
     {
@@ -82,6 +122,19 @@ const BookingItem = () => {
         setCellProps: () => ({
           style: { minWidth: "50px", maxWidth: "50px" },
         }),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <select
+              name="isPackage"
+              id="isPackage"
+              value={value}
+              style={{ minWidth: "80px", maxWidth: "80px" }}
+            >
+              <option value="true">Package</option>
+              <option value="false">Non Package</option>
+            </select>
+          );
+        },
       },
     },
     {
@@ -108,18 +161,36 @@ const BookingItem = () => {
     <Grid container spacing={3}>
       <Grid item xs={12}>
         <Autocomplete
+          key={searchBar}
           disablePortal
           id="combo-box-demo"
           options={results}
           getOptionLabel={(option) => option.name}
-          onChange={(event, values) => {}}
+          onChange={(event, values) => {
+            if (values) {
+              const item = {
+                id: uuidv4(),
+                name: values.name,
+                quantity: 1,
+                price: values.price,
+                discount: 0,
+                image: values.image,
+                deal: values.id,
+                day: 1,
+                time: "10 am",
+                isPackage: true,
+              };
+              dispatch(addToCart(item));
+              setSearchBar(Math.random());
+            }
+          }}
           renderInput={(params) => (
             <TextField {...params} label="Search Deals" />
           )}
         />
       </Grid>
       <Grid item xs={12}>
-        <MUIDataTable title={"Booking Items"} columns={columns} />
+        <MUIDataTable title={"Booking Items"} columns={columns} data={items} />
       </Grid>
     </Grid>
   );
