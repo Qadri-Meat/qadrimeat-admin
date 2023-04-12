@@ -13,11 +13,6 @@ const BookingItem = () => {
   useEffect(() => {
     dispatch(getDeals(""));
   }, [dispatch]);
-
-  useEffect(() => {
-    console.log(items.cart);
-  }, [items]);
-
   const columns = [
     {
       name: "id",
