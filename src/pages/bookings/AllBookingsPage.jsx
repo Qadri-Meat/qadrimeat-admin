@@ -103,7 +103,7 @@ const AllBookingsPage = () => {
         >
           <Grid item>
             <Button
-              onClick={() => navigate("/add-booking")}
+              onClick={() => navigate("/bookings/add-booking")}
               variant="outlined"
               color="primary"
               size="small"

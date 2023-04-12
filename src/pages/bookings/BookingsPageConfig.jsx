@@ -10,7 +10,7 @@ export const BookingPageConfig = {
       element: <AllBookingsPage />,
     },
     {
-      path: "/add-booking",
+      path: "/bookings/add-booking",
       element: <AddBookingPage />,
     },
     {
