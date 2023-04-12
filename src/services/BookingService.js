@@ -2,7 +2,7 @@ import ApiService from "./ApiService";
 
 class BookingService extends ApiService {
   /**
-   * Get all Deals with optional query parameters
+   * Get all Booking with optional query parameters
    * @param {string} query - Optional query parameters
    * @returns {Promise<User>}
    */
@@ -19,8 +19,8 @@ class BookingService extends ApiService {
   }
 
   /**
-   * Get a deal by their ID
-   * @param {ObjectId} id - The ID of the deal to get
+   * Get a booking by their ID
+   * @param {ObjectId} id - The ID of the booking to get
    * @returns {Promise<User>}
    */
   get(id) {
@@ -28,8 +28,8 @@ class BookingService extends ApiService {
   }
 
   /**
-   * Update the current deal with the given data
-   * @param {object} data - The data to update the deal with
+   * Update the current booking with the given data
+   * @param {object} data - The data to update the booking with
    * @returns {Promise<User>}
    */
   update(data) {
@@ -37,9 +37,9 @@ class BookingService extends ApiService {
   }
 
   /**
-   * Update a deal with the given ID with the given data
-   * @param {object} data - The data to update the deal with
-   * @param {ObjectId} id - The ID of the deal to update
+   * Update a  booking with the given ID with the given data
+   * @param {object} data - The data to update the booking with
+   * @param {ObjectId} id - The ID of the booking to update
    * @returns {Promise<User>}
    */
   updateById({ id, data }) {
@@ -62,8 +62,8 @@ class BookingService extends ApiService {
     return this.instance.patch(`/v1/booking/${id}`, data, config);
   }
   /**
-   * Create a deal with the given data
-   * @param {object} data - The data to update the deal with
+   * Create a booking with the given data
+   * @param {object} data - The data to update the booking with
    * @returns {Promise<User>}
    */
   create(data) {
@@ -86,12 +86,12 @@ class BookingService extends ApiService {
     return this.instance.post(`/v1/booking`, formData, config);
   }
   /**
-   * Delete a deal with the given id
-   *  @param {ObjectId} id - The ID of the deal to delete
+   * Delete a Booking with the given id
+   *  @param {ObjectId} id - The ID of the Booking to delete
    * @returns {Promise<User>}
    */
   delete(id) {
-    return this.instance.delete(`/v1/deals/${id}`);
+    return this.instance.delete(`/v1/bookings/${id}`);
   }
 
   addTransaction(id, data) {

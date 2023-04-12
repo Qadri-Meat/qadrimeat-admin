@@ -4,7 +4,7 @@ import { Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getBookings } from "store/booking";
+import { deleteBooking, getBookings } from "store/booking";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -144,7 +144,9 @@ const AllBookingsPage = () => {
         onEdit={(value) => {
           navigate(`/bookings/${value}`);
         }}
-        onDelete={(value) => {}}
+        onDelete={(value) => {
+          dispatch(deleteBooking(value));
+        }}
       />
     </AdminLayout>
   );
