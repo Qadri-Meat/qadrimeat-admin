@@ -251,7 +251,7 @@ const BookingItem = () => {
           title={"Booking Items"}
           columns={columns}
           data={items}
-          // options={options}
+          options={options}
         />
       </Grid>
     </Grid>
