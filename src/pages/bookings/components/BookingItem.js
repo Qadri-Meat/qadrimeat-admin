@@ -1,16 +1,18 @@
 import {
   Autocomplete,
   Avatar,
+  Box,
   Grid,
   IconButton,
   TextField,
+  Typography,
 } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { getDeals } from "store/deal";
-import { addToCart } from "store/cart";
+import { addToCart, decrementQuantity, incrementQuantity } from "store/cart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 const BookingItem = () => {
@@ -151,13 +153,25 @@ const BookingItem = () => {
         }),
 
         customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cartItem = items.filter((item) => {
+            return item.id === rowData[0];
+          })[0];
           return (
             <div style={{ width: "max-content" }}>
-              <IconButton>
+              <IconButton
+                onClick={() => {
+                  dispatch(decrementQuantity(cartItem.id));
+                }}
+              >
                 <RemoveIcon />
               </IconButton>
               {value}
-              <IconButton>
+              <IconButton
+                onClick={() => {
+                  dispatch(incrementQuantity(cartItem.id));
+                }}
+              >
                 <AddIcon />
               </IconButton>
             </div>
@@ -173,6 +187,32 @@ const BookingItem = () => {
       },
     },
   ];
+
+  const options = {
+    filterType: "checkbox",
+    count: 100,
+    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            m: 3,
+          }}
+        >
+          <Box>
+            <Typography variant="h6">Grand Total</Typography>
+            <Typography variant="body1">
+              PKR
+              {10000}
+            </Typography>
+          </Box>
+        </Box>
+      );
+    },
+  };
 
   return (
     <Grid container spacing={3}>
@@ -207,7 +247,12 @@ const BookingItem = () => {
         />
       </Grid>
       <Grid item xs={12}>
-        <MUIDataTable title={"Booking Items"} columns={columns} data={items} />
+        <MUIDataTable
+          title={"Booking Items"}
+          columns={columns}
+          data={items}
+          // options={options}
+        />
       </Grid>
     </Grid>
   );
