@@ -12,12 +12,19 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { getDeals } from "store/deal";
-import { addToCart, decrementQuantity, incrementQuantity } from "store/cart";
+import {
+  addToCart,
+  decrementQuantity,
+  incrementQuantity,
+  updateCartItem,
+} from "store/cart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import { getDiscountPrice } from "helper/product";
 const BookingItem = () => {
   const [searchBar, setSearchBar] = useState(0);
   const dispatch = useDispatch();
+  let cartTotalPrice = 0;
   const { results } = useSelector((state) => state.deal);
   const items = useSelector((state) => state.reducer.cart);
   useEffect(() => {
@@ -70,6 +77,42 @@ const BookingItem = () => {
         setCellProps: () => ({
           style: { minWidth: "100px", maxWidth: "100px" },
         }),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData, rowIndex } = tableMeta;
+          const cartItem = items.filter((item) => {
+            return item.id === rowData[0];
+          })[0];
+          const discountedPrice = getDiscountPrice(
+            cartItem.price,
+            cartItem.discount
+          );
+          const finalProductPrice = cartItem.price * 1;
+          const finalDiscountedPrice = discountedPrice * 1;
+          cartTotalPrice = rowIndex === 0 ? 0 : cartTotalPrice;
+          discountedPrice != null
+            ? (cartTotalPrice += finalDiscountedPrice * cartItem.quantity)
+            : (cartTotalPrice += finalProductPrice * cartItem.quantity);
+
+          return (
+            <>
+              {discountedPrice !== null ? (
+                <>
+                  <span
+                    style={{ textDecoration: "line-through", color: "gray" }}
+                  >
+                    {"PKR " + finalProductPrice}
+                  </span>
+                  <br />
+                  <span className="amount">
+                    {"    PKR " + finalDiscountedPrice}
+                  </span>
+                </>
+              ) : (
+                <span>{"PKR " + finalProductPrice}</span>
+              )}
+            </>
+          );
+        },
       },
     },
     {
@@ -79,7 +122,7 @@ const BookingItem = () => {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowData } = tableMeta;
-          const cart1Item = items.filter((item) => {
+          const cartItem = items.filter((item) => {
             return item.id === rowData[0];
           })[0];
           return (
@@ -87,7 +130,7 @@ const BookingItem = () => {
               name="day"
               id="day"
               value={value}
-              hidden={!cart1Item.isPackage}
+              hidden={!cartItem.isPackage}
             >
               <option value="1">1</option>
               <option value="2">2</option>
@@ -104,7 +147,7 @@ const BookingItem = () => {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowData } = tableMeta;
-          const cart1Item = items.filter((item) => {
+          const cartItem = items.filter((item) => {
             return item.id === rowData[0];
           })[0];
           return (
@@ -113,7 +156,12 @@ const BookingItem = () => {
               id="appt"
               name="appt"
               value={value}
-              hidden={!cart1Item.isPackage}
+              hidden={!cartItem.isPackage}
+              onChange={(e) => {
+                dispatch(
+                  updateCartItem({ id: cartItem.id, time: e.target.value })
+                );
+              }}
             />
           );
         },
@@ -185,6 +233,25 @@ const BookingItem = () => {
       options: {
         filter: false,
       },
+      customBodyRender: (value, tableMeta, updateValue) => {
+        const { rowData } = tableMeta;
+        const cartItem = items.filter((item) => {
+          return item.id === rowData[0];
+        })[0];
+        const discountedPrice = getDiscountPrice(
+          cartItem.price,
+          cartItem.discount
+        );
+        const finalProductPrice = cartItem.price * 1;
+        const finalDiscountedPrice = discountedPrice * 1;
+        return (
+          <>
+            {discountedPrice !== null
+              ? "PKR " + finalDiscountedPrice * cartItem.quantity
+              : "PKR " + finalProductPrice * cartItem.quantity}
+          </>
+        );
+      },
     },
   ];
 
@@ -206,7 +273,7 @@ const BookingItem = () => {
             <Typography variant="h6">Grand Total</Typography>
             <Typography variant="body1">
               PKR
-              {10000}
+              {" " + cartTotalPrice}
             </Typography>
           </Box>
         </Box>
@@ -234,7 +301,7 @@ const BookingItem = () => {
                 image: values.image,
                 deal: values.id,
                 day: 1,
-                time: "10 am",
+                time: "10:00",
                 isPackage: true,
               };
               dispatch(addToCart(item));
