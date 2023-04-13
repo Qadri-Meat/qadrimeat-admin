@@ -1,10 +1,18 @@
-import { Autocomplete, Avatar, Grid, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Avatar,
+  Grid,
+  IconButton,
+  TextField,
+} from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import { getDeals } from "store/deal";
 import { addToCart } from "store/cart";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
 const BookingItem = () => {
   const [searchBar, setSearchBar] = useState(0);
   const dispatch = useDispatch();
@@ -141,6 +149,20 @@ const BookingItem = () => {
         setCellProps: () => ({
           style: { minWidth: "100px", maxWidth: "100px" },
         }),
+
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <div style={{ width: "max-content" }}>
+              <IconButton>
+                <RemoveIcon />
+              </IconButton>
+              {value}
+              <IconButton>
+                <AddIcon />
+              </IconButton>
+            </div>
+          );
+        },
       },
     },
     {
