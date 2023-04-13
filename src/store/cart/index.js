@@ -18,7 +18,6 @@ const cartSlice = createSlice({
     },
     incrementQuantity: (state, action) => {
       const item = state.cart.find((item) => item.id === action.payload);
-      console.log("Item Quantitiy: ", item.quantity);
       item.quantity++;
     },
     decrementQuantity: (state, action) => {
@@ -35,13 +34,16 @@ const cartSlice = createSlice({
       );
       state.cart = removeItem;
     },
-
-    updateCartItem: (state, action) => {
+    updateCartItemTime: (state, action) => {
       const { id, time } = action.payload;
-      console.log(id, time);
       const itemIndex = state.cart.find((item) => item.id === id);
-      console.log(itemIndex.time);
       itemIndex.time = time;
+    },
+
+    updateCartItemDay: (state, action) => {
+      const { id, day } = action.payload;
+      const itemIndex = state.cart.find((item) => item.id === id);
+      itemIndex.day = day;
     },
   },
 });
@@ -52,5 +54,6 @@ export const {
   incrementQuantity,
   decrementQuantity,
   removeItem,
-  updateCartItem,
+  updateCartItemDay,
+  updateCartItemTime,
 } = cartSlice.actions;

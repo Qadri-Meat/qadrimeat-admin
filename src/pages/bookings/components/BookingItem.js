@@ -16,7 +16,8 @@ import {
   addToCart,
   decrementQuantity,
   incrementQuantity,
-  updateCartItem,
+  updateCartItemDay,
+  updateCartItemTime,
 } from "store/cart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -131,6 +132,14 @@ const BookingItem = () => {
               id="day"
               value={value}
               hidden={!cartItem.isPackage}
+              onChange={(e) => {
+                dispatch(
+                  updateCartItemDay({
+                    ...cartItem,
+                    day: e.target.value,
+                  })
+                );
+              }}
             >
               <option value="1">1</option>
               <option value="2">2</option>
@@ -159,7 +168,7 @@ const BookingItem = () => {
               hidden={!cartItem.isPackage}
               onChange={(e) => {
                 dispatch(
-                  updateCartItem({ id: cartItem.id, time: e.target.value })
+                  updateCartItemTime({ ...cartItem, time: e.target.value })
                 );
               }}
             />
