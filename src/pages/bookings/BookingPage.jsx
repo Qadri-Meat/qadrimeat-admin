@@ -96,7 +96,7 @@ const BookingPage = () => {
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate("/bookings/add-booking")}
+            onClick={() => navigate("/bookings/update-booking/:id")}
             variant="outlined"
             color="primary"
             size="small"
@@ -105,12 +105,7 @@ const BookingPage = () => {
           </Button>
         </Grid>
         <Grid item>
-          <Button
-            onClick={() => navigate("/users/add-user")}
-            variant="outlined"
-            color="primary"
-            size="small"
-          >
+          <Button variant="outlined" color="primary" size="small">
             Invoice
           </Button>
         </Grid>

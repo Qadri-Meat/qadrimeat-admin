@@ -7,6 +7,12 @@ import React, { Fragment } from "react";
 import { useForm } from "react-hook-form";
 import SaveIcon from "@mui/icons-material/Save";
 import BookingItem from "./BookingItem";
+import { useDispatch, useSelector } from "react-redux";
+import { getDiscountPrice } from "helper/product";
+import { createBooking, updateBooking } from "store/booking";
+import Loader from "@core/components/ui/Loader";
+import Message from "@core/components/ui/Message";
+
 const schema = yup.object().shape({
   name: yup.string().required(),
   lastName: yup.string(),
@@ -15,7 +21,11 @@ const schema = yup.object().shape({
   postalCode: yup.string(),
   notes: yup.string(),
 });
-const BookingForm = () => {
+const BookingForm = ({ preloadedValues }) => {
+  const dispatch = useDispatch();
+  let cart1TotalPrice = 0;
+  const { error, loading } = useSelector((state) => state.booking);
+  const items = useSelector((state) => state.reducer.cart);
   let shippingDetails = {
     city: "Lahore, Punjab",
     country: "Pakistan",
@@ -33,11 +43,45 @@ const BookingForm = () => {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    const discount = data.discount;
+    delete data.discount;
+    cart1TotalPrice = 0 - Number(discount);
+
+    items.forEach((item) => {
+      const discountedPrice = getDiscountPrice(item.price, item.discount);
+      const finalProductPrice = item.price * 1;
+      const finalDiscountedPrice = discountedPrice * 1;
+
+      discountedPrice != null
+        ? (cart1TotalPrice += finalDiscountedPrice * item.quantity)
+        : (cart1TotalPrice += finalProductPrice * item.quantity);
+    });
+
+    const newBooking = {
+      phone: data.phone,
+      bookingItems: items,
+      shippingDetails: {
+        ...data,
+        city: "Lahore",
+        country: "Pakistan",
+      },
+      shippingPrice: 0,
+      totalPrice: cart1TotalPrice,
+      type: "retail",
+      discount,
+      deliveryTime: Date.now(),
+    };
+
+    if (preloadedValues) {
+      dispatch(updateBooking(preloadedValues.id, newBooking));
+    } else {
+      dispatch(createBooking(newBooking));
+    }
   };
 
   return (
     <Fragment>
+      {error && <Message severity="error">{error}</Message>}
       <BookingItem />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
@@ -139,8 +183,13 @@ const BookingForm = () => {
               size="large"
               endIcon={<SaveIcon />}
             >
-              Update Booking
-              {/* {loading ? <Loader /> : defaultValues ? "Update User" : "Save User"} */}
+              {loading ? (
+                <Loader />
+              ) : preloadedValues ? (
+                "Update Booking"
+              ) : (
+                "Save Booking"
+              )}
             </Button>
           </Grid>
         </Grid>

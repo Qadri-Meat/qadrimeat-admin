@@ -1,6 +1,7 @@
 import AddBookingPage from "./AddBookingPage";
 import AllBookingsPage from "./AllBookingsPage";
 import BookingPage from "./BookingPage";
+import UpdateBookingPage from "./UpdateBookingPage";
 
 export const BookingPageConfig = {
   routes: [
@@ -16,6 +17,11 @@ export const BookingPageConfig = {
     {
       path: "/bookings/:id",
       element: <BookingPage />,
+    },
+
+    {
+      path: "/bookings/update-booking/:id",
+      element: <UpdateBookingPage />,
     },
   ],
 };
