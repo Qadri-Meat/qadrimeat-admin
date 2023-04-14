@@ -16,6 +16,7 @@ import {
   addToCart,
   decrementQuantity,
   incrementQuantity,
+  removeItem,
   updateCartItemDay,
   updateCartItemTime,
 } from "store/cart";
@@ -218,7 +219,11 @@ const BookingItem = () => {
             <div style={{ width: "max-content" }}>
               <IconButton
                 onClick={() => {
-                  dispatch(decrementQuantity(cartItem.id));
+                  if (cartItem.quantity === 1) {
+                    dispatch(removeItem(cartItem.id));
+                  } else {
+                    dispatch(decrementQuantity(cartItem.id));
+                  }
                 }}
               >
                 <RemoveIcon />
