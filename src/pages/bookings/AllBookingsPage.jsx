@@ -9,15 +9,28 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-
+import { useLocation } from "react-router-dom";
+import { pick } from "helper/pick";
 const AllBookingsPage = () => {
+  const location = useLocation();
+  console.log("All Booking props are: ", location);
+  const { type = "retail", paid } = pick(location.search);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState("");
+  const [page, setPage] = useState("");
   const data = useSelector((state) => state.booking);
+  const { user: authUser } = useSelector((state) => state.auth);
+
   useEffect(() => {
-    dispatch(getBookings(query));
-  }, [dispatch, query]);
+    if (authUser) {
+      const query = `${page}&type=${type}${
+        paid !== undefined ? `&isPaid=${paid}` : ""
+      }`;
+      dispatch(getBookings(query));
+    } else {
+      navigate("/login");
+    }
+  }, [dispatch, authUser, navigate, paid, type, page]);
   const columns = [
     {
       name: "phone",
@@ -116,19 +129,36 @@ const AllBookingsPage = () => {
             <ToggleButtonGroup
               color="primary"
               style={{ marginRight: "10px" }}
-              value="paid"
+              value={paid}
               size="small"
               exclusive
+              onChange={(event, value) => {
+                navigate(
+                  `/bookings?type=${type}${
+                    value !== undefined && value !== null
+                      ? `&paid=${value}`
+                      : ""
+                  }`
+                );
+              }}
             >
               <ToggleButton value="true">Paid</ToggleButton>
               <ToggleButton value="false">No Paid</ToggleButton>
             </ToggleButtonGroup>
-
             <ToggleButtonGroup
               color="primary"
-              value="abc"
+              value={type}
               size="small"
               exclusive
+              onChange={(event, value) => {
+                navigate(
+                  `/bookings?type=${
+                    value !== undefined && value !== null
+                      ? `${value}`
+                      : `${type}`
+                  }`
+                );
+              }}
             >
               <ToggleButton value="online">Online</ToggleButton>
               <ToggleButton value="retail">Retail</ToggleButton>
@@ -140,7 +170,7 @@ const AllBookingsPage = () => {
         title={"Booking List"}
         data={data}
         columns={columns}
-        setQuery={setQuery}
+        setQuery={setPage}
         onEdit={(value) => {
           navigate(`/bookings/${value}`);
         }}
