@@ -8,10 +8,13 @@ import { useForm } from "react-hook-form";
 import SaveIcon from "@mui/icons-material/Save";
 import BookingItem from "./BookingItem";
 const schema = yup.object().shape({
-  name: yup.string(),
+  name: yup.string().required(),
   lastName: yup.string(),
+  phone: yup.string().required(),
+  address: yup.string().required(),
+  postalCode: yup.string(),
+  notes: yup.string(),
 });
-
 const BookingForm = () => {
   let shippingDetails = {
     city: "Lahore, Punjab",
@@ -21,6 +24,7 @@ const BookingForm = () => {
   };
   const {
     register,
+    handleSubmit,
     formState: { errors },
   } = useForm({
     defaultValues: shippingDetails,
@@ -28,10 +32,14 @@ const BookingForm = () => {
     resolver: yupResolver(schema),
   });
 
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <Fragment>
       <BookingItem />
-      <Form>
+      <Form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <FormInput
@@ -46,13 +54,13 @@ const BookingForm = () => {
           </Grid>
           <Grid item xs={12} md={4}>
             <FormInput
-              {...register("last-name")}
+              {...register("lastName")}
               id="last-name"
               type="text"
               label="Last Name"
-              name="last-name"
-              error={!!errors.name}
-              helperText={errors?.name?.message}
+              name="lastName"
+              error={!!errors.lastName}
+              helperText={errors?.lastName?.message}
             />
           </Grid>
           <Grid item xs={12} md={4}>
@@ -62,8 +70,8 @@ const BookingForm = () => {
               type="number"
               label="Phone"
               name="phone"
-              error={!!errors.email}
-              helperText={errors?.email?.message}
+              error={!!errors.phone}
+              helperText={errors?.phone?.message}
             />
           </Grid>
           <Grid item xs={12} md={4}>
@@ -73,8 +81,8 @@ const BookingForm = () => {
               type="text"
               label="Address"
               name="address"
-              error={!!errors.email}
-              helperText={errors?.email?.message}
+              error={!!errors.address}
+              helperText={errors?.address?.message}
             />
           </Grid>
           <Grid item xs={12} md={4}>
