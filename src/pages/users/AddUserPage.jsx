@@ -10,13 +10,9 @@ import { useNavigate, useParams } from "react-router-dom";
 const AddUserPage = () => {
   const params = useParams();
   const userId = params.id;
-
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-
   const { details, success } = useSelector((state) => state.user);
-
   useEffect(() => {
     if (userId !== "add-user") dispatch(getUser(userId));
   }, [dispatch, userId]);
