@@ -38,6 +38,7 @@ const DataTable = (props) => {
     selectableRows: "none",
     sort: false,
     onTableChange: (action, tableState) => {
+      console.log("tableChanging");
       if (serverSide !== false) {
         switch (action) {
           case "changePage":
