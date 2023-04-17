@@ -1,10 +1,9 @@
 import React, { useEffect } from "react";
 import "./styles/invoice.css";
 import { useDispatch, useSelector } from "react-redux";
-import { getBooking } from "state/ducks/booking/actions";
 import { Avatar } from "@material-ui/core";
-import { getDiscountPrice } from "helpers/product";
-
+import { getBooking } from "store/booking";
+import { getDiscountPrice } from "helper/product";
 const InvoicePage = (props) => {
   const { history, match } = props;
   const bookingId = match.params.id;

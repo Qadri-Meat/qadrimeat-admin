@@ -65,24 +65,14 @@ class BookingService extends ApiService {
    * @param {object} data - The data to update the booking with
    * @returns {Promise<User>}
    */
-  create(data) {
+  create({ data }) {
+    console.log("data in booking service---->", data);
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",
       },
     };
-    const formData = new FormData();
-    Object.entries(data).forEach((entry) => {
-      const [key, value] = entry;
-      if (key === "image") {
-        value.forEach((item) => {
-          formData.append(key, item);
-        });
-      } else {
-        formData.append(key, value);
-      }
-    });
-    return this.instance.post(`/v1/booking`, formData, config);
+    return this.instance.post(`/v1/bookings`, { data }, config);
   }
   /**
    * Delete a Booking with the given id

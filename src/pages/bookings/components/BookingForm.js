@@ -71,11 +71,12 @@ const BookingForm = ({ preloadedValues }) => {
       discount,
       deliveryTime: Date.now(),
     };
+    console.log("new booking is : ", newBooking);
 
     if (preloadedValues) {
       dispatch(updateBooking(preloadedValues.id, newBooking));
     } else {
-      dispatch(createBooking(newBooking));
+      dispatch(createBooking({ newBooking }));
     }
   };
 

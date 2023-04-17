@@ -2,7 +2,6 @@ import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBread
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 import { Avatar, Button, Grid, Typography } from "@mui/material";
 import MUIDataTable from "mui-datatables";
-import React from "react";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -105,7 +104,14 @@ const BookingPage = () => {
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="outlined" color="primary" size="small">
+          <Button
+            onClick={() =>
+              navigate(`/bookings/invoice/${"628fc4e85c35f151989bc238"}`)
+            }
+            variant="outlined"
+            color="primary"
+            size="small"
+          >
             Invoice
           </Button>
         </Grid>
