@@ -26,6 +26,17 @@ export const getBooking = createAsyncThunk(
     }
   }
 );
+export const getBookingItems = createAsyncThunk(
+  "booking/get",
+  async (day, deal, { rejectWithValue }) => {
+    try {
+      const res = await BookingService.getBookingItems(day, deal);
+      return { details: res.data };
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 export const createBooking = createAsyncThunk(
   "booking/create",

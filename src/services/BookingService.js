@@ -23,7 +23,7 @@ class BookingService extends ApiService {
    * @returns {Promise<User>}
    */
   get(id) {
-    return this.instance.get(`/v1/booking/${id}`);
+    return this.instance.get(`/v1/bookings/${id}`);
   }
 
   /**

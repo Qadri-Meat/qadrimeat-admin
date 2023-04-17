@@ -1,12 +1,26 @@
 import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 import { Avatar, Button, Grid, Typography } from "@mui/material";
-import MUIDataTable from "mui-datatables";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { getBooking } from "store/booking";
+import MUIDataTable from "mui-datatables";
 const BookingPage = () => {
+  const dispatch = useDispatch();
+  const data = useSelector((state) => state.booking);
+  const { user: authUser } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  useEffect(() => {
+    if (authUser) {
+      dispatch(getBooking("628fc4e85c35f151989bc238"));
+    } else {
+      navigate("/login");
+    }
+  }, [navigate, authUser, dispatch]);
+
   const columns = [
     {
       name: "image",
@@ -117,11 +131,23 @@ const BookingPage = () => {
         </Grid>
       </Grid>
       <AdminBreadcrumbs />
-      <Grid container item md={8} spacing={3}>
-        <Grid item xs={12}>
-          <MUIDataTable columns={columns} />
-        </Grid>
-      </Grid>
+      <div>
+        {data ? (
+          <Grid container spacing={3}>
+            <Grid container item md={8} spacing={3}>
+              <Grid item xs={12}>
+                <MUIDataTable
+                  title={"Booking Items"}
+                  // data={data.details.bookingItems}
+                  columns={columns}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        ) : (
+          <></>
+        )}
+      </div>
     </AdminLayout>
   );
 };
