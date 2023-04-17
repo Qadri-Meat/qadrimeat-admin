@@ -29,9 +29,9 @@ export const getBooking = createAsyncThunk(
 
 export const createBooking = createAsyncThunk(
   "booking/create",
-  async (data, { rejectWithValue }) => {
+  async ({ data }, { rejectWithValue }) => {
     try {
-      await BookingService.create(data);
+      await BookingService.create({ data });
       return { success: true };
     } catch (err) {
       console.log("Error is", err.response.data.message);
