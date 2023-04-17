@@ -13,7 +13,6 @@ import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
 const AllBookingsPage = () => {
   const location = useLocation();
-  console.log("All Booking props are: ", location);
   const { type = "retail", paid } = pick(location.search);
   const navigate = useNavigate();
   const dispatch = useDispatch();

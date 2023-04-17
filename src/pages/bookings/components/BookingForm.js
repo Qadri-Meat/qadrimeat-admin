@@ -14,7 +14,7 @@ import Loader from "@core/components/ui/Loader";
 import Message from "@core/components/ui/Message";
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
+  firstName: yup.string().required(),
   lastName: yup.string(),
   phone: yup.string().required(),
   address: yup.string().required(),
@@ -76,7 +76,7 @@ const BookingForm = ({ preloadedValues }) => {
     if (preloadedValues) {
       dispatch(updateBooking(preloadedValues.id, newBooking));
     } else {
-      dispatch(createBooking({ newBooking }));
+      dispatch(createBooking(newBooking));
     }
   };
 
@@ -88,13 +88,13 @@ const BookingForm = ({ preloadedValues }) => {
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <FormInput
-              {...register("name")}
-              id="name"
+              {...register("firstName")}
+              id="firstName"
               type="text"
               label="First Name"
-              name="name"
-              error={!!errors.name}
-              helperText={errors?.name?.message}
+              name="firstName"
+              error={!!errors.firstName}
+              helperText={errors?.firstName?.message}
             />
           </Grid>
           <Grid item xs={12} md={4}>
