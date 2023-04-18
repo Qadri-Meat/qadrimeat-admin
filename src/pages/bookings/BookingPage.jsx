@@ -1,25 +1,30 @@
 import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 import { Avatar, Button, Grid, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getBooking } from "store/booking";
 import MUIDataTable from "mui-datatables";
+import { getBooking } from "store/booking";
+
 const BookingPage = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const data = useSelector((state) => state.booking);
   const { user: authUser } = useSelector((state) => state.auth);
+  const bookingItems = useSelector(
+    (state) => state.booking.details?.bookingItems || []
+  );
   const navigate = useNavigate();
+
   useEffect(() => {
-    if (authUser) {
-      dispatch(getBooking("628fc4e85c35f151989bc238"));
-    } else {
+    if (authUser && bookingItems.length === 0) {
+      dispatch(getBooking(id));
+    } else if (!authUser) {
       navigate("/login");
     }
-  }, [navigate, authUser, dispatch]);
+  }, [authUser, dispatch, id, navigate, bookingItems]);
 
   const columns = [
     {
@@ -99,6 +104,8 @@ const BookingPage = () => {
     },
   ];
 
+  console.log(bookingItems); // Moved console.log here
+
   return (
     <AdminLayout>
       <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
@@ -109,7 +116,7 @@ const BookingPage = () => {
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate("/bookings/update-booking/:id")}
+            onClick={() => navigate(`/bookings/update-booking/${id}`)}
             variant="outlined"
             color="primary"
             size="small"
@@ -132,21 +139,17 @@ const BookingPage = () => {
       </Grid>
       <AdminBreadcrumbs />
       <div>
-        {data ? (
-          <Grid container spacing={3}>
-            <Grid container item md={8} spacing={3}>
-              <Grid item xs={12}>
-                <MUIDataTable
-                  title={"Booking Items"}
-                  // data={data.details.bookingItems}
-                  columns={columns}
-                />
-              </Grid>
+        <Grid container spacing={3}>
+          <Grid container item md={8} spacing={3}>
+            <Grid item xs={12}>
+              <MUIDataTable
+                title={"Booking Items"}
+                data={bookingItems}
+                columns={columns}
+              />
             </Grid>
           </Grid>
-        ) : (
-          <></>
-        )}
+        </Grid>
       </div>
     </AdminLayout>
   );
