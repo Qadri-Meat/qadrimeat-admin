@@ -41,6 +41,7 @@ export const getBookingItems = createAsyncThunk(
 export const createBooking = createAsyncThunk(
   "booking/create",
   async (data, { rejectWithValue }) => {
+    console.log("data in index: ", data);
     try {
       await BookingService.create(data);
       return { success: true };

@@ -1,6 +1,6 @@
 import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import { Avatar, Button, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { getBooking } from "store/booking";
+import { getDiscountPrice } from "helper/product";
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -66,6 +67,34 @@ const BookingPage = () => {
         filter: true,
         sort: false,
         display: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData: cartItem } = tableMeta;
+          const price = cartItem[2];
+          const discount = cartItem[3];
+          const discountedPrice = getDiscountPrice(price, discount);
+          const finalProductPrice = (price * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+
+          return (
+            <>
+              {discountedPrice !== null ? (
+                <>
+                  <span
+                    style={{ textDecoration: "line-through", color: "gray" }}
+                  >
+                    {"PKR " + finalProductPrice}
+                  </span>
+                  <br />
+                  <span className="amount">
+                    {"    PKR " + finalDiscountedPrice}
+                  </span>
+                </>
+              ) : (
+                <span>{"PKR " + finalProductPrice}</span>
+              )}
+            </>
+          );
+        },
       },
     },
     {
@@ -102,7 +131,84 @@ const BookingPage = () => {
         },
       },
     },
+    {
+      name: "price",
+      label: "Sub Total",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData: cartItem } = tableMeta;
+          const price = cartItem[2];
+          const discount = cartItem[3];
+          const quantity = cartItem[4];
+          const discountedPrice = getDiscountPrice(price, discount);
+          const finalProductPrice = (price * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+          return (
+            <>
+              {discountedPrice !== null
+                ? "PKR " + (finalDiscountedPrice * quantity).toFixed(2)
+                : "PKR " + (finalProductPrice * quantity).toFixed(2)}
+            </>
+          );
+        },
+      },
+    },
   ];
+
+  const options = {
+    filterType: "checkbox",
+    selectableRows: false,
+    search: false,
+    print: false,
+    download: false,
+    viewColumns: false,
+    filter: false,
+    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
+      const subtotal = bookingItems.reduce((accumulator, cartItem) => {
+        const itemTotal = cartItem.price * cartItem.quantity;
+        return accumulator + itemTotal;
+      }, 0);
+
+      return (
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            m: 3,
+          }}
+        >
+          <Box>
+            <Typography variant="h6">Sub Total</Typography>
+            <Typography variant="body1">
+              Rs
+              {" " + subtotal}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h6">Shipping Price</Typography>
+            <Typography variant="body1">
+              Rs{" " + bookingItems.shippingPrice}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h6">Discount</Typography>
+            <Typography variant="body1">
+              Rs{" " + (bookingItems.discount || 0)}
+            </Typography>
+          </Box>
+          <Box>
+            <Typography variant="h6">Grand Total</Typography>
+            <Typography variant="body1">
+              Rs{" " + bookingItems.totalPrice}
+            </Typography>
+          </Box>
+        </Box>
+      );
+    },
+  };
 
   console.log(bookingItems); // Moved console.log here
 
@@ -126,9 +232,7 @@ const BookingPage = () => {
         </Grid>
         <Grid item>
           <Button
-            onClick={() =>
-              navigate(`/bookings/invoice/${"628fc4e85c35f151989bc238"}`)
-            }
+            onClick={() => navigate(`/bookings/invoice/${id}`)}
             variant="outlined"
             color="primary"
             size="small"
@@ -146,6 +250,7 @@ const BookingPage = () => {
                 title={"Booking Items"}
                 data={bookingItems}
                 columns={columns}
+                options={options}
               />
             </Grid>
           </Grid>
