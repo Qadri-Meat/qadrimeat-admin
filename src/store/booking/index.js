@@ -64,6 +64,18 @@ export const updateBooking = createAsyncThunk(
   }
 );
 
+export const deleteTransaction = createAsyncThunk(
+  "booking/updateDeal",
+  async ({ bookingId, tranId }, { rejectWithValue }) => {
+    try {
+      await BookingService.updateById({ bookingId, tranId });
+      return { success: true };
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 // export const updateUser = createAsyncThunk(
 //   "users/updateUser",
 //   async (id, data, { rejectWithValue }) => {

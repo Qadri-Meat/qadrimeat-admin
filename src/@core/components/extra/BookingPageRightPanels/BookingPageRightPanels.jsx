@@ -7,7 +7,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Button, Divider, Grid, TextField } from "@mui/material";
 import Message from "@core/components/ui/Message";
 import { useDispatch, useSelector } from "react-redux";
-import { updateBooking } from "store/booking";
+import { deleteTransaction, updateBooking } from "store/booking";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 const BookingPageRightPanels = () => {
@@ -18,6 +18,7 @@ const BookingPageRightPanels = () => {
   const TransectionDetails = useSelector(
     (state) => state.booking.details?.transactions || []
   );
+  const details = useSelector((state) => state.booking || []);
   const [deliveryTime, setDeliveryTime] = React.useState(null);
   const [amount, setAmount] = React.useState(null);
 
@@ -29,14 +30,14 @@ const BookingPageRightPanels = () => {
   }, [dispatch, selectedBooking, deliveryTime]);
 
   const submitHandler = () => {
-    if (selectedBooking.status === "pending") {
+    if (details.status === "pending") {
       dispatch(
         updateBooking(selectedBooking.id, {
           status: "approved",
           approvedAt: new Date(),
         })
       );
-    } else if (selectedBooking.status === "approved") {
+    } else if (details.status === "approved") {
       dispatch(
         updateBooking(selectedBooking.id, {
           status: "delivered",
@@ -84,12 +85,11 @@ const BookingPageRightPanels = () => {
             </Grid>
             <Grid container>
               <Grid item container justify="space-around">
-                {selectedBooking === "delivered" ? (
+                {details.status === "delivered" ? (
                   <Message severity="success">
                     Delivered at{" "}
-                    {new Date(selectedBooking.deliveredAt).toLocaleDateString()}
-                    ,{" "}
-                    {new Date(selectedBooking.deliveredAt).toLocaleTimeString()}
+                    {new Date(details.deliveredAt).toLocaleDateString()},{" "}
+                    {new Date(details.deliveredAt).toLocaleTimeString()}
                   </Message>
                 ) : (
                   <>
@@ -152,7 +152,15 @@ const BookingPageRightPanels = () => {
                         {new Date(tran.createdAt).toLocaleTimeString()}
                       </p>
                       <p>{tran.amount}</p>
-                      <Button endIcon={<DeleteIcon />}></Button>
+                      <Button
+                        endIcon={<DeleteIcon />}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          dispatch(
+                            deleteTransaction(selectedBooking.id, tran.id)
+                          );
+                        }}
+                      ></Button>
                     </Box>
                   ))}
                   <Divider />
@@ -166,7 +174,7 @@ const BookingPageRightPanels = () => {
                       <strong>Total Paid: </strong>
                     </p>
                     <p>
-                      <span>{selectedBooking.totalPaid}</span>
+                      <span>{TransectionDetails.totalPaid}</span>
                     </p>
                   </Box>
                   <Box
