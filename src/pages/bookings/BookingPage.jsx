@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import MUIDataTable from "mui-datatables";
 import { getBooking } from "store/booking";
 import { getDiscountPrice } from "helper/product";
+import BookingPageRightPanels from "@core/components/extra/BookingPageRightPanels/BookingPageRightPanels";
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -253,6 +254,9 @@ const BookingPage = () => {
                 options={options}
               />
             </Grid>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <BookingPageRightPanels />
           </Grid>
         </Grid>
       </div>
