@@ -21,12 +21,12 @@ const BookingPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (authUser && bookingItems.length === 0) {
+    if (authUser) {
       dispatch(getBooking(id));
-    } else if (!authUser) {
+    } else {
       navigate("/login");
     }
-  }, [authUser, dispatch, id, navigate, bookingItems]);
+  }, [authUser, dispatch, id, navigate]);
 
   const columns = [
     {

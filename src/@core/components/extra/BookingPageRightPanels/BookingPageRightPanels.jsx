@@ -4,19 +4,24 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Button, Grid } from "@mui/material";
+import { Box, Button, Divider, Grid, TextField } from "@mui/material";
 import Message from "@core/components/ui/Message";
 import { useDispatch, useSelector } from "react-redux";
 import { updateBooking } from "store/booking";
-
+import SaveIcon from "@mui/icons-material/Save";
+import DeleteIcon from "@mui/icons-material/Delete";
 const BookingPageRightPanels = () => {
   const dispatch = useDispatch();
   const selectedBooking = useSelector(
     (state) => state.booking.details?.shippingDetails || []
   );
+  const TransectionDetails = useSelector(
+    (state) => state.booking.details?.transactions || []
+  );
   const [deliveryTime, setDeliveryTime] = React.useState(null);
+  const [amount, setAmount] = React.useState(null);
+
   React.useEffect(() => {
-    console.log("Selected booking details is: ", selectedBooking.firstName);
     if (selectedBooking && !deliveryTime) {
       const date = new Date(selectedBooking.deliveryTime);
       setDeliveryTime(date);
@@ -43,7 +48,7 @@ const BookingPageRightPanels = () => {
 
   return (
     <div>
-      <Accordion sx={{ marginBottom: 2 }}>
+      <Accordion defaultExpanded sx={{ marginBottom: "1.3rem" }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -51,6 +56,7 @@ const BookingPageRightPanels = () => {
         >
           <Typography>Shipping</Typography>
         </AccordionSummary>
+        <Divider />
         <AccordionDetails>
           <Grid container>
             <Grid item>
@@ -104,7 +110,7 @@ const BookingPageRightPanels = () => {
           </Grid>
         </AccordionDetails>
       </Accordion>
-      <Accordion>
+      <Accordion defaultExpanded>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel2a-content"
@@ -112,11 +118,104 @@ const BookingPageRightPanels = () => {
         >
           <Typography>Transactions</Typography>
         </AccordionSummary>
+        <Divider />
         <AccordionDetails>
-          <Typography>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
-            malesuada lacus ex, sit amet blandit leo lobortis eget.
-          </Typography>
+          <Grid container>
+            <Grid item xs={12}>
+              {TransectionDetails && TransectionDetails.length > 0 ? (
+                <div style={{ width: "100%" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <p>
+                      <strong>Date</strong>
+                    </p>
+                    <p>
+                      <strong>Amount</strong>
+                    </p>
+                    <p>
+                      <strong></strong>
+                    </p>
+                  </Box>
+                  {TransectionDetails.map((tran) => (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <p>
+                        {new Date(tran.createdAt).toLocaleDateString()},{" "}
+                        {new Date(tran.createdAt).toLocaleTimeString()}
+                      </p>
+                      <p>{tran.amount}</p>
+                      <Button endIcon={<DeleteIcon />}></Button>
+                    </Box>
+                  ))}
+                  <Divider />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <p>
+                      <strong>Total Paid: </strong>
+                    </p>
+                    <p>
+                      <span>{selectedBooking.totalPaid}</span>
+                    </p>
+                  </Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <p>
+                      <strong>Balance: </strong>
+                    </p>
+                    <p>
+                      <span>
+                        {(
+                          selectedBooking.totalPrice - selectedBooking.totalPaid
+                        ).toFixed(2)}
+                      </span>
+                    </p>
+                  </Box>
+                </div>
+              ) : (
+                <>No Transactions found</>
+              )}
+              <>
+                {selectedBooking.totalPaid < selectedBooking.totalPrice ? (
+                  <TextField
+                    id="amount"
+                    label="Amount"
+                    type="number"
+                    value={amount}
+                    onChange={(e) => {
+                      if (
+                        selectedBooking.totalPrice -
+                          selectedBooking.totalPaid >=
+                        e.target.value
+                      ) {
+                        setAmount(e.target.value);
+                      }
+                    }}
+                    InputProps={{
+                      endAdornment: <Button endIcon={<SaveIcon />}>Add</Button>,
+                    }}
+                  />
+                ) : (
+                  <></>
+                )}
+              </>
+            </Grid>
+          </Grid>
         </AccordionDetails>
       </Accordion>
     </div>
