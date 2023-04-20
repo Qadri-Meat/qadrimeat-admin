@@ -7,7 +7,11 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Box, Button, Divider, Grid, TextField } from "@mui/material";
 import Message from "@core/components/ui/Message";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTransaction, updateBooking } from "store/booking";
+import {
+  addTransaction,
+  deleteTransaction,
+  updateBooking,
+} from "store/booking";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Loader from "@core/components/ui/Loader";
@@ -47,6 +51,18 @@ const BookingPageRightPanels = () => {
         })
       );
     }
+  };
+  const handleCreateTransaction = () => {
+    dispatch(
+      addTransaction({
+        id: selectedBooking.id,
+        data: {
+          amount,
+          paymentMethod: "cash",
+        },
+      })
+    );
+    setAmount("");
   };
 
   if (!selectedBooking) {
@@ -233,7 +249,10 @@ const BookingPageRightPanels = () => {
                     }}
                     InputProps={{
                       endAdornment: (
-                        <Button endIcon={<SaveIcon />}>
+                        <Button
+                          endIcon={<SaveIcon />}
+                          onClick={handleCreateTransaction}
+                        >
                           {loading ? <Loader /> : "Add"}
                         </Button>
                       ),
