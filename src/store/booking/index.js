@@ -41,7 +41,6 @@ export const getBookingItems = createAsyncThunk(
 export const createBooking = createAsyncThunk(
   "booking/create",
   async (data, { rejectWithValue }) => {
-    console.log("data in index: ", data);
     try {
       await BookingService.create(data);
       return { success: true };
@@ -66,9 +65,10 @@ export const updateBooking = createAsyncThunk(
 
 export const deleteTransaction = createAsyncThunk(
   "booking/updateDeal",
-  async ({ bookingId, tranId }, { rejectWithValue }) => {
+  async ({ id1, id2 }, { rejectWithValue }) => {
+    console.log("Action Dispatched", id1, id2);
     try {
-      await BookingService.updateById({ bookingId, tranId });
+      await BookingService.deleteTransaction(id1, id2);
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -136,7 +136,7 @@ const userSlice = createSlice({
       ),
       (state, action) => {
         state.loading = false;
-        state.message = action.payload.message;
+        // state.message = action.payload.message;
       }
     );
   },

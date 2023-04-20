@@ -157,7 +157,10 @@ const BookingPageRightPanels = () => {
                         onClick={(e) => {
                           e.preventDefault();
                           dispatch(
-                            deleteTransaction(selectedBooking.id, tran.id)
+                            deleteTransaction({
+                              id1: details.details.id,
+                              id2: tran.id,
+                            })
                           );
                         }}
                       ></Button>
