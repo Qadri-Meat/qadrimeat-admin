@@ -28,16 +28,22 @@ const BookingPageRightPanels = () => {
   const submitHandler = () => {
     if (selectedBooking.status === "pending") {
       dispatch(
-        updateBooking(selectedBooking.id, {
-          status: "approved",
-          approvedAt: new Date(),
+        updateBooking({
+          id: selectedBooking.id,
+          data: {
+            status: "approved",
+            deliveredAt: new Date(),
+          },
         })
       );
     } else if (selectedBooking.status === "approved") {
       dispatch(
-        updateBooking(selectedBooking.id, {
-          status: "delivered",
-          deliveredAt: new Date(),
+        updateBooking({
+          id: selectedBooking.id,
+          data: {
+            status: "delivered",
+            deliveredAt: new Date(),
+          },
         })
       );
     }
@@ -46,7 +52,6 @@ const BookingPageRightPanels = () => {
   if (!selectedBooking) {
     return <Loader />;
   }
-
   return (
     <div>
       <Accordion defaultExpanded sx={{ marginBottom: "1.3rem" }}>
