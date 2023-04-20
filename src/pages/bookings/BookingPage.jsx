@@ -15,9 +15,7 @@ const BookingPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { user: authUser } = useSelector((state) => state.auth);
-  const bookingItems = useSelector(
-    (state) => state.booking.details?.bookingItems || []
-  );
+  const { selectedBooking } = useSelector((state) => state.booking);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -166,11 +164,6 @@ const BookingPage = () => {
     viewColumns: false,
     filter: false,
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
-      const subtotal = bookingItems.reduce((accumulator, cartItem) => {
-        const itemTotal = cartItem.price * cartItem.quantity;
-        return accumulator + itemTotal;
-      }, 0);
-
       return (
         <Box
           sx={{
@@ -185,34 +178,34 @@ const BookingPage = () => {
             <Typography variant="h6">Sub Total</Typography>
             <Typography variant="body1">
               Rs
-              {" " + subtotal}
+              {" " +
+                selectedBooking.totalPrice -
+                selectedBooking.shippingPrice +
+                (selectedBooking.discount || 0)}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Shipping Price</Typography>
             <Typography variant="body1">
-              Rs{" " + bookingItems.shippingPrice}
+              Rs{" " + selectedBooking.shippingPrice}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Discount</Typography>
             <Typography variant="body1">
-              Rs{" " + (bookingItems.discount || 0)}
+              Rs{" " + (selectedBooking.discount || 0)}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Grand Total</Typography>
             <Typography variant="body1">
-              Rs{" " + bookingItems.totalPrice}
+              Rs{" " + selectedBooking.totalPrice}
             </Typography>
           </Box>
         </Box>
       );
     },
   };
-
-  console.log(bookingItems); // Moved console.log here
-
   return (
     <AdminLayout>
       <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
@@ -243,13 +236,13 @@ const BookingPage = () => {
         </Grid>
       </Grid>
       <AdminBreadcrumbs />
-      <div>
+      {selectedBooking ? (
         <Grid container spacing={3}>
           <Grid container item md={8} spacing={3}>
             <Grid item xs={12}>
               <MUIDataTable
                 title={"Booking Items"}
-                data={bookingItems}
+                data={selectedBooking.bookingItems}
                 columns={columns}
                 options={options}
               />
@@ -259,7 +252,9 @@ const BookingPage = () => {
             <BookingPageRightPanels />
           </Grid>
         </Grid>
-      </div>
+      ) : (
+        <></>
+      )}
     </AdminLayout>
   );
 };
