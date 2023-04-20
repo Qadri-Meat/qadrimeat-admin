@@ -61,7 +61,8 @@ class BookingService extends ApiService {
   delete(id) {
     return this.instance.delete(`/v1/bookings/${id}`);
   }
-  addTransaction(id, data) {
+  addTransaction({ id, data }) {
+    console.log("in services: ", id, data);
     return this.instance.patch(`/v1/bookings/${id}/transactions`, data);
   }
   deleteTransaction(bookingId, transactionId) {

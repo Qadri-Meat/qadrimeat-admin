@@ -98,6 +98,19 @@ export const deleteTransaction = createAsyncThunk(
     }
   }
 );
+export const addTransaction = createAsyncThunk(
+  "booking/updateDeal",
+  async ({ id, data }, { rejectWithValue }) => {
+    console.log(id, data);
+    try {
+      await BookingService.addTransaction({ id, data });
+      return { success: true };
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const deleteBooking = createAsyncThunk(
   "booking/delete",
   async (id, { rejectWithValue }) => {
