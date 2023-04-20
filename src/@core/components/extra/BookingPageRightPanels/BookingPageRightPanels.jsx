@@ -10,19 +10,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteTransaction, updateBooking } from "store/booking";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
+import Loader from "@core/components/ui/Loader";
+import { useEffect } from "react";
 const BookingPageRightPanels = () => {
   const dispatch = useDispatch();
-  const selectedBooking = useSelector(
-    (state) => state.booking.details?.shippingDetails || []
-  );
-  const TransectionDetails = useSelector(
-    (state) => state.booking.details?.transactions || []
-  );
-  const details = useSelector((state) => state.booking || []);
+  const { selectedBooking, loading } = useSelector((state) => state.booking);
   const [deliveryTime, setDeliveryTime] = React.useState(null);
   const [amount, setAmount] = React.useState(null);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (selectedBooking && !deliveryTime) {
       const date = new Date(selectedBooking.deliveryTime);
       setDeliveryTime(date);
@@ -30,14 +26,14 @@ const BookingPageRightPanels = () => {
   }, [dispatch, selectedBooking, deliveryTime]);
 
   const submitHandler = () => {
-    if (details.status === "pending") {
+    if (selectedBooking.status === "pending") {
       dispatch(
         updateBooking(selectedBooking.id, {
           status: "approved",
           approvedAt: new Date(),
         })
       );
-    } else if (details.status === "approved") {
+    } else if (selectedBooking.status === "approved") {
       dispatch(
         updateBooking(selectedBooking.id, {
           status: "delivered",
@@ -46,6 +42,10 @@ const BookingPageRightPanels = () => {
       );
     }
   };
+
+  if (!selectedBooking) {
+    return <Loader />;
+  }
 
   return (
     <div>
@@ -61,11 +61,12 @@ const BookingPageRightPanels = () => {
         <AccordionDetails>
           <Grid container>
             <Grid item>
-              {selectedBooking ? (
+              {selectedBooking && selectedBooking.shippingDetails ? (
                 <>
                   <p>
-                    <strong>Name: </strong> {selectedBooking.firstName}{" "}
-                    {selectedBooking.lastName}
+                    <strong>Name: </strong>{" "}
+                    {selectedBooking.shippingDetails.firstName}{" "}
+                    {selectedBooking.shippingDetails.lastName}
                   </p>
                   <p>
                     <strong>Phone: </strong>{" "}
@@ -74,9 +75,11 @@ const BookingPageRightPanels = () => {
                     </a>
                   </p>
                   <p>
-                    <strong>Address:</strong> {selectedBooking.address},{" "}
-                    {selectedBooking.city} {selectedBooking.postalCode},{" "}
-                    {selectedBooking.country}
+                    <strong>Address:</strong>{" "}
+                    {selectedBooking.shippingDetails.address},{" "}
+                    {selectedBooking.shippingDetails.city}{" "}
+                    {selectedBooking.shippingDetails.postalCode},{" "}
+                    {selectedBooking.shippingDetails.country}
                   </p>
                 </>
               ) : (
@@ -85,24 +88,30 @@ const BookingPageRightPanels = () => {
             </Grid>
             <Grid container>
               <Grid item container justify="space-around">
-                {details.status === "delivered" ? (
+                {selectedBooking && selectedBooking.status === "delivered" ? (
                   <Message severity="success">
                     Delivered at{" "}
-                    {new Date(details.deliveredAt).toLocaleDateString()},{" "}
-                    {new Date(details.deliveredAt).toLocaleTimeString()}
+                    {new Date(selectedBooking.deliveredAt).toLocaleDateString()}
+                    ,{" "}
+                    {new Date(selectedBooking.deliveredAt).toLocaleTimeString()}
                   </Message>
                 ) : (
                   <>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      size="large"
-                      onClick={submitHandler}
-                    >
-                      {selectedBooking === "approved"
-                        ? "Mark Delivered"
-                        : "Mark Approved"}
-                    </Button>
+                    {loading ? (
+                      <Loader />
+                    ) : (
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        onClick={submitHandler}
+                      >
+                        {selectedBooking &&
+                        selectedBooking.status === "approved"
+                          ? "Mark Delivered"
+                          : "Mark Approved"}
+                      </Button>
+                    )}
                   </>
                 )}
               </Grid>
@@ -122,7 +131,7 @@ const BookingPageRightPanels = () => {
         <AccordionDetails>
           <Grid container>
             <Grid item xs={12}>
-              {TransectionDetails && TransectionDetails.length > 0 ? (
+              {selectedBooking && selectedBooking.transactions.length > 0 ? (
                 <div style={{ width: "100%" }}>
                   <Box
                     sx={{
@@ -140,7 +149,7 @@ const BookingPageRightPanels = () => {
                       <strong></strong>
                     </p>
                   </Box>
-                  {TransectionDetails.map((tran) => (
+                  {selectedBooking.transactions.map((tran) => (
                     <Box
                       sx={{
                         display: "flex",
@@ -158,7 +167,7 @@ const BookingPageRightPanels = () => {
                           e.preventDefault();
                           dispatch(
                             deleteTransaction({
-                              id1: details.details.id,
+                              id1: selectedBooking.id,
                               id2: tran.id,
                             })
                           );
@@ -177,7 +186,7 @@ const BookingPageRightPanels = () => {
                       <strong>Total Paid: </strong>
                     </p>
                     <p>
-                      <span>{TransectionDetails.totalPaid}</span>
+                      <span>{selectedBooking.totalPaid}</span>
                     </p>
                   </Box>
                   <Box
@@ -218,7 +227,11 @@ const BookingPageRightPanels = () => {
                       }
                     }}
                     InputProps={{
-                      endAdornment: <Button endIcon={<SaveIcon />}>Add</Button>,
+                      endAdornment: (
+                        <Button endIcon={<SaveIcon />}>
+                          {loading ? <Loader /> : "Add"}
+                        </Button>
+                      ),
                     }}
                   />
                 ) : (

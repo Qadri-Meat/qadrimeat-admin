@@ -20,12 +20,34 @@ export const getBooking = createAsyncThunk(
   async (id, { rejectWithValue }) => {
     try {
       const res = await BookingService.get(id);
-      return { details: res.data };
+      const totalPaid1 = res.data.transactions.reduce(function (a, b) {
+        return a + b.amount;
+      }, 0);
+      return {
+        loading: false,
+        selectedBooking: { ...res.data, totalPaid: totalPaid1 || 0 },
+        // details: res.data,
+        // totalPaid: totalPaid1 || 0,
+      };
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
   }
 );
+
+// export const getBooking = createAsyncThunk(
+//   "booking/get",
+//   async (id, { rejectWithValue }) => {
+//     try {
+//       const res = await BookingService.get(id);
+//       return {
+//         details: res.data,
+//       };
+//     } catch (err) {
+//       return rejectWithValue(err.response.data);
+//     }
+//   }
+// );
 export const getBookingItems = createAsyncThunk(
   "booking/get",
   async (day, deal, { rejectWithValue }) => {
@@ -43,7 +65,9 @@ export const createBooking = createAsyncThunk(
   async (data, { rejectWithValue }) => {
     try {
       await BookingService.create(data);
-      return { success: true };
+      return {
+        success: true,
+      };
     } catch (err) {
       console.log("Error is", err.response.data.message);
       return rejectWithValue(err.response.data);
@@ -66,7 +90,6 @@ export const updateBooking = createAsyncThunk(
 export const deleteTransaction = createAsyncThunk(
   "booking/updateDeal",
   async ({ id1, id2 }, { rejectWithValue }) => {
-    console.log("Action Dispatched", id1, id2);
     try {
       await BookingService.deleteTransaction(id1, id2);
       return { success: true };
@@ -75,20 +98,6 @@ export const deleteTransaction = createAsyncThunk(
     }
   }
 );
-
-// export const updateUser = createAsyncThunk(
-//   "users/updateUser",
-//   async (id, data, { rejectWithValue }) => {
-//     console.log(id, data);
-//     try {
-//       await UserService.updateById(id, data);
-//       return { success: true };
-//     } catch (err) {
-//       return rejectWithValue(err.response.data);
-//     }
-//   }
-// );
-
 export const deleteBooking = createAsyncThunk(
   "booking/delete",
   async (id, { rejectWithValue }) => {
