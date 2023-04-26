@@ -12,12 +12,11 @@ class BookingService extends ApiService {
 
   getBookingItems(day, deal) {
     return this.instance.get(
-      `/bookings/booking-items?isPackage=true&day=${day}${
+      `/v1/bookings/booking-items?isPackage=true&day=${day}${
         deal ? `&deal=${deal}` : ""
       }`
     );
   }
-
   /**
    * Get a booking by their ID
    * @param {ObjectId} id - The ID of the booking to get

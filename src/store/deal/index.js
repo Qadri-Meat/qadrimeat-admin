@@ -7,6 +7,7 @@ export const getDeals = createAsyncThunk(
   "deal/getAll",
   async (params, { rejectWithValue }) => {
     try {
+      console.log("In GetDeals Index");
       const res = await DealService.getAll(params);
       return res.data;
     } catch (err) {

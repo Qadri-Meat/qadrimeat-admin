@@ -50,16 +50,15 @@ export const getBooking = createAsyncThunk(
 // );
 export const getBookingItems = createAsyncThunk(
   "booking/get",
-  async (day, deal, { rejectWithValue }) => {
+  async (day, { rejectWithValue }) => {
     try {
-      const res = await BookingService.getBookingItems(day, deal);
-      return { details: res.data };
+      const res = await BookingService.getBookingItems(day);
+      return { bookingItems: res.data };
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
   }
 );
-
 export const createBooking = createAsyncThunk(
   "booking/create",
   async (data, { rejectWithValue }) => {
@@ -110,7 +109,6 @@ export const addTransaction = createAsyncThunk(
     }
   }
 );
-
 export const deleteBooking = createAsyncThunk(
   "booking/delete",
   async (id, { rejectWithValue }) => {

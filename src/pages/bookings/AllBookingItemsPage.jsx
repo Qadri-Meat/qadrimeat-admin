@@ -33,7 +33,7 @@ const AllBookingItemsPage = () => {
   const { user: authUser } = useSelector((state) => state.auth);
   useEffect(() => {
     if (authUser) {
-      dispatch(getBookingItems());
+      dispatch(getBookingItems(1));
       dispatch(getDeals(""));
     } else {
       navigate("/login");
@@ -114,7 +114,12 @@ const AllBookingItemsPage = () => {
               {bookingItems.map((item) => (
                 <TableRow key={item.id}>
                   <TableCell component="th" scope="row">
-                    <Button variant="outlined" color="primary" size="small">
+                    <Button
+                      onClick={() => navigate(`/bookings/${item.id}`)}
+                      variant="outlined"
+                      color="primary"
+                      size="small"
+                    >
                       Open Booking
                     </Button>
                   </TableCell>
