@@ -33,7 +33,7 @@ const AllBookingItemsPage = () => {
   const { user: authUser } = useSelector((state) => state.auth);
   useEffect(() => {
     if (authUser) {
-      dispatch(getBookingItems(1));
+      dispatch(getBookingItems({ day, deal }));
       dispatch(getDeals(""));
     } else {
       navigate("/login");
@@ -85,6 +85,11 @@ const AllBookingItemsPage = () => {
               variant="outlined"
               label="Deal"
               style={{ width: "300px" }}
+              onChange={(event) => {
+                navigate(
+                  `/bookings/booking-items?day=${day}&deal=${event.target.value}`
+                );
+              }}
             >
               {results.map((item) => (
                 <MenuItem value={item.id}>{item.name}</MenuItem>
@@ -93,7 +98,19 @@ const AllBookingItemsPage = () => {
           ) : (
             <></>
           )}
-          <ToggleButtonGroup value={day} color="primary" size="small" exclusive>
+          <ToggleButtonGroup
+            onChange={(event, value) => {
+              navigate(
+                `/bookings/booking-items?day=${value}${
+                  deal ? `&deal=${deal}` : ""
+                }`
+              );
+            }}
+            value={day}
+            color="primary"
+            size="small"
+            exclusive
+          >
             <ToggleButton value="1">Day 1</ToggleButton>
             <ToggleButton value="2">Day 2</ToggleButton>
             <ToggleButton value="3">Day 3</ToggleButton>

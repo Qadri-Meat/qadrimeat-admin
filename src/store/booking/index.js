@@ -50,9 +50,9 @@ export const getBooking = createAsyncThunk(
 // );
 export const getBookingItems = createAsyncThunk(
   "booking/get",
-  async (day, { rejectWithValue }) => {
+  async ({ day, deal }, { rejectWithValue }) => {
     try {
-      const res = await BookingService.getBookingItems(day);
+      const res = await BookingService.getBookingItems(day, deal);
       return { bookingItems: res.data };
     } catch (err) {
       return rejectWithValue(err.response.data);
