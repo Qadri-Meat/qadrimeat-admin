@@ -32,6 +32,12 @@ const BookingForm = ({ preloadedValues }) => {
     postalCode: "54030",
     discount: 0,
   };
+  if (preloadedValues !== undefined) {
+    shippingDetails = {
+      ...preloadedValues.shippingDetails,
+      discount: preloadedValues.discount,
+    };
+  }
   const {
     register,
     handleSubmit,
@@ -74,7 +80,7 @@ const BookingForm = ({ preloadedValues }) => {
     console.log("new booking is : ", newBooking);
 
     if (preloadedValues) {
-      dispatch(updateBooking(preloadedValues.id, newBooking));
+      dispatch(updateBooking({ id: preloadedValues.id, data: newBooking }));
     } else {
       dispatch(createBooking(newBooking));
     }

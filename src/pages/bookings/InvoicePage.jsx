@@ -1,26 +1,26 @@
-import React, { useEffect } from "react";
-import "./styles/invoice.css";
 import { useDispatch, useSelector } from "react-redux";
-import { Avatar } from "@material-ui/core";
+import "./styles/invoice.css";
+import { useEffect } from "react";
 import { getBooking } from "store/booking";
+import { useNavigate, useParams } from "react-router-dom";
 import { getDiscountPrice } from "helper/product";
+import { Avatar } from "@mui/material";
 const InvoicePage = (props) => {
-  const { history, match } = props;
-  const bookingId = match.params.id;
-
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { selectedBooking } = useSelector((state) => state.booking);
   const { user: authUser } = useSelector((state) => state.auth);
-
+  const { selectedBooking } = useSelector((state) => state.booking);
+  const navigate = useNavigate();
   useEffect(() => {
+    console.log(selectedBooking);
     if (authUser) {
-      if (!selectedBooking || selectedBooking.id !== bookingId) {
-        dispatch(getBooking(bookingId));
+      if (!selectedBooking || selectedBooking.id !== id) {
+        dispatch(getBooking(id));
       }
     } else {
-      history.push("/login");
+      navigate("/login");
     }
-  }, [history, authUser, selectedBooking, bookingId, dispatch]);
+  }, [authUser, selectedBooking, id, dispatch, navigate]);
   return (
     <>
       {!selectedBooking ? (

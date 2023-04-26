@@ -6,6 +6,13 @@ const cartSlice = createSlice({
     cart: [],
   },
   reducers: {
+    addAllToCart: (state, action) => {
+      const items = action.payload.map((item) => {
+        const { createdAt, ...newItem } = item;
+        return newItem;
+      });
+      state.cart = [...state.cart, ...items];
+    },
     addToCart: (state, action) => {
       const itemInCart = state.cart.find(
         (item) => item.id === action.payload.id
@@ -19,6 +26,7 @@ const cartSlice = createSlice({
     incrementQuantity: (state, action) => {
       const item = state.cart.find((item) => item.id === action.payload);
       item.quantity++;
+      console.log(item.price);
     },
     decrementQuantity: (state, action) => {
       const item = state.cart.find((item) => item.id === action.payload);
@@ -50,6 +58,7 @@ const cartSlice = createSlice({
 
 export const cartReducer = cartSlice.reducer;
 export const {
+  addAllToCart,
   addToCart,
   incrementQuantity,
   decrementQuantity,
