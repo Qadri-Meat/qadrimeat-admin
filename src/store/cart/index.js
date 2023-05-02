@@ -53,6 +53,12 @@ const cartSlice = createSlice({
       const itemIndex = state.cart.find((item) => item.id === id);
       itemIndex.day = day;
     },
+    updateCartPackage: (state, action) => {
+      const { id, isPackage } = action.payload;
+      const itemIndex = state.cart.find((item) => item.id === id);
+      console.log(action.payload);
+      itemIndex.isPackage = isPackage;
+    },
   },
 });
 
@@ -65,4 +71,5 @@ export const {
   removeItem,
   updateCartItemDay,
   updateCartItemTime,
+  updateCartPackage,
 } = cartSlice.actions;

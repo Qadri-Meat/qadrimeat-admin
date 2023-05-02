@@ -31,9 +31,9 @@ const BookingPageRightPanels = () => {
       setDeliveryTime(date);
     }
   }, [dispatch, selectedBooking, deliveryTime]);
-  const submitHandler = () => {
+  const submitHandler = async () => {
     if (selectedBooking.status === "pending") {
-      dispatch(
+      await dispatch(
         updateBooking({
           id: selectedBooking.id,
           data: {
@@ -42,8 +42,9 @@ const BookingPageRightPanels = () => {
           },
         })
       );
+      dispatch(getBooking(id));
     } else if (selectedBooking.status === "approved") {
-      dispatch(
+      await dispatch(
         updateBooking({
           id: selectedBooking.id,
           data: {
@@ -52,6 +53,7 @@ const BookingPageRightPanels = () => {
           },
         })
       );
+      dispatch(getBooking(id));
     }
   };
   const handleCreateTransaction = async () => {
