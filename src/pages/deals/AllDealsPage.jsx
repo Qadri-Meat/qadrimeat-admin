@@ -13,6 +13,10 @@ const AllDealsPage = () => {
   useEffect(() => {
     dispatch(getDeals(query));
   }, [dispatch, query]);
+  const onDelete = async (value) => {
+    await dispatch(deleteDeal(value));
+    dispatch(getDeals(query)); // re-fetch the Deals data
+  };
 
   const columns = [
     {
@@ -76,9 +80,7 @@ const AllDealsPage = () => {
         onEdit={(value) => {
           navigate(`/deals/${value}`);
         }}
-        onDelete={(value) => {
-          dispatch(deleteDeal(value));
-        }}
+        onDelete={onDelete}
       />
     </AdminLayout>
   );
