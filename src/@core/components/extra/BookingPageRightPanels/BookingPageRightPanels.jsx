@@ -10,13 +10,16 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addTransaction,
   deleteTransaction,
+  getBooking,
   updateBooking,
 } from "store/booking";
 import SaveIcon from "@mui/icons-material/Save";
 import DeleteIcon from "@mui/icons-material/Delete";
 import Loader from "@core/components/ui/Loader";
 import { useEffect } from "react";
+import { useParams } from "react-router-dom";
 const BookingPageRightPanels = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedBooking, loading } = useSelector((state) => state.booking);
   const [deliveryTime, setDeliveryTime] = React.useState(null);
@@ -28,7 +31,6 @@ const BookingPageRightPanels = () => {
       setDeliveryTime(date);
     }
   }, [dispatch, selectedBooking, deliveryTime]);
-
   const submitHandler = () => {
     if (selectedBooking.status === "pending") {
       dispatch(
@@ -52,8 +54,8 @@ const BookingPageRightPanels = () => {
       );
     }
   };
-  const handleCreateTransaction = () => {
-    dispatch(
+  const handleCreateTransaction = async () => {
+    await dispatch(
       addTransaction({
         id: selectedBooking.id,
         data: {
@@ -63,6 +65,7 @@ const BookingPageRightPanels = () => {
       })
     );
     setAmount("");
+    dispatch(getBooking(id));
   };
 
   if (!selectedBooking) {
@@ -184,14 +187,15 @@ const BookingPageRightPanels = () => {
                       <p>{tran.amount}</p>
                       <Button
                         endIcon={<DeleteIcon />}
-                        onClick={(e) => {
+                        onClick={async (e) => {
                           e.preventDefault();
-                          dispatch(
+                          await dispatch(
                             deleteTransaction({
                               id1: selectedBooking.id,
                               id2: tran.id,
                             })
                           );
+                          dispatch(getBooking(id));
                         }}
                       ></Button>
                     </Box>
