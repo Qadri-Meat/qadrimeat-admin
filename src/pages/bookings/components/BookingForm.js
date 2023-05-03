@@ -52,7 +52,6 @@ const BookingForm = ({ preloadedValues }) => {
     const discount = data.discount;
     delete data.discount;
     cart1TotalPrice = 0 - Number(discount);
-
     items.forEach((item) => {
       const discountedPrice = getDiscountPrice(item.price, item.discount);
       const finalProductPrice = item.price * 1;
@@ -62,7 +61,6 @@ const BookingForm = ({ preloadedValues }) => {
         ? (cart1TotalPrice += finalDiscountedPrice * item.quantity)
         : (cart1TotalPrice += finalProductPrice * item.quantity);
     });
-
     const newBooking = {
       phone: data.phone,
       bookingItems: items,

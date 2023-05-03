@@ -110,6 +110,10 @@ const BookingPage = () => {
       options: {
         filter: true,
         sort: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowIndex } = tableMeta;
+          return selectedBooking.bookingItems[rowIndex].isPackage ? value : "";
+        },
       },
     },
     {
@@ -118,6 +122,10 @@ const BookingPage = () => {
       options: {
         filter: true,
         sort: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowIndex } = tableMeta;
+          return selectedBooking.bookingItems[rowIndex].isPackage ? value : "";
+        },
       },
     },
     {

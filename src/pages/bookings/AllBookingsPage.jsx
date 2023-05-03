@@ -19,17 +19,21 @@ const AllBookingsPage = () => {
   const [page, setPage] = useState("");
   const data = useSelector((state) => state.booking);
   const { user: authUser } = useSelector((state) => state.auth);
-
+  const query = `${page}&type=${type}${
+    paid !== undefined ? `&isPaid=${paid}` : ""
+  }`;
   useEffect(() => {
     if (authUser) {
-      const query = `${page}&type=${type}${
-        paid !== undefined ? `&isPaid=${paid}` : ""
-      }`;
       dispatch(getBookings(query));
     } else {
       navigate("/login");
     }
-  }, [dispatch, authUser, navigate, paid, type, page]);
+  }, [dispatch, authUser, navigate, paid, type, page, query]);
+
+  const onDelete = async (value) => {
+    await dispatch(deleteBooking(value));
+    dispatch(getBookings(query)); // re-fetch the user data
+  };
   const columns = [
     {
       name: "phone",
@@ -173,9 +177,7 @@ const AllBookingsPage = () => {
         onEdit={(value) => {
           navigate(`/bookings/${value}`);
         }}
-        onDelete={(value) => {
-          dispatch(deleteBooking(value));
-        }}
+        onDelete={onDelete}
       />
     </AdminLayout>
   );

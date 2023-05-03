@@ -19,6 +19,7 @@ import {
   removeItem,
   updateCartItemDay,
   updateCartItemTime,
+  updateCartPackage,
 } from "store/cart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -186,12 +187,24 @@ const BookingItem = () => {
           style: { minWidth: "50px", maxWidth: "50px" },
         }),
         customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cart1Item = items.filter((item) => {
+            return item.id === rowData[0];
+          })[0];
           return (
             <select
               name="isPackage"
               id="isPackage"
               value={value}
               style={{ minWidth: "80px", maxWidth: "80px" }}
+              onChange={(e) => {
+                dispatch(
+                  updateCartPackage({
+                    ...cart1Item,
+                    isPackage: e.target.value,
+                  })
+                );
+              }}
             >
               <option value="true">Package</option>
               <option value="false">Non Package</option>

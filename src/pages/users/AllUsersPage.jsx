@@ -11,10 +11,20 @@ const AllUsersPage = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
+
   const data = useSelector((state) => state.user);
+  const { user: authUser } = useSelector((state) => state.auth);
   useEffect(() => {
-    dispatch(getUsers(query));
-  }, [dispatch, query]);
+    if (authUser) {
+      dispatch(getUsers(query));
+    } else {
+      navigate("/login");
+    }
+  }, [authUser, dispatch, query, navigate]);
+  const onDelete = async (value) => {
+    await dispatch(deleteUser(value));
+    dispatch(getUsers(query)); // re-fetch the user data
+  };
   const columns = [
     {
       name: "id",
@@ -61,9 +71,7 @@ const AllUsersPage = (props) => {
         onEdit={(value) => {
           navigate(`/users/${value}`);
         }}
-        onDelete={(value) => {
-          dispatch(deleteUser(value));
-        }}
+        onDelete={onDelete}
       />
     </AdminLayout>
   );
