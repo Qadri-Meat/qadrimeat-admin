@@ -1,11 +1,14 @@
 import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
-import UserService from "services/UserService";
+import DealService from "services/DealService";
+
 const initialState = {};
-export const getUsers = createAsyncThunk(
-  "users/getAll",
+
+export const getDeals = createAsyncThunk(
+  "deal/getAll",
   async (params, { rejectWithValue }) => {
     try {
-      const res = await UserService.getAll(params);
+      console.log("In GetDeals Index");
+      const res = await DealService.getAll(params);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -13,11 +16,11 @@ export const getUsers = createAsyncThunk(
   }
 );
 
-export const getUser = createAsyncThunk(
-  "users/get",
+export const getDeal = createAsyncThunk(
+  "deals/get",
   async (id, { rejectWithValue }) => {
     try {
-      const res = await UserService.get(id);
+      const res = await DealService.get(id);
       return { details: res.data };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -25,11 +28,11 @@ export const getUser = createAsyncThunk(
   }
 );
 
-export const createUser = createAsyncThunk(
-  "users/create",
+export const createDeal = createAsyncThunk(
+  "deal/create",
   async (data, { rejectWithValue }) => {
     try {
-      await UserService.create(data);
+      await DealService.create(data);
       return { success: true };
     } catch (err) {
       console.log("Error is", err.response.data.message);
@@ -38,12 +41,11 @@ export const createUser = createAsyncThunk(
   }
 );
 
-export const updateUser = createAsyncThunk(
-  "users/updateUser",
+export const updateDeal = createAsyncThunk(
+  "deal/updateDeal",
   async ({ id, data }, { rejectWithValue }) => {
-    console.log(id, data);
     try {
-      await UserService.updateById({ id, data });
+      await DealService.updateById({ id, data });
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -64,11 +66,11 @@ export const updateUser = createAsyncThunk(
 //   }
 // );
 
-export const deleteUser = createAsyncThunk(
-  "user/delete",
+export const deleteDeal = createAsyncThunk(
+  "deal/delete",
   async (id, { rejectWithValue }) => {
     try {
-      await UserService.delete(id);
+      await DealService.delete(id);
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -77,15 +79,15 @@ export const deleteUser = createAsyncThunk(
 );
 
 const userSlice = createSlice({
-  name: "users",
+  name: "deals",
   initialState,
   extraReducers: (builder) => {
     builder.addMatcher(
       isAnyOf(
-        getUsers.pending,
-        getUser.pending,
-        createUser.pending,
-        updateUser.pending
+        getDeals.pending,
+        getDeal.pending,
+        createDeal.pending,
+        updateDeal.pending
       ),
       (state, action) => {
         state.loading = true;
@@ -93,10 +95,10 @@ const userSlice = createSlice({
     );
     builder.addMatcher(
       isAnyOf(
-        getUsers.fulfilled,
-        getUser.fulfilled,
-        createUser.fulfilled,
-        updateUser.fulfilled
+        getDeals.fulfilled,
+        getDeal.fulfilled,
+        createDeal.fulfilled,
+        updateDeal.fulfilled
       ),
       (state, action) => {
         return action.payload;
@@ -104,10 +106,10 @@ const userSlice = createSlice({
     );
     builder.addMatcher(
       isAnyOf(
-        getUsers.rejected,
-        getUser.rejected,
-        createUser.rejected,
-        updateUser.rejected
+        getDeals.rejected,
+        getDeal.rejected,
+        createDeal.rejected,
+        updateDeal.rejected
       ),
       (state, action) => {
         state.loading = false;
