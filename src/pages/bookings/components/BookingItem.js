@@ -31,7 +31,8 @@ const BookingItem = () => {
   const { results } = useSelector((state) => state.deal);
   const items = useSelector((state) => state.reducer.cart);
   useEffect(() => {
-    dispatch(getDeals(""));
+    const query = `limit=${100}&page=${1}`;
+    dispatch(getDeals(query));
   }, [dispatch]);
   const columns = [
     {

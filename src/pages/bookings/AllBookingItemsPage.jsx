@@ -33,8 +33,9 @@ const AllBookingItemsPage = () => {
   const { user: authUser } = useSelector((state) => state.auth);
   useEffect(() => {
     if (authUser) {
+      const query = `limit=${100}&page=${1}`;
       dispatch(getBookingItems({ day, deal }));
-      dispatch(getDeals(""));
+      dispatch(getDeals(query));
     } else {
       navigate("/login");
     }
