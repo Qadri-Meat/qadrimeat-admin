@@ -1,6 +1,6 @@
 import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import { Avatar, Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -10,6 +10,7 @@ import MUIDataTable from "mui-datatables";
 import { getBooking } from "store/booking";
 import { getDiscountPrice } from "helper/product";
 import BookingPageRightPanels from "@core/components/extra/BookingPageRightPanels/BookingPageRightPanels";
+import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -35,9 +36,8 @@ const BookingPage = () => {
         customBodyRender: (value, tableMeta, updateValue) => {
           const image = value.length > 0 ? value[0] : "";
           return (
-            <Avatar
-              variant="rounded"
-              src={image === "" ? "" : process.env.REACT_APP_API_URL + image}
+            <MemoizedAvatar
+              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
             />
           );
         },

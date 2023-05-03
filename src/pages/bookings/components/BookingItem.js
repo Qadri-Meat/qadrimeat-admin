@@ -1,6 +1,5 @@
 import {
   Autocomplete,
-  Avatar,
   Box,
   Grid,
   IconButton,
@@ -24,6 +23,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { getDiscountPrice } from "helper/product";
+import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 const BookingItem = () => {
   const [searchBar, setSearchBar] = useState(0);
   const dispatch = useDispatch();
@@ -51,9 +51,8 @@ const BookingItem = () => {
         customBodyRender: (value, tableMeta, updateValue) => {
           const image = value.length > 0 ? value[0] : "";
           return (
-            <Avatar
-              variant="rounded"
-              src={image === "" ? "" : process.env.REACT_APP_API_URL + image}
+            <MemoizedAvatar
+              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
             />
           );
         },
