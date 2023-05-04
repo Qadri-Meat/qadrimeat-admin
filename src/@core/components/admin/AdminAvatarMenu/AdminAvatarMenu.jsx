@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 0,
   },
 }));
-
 const AdminAvatarMenu = (props) => {
   const classes = useStyles(props);
   const navigate = useNavigate();
