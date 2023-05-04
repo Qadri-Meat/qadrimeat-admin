@@ -259,25 +259,25 @@ const BookingItem = () => {
       label: "Sub Total",
       options: {
         filter: false,
-      },
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const { rowData } = tableMeta;
-        const cartItem = items.filter((item) => {
-          return item.id === rowData[0];
-        })[0];
-        const discountedPrice = getDiscountPrice(
-          cartItem.price,
-          cartItem.discount
-        );
-        const finalProductPrice = cartItem.price * 1;
-        const finalDiscountedPrice = discountedPrice * 1;
-        return (
-          <>
-            {discountedPrice !== null
-              ? "PKR " + finalDiscountedPrice * cartItem.quantity
-              : "PKR " + finalProductPrice * cartItem.quantity}
-          </>
-        );
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cart1Item = items.filter((item) => {
+            return item.id === rowData[0];
+          })[0];
+          const discountedPrice = getDiscountPrice(
+            cart1Item.price,
+            cart1Item.discount
+          );
+          const finalProductPrice = cart1Item.price * 1;
+          const finalDiscountedPrice = discountedPrice * 1;
+          return (
+            <>
+              {discountedPrice !== null
+                ? "PKR " + finalDiscountedPrice * cart1Item.quantity
+                : "PKR " + finalProductPrice * cart1Item.quantity}
+            </>
+          );
+        },
       },
     },
   ];
