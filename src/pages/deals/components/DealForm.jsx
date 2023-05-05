@@ -18,7 +18,6 @@ const schema = yup.object().shape({
   price: yup.number().required(),
   stock: yup.number().required(),
 });
-
 const DealForm = ({ defaultValues }) => {
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
@@ -87,18 +86,6 @@ const DealForm = ({ defaultValues }) => {
             helperText={errors?.price?.message}
           />
         </Grid>
-
-        {/* <Grid item xs={12} md={4}>
-          <FormInput
-            {...register("weight")}
-            id="weight"
-            type="number"
-            label="Weight"
-            name="weight"
-            error={!!errors.Cpassword}
-            helperText={errors?.Cpassword?.message}
-          />
-        </Grid> */}
         <Grid item xs={12} md={4}>
           <FormInput
             {...register("stock")}
@@ -110,28 +97,6 @@ const DealForm = ({ defaultValues }) => {
             helperText={errors?.stock?.message}
           />
         </Grid>
-        {/* <Grid item xs={12} md={4}>
-          <FormInput
-            {...register("discount")}
-            id="discount"
-            type="discount"
-            label="Discount"
-            name="discount"
-            error={!!errors.Cpassword}
-            helperText={errors?.Cpassword?.message}
-          />
-        </Grid> */}
-        {/* <Grid item xs={12} md={4}>
-          <FormInput
-            {...register("saleCount")}
-            id="saleCount"
-            type="number"
-            label="Sale Count"
-            name="saleCount"
-            error={!!errors.Cpassword}
-            helperText={errors?.Cpassword?.message}
-          />
-        </Grid> */}
         <Grid item xs={12} md={4}>
           <FormInput
             {...register("fullDescription")}
@@ -173,6 +138,7 @@ const DealForm = ({ defaultValues }) => {
 
         <Grid item xs={12}>
           <DropzoneArea
+            maxFileSize={5242880}
             initialFiles={defaultValues ? defaultValues.image : []}
             onChange={handleChange}
             dropzoneText="Drag and drop images here or click"

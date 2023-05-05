@@ -46,11 +46,8 @@ const useStyles = makeStyles((theme) => ({
 const LoginPage = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-
   const { message, loading, user } = useSelector((state) => state.auth);
-
   const {
     register,
     handleSubmit,
@@ -59,16 +56,18 @@ const LoginPage = () => {
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
-
   const onSubmit = (data) => {
     dispatch(loginUser(data));
   };
-
   useEffect(() => {
     if (user) {
       navigate("/");
     }
   }, [user, navigate]);
+
+  const errorMessage = message ? (
+    <Message severity="error">{message}</Message>
+  ) : null;
 
   return (
     <div className={classes.root}>
@@ -76,14 +75,11 @@ const LoginPage = () => {
         <Typography variant="h5" component="h1">
           Login
         </Typography>
-        {/* <Typography className={classes.brand} variant="h5" component="h1">
-          Login
-        </Typography> */}
         <Typography className={classes.mBottom} variant="body1">
           Sign In to your account
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          {message && <Message severity="error">{message}</Message>}
+          {errorMessage}
           <FormInput
             {...register("email")}
             id="email"
