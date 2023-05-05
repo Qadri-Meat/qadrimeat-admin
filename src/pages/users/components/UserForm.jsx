@@ -16,7 +16,7 @@ const emailRegExp =
 const passwordRegix = /^(?=.*[a-z])(?=.*\d)[A-z\d#$@!%&*?]{8,30}$/;
 
 const schema = yup.object().shape({
-  name: yup.string(),
+  name: yup.string().required(),
   lastName: yup.string(),
   email: yup
     .string()
