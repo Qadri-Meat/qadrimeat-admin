@@ -15,8 +15,17 @@ import { useState } from "react";
 const schema = yup.object().shape({
   name: yup.string().required(),
   sku: yup.string().required(),
-  price: yup.number().required(),
-  stock: yup.number().required(),
+  price: yup
+    .number()
+    .required()
+    .positive()
+    .typeError("Price is required field"),
+  stock: yup
+    .number()
+    .required()
+    .positive()
+    .typeError("Stock is required field"),
+  category: yup.string().required("Category is a required field"),
 });
 const DealForm = ({ defaultValues }) => {
   const [files, setFiles] = useState([]);
@@ -34,11 +43,9 @@ const DealForm = ({ defaultValues }) => {
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
-
   const handleChange = (files) => {
     setFiles(files);
   };
-
   const onSubmit = (data) => {
     data.image = files;
     if (defaultValues) {
@@ -127,8 +134,8 @@ const DealForm = ({ defaultValues }) => {
             name="category"
             label="Category"
             control={control}
-            error={!!errors.role}
-            helperText={errors?.role?.message}
+            error={!!errors.category}
+            helperText={errors.category?.message || " "}
           >
             <MenuItem value="chicken">Chicken</MenuItem>
             <MenuItem value="mutton">Mutton</MenuItem>

@@ -1,8 +1,8 @@
-import { FormControl, InputLabel, Select } from "@mui/material";
+import { FormControl, FormHelperText, InputLabel, Select } from "@mui/material";
 import React, { forwardRef } from "react";
 import { Controller } from "react-hook-form";
 const SelectInput = forwardRef(
-  ({ name, ref, label, children, control, ...props }) => {
+  ({ name, ref, label, children, control, helperText, ...props }) => {
     const labelId = `${name}-label`;
     return (
       <FormControl variant="outlined" margin="normal" fullWidth {...props}>
@@ -16,6 +16,7 @@ const SelectInput = forwardRef(
           name={name}
           control={control}
         />
+        <FormHelperText>{helperText}</FormHelperText>
       </FormControl>
     );
   }

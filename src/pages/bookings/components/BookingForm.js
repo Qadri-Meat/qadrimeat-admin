@@ -12,11 +12,15 @@ import { getDiscountPrice } from "helper/product";
 import { createBooking, updateBooking } from "store/booking";
 import Loader from "@core/components/ui/Loader";
 import Message from "@core/components/ui/Message";
+const phoneRegExp = /^(?:\+1)?\s*(?:\d{3}[\s-]?\d{3}[\s-]?\d{4}|\d{11})$/;
 
 const schema = yup.object().shape({
   firstName: yup.string().required(),
   lastName: yup.string(),
-  phone: yup.string().required(),
+  phone: yup
+    .string()
+    .required()
+    .matches(phoneRegExp, "Phone number is not valid"),
   address: yup.string().required(),
   postalCode: yup.string(),
   notes: yup.string(),
@@ -75,7 +79,6 @@ const BookingForm = ({ preloadedValues }) => {
       discount,
       deliveryTime: Date.now(),
     };
-    console.log("new booking is : ", newBooking);
 
     if (preloadedValues) {
       dispatch(updateBooking({ id: preloadedValues.id, data: newBooking }));

@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 
 import AdminAvatarBadge from "../AdminAvatarBadge/AdminAvatarBadge";
-import { AccountCircle, Settings, ExitToApp } from "@mui/icons-material";
+import { AccountCircle, ExitToApp } from "@mui/icons-material";
 
 import { useDispatch } from "react-redux";
 import { logoutUser } from "store/auth";
@@ -127,12 +127,7 @@ const AdminAvatarMenu = (props) => {
                     </ListItemIcon>
                     Profile
                   </MenuItem>
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon className={classes.menuIcon}>
-                      <Settings fontSize="small" />
-                    </ListItemIcon>
-                    settings
-                  </MenuItem>
+
                   <MenuItem onClick={logoutHandler}>
                     <ListItemIcon className={classes.menuIcon}>
                       <ExitToApp fontSize="small" />

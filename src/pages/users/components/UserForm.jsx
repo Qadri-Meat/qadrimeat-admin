@@ -34,6 +34,7 @@ const schema = yup.object().shape({
   Cpassword: yup
     .string()
     .oneOf([yup.ref("password")], "Passwords do not match"),
+  role: yup.string().required("Role is a required field"),
 });
 
 const UserForm = ({ defaultValues }) => {

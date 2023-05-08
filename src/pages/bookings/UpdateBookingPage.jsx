@@ -5,7 +5,7 @@ import BookingForm from "./components/BookingForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getBooking } from "store/booking";
-import { addAllToCart, reSetCart } from "store/cart";
+import { addAllToCart } from "store/cart";
 const UpdateBookingPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -15,7 +15,6 @@ const UpdateBookingPage = () => {
   useEffect(() => {
     if (authUser) {
       if (success) {
-        dispatch(reSetCart());
         navigate(`/bookings/${id}`);
       } else if (!selectedBooking) {
         dispatch(getBooking(id));

@@ -15,6 +15,7 @@ import {
   addToCart,
   decrementQuantity,
   incrementQuantity,
+  reSetCart,
   removeItem,
   updateCartItemDay,
   updateCartItemTime,
@@ -31,6 +32,7 @@ const BookingItem = () => {
   const { results } = useSelector((state) => state.deal);
   const items = useSelector((state) => state.reducer.cart);
   useEffect(() => {
+    dispatch(reSetCart());
     const query = `limit=${100}&page=${1}`;
     dispatch(getDeals(query));
   }, [dispatch]);
@@ -285,6 +287,12 @@ const BookingItem = () => {
   const options = {
     filterType: "checkbox",
     count: 100,
+    onRowsDelete: (rowsDeleted, dataRows) => {
+      rowsDeleted.data.forEach(({ index }) => {
+        const id = items[index].id; // obtain the id of the item to be deleted
+        dispatch(removeItem(id)); // dispatch the removeItem action with the id as the payload
+      });
+    },
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
       return (
         <Box
