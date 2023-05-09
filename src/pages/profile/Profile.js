@@ -32,31 +32,43 @@ const Profile = () => {
   const navigate = useNavigate();
   const classes = useStyles();
   const { user: authUser } = useSelector((state) => state.auth);
-  const data = useSelector((state) => state.user.details);
+  const { details, success } = useSelector((state) => state.user);
   useEffect(() => {
+    if (success) {
+      navigate(`/profile?id=${id}`);
+    }
     if (authUser) {
       dispatch(getUser(id));
     } else {
       navigate("/login");
     }
-  }, [authUser, dispatch, navigate, id]);
+  }, [authUser, dispatch, navigate, id, success]);
   return (
     <AdminLayout>
       <Grid container spacing={3}>
         <Grid container item md={4} spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
+            <Paper
+              className={classes.paper}
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "column",
+              }}
+            >
               <Typography variant="h6" gutterBottom>
                 Profile Details
               </Typography>
-              {data ? (
+              {details ? (
                 <>
-                  <Avatar src="/broken-image.jpg" />
-                  <Typography gutterBottom>{data.name}</Typography>
-                  <Typography gutterBottom>{data.email}</Typography>
-                  <Typography variant="h6" gutterBottom>
-                    {data.role}
-                  </Typography>
+                  <Avatar
+                    style={{ height: "100px", width: "100px" }}
+                    src="/broken-image.jpg"
+                  />
+                  <Typography gutterBottom> {details.role}</Typography>
+                  <Typography gutterBottom> {details.name}</Typography>
+                  <Typography gutterBottom> {details.email}</Typography>
                 </>
               ) : (
                 <Typography gutterBottom>No data available</Typography>
@@ -65,8 +77,8 @@ const Profile = () => {
           </Grid>
         </Grid>
         <Grid item xs={12} md={8}>
-          {data ? (
-            <UserForm defaultValues={data} />
+          {details ? (
+            <UserForm defaultValues={details} />
           ) : (
             <Typography gutterBottom>No data available</Typography>
           )}

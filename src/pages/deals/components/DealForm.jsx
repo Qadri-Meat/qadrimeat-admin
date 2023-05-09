@@ -142,15 +142,14 @@ const DealForm = ({ defaultValues }) => {
             <MenuItem value="beef">Beef</MenuItem>
           </SelectInput>
         </Grid>
-
         <Grid item xs={12}>
           <DropzoneArea
             maxFileSize={5242880}
             initialFiles={defaultValues ? defaultValues.image : []}
             onChange={handleChange}
-            dropzoneText="Drag and drop images here or click"
             showAlerts={false}
             filesLimit={5}
+            dropzoneText=""
           />
         </Grid>
 

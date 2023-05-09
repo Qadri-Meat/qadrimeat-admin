@@ -43,11 +43,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const LoginPage = () => {
+const LoginPage = (props) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { message, loading, user } = useSelector((state) => state.auth);
+  const auth = useSelector((state) => state.auth);
+  const { user: authUser, message, loading } = auth;
   const {
     register,
     handleSubmit,
@@ -60,15 +61,14 @@ const LoginPage = () => {
     dispatch(loginUser(data));
   };
   useEffect(() => {
-    if (user) {
+    if (authUser) {
       navigate("/");
     }
-  }, [user, navigate]);
+  }, [authUser, navigate, loading]);
 
   const errorMessage = message ? (
     <Message severity="error">{message}</Message>
   ) : null;
-
   return (
     <div className={classes.root}>
       <div className={classes.loginCard}>
@@ -98,7 +98,6 @@ const LoginPage = () => {
             error={!!errors.password}
             helperText={errors?.password?.message}
           />
-
           <div className={classes.mBottom}>
             <Button
               variant="contained"

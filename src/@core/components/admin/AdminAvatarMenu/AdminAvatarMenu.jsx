@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const AdminAvatarMenu = (props) => {
   const auth = useSelector((state) => state.auth);
-  const { user } = auth;
+  const user = auth?.user;
   const classes = useStyles(props);
   const navigate = useNavigate();
   const dispatch = useDispatch();
