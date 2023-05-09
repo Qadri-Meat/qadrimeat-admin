@@ -1,9 +1,9 @@
 import Form from "@core/components/forms/Form";
 import FormInput from "@core/components/forms/FormInput";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Grid } from "@mui/material";
+import { Alert, Button, Grid } from "@mui/material";
 import * as yup from "yup";
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import SaveIcon from "@mui/icons-material/Save";
 import BookingItem from "./BookingItem";
@@ -26,6 +26,7 @@ const schema = yup.object().shape({
   notes: yup.string(),
 });
 const BookingForm = ({ preloadedValues }) => {
+  const [itemsError, setItemsError] = useState(false);
   const dispatch = useDispatch();
   let cart1TotalPrice = 0;
   const { error, loading } = useSelector((state) => state.booking);
@@ -53,6 +54,12 @@ const BookingForm = ({ preloadedValues }) => {
   });
 
   const onSubmit = (data) => {
+    if (items.length === 0) {
+      setItemsError(true);
+      return;
+    } else {
+      setItemsError(false);
+    }
     const discount = data.discount;
     delete data.discount;
     cart1TotalPrice = 0 - Number(discount);
@@ -79,7 +86,6 @@ const BookingForm = ({ preloadedValues }) => {
       discount,
       deliveryTime: Date.now(),
     };
-
     if (preloadedValues) {
       dispatch(updateBooking({ id: preloadedValues.id, data: newBooking }));
     } else {
@@ -202,6 +208,11 @@ const BookingForm = ({ preloadedValues }) => {
           </Grid>
         </Grid>
       </Form>
+      {itemsError && (
+        <Alert style={{ marginTop: "10px" }} severity="error">
+          Items can't be empty
+        </Alert>
+      )}
     </Fragment>
   );
 };

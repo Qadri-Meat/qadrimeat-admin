@@ -1,10 +1,15 @@
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { Avatar } from "@mui/material";
+import UserForm from "pages/users/components/UserForm";
+import { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getUser } from "store/user";
+import { pick } from "helper/pick";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -21,7 +26,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const Profile = () => {
+  const location = useLocation();
+  const { id } = pick(location.search);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const classes = useStyles();
+  const { user: authUser } = useSelector((state) => state.auth);
+  const data = useSelector((state) => state.user.details);
+  useEffect(() => {
+    if (authUser) {
+      dispatch(getUser(id));
+    } else {
+      navigate("/login");
+    }
+  }, [authUser, dispatch, navigate, id]);
   return (
     <AdminLayout>
       <Grid container spacing={3}>
@@ -31,23 +49,27 @@ const Profile = () => {
               <Typography variant="h6" gutterBottom>
                 Profile Details
               </Typography>
+              {data ? (
+                <>
+                  <Avatar src="/broken-image.jpg" />
+                  <Typography gutterBottom>{data.name}</Typography>
+                  <Typography gutterBottom>{data.email}</Typography>
+                  <Typography variant="h6" gutterBottom>
+                    {data.role}
+                  </Typography>
+                </>
+              ) : (
+                <Typography gutterBottom>No data available</Typography>
+              )}
             </Paper>
           </Grid>
         </Grid>
         <Grid item xs={12} md={8}>
-          <Paper className={classes.paper}>
-            <Typography variant="h6" gutterBottom>
-              Update Profile
-            </Typography>
-
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-            >
-              Save
-            </Button>
-          </Paper>
+          {data ? (
+            <UserForm defaultValues={data} />
+          ) : (
+            <Typography gutterBottom>No data available</Typography>
+          )}
         </Grid>
       </Grid>
     </AdminLayout>

@@ -36,7 +36,6 @@ const schema = yup.object().shape({
     .oneOf([yup.ref("password")], "Passwords do not match"),
   role: yup.string().required("Role is a required field"),
 });
-
 const UserForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
   const { message, loading } = useSelector((state) => state.user);
