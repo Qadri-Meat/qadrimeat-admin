@@ -36,10 +36,9 @@ class ExpenseService extends ApiService {
    */
   updateById({ id, data }) {
     const postData = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      role: data.role,
+      description: data.description,
+      amount: data.amount,
+      type: data.type,
     };
     return this.instance.patch(`/v1/expenses/${id}`, postData);
   }

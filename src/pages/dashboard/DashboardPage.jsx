@@ -23,23 +23,6 @@ const DashboardPage = (props) => {
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
-                  Today's Orders
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Rs {/* {todayReport ? todayReport.totalOrders || 0 : 0} */}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small" href="/orders">
-                  View All
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" component="div">
                   Today's Bookings
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
@@ -95,20 +78,12 @@ const DashboardPage = (props) => {
       <Grid style={{ marginTop: 10 }} item container spacing={2}>
         <Grid item xs={12} md={7}>
           <Grid item xs={12}>
-            <Paper style={{ padding: 10 }} variant="outlined">
-              <Typography variant="h5">Order Reports</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
             <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
               <Typography variant="h5">Booking Reports</Typography>
             </Paper>
           </Grid>
         </Grid>
         <Grid item xs={12} md={5}>
-          <Paper style={{ padding: 10 }} variant="outlined">
-            <Typography variant="h5">Total Stocks</Typography>
-          </Paper>
           <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
             <Typography variant="h5">Total Bookings</Typography>
           </Paper>

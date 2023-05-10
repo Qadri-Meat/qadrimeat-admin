@@ -88,16 +88,6 @@ const AllBookingsPage = () => {
         },
       },
     },
-    {
-      name: "deliveredAt",
-      label: "Delivered",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-        },
-      },
-    },
   ];
 
   return (
@@ -147,24 +137,6 @@ const AllBookingsPage = () => {
             >
               <ToggleButton value="true">Paid</ToggleButton>
               <ToggleButton value="false">No Paid</ToggleButton>
-            </ToggleButtonGroup>
-            <ToggleButtonGroup
-              color="primary"
-              value={type}
-              size="small"
-              exclusive
-              onChange={(event, value) => {
-                navigate(
-                  `/bookings?type=${
-                    value !== undefined && value !== null
-                      ? `${value}`
-                      : `${type}`
-                  }`
-                );
-              }}
-            >
-              <ToggleButton value="online">Online</ToggleButton>
-              <ToggleButton value="retail">Retail</ToggleButton>
             </ToggleButtonGroup>
           </Grid>
         </Grid>

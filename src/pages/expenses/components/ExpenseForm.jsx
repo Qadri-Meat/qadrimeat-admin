@@ -4,29 +4,31 @@ import SelectInput from "@core/components/forms/SelectInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Button, Grid, MenuItem } from "@mui/material";
-import React from "react";
 import { useForm } from "react-hook-form";
+import SaveIcon from "@mui/icons-material/Save";
+import Loader from "@core/components/ui/Loader";
+import { useDispatch, useSelector } from "react-redux";
+import { createExpense, updateExpense } from "store/expense";
 const schema = yup.object().shape({
   description: yup.string().required(),
   amount: yup.string().required(),
   type: yup.string().required("Type is a required field"),
 });
-const ExpenseForm = () => {
+const ExpenseForm = ({ defaultValues }) => {
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.expense);
   const onSubmit = (data) => {
-    console.log(data);
-    // const postData = {
-    //   name: data.name,
-    //   email: data.email,
-    //   password: data.password,
-    //   role: data.role,
-    // };
-    // if (defaultValues) {
-    //   dispatch(updateUser({ id: defaultValues.id, data }));
-    // } else {
-    //   dispatch(createUser(postData));
-    // }
+    const postData = {
+      description: data.description,
+      amount: data.amount,
+      type: data.type,
+    };
+    if (defaultValues) {
+      dispatch(updateExpense({ id: defaultValues.id, data }));
+    } else {
+      dispatch(createExpense(postData));
+    }
   };
-
   const {
     register,
     handleSubmit,
@@ -34,6 +36,9 @@ const ExpenseForm = () => {
     formState: { errors },
   } = useForm({
     mode: "onBlur",
+    defaultValues: {
+      ...defaultValues,
+    },
     resolver: yupResolver(schema),
   });
 
@@ -56,7 +61,7 @@ const ExpenseForm = () => {
             <FormInput
               {...register("amount")}
               id="amount"
-              type="text"
+              type="number"
               label="Amount"
               name="amount"
               error={!!errors.amount}
@@ -73,8 +78,8 @@ const ExpenseForm = () => {
               error={!!errors.type}
               helperText={errors?.type?.message}
             >
-              <MenuItem value="admin">Qurbani</MenuItem>
-              <MenuItem value="user">Order</MenuItem>
+              <MenuItem value="booking">Qurbani</MenuItem>
+              <MenuItem value="order">Order</MenuItem>
             </SelectInput>
           </Grid>
           <Grid item xs={12} sx={{ textAlign: "center" }}>
@@ -83,8 +88,15 @@ const ExpenseForm = () => {
               color="primary"
               type="submit"
               size="large"
+              endIcon={<SaveIcon />}
             >
-              Add Expense
+              {loading ? (
+                <Loader />
+              ) : defaultValues ? (
+                "Update Expense"
+              ) : (
+                "Save Expense"
+              )}
             </Button>
           </Grid>
         </Grid>

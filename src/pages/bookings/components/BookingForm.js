@@ -210,7 +210,7 @@ const BookingForm = ({ preloadedValues }) => {
       </Form>
       {itemsError && (
         <Alert style={{ marginTop: "10px" }} severity="error">
-          Items can't be empty
+          please select the Deal
         </Alert>
       )}
     </Fragment>
