@@ -29,7 +29,7 @@ export const logoutUser = createAsyncThunk(
       //   refreshToken: TokenService.getRefreshToken(),
       // });
       TokenService.removeUserData();
-      return null;
+      return initialState;
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
