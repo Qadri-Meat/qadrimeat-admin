@@ -47,7 +47,7 @@ const LoginPage = (props) => {
   const classes = useStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const auth = useSelector((state) => state.auth);
+  const auth = useSelector((state) => (state.auth ? state.auth : {}));
   const { user: authUser, message, loading } = auth;
   const {
     register,

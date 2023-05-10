@@ -12,6 +12,8 @@ import SelectInput from "@core/components/forms/SelectInput";
 import { createDeal, updateDeal } from "store/deal";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useState } from "react";
+import Compressor from "compressorjs";
+
 const schema = yup.object().shape({
   name: yup.string().required(),
   sku: yup.string().required(),
@@ -44,7 +46,31 @@ const DealForm = ({ defaultValues }) => {
     resolver: yupResolver(schema),
   });
   const handleChange = (files) => {
-    setFiles(files);
+    console.log("before Compress", files);
+    // Check if the file is an image
+    if (files[0] ? files[0].type.startsWith("image/") : []) {
+      // Compress the image
+      new Compressor(files[0], {
+        quality: 0.8,
+        maxWidth: 800,
+        maxHeight: 800,
+        success(result) {
+          // Create a new File object from the compressed image data
+          const compressedFile = new File([result], files[0].name, {
+            type: files[0].type,
+          });
+          // Set the compressed image as the new file
+          console.log("after compress", [compressedFile]);
+          setFiles([compressedFile]);
+        },
+        error(err) {
+          console.log(err.message);
+        },
+      });
+    } else {
+      // Set the original file if it is not an image
+      setFiles(files);
+    }
   };
   const onSubmit = (data) => {
     data.image = files;
