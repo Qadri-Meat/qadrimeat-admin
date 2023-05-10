@@ -24,7 +24,6 @@ const BookingPageRightPanels = () => {
   const { selectedBooking, loading } = useSelector((state) => state.booking);
   const [deliveryTime, setDeliveryTime] = React.useState(null);
   const [amount, setAmount] = React.useState(null);
-
   useEffect(() => {
     if (selectedBooking && !deliveryTime) {
       const date = new Date(selectedBooking.deliveryTime);
@@ -38,7 +37,7 @@ const BookingPageRightPanels = () => {
           id: selectedBooking.id,
           data: {
             status: "approved",
-            deliveredAt: new Date(),
+            approvedAt: new Date(),
           },
         })
       );

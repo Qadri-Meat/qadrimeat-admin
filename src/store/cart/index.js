@@ -26,7 +26,6 @@ const cartSlice = createSlice({
     incrementQuantity: (state, action) => {
       const item = state.cart.find((item) => item.id === action.payload);
       item.quantity++;
-      console.log(item.price);
     },
     decrementQuantity: (state, action) => {
       const item = state.cart.find((item) => item.id === action.payload);
@@ -59,6 +58,9 @@ const cartSlice = createSlice({
       console.log(action.payload);
       itemIndex.isPackage = isPackage;
     },
+    reSetCart: (state) => {
+      state.cart = [];
+    },
   },
 });
 
@@ -72,4 +74,5 @@ export const {
   updateCartItemDay,
   updateCartItemTime,
   updateCartPackage,
+  reSetCart,
 } = cartSlice.actions;

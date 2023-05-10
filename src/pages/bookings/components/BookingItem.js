@@ -1,6 +1,5 @@
 import {
   Autocomplete,
-  Avatar,
   Box,
   Grid,
   IconButton,
@@ -16,6 +15,7 @@ import {
   addToCart,
   decrementQuantity,
   incrementQuantity,
+  reSetCart,
   removeItem,
   updateCartItemDay,
   updateCartItemTime,
@@ -24,6 +24,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { getDiscountPrice } from "helper/product";
+import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 const BookingItem = () => {
   const [searchBar, setSearchBar] = useState(0);
   const dispatch = useDispatch();
@@ -31,7 +32,9 @@ const BookingItem = () => {
   const { results } = useSelector((state) => state.deal);
   const items = useSelector((state) => state.reducer.cart);
   useEffect(() => {
-    dispatch(getDeals(""));
+    dispatch(reSetCart());
+    const query = `limit=${100}&page=${1}`;
+    dispatch(getDeals(query));
   }, [dispatch]);
   const columns = [
     {
@@ -51,9 +54,8 @@ const BookingItem = () => {
         customBodyRender: (value, tableMeta, updateValue) => {
           const image = value.length > 0 ? value[0] : "";
           return (
-            <Avatar
-              variant="rounded"
-              src={image === "" ? "" : process.env.REACT_APP_API_URL + image}
+            <MemoizedAvatar
+              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
             />
           );
         },
@@ -259,25 +261,25 @@ const BookingItem = () => {
       label: "Sub Total",
       options: {
         filter: false,
-      },
-      customBodyRender: (value, tableMeta, updateValue) => {
-        const { rowData } = tableMeta;
-        const cartItem = items.filter((item) => {
-          return item.id === rowData[0];
-        })[0];
-        const discountedPrice = getDiscountPrice(
-          cartItem.price,
-          cartItem.discount
-        );
-        const finalProductPrice = cartItem.price * 1;
-        const finalDiscountedPrice = discountedPrice * 1;
-        return (
-          <>
-            {discountedPrice !== null
-              ? "PKR " + finalDiscountedPrice * cartItem.quantity
-              : "PKR " + finalProductPrice * cartItem.quantity}
-          </>
-        );
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cart1Item = items.filter((item) => {
+            return item.id === rowData[0];
+          })[0];
+          const discountedPrice = getDiscountPrice(
+            cart1Item.price,
+            cart1Item.discount
+          );
+          const finalProductPrice = cart1Item.price * 1;
+          const finalDiscountedPrice = discountedPrice * 1;
+          return (
+            <>
+              {discountedPrice !== null
+                ? "PKR " + finalDiscountedPrice * cart1Item.quantity
+                : "PKR " + finalProductPrice * cart1Item.quantity}
+            </>
+          );
+        },
       },
     },
   ];
@@ -285,6 +287,12 @@ const BookingItem = () => {
   const options = {
     filterType: "checkbox",
     count: 100,
+    onRowsDelete: (rowsDeleted, dataRows) => {
+      rowsDeleted.data.forEach(({ index }) => {
+        const id = items[index].id; // obtain the id of the item to be deleted
+        dispatch(removeItem(id)); // dispatch the removeItem action with the id as the payload
+      });
+    },
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
       return (
         <Box

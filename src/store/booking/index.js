@@ -64,7 +64,6 @@ export const createBooking = createAsyncThunk(
 export const updateBooking = createAsyncThunk(
   "booking/updateDeal",
   async ({ id, data }, { rejectWithValue }) => {
-    console.log("In UpdateBooking Index", id, data);
     try {
       await BookingService.updateById({ id, data });
       return { success: true };

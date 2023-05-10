@@ -51,7 +51,7 @@ class DealService extends ApiService {
         formData.append(key, value);
       }
     });
-    return this.instance.patch(`/v1/deals/${id}`, data, config);
+    return this.instance.patch(`/v1/deals/${id}`, formData, config);
   }
   /**
    * Create a deal with the given data

@@ -37,8 +37,10 @@ const DataTable = (props) => {
     download: download,
     selectableRows: "none",
     sort: false,
+    responsive: "simple",
+    // standard","vertical","verticalAlways","simple"].
+
     onTableChange: (action, tableState) => {
-      console.log("tableChanging");
       if (serverSide !== false) {
         switch (action) {
           case "changePage":

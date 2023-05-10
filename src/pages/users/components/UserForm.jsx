@@ -16,7 +16,7 @@ const emailRegExp =
 const passwordRegix = /^(?=.*[a-z])(?=.*\d)[A-z\d#$@!%&*?]{8,30}$/;
 
 const schema = yup.object().shape({
-  name: yup.string(),
+  name: yup.string().required(),
   lastName: yup.string(),
   email: yup
     .string()
@@ -33,11 +33,9 @@ const schema = yup.object().shape({
     .max(12, "Password cannot exceed more than 12 characters"),
   Cpassword: yup
     .string()
-    .min(4, "Confirm Password length should be at least 4 characters")
-    .max(12, "Confirm Password cannot exceed more than 12 characters")
     .oneOf([yup.ref("password")], "Passwords do not match"),
+  role: yup.string().required("Role is a required field"),
 });
-
 const UserForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
   const { message, loading } = useSelector((state) => state.user);

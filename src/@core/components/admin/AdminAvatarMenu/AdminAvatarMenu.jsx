@@ -13,14 +13,11 @@ import {
   ClickAwayListener,
   ListItemIcon,
 } from "@mui/material";
-
 import AdminAvatarBadge from "../AdminAvatarBadge/AdminAvatarBadge";
-import { AccountCircle, Settings, ExitToApp } from "@mui/icons-material";
-
-import { useDispatch } from "react-redux";
+import { AccountCircle, ExitToApp } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "store/auth";
 import { useNavigate } from "react-router-dom";
-
 const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
@@ -32,23 +29,22 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: 0,
   },
 }));
-
 const AdminAvatarMenu = (props) => {
+  const auth = useSelector((state) => state.auth);
+  const user = auth?.user;
   const classes = useStyles(props);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
-
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
-
   const handleClose = (event) => {
+    navigate(`/profile?id=${user.id}`);
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
-
     setOpen(false);
   };
   const logoutHandler = () => {
@@ -128,12 +124,7 @@ const AdminAvatarMenu = (props) => {
                     </ListItemIcon>
                     Profile
                   </MenuItem>
-                  <MenuItem onClick={handleClose}>
-                    <ListItemIcon className={classes.menuIcon}>
-                      <Settings fontSize="small" />
-                    </ListItemIcon>
-                    settings
-                  </MenuItem>
+
                   <MenuItem onClick={logoutHandler}>
                     <ListItemIcon className={classes.menuIcon}>
                       <ExitToApp fontSize="small" />

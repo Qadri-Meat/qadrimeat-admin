@@ -19,7 +19,6 @@ const UpdateBookingPage = () => {
       } else if (!selectedBooking) {
         dispatch(getBooking(id));
       } else if (selectedBooking) {
-        console.log("test", selectedBooking.bookingItems);
         dispatch(addAllToCart(selectedBooking.bookingItems));
       }
     } else {
