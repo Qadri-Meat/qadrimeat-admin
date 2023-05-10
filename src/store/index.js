@@ -6,6 +6,7 @@ import auth from "store/auth";
 import user from "store/user";
 import deal from "store/deal";
 import booking from "store/booking";
+import expense from "store/expense";
 import { cartReducer } from "./cart";
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     user,
     deal,
     booking,
+    expense,
     reducer: cartReducer,
   },
   middleware: (getDefaultMiddleware) =>
