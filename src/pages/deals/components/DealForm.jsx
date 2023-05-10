@@ -46,7 +46,6 @@ const DealForm = ({ defaultValues }) => {
     resolver: yupResolver(schema),
   });
   const handleChange = (files) => {
-    console.log("before Compress", files);
     // Check if the file is an image
     if (files[0] ? files[0].type.startsWith("image/") : []) {
       // Compress the image
@@ -60,7 +59,6 @@ const DealForm = ({ defaultValues }) => {
             type: files[0].type,
           });
           // Set the compressed image as the new file
-          console.log("after compress", [compressedFile]);
           setFiles([compressedFile]);
         },
         error(err) {

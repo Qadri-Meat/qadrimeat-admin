@@ -36,10 +36,13 @@ const useStyles = makeStyles((theme) => ({
     marginTop: ".85rem",
   },
   loginCard: {
-    width: "275px",
+    width: "300px",
     borderRadius: 5,
     background: "#fff",
     padding: ".85rem",
+  },
+  textField: {
+    width: "100%",
   },
 }));
 

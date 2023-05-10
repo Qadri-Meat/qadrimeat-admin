@@ -4,6 +4,7 @@ import TokenService from "services/TokenService";
 
 const initialState = {
   user: TokenService.getUserData(),
+  loading: false,
 };
 
 export const loginUser = createAsyncThunk(

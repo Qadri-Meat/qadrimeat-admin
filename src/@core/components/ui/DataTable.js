@@ -37,7 +37,9 @@ const DataTable = (props) => {
     download: download,
     selectableRows: "none",
     sort: false,
-    responsive: "stacked",
+    responsive: "simple",
+    // standard","vertical","verticalAlways","simple"].
+
     onTableChange: (action, tableState) => {
       if (serverSide !== false) {
         switch (action) {

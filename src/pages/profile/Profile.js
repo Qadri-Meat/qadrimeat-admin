@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUser } from "store/user";
 import { pick } from "helper/pick";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -17,22 +18,29 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     padding: theme.spacing(3),
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
   },
-  textField: {
-    margin: theme.spacing(1),
-  },
-  button: {
-    margin: theme.spacing(1),
+  avatar: {
+    height: theme.spacing(15),
+    width: theme.spacing(15),
+    marginBottom: theme.spacing(2),
   },
 }));
+
 const Profile = () => {
   const location = useLocation();
   const { id } = pick(location.search);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const classes = useStyles();
-  const { user: authUser } = useSelector((state) => state.auth);
+  const { user: authUser } = useSelector((state) =>
+    state.auth ? state.auth : []
+  );
   const { details, success } = useSelector((state) => state.user);
+
   useEffect(() => {
     if (success) {
       navigate(`/profile?id=${id}`);
@@ -43,39 +51,45 @@ const Profile = () => {
       navigate("/login");
     }
   }, [authUser, dispatch, navigate, id, success]);
+
   return (
     <AdminLayout>
       <Grid container spacing={3}>
-        <Grid container item md={4} spacing={3}>
-          <Grid item xs={12}>
-            <Paper
-              className={classes.paper}
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
-              <Typography variant="h6" gutterBottom>
-                Profile Details
-              </Typography>
-              {details ? (
-                <>
-                  <Avatar
-                    style={{ height: "100px", width: "100px" }}
-                    src="/broken-image.jpg"
-                  />
-                  <Typography gutterBottom> {details.role}</Typography>
-                  <Typography gutterBottom> {details.name}</Typography>
-                  <Typography gutterBottom> {details.email}</Typography>
-                </>
-              ) : (
-                <Typography gutterBottom>No data available</Typography>
-              )}
-            </Paper>
-          </Grid>
+        <Grid item xs={12} md={4}>
+          <Paper
+            className={classes.paper}
+            style={{ textAlign: "center", padding: "2rem" }}
+          >
+            <Avatar
+              alt={details?.name}
+              src="/broken-image.jpg"
+              className={classes.avatar}
+              style={{ width: "150px", height: "150px", marginBottom: "1rem" }}
+            />
+            {details ? (
+              <>
+                <Typography
+                  variant="h5"
+                  gutterBottom
+                  style={{ fontWeight: "bold", marginBottom: "0.5rem" }}
+                >
+                  {details.name}
+                </Typography>
+                <Typography
+                  variant="subtitle1"
+                  gutterBottom
+                  style={{ color: "#757575", marginBottom: "1rem" }}
+                >
+                  {details.role}
+                </Typography>
+                <Typography gutterBottom>{details.email}</Typography>
+              </>
+            ) : (
+              <Typography gutterBottom>No data available</Typography>
+            )}
+          </Paper>
         </Grid>
+
         <Grid item xs={12} md={8}>
           {details ? (
             <UserForm defaultValues={details} />
