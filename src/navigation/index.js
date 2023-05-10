@@ -2,6 +2,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
+import ReceiptIcon from "@mui/icons-material/Receipt";
 const navigation = [
   {
     id: "Main",
@@ -58,6 +59,14 @@ const navigation = [
             exact: "true",
           },
         ],
+      },
+      {
+        id: "expenses",
+        title: "Expenses",
+        type: "item",
+        icon: <ReceiptIcon />,
+        url: "/expenses",
+        exact: "true",
       },
     ],
   },
