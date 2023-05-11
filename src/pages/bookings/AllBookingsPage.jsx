@@ -19,9 +19,7 @@ const AllBookingsPage = () => {
   const [page, setPage] = useState("");
   const data = useSelector((state) => state.booking);
   const { user: authUser } = useSelector((state) => state.auth);
-  const query = `${page}&type=${type}${
-    paid !== undefined ? `&isPaid=${paid}` : ""
-  }`;
+  const query = `${page}${paid !== undefined ? `&isPaid=${paid}` : ""}`;
   useEffect(() => {
     if (authUser) {
       dispatch(getBookings(query));

@@ -82,7 +82,7 @@ const AllExpensesPage = () => {
           </Grid>
         </Grid>
         <DataTable
-          title={"Users List"}
+          title={"Expense List"}
           columns={columns}
           data={data}
           setQuery={setSelectedPage}
