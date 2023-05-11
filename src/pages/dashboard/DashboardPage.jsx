@@ -11,15 +11,17 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+
 const DashboardPage = (props) => {
   const navigate = useNavigate();
+
   return (
     <AdminLayout>
       <h2>Dashboard</h2>
       <AdminBreadcrumbs />
       <Grid container spacing={2}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
@@ -36,7 +38,7 @@ const DashboardPage = (props) => {
               </CardActions>
             </Card>
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
@@ -56,7 +58,7 @@ const DashboardPage = (props) => {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
@@ -75,13 +77,11 @@ const DashboardPage = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid style={{ marginTop: 10 }} item container spacing={2}>
+      <Grid style={{ marginTop: 20 }} container spacing={2}>
         <Grid item xs={12} md={7}>
-          <Grid item xs={12}>
-            <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
-              <Typography variant="h5">Booking Reports</Typography>
-            </Paper>
-          </Grid>
+          <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
+            <Typography variant="h5">Booking Reports</Typography>
+          </Paper>
         </Grid>
         <Grid item xs={12} md={5}>
           <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
