@@ -67,7 +67,7 @@ const LoginPage = (props) => {
     if (authUser) {
       navigate("/");
     }
-  }, [authUser, navigate, loading]);
+  }, [navigate, authUser]);
 
   const errorMessage = message ? (
     <Message severity="error">{message}</Message>

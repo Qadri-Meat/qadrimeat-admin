@@ -78,8 +78,11 @@ const ExpenseForm = ({ defaultValues }) => {
               error={!!errors.type}
               helperText={errors?.type?.message}
             >
-              <MenuItem value="booking">Qurbani</MenuItem>
-              <MenuItem value="order">Order</MenuItem>
+              <MenuItem value="Labor_costs">Labor costs</MenuItem>
+              <MenuItem value="Raw_material">Raw materials</MenuItem>
+              <MenuItem value="Equipment">Equipment and supplies</MenuItem>
+              <MenuItem value="Utilities">Utilities</MenuItem>
+              <MenuItem value="Marketing">Marketing and advertising</MenuItem>
             </SelectInput>
           </Grid>
           <Grid item xs={12} sx={{ textAlign: "center" }}>
