@@ -11,9 +11,15 @@ const AllDealsPage = () => {
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
   const data = useSelector((state) => state.deal);
+  const { user: authUser } = useSelector((state) => state.auth);
   useEffect(() => {
-    dispatch(getDeals(query));
-  }, [dispatch, query]);
+    console.log(authUser);
+    if (authUser) {
+      dispatch(getDeals(query));
+    } else {
+      navigate("/login");
+    }
+  }, [navigate, dispatch, query, authUser]);
   const onDelete = async (value) => {
     await dispatch(deleteDeal(value));
     dispatch(getDeals(query)); // re-fetch the Deals data
@@ -77,10 +83,14 @@ const AllDealsPage = () => {
         data={data}
         columns={columns}
         setQuery={setQuery}
-        onEdit={(value) => {
-          navigate(`/deals/${value}`);
-        }}
-        onDelete={onDelete}
+        onEdit={
+          authUser.role === "user"
+            ? null
+            : (value) => {
+                navigate(`/deals/${value}`);
+              }
+        }
+        onDelete={authUser.role === "user" ? null : onDelete}
       />
     </AdminLayout>
   );

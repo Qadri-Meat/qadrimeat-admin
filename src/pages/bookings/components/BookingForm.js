@@ -82,7 +82,6 @@ const BookingForm = ({ preloadedValues }) => {
       },
       shippingPrice: 0,
       totalPrice: cart1TotalPrice,
-      type: "retail",
       discount,
       deliveryTime: Date.now(),
     };
