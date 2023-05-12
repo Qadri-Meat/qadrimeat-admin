@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
 import {
@@ -11,10 +11,23 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { getDashboard } from "store/user";
+import BookingReportsTable from "./BookingRepotTable";
+import BookingTable from "./BookingTable";
 
-const DashboardPage = (props) => {
+const DashboardPage = () => {
+  const { todayReport, reports, deals } = useSelector((state) => state.user);
+  const { user: authUser } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (authUser) {
+      dispatch(getDashboard());
+    } else {
+      navigate("/login");
+    }
+  }, [authUser, dispatch, navigate]);
   return (
     <AdminLayout>
       <h2>Dashboard</h2>
@@ -28,7 +41,7 @@ const DashboardPage = (props) => {
                   Today's Bookings
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Rs {/* {todayReport ? todayReport.totalBookings || 0 : 0} */}
+                  {todayReport ? todayReport.totalBookings || 0 : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -46,10 +59,10 @@ const DashboardPage = (props) => {
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Rs{" "}
-                  {/* {todayReport
+                  {todayReport
                     ? (todayReport.orderSales || 0) +
                       (todayReport.bookingSales || 0)
-                    : 0} */}
+                    : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -65,7 +78,7 @@ const DashboardPage = (props) => {
                   Today's Expenses
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Rs {/* Rs {todayReport ? todayReport.expenses || 0 : 0} */}
+                  Rs {todayReport ? todayReport.expenses || 0 : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -81,11 +94,13 @@ const DashboardPage = (props) => {
         <Grid item xs={12} md={7}>
           <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
             <Typography variant="h5">Booking Reports</Typography>
+            {reports ? <BookingReportsTable reports={reports} /> : <></>}
           </Paper>
         </Grid>
         <Grid item xs={12} md={5}>
           <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
             <Typography variant="h5">Total Bookings</Typography>
+            {deals ? <BookingTable deals={deals} /> : <></>}
           </Paper>
         </Grid>
       </Grid>

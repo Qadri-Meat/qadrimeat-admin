@@ -6,6 +6,11 @@ class UserService extends ApiService {
    * @param {string} query - Optional query parameters
    * @returns {Promise<User>}
    */
+
+  getDashboard() {
+    return this.instance.get(`v1/users/dashboard`);
+  }
+
   getAll(query) {
     return this.instance.get(`/v1/users?${query}`);
   }

@@ -76,29 +76,27 @@ const AdminAvatarMenu = (props) => {
             <Avatar alt="Mohammad Admin" src="" />
           </AdminAvatarBadge>
         </ListItemAvatar>
-        {/* <Hidden implementation="css" smDown>
-          <ListItemText
-            primary={
-              <React.Fragment>
-                <Typography component="span" variant="subtitle2">
-                  {user && user.name}
-                </Typography>
-              </React.Fragment>
-            }
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.inline}
-                  color="textPrimary"
-                >
-                  {user && user.role}
-                </Typography>
-              </React.Fragment>
-            }
-          />
-        </Hidden> */}
+
+        {/* <ListItemText
+          primary={
+            <React.Fragment>
+              <Typography component="span" variant="subtitle2">
+                {user && user.name}
+              </Typography>
+            </React.Fragment>
+          }
+          secondary={
+            <React.Fragment>
+              <Typography
+                component="span"
+                variant="caption"
+                className={classes.inline}
+              >
+                {user && user.role}
+              </Typography>
+            </React.Fragment>
+          }
+        /> */}
       </ListItem>
       <Popper
         open={open}

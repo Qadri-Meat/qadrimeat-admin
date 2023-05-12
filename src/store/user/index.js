@@ -1,11 +1,23 @@
 import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
 import UserService from "services/UserService";
 const initialState = {};
+
 export const getUsers = createAsyncThunk(
   "users/getAll",
   async (params, { rejectWithValue }) => {
     try {
       const res = await UserService.getAll(params);
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+export const getDashboard = createAsyncThunk(
+  "users/getAll",
+  async (params, { rejectWithValue }) => {
+    try {
+      const res = await UserService.getDashboard();
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -24,7 +36,6 @@ export const getUser = createAsyncThunk(
     }
   }
 );
-
 export const createUser = createAsyncThunk(
   "users/create",
   async (data, { rejectWithValue }) => {

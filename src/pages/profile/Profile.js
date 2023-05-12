@@ -36,9 +36,7 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const classes = useStyles();
-  const { user: authUser } = useSelector((state) =>
-    state.auth ? state.auth : []
-  );
+  const { user: authUser } = useSelector((state) => state.auth);
   const { details, success } = useSelector((state) => state.user);
 
   useEffect(() => {
