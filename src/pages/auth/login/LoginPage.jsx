@@ -36,22 +36,21 @@ const useStyles = makeStyles((theme) => ({
     marginTop: ".85rem",
   },
   loginCard: {
-    width: "300px",
+    width: "275px",
     borderRadius: 5,
     background: "#fff",
     padding: ".85rem",
   },
-  textField: {
-    width: "100%",
-  },
 }));
 
-const LoginPage = (props) => {
+const LoginPage = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+
   const dispatch = useDispatch();
-  const auth = useSelector((state) => (state.auth ? state.auth : {}));
-  const { user: authUser, message, loading } = auth;
+
+  const { message, loading, user } = useSelector((state) => state.auth);
+
   const {
     register,
     handleSubmit,
@@ -60,29 +59,31 @@ const LoginPage = (props) => {
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
+
   const onSubmit = (data) => {
     dispatch(loginUser(data));
   };
+
   useEffect(() => {
-    if (authUser) {
+    if (user) {
       navigate("/");
     }
-  }, [authUser, navigate, loading]);
+  }, [user, navigate]);
 
-  const errorMessage = message ? (
-    <Message severity="error">{message}</Message>
-  ) : null;
   return (
     <div className={classes.root}>
       <div className={classes.loginCard}>
         <Typography variant="h5" component="h1">
           Login
         </Typography>
+        {/* <Typography className={classes.brand} variant="h5" component="h1">
+          Login
+        </Typography> */}
         <Typography className={classes.mBottom} variant="body1">
           Sign In to your account
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
-          {errorMessage}
+          {message && <Message severity="error">{message}</Message>}
           <FormInput
             {...register("email")}
             id="email"
@@ -101,6 +102,7 @@ const LoginPage = (props) => {
             error={!!errors.password}
             helperText={errors?.password?.message}
           />
+
           <div className={classes.mBottom}>
             <Button
               variant="contained"

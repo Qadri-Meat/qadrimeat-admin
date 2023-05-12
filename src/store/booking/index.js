@@ -50,8 +50,13 @@ export const createBooking = createAsyncThunk(
   "booking/create",
   async (data, { rejectWithValue }) => {
     try {
-      await BookingService.create(data);
+      const res = await BookingService.create(data);
+      const totalPaid1 = res.data.transactions.reduce(function (a, b) {
+        return a + b.amount;
+      }, 0);
       return {
+        loading: false,
+        selectedBooking: { ...res.data, totalPaid: totalPaid1 || 0 },
         success: true,
       };
     } catch (err) {
@@ -109,7 +114,7 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
-const userSlice = createSlice({
+const bookingSlice = createSlice({
   name: "bookings",
   initialState,
   extraReducers: (builder) => {
@@ -150,5 +155,5 @@ const userSlice = createSlice({
   },
 });
 
-const { reducer } = userSlice;
+const { reducer } = bookingSlice;
 export default reducer;

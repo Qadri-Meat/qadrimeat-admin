@@ -126,7 +126,6 @@ const AllBookingItemsPage = () => {
             <TableCell align="right">Quantity</TableCell>
             <TableCell align="right">Time</TableCell>
           </TableRow>
-
           {bookingItems && bookingItems.length > 0 ? (
             <TableBody>
               {bookingItems.map((item) => (

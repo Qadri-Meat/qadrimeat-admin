@@ -1,23 +1,11 @@
 import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
-import UserService from "services/UserService";
+import ExpenseService from "services/ExpenseServices";
 const initialState = {};
-
-export const getUsers = createAsyncThunk(
+export const getExpenses = createAsyncThunk(
   "users/getAll",
   async (params, { rejectWithValue }) => {
     try {
-      const res = await UserService.getAll(params);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
-export const getDashboard = createAsyncThunk(
-  "users/getAll",
-  async (params, { rejectWithValue }) => {
-    try {
-      const res = await UserService.getDashboard();
+      const res = await ExpenseService.getAll(params);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -25,22 +13,23 @@ export const getDashboard = createAsyncThunk(
   }
 );
 
-export const getUser = createAsyncThunk(
+export const getExpense = createAsyncThunk(
   "users/get",
   async (id, { rejectWithValue }) => {
     try {
-      const res = await UserService.get(id);
+      const res = await ExpenseService.get(id);
       return { details: res.data };
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
   }
 );
-export const createUser = createAsyncThunk(
+
+export const createExpense = createAsyncThunk(
   "users/create",
   async (data, { rejectWithValue }) => {
     try {
-      await UserService.create(data);
+      await ExpenseService.create(data);
       return { success: true };
     } catch (err) {
       console.log("Error is", err.response.data.message);
@@ -49,12 +38,12 @@ export const createUser = createAsyncThunk(
   }
 );
 
-export const updateUser = createAsyncThunk(
+export const updateExpense = createAsyncThunk(
   "users/updateUser",
   async ({ id, data }, { rejectWithValue }) => {
     console.log(id, data);
     try {
-      await UserService.updateById({ id, data });
+      await ExpenseService.updateById({ id, data });
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -62,11 +51,11 @@ export const updateUser = createAsyncThunk(
   }
 );
 
-export const deleteUser = createAsyncThunk(
+export const deleteExpense = createAsyncThunk(
   "user/delete",
   async (id, { rejectWithValue }) => {
     try {
-      await UserService.delete(id);
+      await ExpenseService.delete(id);
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -74,16 +63,16 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-const userSlice = createSlice({
+const expenseSlice = createSlice({
   name: "users",
   initialState,
   extraReducers: (builder) => {
     builder.addMatcher(
       isAnyOf(
-        getUsers.pending,
-        getUser.pending,
-        createUser.pending,
-        updateUser.pending
+        getExpenses.pending,
+        getExpense.pending,
+        createExpense.pending,
+        updateExpense.pending
       ),
       (state, action) => {
         state.loading = true;
@@ -91,10 +80,10 @@ const userSlice = createSlice({
     );
     builder.addMatcher(
       isAnyOf(
-        getUsers.fulfilled,
-        getUser.fulfilled,
-        createUser.fulfilled,
-        updateUser.fulfilled
+        getExpenses.fulfilled,
+        getExpense.fulfilled,
+        createExpense.fulfilled,
+        updateExpense.fulfilled
       ),
       (state, action) => {
         return action.payload;
@@ -102,10 +91,10 @@ const userSlice = createSlice({
     );
     builder.addMatcher(
       isAnyOf(
-        getUsers.rejected,
-        getUser.rejected,
-        createUser.rejected,
-        updateUser.rejected
+        getExpenses.rejected,
+        getExpense.rejected,
+        createExpense.rejected,
+        updateExpense.rejected
       ),
       (state, action) => {
         state.loading = false;
@@ -115,5 +104,5 @@ const userSlice = createSlice({
   },
 });
 
-const { reducer } = userSlice;
+const { reducer } = expenseSlice;
 export default reducer;

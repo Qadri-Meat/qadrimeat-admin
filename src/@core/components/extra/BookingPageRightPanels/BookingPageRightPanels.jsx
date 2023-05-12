@@ -42,17 +42,6 @@ const BookingPageRightPanels = () => {
         })
       );
       dispatch(getBooking(id));
-    } else if (selectedBooking.status === "approved") {
-      await dispatch(
-        updateBooking({
-          id: selectedBooking.id,
-          data: {
-            status: "delivered",
-            deliveredAt: new Date(),
-          },
-        })
-      );
-      dispatch(getBooking(id));
     }
   };
   const handleCreateTransaction = async () => {
@@ -113,12 +102,10 @@ const BookingPageRightPanels = () => {
             </Grid>
             <Grid container>
               <Grid item container justify="space-around">
-                {selectedBooking && selectedBooking.status === "delivered" ? (
+                {selectedBooking && selectedBooking.status === "approved" ? (
                   <Message severity="success">
-                    Delivered at{" "}
-                    {new Date(selectedBooking.deliveredAt).toLocaleDateString()}
-                    ,{" "}
-                    {new Date(selectedBooking.deliveredAt).toLocaleTimeString()}
+                    Approved at{" "}
+                    {new Date(selectedBooking.approvedAt).toLocaleDateString()}
                   </Message>
                 ) : (
                   <>

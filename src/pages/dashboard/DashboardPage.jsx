@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
 import {
@@ -11,39 +11,37 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-const DashboardPage = (props) => {
+import { useDispatch, useSelector } from "react-redux";
+import { getDashboard } from "store/user";
+import BookingReportsTable from "./BookingRepotTable";
+import BookingTable from "./BookingTable";
+
+const DashboardPage = () => {
+  const { todayReport, reports, deals } = useSelector((state) => state.user);
+  const { user: authUser } = useSelector((state) => state.auth);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (authUser) {
+      dispatch(getDashboard());
+    } else {
+      navigate("/login");
+    }
+  }, [authUser, dispatch, navigate]);
   return (
     <AdminLayout>
       <h2>Dashboard</h2>
       <AdminBreadcrumbs />
       <Grid container spacing={2}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={3}>
-            <Card>
-              <CardContent>
-                <Typography variant="h5" component="div">
-                  Today's Orders
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Rs {/* {todayReport ? todayReport.totalOrders || 0 : 0} */}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small" href="/orders">
-                  View All
-                </Button>
-              </CardActions>
-            </Card>
-          </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
                   Today's Bookings
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Rs {/* {todayReport ? todayReport.totalBookings || 0 : 0} */}
+                  {todayReport ? todayReport.totalBookings || 0 : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -53,7 +51,7 @@ const DashboardPage = (props) => {
               </CardActions>
             </Card>
           </Grid>
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
@@ -61,10 +59,10 @@ const DashboardPage = (props) => {
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
                   Rs{" "}
-                  {/* {todayReport
+                  {todayReport
                     ? (todayReport.orderSales || 0) +
                       (todayReport.bookingSales || 0)
-                    : 0} */}
+                    : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -73,14 +71,14 @@ const DashboardPage = (props) => {
             </Card>
           </Grid>
 
-          <Grid item xs={12} md={3}>
+          <Grid item xs={12} md={4}>
             <Card>
               <CardContent>
                 <Typography variant="h5" component="div">
                   Today's Expenses
                 </Typography>
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  Rs {/* Rs {todayReport ? todayReport.expenses || 0 : 0} */}
+                  Rs {todayReport ? todayReport.expenses || 0 : 0}
                 </Typography>
               </CardContent>
               <CardActions>
@@ -92,25 +90,17 @@ const DashboardPage = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      <Grid style={{ marginTop: 10 }} item container spacing={2}>
+      <Grid style={{ marginTop: 20 }} container spacing={2}>
         <Grid item xs={12} md={7}>
-          <Grid item xs={12}>
-            <Paper style={{ padding: 10 }} variant="outlined">
-              <Typography variant="h5">Order Reports</Typography>
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
-              <Typography variant="h5">Booking Reports</Typography>
-            </Paper>
-          </Grid>
+          <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
+            <Typography variant="h5">Booking Reports</Typography>
+            {reports ? <BookingReportsTable reports={reports} /> : <></>}
+          </Paper>
         </Grid>
         <Grid item xs={12} md={5}>
-          <Paper style={{ padding: 10 }} variant="outlined">
-            <Typography variant="h5">Total Stocks</Typography>
-          </Paper>
           <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
             <Typography variant="h5">Total Bookings</Typography>
+            {deals ? <BookingTable deals={deals} /> : <></>}
           </Paper>
         </Grid>
       </Grid>

@@ -29,7 +29,6 @@ export default class ApiService {
 
   handleRequest(config) {
     config.headers["Authorization"] = `Bearer ${TokenService.getAccessToken()}`;
-
     return config;
   }
 

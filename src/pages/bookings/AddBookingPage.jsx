@@ -13,7 +13,7 @@ const AddBookingPage = () => {
   useEffect(() => {
     if (user) {
       if (success) {
-        navigate(`/bookings`);
+        navigate(`/bookings/${selectedBooking.id}`);
       }
     } else {
       navigate("/login");

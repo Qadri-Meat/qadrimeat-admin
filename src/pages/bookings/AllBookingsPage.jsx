@@ -19,9 +19,7 @@ const AllBookingsPage = () => {
   const [page, setPage] = useState("");
   const data = useSelector((state) => state.booking);
   const { user: authUser } = useSelector((state) => state.auth);
-  const query = `${page}&type=${type}${
-    paid !== undefined ? `&isPaid=${paid}` : ""
-  }`;
+  const query = `${page}${paid !== undefined ? `&isPaid=${paid}` : ""}`;
   useEffect(() => {
     if (authUser) {
       dispatch(getBookings(query));
@@ -88,16 +86,6 @@ const AllBookingsPage = () => {
         },
       },
     },
-    {
-      name: "deliveredAt",
-      label: "Delivered",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-        },
-      },
-    },
   ];
 
   return (
@@ -148,24 +136,6 @@ const AllBookingsPage = () => {
               <ToggleButton value="true">Paid</ToggleButton>
               <ToggleButton value="false">No Paid</ToggleButton>
             </ToggleButtonGroup>
-            <ToggleButtonGroup
-              color="primary"
-              value={type}
-              size="small"
-              exclusive
-              onChange={(event, value) => {
-                navigate(
-                  `/bookings?type=${
-                    value !== undefined && value !== null
-                      ? `${value}`
-                      : `${type}`
-                  }`
-                );
-              }}
-            >
-              <ToggleButton value="online">Online</ToggleButton>
-              <ToggleButton value="retail">Retail</ToggleButton>
-            </ToggleButtonGroup>
           </Grid>
         </Grid>
       </Grid>
@@ -174,10 +144,14 @@ const AllBookingsPage = () => {
         data={data}
         columns={columns}
         setQuery={setPage}
-        onEdit={(value) => {
-          navigate(`/bookings/${value}`);
-        }}
-        onDelete={onDelete}
+        onEdit={
+          authUser.role === "user"
+            ? null
+            : (value) => {
+                navigate(`/bookings/${value}`);
+              }
+        }
+        onDelete={authUser.role === "user" ? null : onDelete}
       />
     </AdminLayout>
   );

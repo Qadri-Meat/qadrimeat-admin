@@ -78,11 +78,10 @@ const DealForm = ({ defaultValues }) => {
       dispatch(createDeal(data));
     }
   };
-
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       {message && <Message severity="error">{message}</Message>}
-
+      <h6>{defaultValues ? defaultValues.category : null}</h6>
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <FormInput
@@ -160,10 +159,11 @@ const DealForm = ({ defaultValues }) => {
             control={control}
             error={!!errors.category}
             helperText={errors.category?.message || " "}
+            defaultValue={defaultValues ? defaultValues.category : "chicken"}
           >
             <MenuItem value="chicken">Chicken</MenuItem>
-            <MenuItem value="mutton">Mutton</MenuItem>
-            <MenuItem value="beef">Beef</MenuItem>
+            <MenuItem value="cow">Cow</MenuItem>
+            <MenuItem value="goat">Goat</MenuItem>
           </SelectInput>
         </Grid>
         <Grid item xs={12}>

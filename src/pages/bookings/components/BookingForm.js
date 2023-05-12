@@ -82,7 +82,6 @@ const BookingForm = ({ preloadedValues }) => {
       },
       shippingPrice: 0,
       totalPrice: cart1TotalPrice,
-      type: "retail",
       discount,
       deliveryTime: Date.now(),
     };
@@ -210,7 +209,7 @@ const BookingForm = ({ preloadedValues }) => {
       </Form>
       {itemsError && (
         <Alert style={{ marginTop: "10px" }} severity="error">
-          Items can't be empty
+          please select the Deal
         </Alert>
       )}
     </Fragment>
