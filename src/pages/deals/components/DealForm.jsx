@@ -11,7 +11,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
 import { createDeal, updateDeal } from "store/deal";
 import { DropzoneArea } from "material-ui-dropzone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Compressor from "compressorjs";
 
 const schema = yup.object().shape({
@@ -27,24 +27,31 @@ const schema = yup.object().shape({
     .required()
     .positive()
     .typeError("Stock is required field"),
-  category: yup.string().required("Category is a required field"),
+  category: yup.string().required("category is required field"),
 });
 const DealForm = ({ defaultValues }) => {
+  useEffect(() => {
+    console.log(defaultValues?.image);
+  }, [defaultValues]);
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const { message, loading } = useSelector((state) => state.deal);
+  const defaultFormValues = {
+    ...defaultValues,
+    category: "", // Set category as an empty string if it's undefined
+    image: "",
+  };
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      ...defaultValues,
-    },
+    defaultValues: defaultFormValues,
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
+
   const handleChange = (files) => {
     // Check if the file is an image
     if (files[0] ? files[0].type.startsWith("image/") : []) {
@@ -71,6 +78,7 @@ const DealForm = ({ defaultValues }) => {
     }
   };
   const onSubmit = (data) => {
+    console.log(data);
     data.image = files;
     if (defaultValues) {
       dispatch(updateDeal({ id: defaultValues.id, data }));
@@ -81,7 +89,7 @@ const DealForm = ({ defaultValues }) => {
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       {message && <Message severity="error">{message}</Message>}
-      <h6>{defaultValues ? defaultValues.category : null}</h6>
+
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <FormInput
@@ -158,8 +166,7 @@ const DealForm = ({ defaultValues }) => {
             label="Category"
             control={control}
             error={!!errors.category}
-            helperText={errors.category?.message || " "}
-            defaultValue={defaultValues ? defaultValues.category : "chicken"}
+            helperText={errors?.category?.message}
           >
             <MenuItem value="chicken">Chicken</MenuItem>
             <MenuItem value="cow">Cow</MenuItem>
@@ -176,7 +183,6 @@ const DealForm = ({ defaultValues }) => {
             dropzoneText=""
           />
         </Grid>
-
         <Grid item xs={12} sx={{ textAlign: "center" }}>
           <Button
             variant="contained"

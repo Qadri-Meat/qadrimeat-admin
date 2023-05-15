@@ -62,7 +62,6 @@ export const deleteExpense = createAsyncThunk(
     }
   }
 );
-
 const expenseSlice = createSlice({
   name: "users",
   initialState,
@@ -98,7 +97,6 @@ const expenseSlice = createSlice({
       ),
       (state, action) => {
         state.loading = false;
-        state.message = action.payload.message;
       }
     );
   },

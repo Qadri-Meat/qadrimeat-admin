@@ -13,7 +13,6 @@ const AllDealsPage = () => {
   const data = useSelector((state) => state.deal);
   const { user: authUser } = useSelector((state) => state.auth);
   useEffect(() => {
-    console.log(authUser);
     if (authUser) {
       dispatch(getDeals(query));
     } else {
