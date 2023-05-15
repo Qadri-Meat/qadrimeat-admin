@@ -15,6 +15,7 @@ const DataTable = (props) => {
     onDelete,
     download,
     serverSide,
+    searchIcon,
   } = props;
 
   const [page, setPage] = useState(1);
@@ -38,6 +39,7 @@ const DataTable = (props) => {
     selectableRows: "none",
     sort: false,
     responsive: "simple",
+    search: searchIcon,
     // standard","vertical","verticalAlways","simple"].
 
     onTableChange: (action, tableState) => {
