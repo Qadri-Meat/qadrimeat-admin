@@ -81,7 +81,7 @@ const BookingForm = ({ preloadedValues }) => {
         country: "Pakistan",
       },
       shippingPrice: 0,
-      totalPrice: cart1TotalPrice,
+      totalPrice: cart1TotalPrice ? cart1TotalPrice : 0,
       discount,
       deliveryTime: Date.now(),
     };

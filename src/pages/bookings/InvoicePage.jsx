@@ -99,7 +99,8 @@ const InvoicePage = (props) => {
                           {selectedBooking.shippingDetails.postalCode},{" "}
                           {selectedBooking.shippingDetails.country}
                           <br />
-                          Note: {selectedBooking.shippingDetails.notes}
+                          <strong>Note:</strong>{" "}
+                          {selectedBooking.shippingDetails.notes}
                         </p>
                       </div>
 
@@ -180,7 +181,7 @@ const InvoicePage = (props) => {
                                       alt={item.name}
                                       src={
                                         item.image.length > 0
-                                          ? process.env.REACT_APP_API_URL +
+                                          ? process.env.REACT_APP_IMAGE_URL +
                                             item.image[0]
                                           : ""
                                       }
