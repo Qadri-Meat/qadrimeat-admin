@@ -27,7 +27,21 @@ const schema = yup.object().shape({
     .required()
     .positive()
     .typeError("Stock is required field"),
-  category: yup.string().required("category is required field"),
+  category: yup
+    .mixed()
+    .test("isCategoryValid", "Category is a required field", function (value) {
+      return (
+        value !== undefined &&
+        (typeof value === "string" || Array.isArray(value))
+      );
+    })
+    .transform(function (value, originalValue) {
+      if (originalValue && typeof originalValue === "string") {
+        return [originalValue];
+      }
+      return value;
+    })
+    .nullable(true),
 });
 const DealForm = ({ defaultValues }) => {
   useEffect(() => {
@@ -38,7 +52,8 @@ const DealForm = ({ defaultValues }) => {
   const { message, loading } = useSelector((state) => state.deal);
   const defaultFormValues = {
     ...defaultValues,
-    category: "", // Set category as an empty string if it's undefined
+
+    // Set category as an empty string if it's undefined
     image: "",
   };
   const {
@@ -78,7 +93,8 @@ const DealForm = ({ defaultValues }) => {
     }
   };
   const onSubmit = (data) => {
-    console.log(data);
+    data.category = data.category[0];
+
     data.image = files;
     if (defaultValues) {
       dispatch(updateDeal({ id: defaultValues.id, data }));
