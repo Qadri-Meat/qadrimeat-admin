@@ -83,13 +83,13 @@ const AllDealsPage = () => {
         columns={columns}
         setQuery={setQuery}
         onEdit={
-          authUser.role === "user"
+          authUser?.role === "user"
             ? null
             : (value) => {
                 navigate(`/deals/${value}`);
               }
         }
-        onDelete={authUser.role === "user" ? null : onDelete}
+        onDelete={authUser?.role === "user" ? null : onDelete}
       />
     </AdminLayout>
   );

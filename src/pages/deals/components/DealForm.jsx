@@ -45,14 +45,16 @@ const schema = yup.object().shape({
 });
 const DealForm = ({ defaultValues }) => {
   useEffect(() => {
-    console.log(defaultValues?.image);
+    console.log(
+      "image is",
+      process.env.REACT_APP_IMAGE_URL + defaultValues?.image
+    );
   }, [defaultValues]);
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const { message, loading } = useSelector((state) => state.deal);
   const defaultFormValues = {
     ...defaultValues,
-
     // Set category as an empty string if it's undefined
     image: "",
   };
@@ -196,6 +198,7 @@ const DealForm = ({ defaultValues }) => {
             showAlerts={false}
             filesLimit={5}
             dropzoneText=""
+            initialFiles={defaultValues?.image ? [defaultValues.image] : []}
           />
         </Grid>
         <Grid item xs={12} sx={{ textAlign: "center" }}>
