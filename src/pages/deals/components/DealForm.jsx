@@ -176,7 +176,6 @@ const DealForm = ({ defaultValues }) => {
         <Grid item xs={12}>
           <DropzoneArea
             maxFileSize={5242880}
-            initialFiles={defaultValues ? defaultValues.image : []}
             onChange={handleChange}
             showAlerts={false}
             filesLimit={5}

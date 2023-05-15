@@ -77,55 +77,47 @@ const AllBookingItemsPage = () => {
           xs={12}
           spacing={1}
         >
-          {results && results.length > 0 ? (
+          {results && results.length > 0 && (
             <>
-              <Grid item xs={12} sm={6}>
-                <InputLabel id="deal-label">Deal</InputLabel>
-                <Select
-                  labelId="deal-label"
-                  id="deal"
-                  name="deal"
-                  variant="outlined"
-                  label="Deal"
-                  style={{ width: "300px" }}
-                  onChange={(event) => {
-                    navigate(
-                      `/bookings/booking-items?day=${day}&deal=${event.target.value}`
-                    );
-                  }}
-                >
-                  {results.map((item) => (
-                    <MenuItem key={item.id} value={item.id}>
-                      {item.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <ToggleButtonGroup
-                  onChange={(event, value) => {
-                    navigate(
-                      `/bookings/booking-items?day=${value}${
-                        deal ? `&deal=${deal}` : ""
-                      }`
-                    );
-                  }}
-                  value={day}
-                  color="primary"
-                  size="small"
-                  exclusive
-                >
-                  <ToggleButton value="1">Day 1</ToggleButton>
-                  <ToggleButton value="2">Day 2</ToggleButton>
-                  <ToggleButton value="3">Day 3</ToggleButton>
-                </ToggleButtonGroup>
-              </Grid>
+              <InputLabel id="deal-label">Deal</InputLabel>
+              <Select
+                labelId="deal-label"
+                id="deal"
+                name="deal"
+                variant="outlined"
+                label="Deal"
+                style={{ width: "300px" }}
+                onChange={(event) => {
+                  navigate(
+                    `/bookings/booking-items?day=${day}&deal=${event.target.value}`
+                  );
+                }}
+              >
+                {results.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
             </>
-          ) : (
-            <Grid item xs={12}>
-              No deal items available.
-            </Grid>
           )}
+          <ToggleButtonGroup
+            onChange={(event, value) => {
+              navigate(
+                `/bookings/booking-items?day=${value}${
+                  deal ? `&deal=${deal}` : ""
+                }`
+              );
+            }}
+            value={day}
+            color="primary"
+            size="small"
+            exclusive
+          >
+            <ToggleButton value="1">Day 1</ToggleButton>
+            <ToggleButton value="2">Day 2</ToggleButton>
+            <ToggleButton value="3">Day 3</ToggleButton>
+          </ToggleButtonGroup>
         </Grid>
       </FormControl>
 
