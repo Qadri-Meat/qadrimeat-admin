@@ -44,7 +44,6 @@ const AdminAvatarMenu = (props) => {
     setOpen((prevOpen) => !prevOpen);
   };
   const handleClose = (event) => {
-    navigate(`/profile?id=${user.id}`);
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
@@ -54,6 +53,10 @@ const AdminAvatarMenu = (props) => {
     dispatch(logoutUser()).then(() => {
       navigate("/login");
     });
+  };
+
+  const handleProfile = () => {
+    navigate(`/profile?id=${user.id}`);
   };
   return (
     <>
@@ -118,7 +121,7 @@ const AdminAvatarMenu = (props) => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="menu-list-grow">
-                  <MenuItem onClick={handleClose}>
+                  <MenuItem onClick={handleProfile}>
                     <ListItemIcon className={classes.menuIcon}>
                       <AccountCircle fontSize="small" />
                     </ListItemIcon>

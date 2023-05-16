@@ -48,7 +48,11 @@ const LoginPage = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { message, loading, user } = useSelector((state) => state.auth);
+  const {
+    message,
+    loading,
+    user: authUser,
+  } = useSelector((state) => state.auth);
   const {
     register,
     handleSubmit,
@@ -61,13 +65,14 @@ const LoginPage = () => {
   const onSubmit = (data) => {
     dispatch(loginUser(data));
   };
-
   useEffect(() => {
-    if (user) {
+    console.log("Login page");
+    if (authUser) {
       navigate("/");
+    } else {
+      navigate("/login");
     }
-  }, [user, navigate]);
-
+  }, [authUser, navigate]);
   return (
     <div className={classes.fullScreen}>
       <div className={classes.loginCard}>
