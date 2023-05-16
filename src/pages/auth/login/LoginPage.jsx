@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -19,16 +18,6 @@ const schema = yup.object().shape({
 });
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    background: "#0d131d",
-    width: "100vw",
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
-  },
   mBottom: {
     marginBottom: ".5rem",
   },
@@ -40,6 +29,18 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 5,
     background: "#fff",
     padding: ".85rem",
+  },
+  fullScreen: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "#000", // Set the background color to black
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden", // Hide the scroll bar
   },
 }));
 
@@ -71,7 +72,7 @@ const LoginPage = () => {
   }, [user, navigate]);
 
   return (
-    <div className={classes.root}>
+    <div className={classes.fullScreen}>
       <div className={classes.loginCard}>
         <Typography variant="h5" component="h1">
           Login
