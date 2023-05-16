@@ -11,7 +11,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
 import { createDeal, updateDeal } from "store/deal";
 import { DropzoneArea } from "material-ui-dropzone";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Compressor from "compressorjs";
 
 const schema = yup.object().shape({
@@ -44,12 +44,6 @@ const schema = yup.object().shape({
     .nullable(true),
 });
 const DealForm = ({ defaultValues }) => {
-  useEffect(() => {
-    console.log(
-      "image is",
-      process.env.REACT_APP_IMAGE_URL + defaultValues?.image
-    );
-  }, [defaultValues]);
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const { message, loading } = useSelector((state) => state.deal);

@@ -36,11 +36,11 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     width: "100%",
     height: "100%",
-    background: "#000", // Set the background color to black
+    background: "#000",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    overflow: "hidden", // Hide the scroll bar
+    overflow: "hidden",
   },
 }));
 
@@ -74,9 +74,6 @@ const LoginPage = () => {
         <Typography variant="h5" component="h1">
           Login
         </Typography>
-        {/* <Typography className={classes.brand} variant="h5" component="h1">
-          Login
-        </Typography> */}
         <Typography className={classes.mBottom} variant="body1">
           Sign In to your account
         </Typography>
