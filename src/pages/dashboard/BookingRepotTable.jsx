@@ -27,6 +27,12 @@ const BookingReportsTable = ({ reports }) => {
               style={{ fontWeight: "bold", color: "#555555" }}
               align="right"
             >
+              Expenses
+            </TableCell>
+            <TableCell
+              style={{ fontWeight: "bold", color: "#555555" }}
+              align="right"
+            >
               Sales
             </TableCell>
           </TableRow>
@@ -39,6 +45,7 @@ const BookingReportsTable = ({ reports }) => {
                   {report.month + "/" + report.year}
                 </TableCell>
                 <TableCell align="right">{report.totalBookings || 0}</TableCell>
+                <TableCell align="right">{report.totalExpenses || 0}</TableCell>
                 <TableCell align="right">
                   {numberWithCommas(report.totalBookingSales || 0)}
                 </TableCell>
