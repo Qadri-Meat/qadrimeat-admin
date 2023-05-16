@@ -12,6 +12,8 @@ import {
   Grow,
   ClickAwayListener,
   ListItemIcon,
+  ListItemText,
+  Typography,
 } from "@mui/material";
 import AdminAvatarBadge from "../AdminAvatarBadge/AdminAvatarBadge";
 import { AccountCircle, ExitToApp } from "@mui/icons-material";
@@ -21,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
+    color: "#ffffff",
   },
   menuIcon: {
     minWidth: "33px",
@@ -52,7 +55,6 @@ const AdminAvatarMenu = (props) => {
       navigate("/login");
     });
   };
-
   return (
     <>
       <ListItem
@@ -77,7 +79,7 @@ const AdminAvatarMenu = (props) => {
           </AdminAvatarBadge>
         </ListItemAvatar>
 
-        {/* <ListItemText
+        <ListItemText
           primary={
             <React.Fragment>
               <Typography component="span" variant="subtitle2">
@@ -96,7 +98,7 @@ const AdminAvatarMenu = (props) => {
               </Typography>
             </React.Fragment>
           }
-        /> */}
+        />
       </ListItem>
       <Popper
         open={open}

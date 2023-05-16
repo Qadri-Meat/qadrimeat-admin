@@ -47,11 +47,8 @@ const useStyles = makeStyles((theme) => ({
 const LoginPage = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-
   const { message, loading, user } = useSelector((state) => state.auth);
-
   const {
     register,
     handleSubmit,
