@@ -145,13 +145,13 @@ const AllBookingsPage = () => {
         columns={columns}
         setQuery={setPage}
         onEdit={
-          authUser.role === "user"
+          authUser?.role === "user"
             ? null
             : (value) => {
                 navigate(`/bookings/${value}`);
               }
         }
-        onDelete={authUser.role === "user" ? null : onDelete}
+        onDelete={authUser?.role === "user" ? null : onDelete}
       />
     </AdminLayout>
   );
