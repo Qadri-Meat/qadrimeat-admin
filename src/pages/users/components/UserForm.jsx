@@ -38,6 +38,7 @@ const schema = yup.object().shape({
 });
 const UserForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
+  const { user: authUser } = useSelector((state) => state.auth);
   const { message, loading } = useSelector((state) => state.user);
   const {
     register,
@@ -113,20 +114,22 @@ const UserForm = ({ defaultValues }) => {
             helperText={errors?.Cpassword?.message}
           />
         </Grid>
-        <Grid item xs={12} md={4}>
-          <SelectInput
-            {...register("role")}
-            id="role"
-            name="role"
-            label="Role"
-            control={control}
-            error={!!errors.role}
-            helperText={errors?.role?.message}
-          >
-            <MenuItem value="admin">Admin</MenuItem>
-            <MenuItem value="user">User</MenuItem>
-          </SelectInput>
-        </Grid>
+        {authUser?.role === "admin" ? (
+          <Grid item xs={12} md={4}>
+            <SelectInput
+              {...register("role")}
+              id="role"
+              name="role"
+              label="Role"
+              control={control}
+              error={!!errors.role}
+              helperText={errors?.role?.message}
+            >
+              <MenuItem value="admin">Admin</MenuItem>
+              <MenuItem value="user">User</MenuItem>
+            </SelectInput>
+          </Grid>
+        ) : null}
 
         <Grid item xs={12} sx={{ textAlign: "center" }}>
           <Button

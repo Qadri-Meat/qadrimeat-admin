@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -19,16 +18,6 @@ const schema = yup.object().shape({
 });
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    background: "#0d131d",
-    width: "100vw",
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
-  },
   mBottom: {
     marginBottom: ".5rem",
   },
@@ -41,16 +30,29 @@ const useStyles = makeStyles((theme) => ({
     background: "#fff",
     padding: ".85rem",
   },
+  fullScreen: {
+    position: "fixed",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    background: "#000",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
+  },
 }));
 
 const LoginPage = () => {
   const classes = useStyles();
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
-
-  const { message, loading, user } = useSelector((state) => state.auth);
-
+  const {
+    message,
+    loading,
+    user: authUser,
+  } = useSelector((state) => state.auth);
   const {
     register,
     handleSubmit,
@@ -63,22 +65,20 @@ const LoginPage = () => {
   const onSubmit = (data) => {
     dispatch(loginUser(data));
   };
-
   useEffect(() => {
-    if (user) {
+    console.log("Login page");
+    if (authUser) {
       navigate("/");
+    } else {
+      navigate("/login");
     }
-  }, [user, navigate]);
-
+  }, [authUser, navigate]);
   return (
-    <div className={classes.root}>
+    <div className={classes.fullScreen}>
       <div className={classes.loginCard}>
         <Typography variant="h5" component="h1">
           Login
         </Typography>
-        {/* <Typography className={classes.brand} variant="h5" component="h1">
-          Login
-        </Typography> */}
         <Typography className={classes.mBottom} variant="body1">
           Sign In to your account
         </Typography>

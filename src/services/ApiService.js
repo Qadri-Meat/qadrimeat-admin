@@ -42,12 +42,11 @@ export default class ApiService {
     }
     return Promise.reject(error);
   };
-
   refreshToken = async () => {
     const refreshToken = TokenService.getRefreshToken();
     if (refreshToken !== null) {
       return axios
-        .post(`${this.baseURL}/v1/auth/refresh-tokens`, {
+        .post(`${this.baseURL}v1/auth/refresh-tokens`, {
           refreshToken,
         })
         .then(

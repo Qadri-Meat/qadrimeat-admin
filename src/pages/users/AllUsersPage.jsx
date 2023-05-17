@@ -68,7 +68,7 @@ const AllUsersPage = (props) => {
         data={data}
         columns={columns}
         setQuery={setQuery}
-        search={false}
+        searchIcon={false}
         onEdit={(value) => {
           navigate(`/users/${value}`);
         }}

@@ -13,7 +13,6 @@ const AllDealsPage = () => {
   const data = useSelector((state) => state.deal);
   const { user: authUser } = useSelector((state) => state.auth);
   useEffect(() => {
-    console.log(authUser);
     if (authUser) {
       dispatch(getDeals(query));
     } else {
@@ -84,13 +83,13 @@ const AllDealsPage = () => {
         columns={columns}
         setQuery={setQuery}
         onEdit={
-          authUser.role === "user"
+          authUser?.role === "user"
             ? null
             : (value) => {
                 navigate(`/deals/${value}`);
               }
         }
-        onDelete={authUser.role === "user" ? null : onDelete}
+        onDelete={authUser?.role === "user" ? null : onDelete}
       />
     </AdminLayout>
   );

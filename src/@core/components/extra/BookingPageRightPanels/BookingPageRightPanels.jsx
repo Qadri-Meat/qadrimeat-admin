@@ -57,7 +57,6 @@ const BookingPageRightPanels = () => {
     setAmount("");
     dispatch(getBooking(id));
   };
-
   if (!selectedBooking) {
     return <Loader />;
   }
