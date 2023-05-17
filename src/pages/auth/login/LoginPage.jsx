@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
@@ -8,10 +7,10 @@ import Form from "@core/components/forms/Form";
 import Message from "@core/components/ui/Message";
 import Loader from "@core/components/ui/Loader";
 import { loginUser } from "store/auth";
-import { useNavigate } from "react-router-dom";
 import FormInput from "@core/components/forms/FormInput";
 import { Typography, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
+import withAuth from "hooks/withAuth";
 
 const schema = yup.object().shape({
   email: yup.string().email().required(),
@@ -19,7 +18,15 @@ const schema = yup.object().shape({
 });
 
 const useStyles = makeStyles((theme) => ({
-
+  root: {
+    width: "100vw",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+  },
   mBottom: {
     marginBottom: ".5rem",
   },
@@ -48,14 +55,9 @@ const useStyles = makeStyles((theme) => ({
 
 const LoginPage = () => {
   const classes = useStyles();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  
-  const {
-    message,
-    loading,
-    user: authUser,
-  } = useSelector((state) => state.auth);
+  const { message, loading } = useSelector((state) => state.auth);
+
   const {
     register,
     handleSubmit,
@@ -68,14 +70,7 @@ const LoginPage = () => {
   const onSubmit = (data) => {
     dispatch(loginUser(data));
   };
-  useEffect(() => {
-    console.log("Login page");
-    if (authUser) {
-      navigate("/");
-    } else {
-      navigate("/login");
-    }
-  }, [authUser, navigate]);
+
   return (
     <div className={classes.fullScreen}>
       <div className={classes.loginCard}>
@@ -124,4 +119,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default withAuth(LoginPage, false);

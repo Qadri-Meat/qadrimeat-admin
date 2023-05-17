@@ -11,23 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { getDashboard } from "store/user";
-import BookingReportsTable from "./BookingRepotTable";
-import BookingTable from "./BookingTable";
+import withAuth from "hooks/withAuth";
 
-const DashboardPage = () => {
-  const { todayReport, reports, deals } = useSelector((state) => state.user);
-  const { user: authUser } = useSelector((state) => state.auth);
+const DashboardPage = (props) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (authUser) {
-      dispatch(getDashboard());
-    } else {
-      navigate("/login");
-    }
-  }, [authUser, dispatch, navigate]);
+
   return (
     <AdminLayout>
       <h2>Dashboard</h2>
@@ -108,4 +96,4 @@ const DashboardPage = () => {
   );
 };
 
-export default DashboardPage;
+export default withAuth(DashboardPage);
