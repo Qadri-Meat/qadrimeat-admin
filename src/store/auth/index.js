@@ -4,7 +4,6 @@ import TokenService from "services/TokenService";
 
 const initialState = {
   user: TokenService.getUserData(),
-  loading: false,
 };
 
 export const loginUser = createAsyncThunk(
@@ -35,7 +34,6 @@ export const logoutUser = createAsyncThunk(
     }
   }
 );
-
 const authSlice = createSlice({
   name: "auth",
   initialState,

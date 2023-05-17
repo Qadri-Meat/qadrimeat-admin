@@ -77,27 +77,29 @@ const AllBookingItemsPage = () => {
           xs={12}
           spacing={1}
         >
-          <InputLabel id="deal-label">Deal</InputLabel>
-          {results && results.length > 0 ? (
-            <Select
-              labelId="deal-label"
-              id="deal"
-              name="deal"
-              variant="outlined"
-              label="Deal"
-              style={{ width: "300px" }}
-              onChange={(event) => {
-                navigate(
-                  `/bookings/booking-items?day=${day}&deal=${event.target.value}`
-                );
-              }}
-            >
-              {results.map((item) => (
-                <MenuItem value={item.id}>{item.name}</MenuItem>
-              ))}
-            </Select>
-          ) : (
-            <></>
+          {results && results.length > 0 && (
+            <>
+              <InputLabel id="deal-label">Deal</InputLabel>
+              <Select
+                labelId="deal-label"
+                id="deal"
+                name="deal"
+                variant="outlined"
+                label="Deal"
+                style={{ width: "300px" }}
+                onChange={(event) => {
+                  navigate(
+                    `/bookings/booking-items?day=${day}&deal=${event.target.value}`
+                  );
+                }}
+              >
+                {results.map((item) => (
+                  <MenuItem key={item.id} value={item.id}>
+                    {item.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </>
           )}
           <ToggleButtonGroup
             onChange={(event, value) => {
@@ -118,6 +120,7 @@ const AllBookingItemsPage = () => {
           </ToggleButtonGroup>
         </Grid>
       </FormControl>
+
       <TableContainer>
         <Table style={{ tableLayout: "fixed" }} aria-label="simple table">
           <TableRow>
@@ -126,7 +129,6 @@ const AllBookingItemsPage = () => {
             <TableCell align="right">Quantity</TableCell>
             <TableCell align="right">Time</TableCell>
           </TableRow>
-
           {bookingItems && bookingItems.length > 0 ? (
             <TableBody>
               {bookingItems.map((item) => (

@@ -16,6 +16,10 @@ const useStyles = makeStyles((theme) => ({
   toolbar: theme.mixins.toolbar,
   logo: {
     padding: "1rem",
+    "& span": {
+      display: "block",
+      color: "rgba(41, 113, 245, 0.87)",
+    },
   },
   navCustom: {
     "& .MuiTypography-root": {

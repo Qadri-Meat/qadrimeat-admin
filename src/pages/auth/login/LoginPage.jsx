@@ -34,20 +34,30 @@ const useStyles = makeStyles((theme) => ({
     marginTop: ".85rem",
   },
   loginCard: {
-    width: "300px",
+    width: "275px",
     borderRadius: 5,
     background: "#fff",
     padding: ".85rem",
   },
-  textField: {
+  fullScreen: {
+    position: "fixed",
+    top: 0,
+    left: 0,
     width: "100%",
+    height: "100%",
+    background: "#000",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
 }));
 
-const LoginPage = (props) => {
+const LoginPage = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const { message, loading } = useSelector((state) => state.auth);
+
   const {
     register,
     handleSubmit,
@@ -62,7 +72,7 @@ const LoginPage = (props) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.fullScreen}>
       <div className={classes.loginCard}>
         <Typography variant="h5" component="h1">
           Login
@@ -90,6 +100,7 @@ const LoginPage = (props) => {
             error={!!errors.password}
             helperText={errors?.password?.message}
           />
+
           <div className={classes.mBottom}>
             <Button
               variant="contained"

@@ -234,7 +234,9 @@ const BookingPage = () => {
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate(`/bookings/invoice/${id}`)}
+            onClick={() => {
+              window.open(`/bookings/invoice/${id}`, "_blank");
+            }}
             variant="outlined"
             color="primary"
             size="small"

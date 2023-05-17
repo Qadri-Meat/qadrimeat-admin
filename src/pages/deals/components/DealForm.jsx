@@ -27,24 +27,42 @@ const schema = yup.object().shape({
     .required()
     .positive()
     .typeError("Stock is required field"),
-  category: yup.string().required("Category is a required field"),
+  category: yup
+    .mixed()
+    .test("isCategoryValid", "Category is a required field", function (value) {
+      return (
+        value !== undefined &&
+        (typeof value === "string" || Array.isArray(value))
+      );
+    })
+    .transform(function (value, originalValue) {
+      if (originalValue && typeof originalValue === "string") {
+        return [originalValue];
+      }
+      return value;
+    })
+    .nullable(true),
 });
 const DealForm = ({ defaultValues }) => {
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
   const { message, loading } = useSelector((state) => state.deal);
+  const defaultFormValues = {
+    ...defaultValues,
+    // Set category as an empty string if it's undefined
+    image: "",
+  };
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      ...defaultValues,
-    },
+    defaultValues: defaultFormValues,
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
+
   const handleChange = (files) => {
     // Check if the file is an image
     if (files[0] ? files[0].type.startsWith("image/") : []) {
@@ -71,6 +89,8 @@ const DealForm = ({ defaultValues }) => {
     }
   };
   const onSubmit = (data) => {
+    data.category = data.category[0];
+
     data.image = files;
     if (defaultValues) {
       dispatch(updateDeal({ id: defaultValues.id, data }));
@@ -78,7 +98,6 @@ const DealForm = ({ defaultValues }) => {
       dispatch(createDeal(data));
     }
   };
-
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       {message && <Message severity="error">{message}</Message>}
@@ -159,24 +178,23 @@ const DealForm = ({ defaultValues }) => {
             label="Category"
             control={control}
             error={!!errors.category}
-            helperText={errors.category?.message || " "}
+            helperText={errors?.category?.message}
           >
             <MenuItem value="chicken">Chicken</MenuItem>
-            <MenuItem value="mutton">Mutton</MenuItem>
-            <MenuItem value="beef">Beef</MenuItem>
+            <MenuItem value="cow">Cow</MenuItem>
+            <MenuItem value="goat">Goat</MenuItem>
           </SelectInput>
         </Grid>
         <Grid item xs={12}>
           <DropzoneArea
             maxFileSize={5242880}
-            initialFiles={defaultValues ? defaultValues.image : []}
             onChange={handleChange}
             showAlerts={false}
             filesLimit={5}
             dropzoneText=""
+            initialFiles={defaultValues?.image ? [defaultValues.image] : []}
           />
         </Grid>
-
         <Grid item xs={12} sx={{ textAlign: "center" }}>
           <Button
             variant="contained"

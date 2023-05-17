@@ -1,18 +1,13 @@
 import ApiService from "./ApiService";
 
-class UserService extends ApiService {
+class ExpenseService extends ApiService {
   /**
    * Get all users with optional query parameters
    * @param {string} query - Optional query parameters
    * @returns {Promise<User>}
    */
-
-  getDashboard() {
-    return this.instance.get(`v1/users/dashboard`);
-  }
-
   getAll(query) {
-    return this.instance.get(`/v1/users?${query}`);
+    return this.instance.get(`/v1/expenses${query}`);
   }
 
   /**
@@ -21,7 +16,7 @@ class UserService extends ApiService {
    * @returns {Promise<User>}
    */
   get(id) {
-    return this.instance.get(`/v1/users/${id}`);
+    return this.instance.get(`/v1/expenses/${id}`);
   }
 
   /**
@@ -30,7 +25,7 @@ class UserService extends ApiService {
    * @returns {Promise<User>}
    */
   update(data) {
-    return this.instance.patch("/v1/users", data);
+    return this.instance.patch("/v1/expenses", data);
   }
 
   /**
@@ -41,12 +36,11 @@ class UserService extends ApiService {
    */
   updateById({ id, data }) {
     const postData = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      role: data.role,
+      description: data.description,
+      amount: data.amount,
+      type: data.type,
     };
-    return this.instance.patch(`/v1/users/${id}`, postData);
+    return this.instance.patch(`/v1/expenses/${id}`, postData);
   }
   /**
    * Create a user with the given data
@@ -65,7 +59,7 @@ class UserService extends ApiService {
         formData.append(key, value);
       }
     });
-    return this.instance.post(`/v1/users`, formData);
+    return this.instance.post(`/v1/expenses`, formData);
   }
   /**
    * Delete a user with the given id
@@ -73,10 +67,10 @@ class UserService extends ApiService {
    * @returns {Promise<User>}
    */
   delete(id) {
-    return this.instance.delete(`/v1/users/${id}`);
+    return this.instance.delete(`/v1/expenses/${id}`);
   }
 }
 
-const userServiceInstance = new UserService();
+const userServiceInstance = new ExpenseService();
 
 export default userServiceInstance;

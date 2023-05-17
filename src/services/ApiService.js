@@ -30,7 +30,6 @@ export default class ApiService {
 
   handleRequest(config) {
     config.headers["Authorization"] = `Bearer ${TokenService.getAccessToken()}`;
-
     return config;
   }
 
@@ -44,7 +43,6 @@ export default class ApiService {
     }
     return Promise.reject(error);
   };
-
   refreshToken = async () => {
     try {
       const refreshToken = TokenService.getRefreshToken();

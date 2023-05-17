@@ -12,6 +12,8 @@ import {
   Grow,
   ClickAwayListener,
   ListItemIcon,
+  ListItemText,
+  Typography,
 } from "@mui/material";
 import AdminAvatarBadge from "../AdminAvatarBadge/AdminAvatarBadge";
 import { AccountCircle, ExitToApp } from "@mui/icons-material";
@@ -21,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 const useStyles = makeStyles((theme) => ({
   inline: {
     display: "inline",
+    color: "#ffffff",
   },
   menuIcon: {
     minWidth: "33px",
@@ -41,7 +44,6 @@ const AdminAvatarMenu = (props) => {
     setOpen((prevOpen) => !prevOpen);
   };
   const handleClose = (event) => {
-    navigate(`/profile?id=${user.id}`);
     if (anchorRef.current && anchorRef.current.contains(event.target)) {
       return;
     }
@@ -53,6 +55,9 @@ const AdminAvatarMenu = (props) => {
     });
   };
 
+  const handleProfile = () => {
+    navigate(`/profile?id=${user.id}`);
+  };
   return (
     <>
       <ListItem
@@ -76,29 +81,27 @@ const AdminAvatarMenu = (props) => {
             <Avatar alt="Mohammad Admin" src="" />
           </AdminAvatarBadge>
         </ListItemAvatar>
-        {/* <Hidden implementation="css" smDown>
-          <ListItemText
-            primary={
-              <React.Fragment>
-                <Typography component="span" variant="subtitle2">
-                  {user && user.name}
-                </Typography>
-              </React.Fragment>
-            }
-            secondary={
-              <React.Fragment>
-                <Typography
-                  component="span"
-                  variant="caption"
-                  className={classes.inline}
-                  color="textPrimary"
-                >
-                  {user && user.role}
-                </Typography>
-              </React.Fragment>
-            }
-          />
-        </Hidden> */}
+
+        <ListItemText
+          primary={
+            <React.Fragment>
+              <Typography component="span" variant="subtitle2">
+                {user && user.name}
+              </Typography>
+            </React.Fragment>
+          }
+          secondary={
+            <React.Fragment>
+              <Typography
+                component="span"
+                variant="caption"
+                className={classes.inline}
+              >
+                {user && user.role}
+              </Typography>
+            </React.Fragment>
+          }
+        />
       </ListItem>
       <Popper
         open={open}
@@ -118,7 +121,7 @@ const AdminAvatarMenu = (props) => {
             <Paper>
               <ClickAwayListener onClickAway={handleClose}>
                 <MenuList autoFocusItem={open} id="menu-list-grow">
-                  <MenuItem onClick={handleClose}>
+                  <MenuItem onClick={handleProfile}>
                     <ListItemIcon className={classes.menuIcon}>
                       <AccountCircle fontSize="small" />
                     </ListItemIcon>

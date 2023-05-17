@@ -12,7 +12,6 @@ const InvoicePage = (props) => {
   const { selectedBooking } = useSelector((state) => state.booking);
   const navigate = useNavigate();
   useEffect(() => {
-    console.log(selectedBooking);
     if (authUser) {
       if (!selectedBooking || selectedBooking.id !== id) {
         dispatch(getBooking(id));
@@ -48,8 +47,10 @@ const InvoicePage = (props) => {
                             <br />
                             <strong>Phone:</strong> +92 302-4000719
                             <br />
-                            <strong>Address:</strong> Street 113, Sector N Dha
-                            Phase 1, Lahore, Punjab , Pakistan
+                            <strong>PTCL:</strong> 042-38651881
+                            <br />
+                            <strong>Address:</strong> Street 113, Sector 11 N
+                            Dha Phase 1, Lahore, Punjab , Pakistan
                           </p>
                         </div>
                       </div>
@@ -97,6 +98,9 @@ const InvoicePage = (props) => {
                           {selectedBooking.shippingDetails.city}{" "}
                           {selectedBooking.shippingDetails.postalCode},{" "}
                           {selectedBooking.shippingDetails.country}
+                          <br />
+                          <strong>Note:</strong>{" "}
+                          {selectedBooking.shippingDetails.notes}
                         </p>
                       </div>
 
@@ -177,7 +181,7 @@ const InvoicePage = (props) => {
                                       alt={item.name}
                                       src={
                                         item.image.length > 0
-                                          ? process.env.REACT_APP_API_URL +
+                                          ? process.env.REACT_APP_IMAGE_URL +
                                             item.image[0]
                                           : ""
                                       }

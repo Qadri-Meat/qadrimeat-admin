@@ -42,7 +42,8 @@ class BookingService extends ApiService {
    * @returns {Promise<User>}
    */
   updateById({ id, data }) {
-    return this.instance.patch(`/v1/bookings/${id}`, data);
+    const { deliveryTime, ...updatedData } = data;
+    return this.instance.patch(`/v1/bookings/${id}`, updatedData);
   }
   /**
    * Create a booking with the given data
