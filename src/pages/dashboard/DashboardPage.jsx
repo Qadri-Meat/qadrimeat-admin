@@ -11,8 +11,11 @@ import {
   Typography,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import withAuth from "hooks/withAuth";
+
 const DashboardPage = (props) => {
   const navigate = useNavigate();
+
   return (
     <AdminLayout>
       <h2>Dashboard</h2>
@@ -118,4 +121,4 @@ const DashboardPage = (props) => {
   );
 };
 
-export default DashboardPage;
+export default withAuth(DashboardPage);

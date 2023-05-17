@@ -1,5 +1,6 @@
 import axios from "axios";
 import TokenService from "./TokenService";
+import AuthService from "./AuthService";
 
 export default class ApiService {
   baseURL = process.env.REACT_APP_API_URL;
@@ -37,7 +38,7 @@ export default class ApiService {
     const originalConfig = error.config;
     const url = String(originalConfig.url);
     const status = error.response?.status;
-    if (status === 401 && !url.includes("login")) {
+    if (status === 401 && !url.includes("auth")) {
       await this.refreshToken();
       return this.instance(originalConfig);
     }
@@ -45,24 +46,16 @@ export default class ApiService {
   };
 
   refreshToken = async () => {
-    const refreshToken = TokenService.getRefreshToken();
-    if (refreshToken !== null) {
-      return axios
-        .post(`${this.baseURL}/v1/auth/refresh-tokens`, {
-          refreshToken,
-        })
-        .then(
-          (response) => {
-            TokenService.setTokens(response.data);
-          },
-          (error) => {
-            TokenService.removeUserData();
-            window.location = "/login";
-          }
-        );
-    } else {
+    try {
+      const refreshToken = TokenService.getRefreshToken();
+      if (refreshToken !== null) {
+        const res = await AuthService.refreshToken(refreshToken);
+        TokenService.setTokens(res.data);
+      } else {
+        throw Error();
+      }
+    } catch (error) {
       TokenService.removeUserData();
-      console.error("Refresh token not found");
       window.location = "/login";
     }
   };
