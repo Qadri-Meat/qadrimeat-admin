@@ -1,53 +1,35 @@
-import React, { useEffect } from 'react';
-import AdminLayout from 'components/AdminLayout/AdminLayout';
-import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
-import { Typography, Grid, makeStyles } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import * as types from 'state/ducks/booking/types';
-import BookingForm from './components/BookingForm';
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  my3: {
-    margin: '1.3rem 0',
-  },
-  mRight: {
-    marginRight: '.85rem',
-  },
-}));
-
-const AddBookingPage = (props) => {
-  const { history } = props;
-  const classes = useStyles();
+import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
+import { Grid, Typography } from "@mui/material";
+import BookingForm from "./components/BookingForm";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+const AddBookingPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const { success, selectedBooking } = useSelector((state) => state.booking);
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (user) {
       if (success) {
-        history.push(`/bookings/${selectedBooking.id}`);
-        dispatch({ type: types.BOOKING_RESET });
+        navigate(`/bookings/${selectedBooking.id}`);
       }
     } else {
-      history.push('/login');
+      navigate("/login");
     }
-  }, [dispatch, history, success, user, selectedBooking]);
+  }, [success, dispatch, navigate, user, selectedBooking]);
 
   return (
     <AdminLayout>
-      <Grid container className={classes.my3} alignItems="center">
-        <Grid item className={classes.mRight}>
+      <Grid container sx={{ my: 3 }} alignItems="center">
+        <Grid item>
           <Typography variant="h5" component="h1">
             Add New Booking
           </Typography>
         </Grid>
       </Grid>
-      <AdminBreadcrumbs path={history} />
-      <div className={classes.root}>
+      <div>
         <BookingForm />
       </div>
     </AdminLayout>

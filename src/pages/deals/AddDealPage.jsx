@@ -1,55 +1,39 @@
-import React, { useEffect } from 'react';
-import AdminLayout from 'components/AdminLayout/AdminLayout';
-import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
-import { Typography, Grid, makeStyles } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import * as types from 'state/ducks/deal/types';
-import DealForm from './components/DealForm';
+import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
+import { Grid, Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
+import { getDeal } from "store/deal";
+import DealForm from "./components/DealForm";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  my3: {
-    margin: '1.3rem 0',
-  },
-  mRight: {
-    marginRight: '.85rem',
-  },
-}));
-
-const AddDealPage = (props) => {
-  const { history } = props;
-  const classes = useStyles();
+const AddDealPage = () => {
+  const params = useParams();
+  const userId = params.id;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const { success } = useSelector((state) => state.deal);
-  const { user: authUser } = useSelector((state) => state.auth);
+  const { details, success } = useSelector((state) => state.deal);
+  useEffect(() => {
+    if (userId) dispatch(getDeal(userId));
+  }, [dispatch, userId]);
 
   useEffect(() => {
-    console.log(authUser);
-    if (authUser) {
-      if (success) {
-        dispatch({ type: types.DEAL_RESET });
-        history.push('/deals');
-      }
-    } else {
-      history.push('/login');
+    if (success) {
+      navigate("/deals");
     }
-  }, [dispatch, history, success, authUser]);
-
+  }, [dispatch, success, navigate]);
   return (
     <AdminLayout>
-      <Grid container className={classes.my3} alignItems="center">
-        <Grid item className={classes.mRight}>
+      <Grid container sx={{ my: 3 }} alignItems="center">
+        <Grid item>
           <Typography variant="h5" component="h1">
-            Add New Deal
+            {details ? "Update Deal" : "Create Deal"}
           </Typography>
         </Grid>
       </Grid>
-      <AdminBreadcrumbs path={history} />
-      <div className={classes.root}>
-        <DealForm />
+      <AdminBreadcrumbs />
+      <div>
+        <DealForm defaultValues={details} key={details ? details.id : 1} />
       </div>
     </AdminLayout>
   );

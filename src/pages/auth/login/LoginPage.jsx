@@ -1,34 +1,25 @@
 import React, { useEffect } from "react";
-import { makeStyles, Typography, Button } from "@material-ui/core";
 
 import { useDispatch, useSelector } from "react-redux";
 import * as yup from "yup";
-import { useData } from "../../../context/DataContext";
 import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers";
-import Form from "../../../components/Form/Form";
-import Input from "../../../components/Input/Input";
-import Message from "../../../components/Message/Message";
-import Loader from "../../../components/Loader/Loader";
-import { login } from "state/ducks/auth/actions";
-import PhoneNumberInput from "components/Input/PhoneNumberInput";
+import { yupResolver } from "@hookform/resolvers/yup";
+import Form from "@core/components/forms/Form";
+import Message from "@core/components/ui/Message";
+import Loader from "@core/components/ui/Loader";
+import { loginUser } from "store/auth";
+import { useNavigate } from "react-router-dom";
+import FormInput from "@core/components/forms/FormInput";
+import { Typography, Button } from "@mui/material";
+import { makeStyles } from "@mui/styles";
 
 const schema = yup.object().shape({
-  email: yup.string().required(),
+  email: yup.string().email().required(),
   password: yup.string().required(),
 });
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    background: "#0d131d",
-    width: "100vw",
-    height: "100vh",
-    display: "flex",
-    justifyContent: "center",
-    flexDirection: "column",
-    alignItems: "center",
-    textAlign: "center",
-  },
+
   mBottom: {
     marginBottom: ".5rem",
   },
@@ -36,70 +27,77 @@ const useStyles = makeStyles((theme) => ({
     marginTop: ".85rem",
   },
   loginCard: {
-    width: "300px",
+    width: "275px",
     borderRadius: 5,
     background: "#fff",
     padding: ".85rem",
   },
-  textField: {
+  fullScreen: {
+    position: "fixed",
+    top: 0,
+    left: 0,
     width: "100%",
+    height: "100%",
+    background: "#000",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    overflow: "hidden",
   },
 }));
 
-const LoginPage = (props) => {
-  const { setValues, data } = useData();
+const LoginPage = () => {
   const classes = useStyles();
-  const { history, location } = props;
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const auth = useSelector((state) => state.auth);
-  const { user: authUser, message, loading } = auth;
-
-  const redirect = location.search ? location.search.split("=")[1] : "/";
-
-  const { register, handleSubmit, errors, control } = useForm({
-    defaultValues: { phone: data.phone, password: data.password },
+  
+  const {
+    message,
+    loading,
+    user: authUser,
+  } = useSelector((state) => state.auth);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
   const onSubmit = (data) => {
-    dispatch(login(data));
-    setValues(data);
+    dispatch(loginUser(data));
   };
-
   useEffect(() => {
+    console.log("Login page");
     if (authUser) {
-      history.push(redirect);
+      navigate("/");
+    } else {
+      navigate("/login");
     }
-  }, [history, authUser, redirect]);
-
+  }, [authUser, navigate]);
   return (
-    <div className={classes.root}>
+    <div className={classes.fullScreen}>
       <div className={classes.loginCard}>
         <Typography variant="h5" component="h1">
           Login
         </Typography>
-        {/* <Typography className={classes.brand} variant="h5" component="h1">
-          Login
-        </Typography> */}
         <Typography className={classes.mBottom} variant="body1">
           Sign In to your account
         </Typography>
         <Form onSubmit={handleSubmit(onSubmit)}>
           {message && <Message severity="error">{message}</Message>}
-          <Input
-            ref={register}
+          <FormInput
+            {...register("email")}
             id="email"
-            type="email"
+            type="text"
             label="Email"
             name="email"
             error={!!errors.email}
             helperText={errors?.email?.message}
           />
-          <Input
-            ref={register}
+          <FormInput
+            {...register("password")}
             id="password"
             type="password"
             label="Password"
@@ -120,7 +118,7 @@ const LoginPage = (props) => {
             </Button>
           </div>
         </Form>
-        <Typography variant="caption">&copy; QADRI MEAT | Admin</Typography>
+        <Typography variant="caption">&copy; QadriMeat | Admin</Typography>
       </div>
     </div>
   );

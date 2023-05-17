@@ -1,176 +1,98 @@
-import React, { useEffect, useState } from 'react';
-import AdminLayout from 'components/AdminLayout/AdminLayout';
-import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
-import ToggleButton from '@material-ui/lab/ToggleButton';
-import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
-import { Typography, Grid, makeStyles, Button } from '@material-ui/core';
-import MUIDataTable from 'mui-datatables';
-import { getExpenses, deleteExpense } from 'state/ducks/expenses/actions';
-import { useDispatch, useSelector } from 'react-redux';
-import { pick } from 'helpers/pick';
-
-const useStyles = makeStyles((theme) => ({
-  my3: {
-    margin: '1.3rem 0',
-  },
-  mb0: {
-    marginBottom: 0,
-  },
-  mRight: {
-    marginRight: '.85rem',
-  },
-  p1: {
-    padding: '.85rem',
-  },
-}));
-
-const columns = [
-  {
-    name: 'id',
-    label: 'Id',
-    options: {
-      filter: true,
-      sort: true,
-    },
-  },
-  {
-    name: 'description',
-    label: 'Description',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'amount',
-    label: 'Amount',
-    options: {
-      filter: true,
-      sort: false,
-    },
-  },
-  {
-    name: 'createdAt',
-    label: 'Date Added',
-    options: {
-      filter: false,
-      customBodyRender: (value, tableMeta, updateValue) => {
-        return (
-          <>
-            {new Date(value).toLocaleDateString()},{' '}
-            {new Date(value).toLocaleTimeString()}
-          </>
-        );
-      },
-    },
-  },
-];
-
-const AllExpensesPage = (props) => {
-  const { history, location } = props;
-  const { type = 'order' } = pick(location.search);
-  const classes = useStyles();
-
-  const dispatch = useDispatch();
+import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
+import DataTable from "@core/components/ui/DataTable";
+import { Button, Grid, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { deleteExpense, getExpenses } from "store/expense";
+const AllExpensesPage = () => {
   const [selectedPage, setSelectedPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  // const [search, setSearch] = useState('');
-  const { results, page, totalResults } = useSelector(
-    (state) => state.expenses
-  );
-
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const query = `?page=${selectedPage}`;
   const { user: authUser } = useSelector((state) => state.auth);
-
+  const data = useSelector((state) => state.expense);
   useEffect(() => {
     if (authUser) {
-      const query = `?page=${selectedPage}&limit=${limit}&type=${type}`;
       dispatch(getExpenses(query));
     } else {
-      history.push('/login');
+      navigate("/login");
     }
-  }, [history, authUser, dispatch, selectedPage, limit, type]);
-
-  const options = {
-    filterType: 'checkbox',
-    count: totalResults,
-    page: page,
-    serverSide: true,
-    onRowsDelete: (rowsDeleted, dataRows) => {
-      rowsDeleted.data.forEach((row) => {
-        dispatch(deleteExpense(results[row.dataIndex].id));
-      });
-    },
-    onRowClick: (rowData, rowState) => {
-      history.push(`/expenses/${rowData[0]}`);
-    },
-    onTableChange: (action, tableState) => {
-      switch (action) {
-        case 'changePage':
-          setSelectedPage(tableState.page + 1);
-          break;
-        case 'changeRowsPerPage':
-          setLimit(tableState.rowsPerPage);
-          setSelectedPage(1);
-          break;
-        case 'search':
-          break;
-        default:
-          break;
-      }
-    },
+  }, [authUser, dispatch, navigate, query]);
+  const onDelete = async (value) => {
+    await dispatch(deleteExpense(value));
+    dispatch(getExpenses(query)); // re-fetch the user data
   };
-
+  const columns = [
+    {
+      name: "id",
+      label: "Id",
+    },
+    {
+      name: "description",
+      label: "Description",
+    },
+    {
+      name: "amount",
+      label: "Amount",
+    },
+    {
+      name: "createdAt",
+      label: "Date Added",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <>
+              {new Date(value).toLocaleDateString()},{" "}
+              {new Date(value).toLocaleTimeString()}
+            </>
+          );
+        },
+      },
+    },
+  ];
   return (
-    <AdminLayout>
-      <Grid container className={classes.my3} alignItems="center">
-        <Grid item className={classes.mRight}>
-          <Typography variant="h5" component="h1">
-            Expenses
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          container
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          xs={10}
-        >
+    <>
+      <AdminLayout>
+        <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
           <Grid item>
-            <Button
-              onClick={() => history.push('/expenses/add-expense')}
-              variant="outlined"
-              color="primary"
-              size="small"
-            >
-              Add Expense
-            </Button>
+            <Typography variant="h5" component="h1">
+              Expenses
+            </Typography>
           </Grid>
-
-          <Grid item>
-            <ToggleButtonGroup
-              color="primary"
-              value={type}
-              size="small"
-              exclusive
-              onChange={(event, value) => {
-                history.push(`/expenses?type=${value}`);
-              }}
-            >
-              <ToggleButton value="order">Order</ToggleButton>
-              <ToggleButton value="booking">Qurbani</ToggleButton>
-            </ToggleButtonGroup>
+          <Grid
+            item
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            xs={10}
+          >
+            <Grid item>
+              <Button
+                onClick={() => navigate("/expenses/add-expenses")}
+                variant="outlined"
+                color="primary"
+                size="small"
+              >
+                Add Expense
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <AdminBreadcrumbs path={history} />
-      <MUIDataTable
-        title={'Expenses List'}
-        data={results}
-        columns={columns}
-        options={options}
-      />
-    </AdminLayout>
+        <DataTable
+          title={"Expense List"}
+          columns={columns}
+          data={data}
+          setQuery={setSelectedPage}
+          onEdit={(value) => {
+            navigate(`/expenses/${value}`);
+          }}
+          onDelete={onDelete}
+        />
+      </AdminLayout>
+    </>
   );
 };
 

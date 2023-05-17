@@ -1,22 +1,16 @@
-import AllExpensesPage from './AllExpensesPage';
-import AddExpensePage from './AddExpensePage';
-
+import AddExpensePage from "./AddExpensePage";
+import AllExpensesPage from "./AllExpensesPage";
 export const ExpensesPageConfig = {
   routes: [
     {
-      path: '/expenses',
+      path: "/expenses",
       exact: true,
-      component: AllExpensesPage,
+      element: <AllExpensesPage />,
     },
     {
-      path: '/expenses/add-expense',
+      path: "/expenses/:id",
       exact: true,
-      component: AddExpensePage,
-    },
-    {
-      path: '/expenses/:id',
-      exact: true,
-      component: AddExpensePage,
+      element: <AddExpensePage />,
     },
   ],
 };

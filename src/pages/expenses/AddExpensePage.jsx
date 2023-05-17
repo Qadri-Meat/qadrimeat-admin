@@ -1,64 +1,42 @@
-import React, { useEffect } from 'react';
-import AdminLayout from 'components/AdminLayout/AdminLayout';
-import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
-import { Typography, Grid, makeStyles } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { getExpense } from 'state/ducks/expenses/actions';
-import * as types from 'state/ducks/expenses/types';
-import ExpenseForm from './components/ExpenseForm';
+import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
+import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
+import { Grid, Typography } from "@mui/material";
+import React, { useEffect } from "react";
+import ExpenseForm from "./components/ExpenseForm";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { getExpense } from "store/expense";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  my3: {
-    margin: '1.3rem 0',
-  },
-  mRight: {
-    marginRight: '.85rem',
-  },
-}));
-
-const AddExpensePage = (props) => {
-  const { history, match } = props;
-  const expenseId = match.params.id;
-  const classes = useStyles();
+const AddExpensePage = () => {
+  const params = useParams();
+  const userId = params.id;
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const { success, expense } = useSelector((state) => state.expenses);
-  const { user: authUser } = useSelector((state) => state.auth);
-
+  const { details, success } = useSelector((state) => state.expense);
   useEffect(() => {
-    if (authUser) {
-      if (success) {
-        dispatch({ type: types.EXPENSE_RESET });
-        history.push('/expenses');
-      } else if (expenseId) {
-        dispatch(getExpense(expenseId));
-      }
-    } else {
-      history.push('/login');
+    if (userId !== "") dispatch(getExpense(userId));
+  }, [dispatch, userId]);
+  useEffect(() => {
+    if (success) {
+      navigate("/expenses");
     }
-  }, [dispatch, history, success, authUser, expenseId]);
-
+  }, [dispatch, success, navigate]);
   return (
-    <AdminLayout>
-      <Grid container className={classes.my3} alignItems="center">
-        <Grid item className={classes.mRight}>
-          <Typography variant="h5" component="h1">
-            {expenseId ? 'Update Expense' : 'Add Expense'}
-          </Typography>
+    <>
+      <AdminLayout>
+        <Grid container sx={{ my: 3 }} alignItems="center">
+          <Grid item>
+            <Typography variant="h5" component="h1">
+              {details ? "Update Expense" : "Add Expense"}
+            </Typography>
+          </Grid>
         </Grid>
-      </Grid>
-      <AdminBreadcrumbs path={history} />
-      <div className={classes.root}>
-        {expenseId ? (
-          <ExpenseForm preloadedValues={expense} key={expense} />
-        ) : (
-          <ExpenseForm />
-        )}
-      </div>
-    </AdminLayout>
+        <AdminBreadcrumbs />
+        <div>
+          <ExpenseForm defaultValues={details} key={details ? details.id : 1} />
+        </div>
+      </AdminLayout>
+    </>
   );
 };
 

@@ -1,27 +1,25 @@
-import React, { useEffect } from 'react';
-import './styles/invoice.css';
-import { useDispatch, useSelector } from 'react-redux';
-import { getBooking } from 'state/ducks/booking/actions';
-import { Avatar } from '@material-ui/core';
-import { getDiscountPrice } from 'helpers/product';
-
+import { useDispatch, useSelector } from "react-redux";
+import "./styles/invoice.css";
+import { useEffect } from "react";
+import { getBooking } from "store/booking";
+import { useNavigate, useParams } from "react-router-dom";
+import { getDiscountPrice } from "helper/product";
+import { Avatar } from "@mui/material";
 const InvoicePage = (props) => {
-  const { history, match } = props;
-  const bookingId = match.params.id;
-
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { selectedBooking } = useSelector((state) => state.booking);
   const { user: authUser } = useSelector((state) => state.auth);
-
+  const { selectedBooking } = useSelector((state) => state.booking);
+  const navigate = useNavigate();
   useEffect(() => {
     if (authUser) {
-      if (!selectedBooking || selectedBooking.id !== bookingId) {
-        dispatch(getBooking(bookingId));
+      if (!selectedBooking || selectedBooking.id !== id) {
+        dispatch(getBooking(id));
       }
     } else {
-      history.push('/login');
+      navigate("/login");
     }
-  }, [history, authUser, selectedBooking, bookingId, dispatch]);
+  }, [authUser, selectedBooking, id, dispatch, navigate]);
   return (
     <>
       {!selectedBooking ? (
@@ -49,8 +47,10 @@ const InvoicePage = (props) => {
                             <br />
                             <strong>Phone:</strong> +92 302-4000719
                             <br />
-                            <strong>Address:</strong> Street 113, Sector N Dha
-                            Phase 1, Lahore, Punjab , Pakistan
+                            <strong>PTCL:</strong> 042-38651881
+                            <br />
+                            <strong>Address:</strong> Street 113, Sector 11 N
+                            Dha Phase 1, Lahore, Punjab , Pakistan
                           </p>
                         </div>
                       </div>
@@ -63,7 +63,7 @@ const InvoicePage = (props) => {
                           <span
                             className="glyphicon glyphicon-print noprint"
                             aria-hidden="true"
-                          ></span>{' '}
+                          ></span>{" "}
                           Print
                         </button>
                         <p className="font-weight-bold mb-1">
@@ -80,9 +80,9 @@ const InvoicePage = (props) => {
                     <div className="row">
                       <div className="col-md-6">
                         <p className="font-weight-bold">
-                          To:{' '}
+                          To:{" "}
                           {selectedBooking.shippingDetails.firstName +
-                            ' ' +
+                            " " +
                             selectedBooking.shippingDetails.lastName}
                         </p>
                         <p className="text-muted">
@@ -90,14 +90,17 @@ const InvoicePage = (props) => {
                           {selectedBooking.shippingDetails.email}
                           <br /> */}
                           <strong>Phone:</strong>
-                          {' +'}
+                          {" +"}
                           {selectedBooking.shippingDetails.phone}
                           <br />
-                          <strong>Address:</strong>{' '}
-                          {selectedBooking.shippingDetails.address},{' '}
-                          {selectedBooking.shippingDetails.city}{' '}
-                          {selectedBooking.shippingDetails.postalCode},{' '}
+                          <strong>Address:</strong>{" "}
+                          {selectedBooking.shippingDetails.address},{" "}
+                          {selectedBooking.shippingDetails.city}{" "}
+                          {selectedBooking.shippingDetails.postalCode},{" "}
                           {selectedBooking.shippingDetails.country}
+                          <br />
+                          <strong>Note:</strong>{" "}
+                          {selectedBooking.shippingDetails.notes}
                         </p>
                       </div>
 
@@ -178,18 +181,18 @@ const InvoicePage = (props) => {
                                       alt={item.name}
                                       src={
                                         item.image.length > 0
-                                          ? process.env.REACT_APP_API_URL +
+                                          ? process.env.REACT_APP_IMAGE_URL +
                                             item.image[0]
-                                          : ''
+                                          : ""
                                       }
                                     />
                                   </td>
                                   <td>{item.name}</td>
                                   <td>{item.quantity}</td>
-                                  <td>{item.isPackage ? item.day : ''}</td>
-                                  <td>{item.isPackage ? item.time : ''}</td>
+                                  <td>{item.isPackage ? item.day : ""}</td>
+                                  <td>{item.isPackage ? item.time : ""}</td>
                                   <td>
-                                    {item.isPackage ? 'Package' : 'Non Package'}
+                                    {item.isPackage ? "Package" : "Non Package"}
                                   </td>
                                   <td>
                                     <>
@@ -197,19 +200,19 @@ const InvoicePage = (props) => {
                                         <>
                                           <span
                                             style={{
-                                              textDecoration: 'line-through',
-                                              color: 'gray',
+                                              textDecoration: "line-through",
+                                              color: "gray",
                                             }}
                                           >
-                                            {'PKR ' + finalProductPrice}
+                                            {"PKR " + finalProductPrice}
                                           </span>
                                           <span className="amount">
-                                            {'    PKR ' + finalDiscountedPrice}
+                                            {"    PKR " + finalDiscountedPrice}
                                           </span>
                                         </>
                                       ) : (
                                         <span>
-                                          {'PKR ' + finalProductPrice}
+                                          {"PKR " + finalProductPrice}
                                         </span>
                                       )}
                                     </>
@@ -217,11 +220,11 @@ const InvoicePage = (props) => {
                                   <td>
                                     <>
                                       {discountedPrice !== null
-                                        ? 'PKR ' +
+                                        ? "PKR " +
                                           (
                                             finalDiscountedPrice * item.quantity
                                           ).toFixed(2)
-                                        : 'PKR ' +
+                                        : "PKR " +
                                           (
                                             finalProductPrice * item.quantity
                                           ).toFixed(2)}
@@ -245,7 +248,7 @@ const InvoicePage = (props) => {
                               </td>
                               <td>
                                 <strong>
-                                  Rs{' '}
+                                  Rs{" "}
                                   {selectedBooking.totalPrice -
                                     selectedBooking.shippingPrice +
                                     (selectedBooking.discount || 0)}
@@ -294,7 +297,7 @@ const InvoicePage = (props) => {
                               </td>
                               <td>
                                 <strong>
-                                  Rs{' '}
+                                  Rs{" "}
                                   {selectedBooking.totalPrice -
                                     selectedBooking.totalPaid}
                                 </strong>
@@ -310,7 +313,7 @@ const InvoicePage = (props) => {
             </div>
 
             <div className="text-dark mt-2 mb-2 text-center small">
-              by :{' '}
+              by :{" "}
               <a
                 className="text-dark"
                 target="_blank"

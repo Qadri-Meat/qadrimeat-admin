@@ -1,48 +1,39 @@
-import AddBookingPage from './AddBookingPage';
-import AllBookingsPage from './AllBookingsPage';
-import InvoicePage from './InvoicePage';
+import AddBookingPage from "./AddBookingPage";
+import AllBookingItemsPage from "./AllBookingItemsPage";
+import AllBookingsPage from "./AllBookingsPage";
+import BookingPage from "./BookingPage";
+import InvoicePage from "./InvoicePage";
+import UpdateBookingPage from "./UpdateBookingPage";
 
-import BookingPage from './BookingPage';
-import UpdateBookingPage from './UpdateBookingPage';
-import AllBookingItemsPage from './AllBookingItemsPage';
-
-export const BookingsPageConfig = {
+export const BookingPageConfig = {
   routes: [
     {
-      path: '/bookings',
+      path: "/bookings",
       exact: true,
-      component: AllBookingsPage,
+      element: <AllBookingsPage />,
+    },
+    {
+      path: "/bookings/booking-items",
+      exact: true,
+      element: <AllBookingItemsPage />,
+    },
+    {
+      path: "/bookings/add-booking",
+      element: <AddBookingPage />,
+    },
+    {
+      path: "/bookings/:id",
+      element: <BookingPage />,
     },
 
     {
-      path: '/bookings/booking-items',
-      exact: true,
-      component: AllBookingItemsPage,
+      path: "/bookings/update-booking/:id",
+      element: <UpdateBookingPage />,
     },
     {
-      path: '/bookings/add-booking',
+      path: "/bookings/invoice/:id",
       exact: true,
-      component: AddBookingPage,
-    },
-    {
-      path: '/bookings/update-booking/:id',
-      exact: true,
-      component: UpdateBookingPage,
-    },
-    {
-      path: '/bookings/invoice/:id',
-      exact: true,
-      component: InvoicePage,
-    },
-    {
-      path: '/bookings/:id',
-      exact: true,
-      component: BookingPage,
-    },
-    {
-      path: '/bookings/invoice/:id',
-      exact: true,
-      component: InvoicePage,
+      element: <InvoicePage />,
     },
   ],
 };

@@ -1,94 +1,71 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import AdminLayout from 'components/AdminLayout/AdminLayout';
-import AdminBreadcrumbs from 'components/AdminBreadcrumbs/AdminBreadcrumbs';
-import {
-  Typography,
-  Grid,
-  makeStyles,
-  Avatar,
-  Box,
-  Button,
-} from '@material-ui/core';
-import BookingPageRightPanels from 'components/extra/BookingPageRightPanels/BookingPageRightPanels';
-import { getBooking } from 'state/ducks/booking/actions';
-import MUIDataTable from 'mui-datatables';
-import { getDiscountPrice } from 'helpers/product';
-import CheckIcon from '@material-ui/icons/Check';
-import ClearIcon from '@material-ui/icons/Clear';
+import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
+import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
+import { Box, Button, Grid, Typography } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import CheckIcon from "@mui/icons-material/Check";
+import ClearIcon from "@mui/icons-material/Clear";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import MUIDataTable from "mui-datatables";
+import { getBooking } from "store/booking";
+import { getDiscountPrice } from "helper/product";
+import BookingPageRightPanels from "@core/components/extra/BookingPageRightPanels/BookingPageRightPanels";
+import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  my3: {
-    margin: '1.3rem 0',
-  },
-  mb3: {
-    margin: '1.3rem 0',
-  },
-  mb0: {
-    marginBottom: 0,
-  },
-  mRight: {
-    marginRight: '.85rem',
-  },
-  p1: {
-    padding: '.85rem',
-  },
-  card: {
-    width: '100%',
-  },
-}));
-
-const BookingPage = (props) => {
-  const { history, match } = props;
-  const bookingId = match.params.id;
-  const classes = useStyles();
-
+const BookingPage = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const { selectedBooking } = useSelector((state) => state.booking);
   const { user: authUser } = useSelector((state) => state.auth);
+  const { selectedBooking } = useSelector((state) => state.booking);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (authUser) {
-      dispatch(getBooking(bookingId));
+      dispatch(getBooking(id));
     } else {
-      history.push('/login');
+      navigate("/login");
     }
-  }, [history, authUser, bookingId, dispatch]);
+  }, [authUser, dispatch, id, navigate]);
 
   const columns = [
     {
-      name: 'image',
-      label: 'Image',
+      name: "image",
+      label: "Image",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          const image = value.length > 0 ? value[0] : '';
+          const image = value.length > 0 ? value[0] : "";
           return (
-            <Avatar
-              variant="rounded"
-              src={image === '' ? '' : process.env.REACT_APP_API_URL + image}
+            <MemoizedAvatar
+              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
             />
           );
         },
       },
     },
     {
-      name: 'name',
-      label: 'Name',
+      name: "name",
+      label: "Name",
       options: {
         filter: true,
         sort: true,
       },
     },
     {
-      name: 'price',
-      label: 'Price',
+      name: "price",
+      label: "Price",
       options: {
         filter: true,
         sort: false,
+      },
+    },
+    {
+      name: "discount",
+      label: "Discount",
+      options: {
+        filter: true,
+        sort: false,
+        display: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowData: cartItem } = tableMeta;
           const price = cartItem[2];
@@ -102,17 +79,17 @@ const BookingPage = (props) => {
               {discountedPrice !== null ? (
                 <>
                   <span
-                    style={{ textDecoration: 'line-through', color: 'gray' }}
+                    style={{ textDecoration: "line-through", color: "gray" }}
                   >
-                    {'PKR ' + finalProductPrice}
+                    {"PKR " + finalProductPrice}
                   </span>
                   <br />
                   <span className="amount">
-                    {'    PKR ' + finalDiscountedPrice}
+                    {"    PKR " + finalDiscountedPrice}
                   </span>
                 </>
               ) : (
-                <span>{'PKR ' + finalProductPrice}</span>
+                <span>{"PKR " + finalProductPrice}</span>
               )}
             </>
           );
@@ -120,51 +97,40 @@ const BookingPage = (props) => {
       },
     },
     {
-      name: 'discount',
-      label: 'Discount',
-      options: {
-        filter: true,
-        sort: false,
-        display: false,
-      },
-    },
-    {
-      name: 'quantity',
-      label: 'Quantity',
+      name: "quantity",
+      label: "Quantity",
       options: {
         filter: true,
         sort: false,
       },
     },
     {
-      name: 'day',
-      label: 'Day',
+      name: "day",
+      label: "Day",
       options: {
         filter: true,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowIndex } = tableMeta;
-          console.log(rowIndex);
-          return selectedBooking.bookingItems[rowIndex].isPackage ? value : '';
+          return selectedBooking.bookingItems[rowIndex].isPackage ? value : "";
         },
       },
     },
     {
-      name: 'time',
-      label: 'Time',
+      name: "time",
+      label: "Time",
       options: {
         filter: true,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowIndex } = tableMeta;
-          console.log(rowIndex);
-          return selectedBooking.bookingItems[rowIndex].isPackage ? value : '';
+          return selectedBooking.bookingItems[rowIndex].isPackage ? value : "";
         },
       },
     },
     {
-      name: 'isPackage',
-      label: 'Package',
+      name: "isPackage",
+      label: "Package",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -173,8 +139,8 @@ const BookingPage = (props) => {
       },
     },
     {
-      name: 'price',
-      label: 'Sub Total',
+      name: "price",
+      label: "Sub Total",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -188,8 +154,8 @@ const BookingPage = (props) => {
           return (
             <>
               {discountedPrice !== null
-                ? 'PKR ' + (finalDiscountedPrice * quantity).toFixed(2)
-                : 'PKR ' + (finalProductPrice * quantity).toFixed(2)}
+                ? "PKR " + (finalDiscountedPrice * quantity).toFixed(2)
+                : "PKR " + (finalProductPrice * quantity).toFixed(2)}
             </>
           );
         },
@@ -198,7 +164,7 @@ const BookingPage = (props) => {
   ];
 
   const options = {
-    filterType: 'checkbox',
+    filterType: "checkbox",
     selectableRows: false,
     search: false,
     print: false,
@@ -209,10 +175,10 @@ const BookingPage = (props) => {
       return (
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
             m: 3,
           }}
         >
@@ -220,7 +186,7 @@ const BookingPage = (props) => {
             <Typography variant="h6">Sub Total</Typography>
             <Typography variant="body1">
               Rs
-              {' ' +
+              {" " +
                 selectedBooking.totalPrice -
                 selectedBooking.shippingPrice +
                 (selectedBooking.discount || 0)}
@@ -229,55 +195,48 @@ const BookingPage = (props) => {
           <Box>
             <Typography variant="h6">Shipping Price</Typography>
             <Typography variant="body1">
-              Rs{' ' + selectedBooking.shippingPrice}
+              Rs{" " + selectedBooking.shippingPrice}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Discount</Typography>
             <Typography variant="body1">
-              Rs{' ' + (selectedBooking.discount || 0)}
+              Rs{" " + (selectedBooking.discount || 0)}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Grand Total</Typography>
             <Typography variant="body1">
-              Rs{' ' + selectedBooking.totalPrice}
+              Rs{" " + selectedBooking.totalPrice}
             </Typography>
           </Box>
         </Box>
       );
     },
   };
-
   return (
     <AdminLayout>
-      <Grid container className={classes.my3} alignItems="center" spacing={1}>
-        <Grid item className={classes.mRight}>
+      <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
+        <Grid item>
           <Typography variant="h5" component="h1">
             Booking Details
           </Typography>
         </Grid>
         <Grid item>
-          {selectedBooking && selectedBooking.type === 'retail' ? (
-            <Button
-              onClick={() =>
-                history.push(`/bookings/update-booking/${selectedBooking.id}`)
-              }
-              variant="outlined"
-              color="primary"
-              size="small"
-            >
-              Update Booking
-            </Button>
-          ) : (
-            <></>
-          )}
+          <Button
+            onClick={() => navigate(`/bookings/update-booking/${id}`)}
+            variant="outlined"
+            color="primary"
+            size="small"
+          >
+            Update Booking
+          </Button>
         </Grid>
         <Grid item>
           <Button
-            onClick={() =>
-              history.push(`/bookings/invoice/${selectedBooking.id}`)
-            }
+            onClick={() => {
+              window.open(`/bookings/invoice/${id}`, "_blank");
+            }}
             variant="outlined"
             color="primary"
             size="small"
@@ -286,28 +245,26 @@ const BookingPage = (props) => {
           </Button>
         </Grid>
       </Grid>
-      <AdminBreadcrumbs path={history} />
-      <div className={classes.root}>
-        {selectedBooking ? (
-          <Grid container spacing={3}>
-            <Grid container item md={8} spacing={3}>
-              <Grid item xs={12}>
-                <MUIDataTable
-                  title={'Booking Items'}
-                  data={selectedBooking.bookingItems}
-                  columns={columns}
-                  options={options}
-                />
-              </Grid>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <BookingPageRightPanels />
+      <AdminBreadcrumbs />
+      {selectedBooking ? (
+        <Grid container spacing={3}>
+          <Grid container item md={8} spacing={3}>
+            <Grid item xs={12}>
+              <MUIDataTable
+                title={"Booking Items"}
+                data={selectedBooking.bookingItems}
+                columns={columns}
+                options={options}
+              />
             </Grid>
           </Grid>
-        ) : (
-          <></>
-        )}
-      </div>
+          <Grid item xs={12} md={4}>
+            <BookingPageRightPanels />
+          </Grid>
+        </Grid>
+      ) : (
+        <></>
+      )}
     </AdminLayout>
   );
 };

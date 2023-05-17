@@ -1,23 +1,21 @@
-import AllDealsPage from './AllDealsPage';
-import AddDealPage from './AddDealPage';
-import UpdateDealPage from './UpdateDealPage';
+import AddDealPage from "./AddDealPage";
+import AllDealsPage from "./AllDealsPage";
 
 export const DealsPageConfig = {
   routes: [
     {
-      path: '/deals',
+      path: "/deals",
       exact: true,
-      component: AllDealsPage,
+      element: <AllDealsPage />,
     },
     {
-      path: '/deals/add-deal',
+      path: "/deals/add-deal",
       exact: true,
-      component: AddDealPage,
+      element: <AddDealPage />,
     },
     {
-      path: '/deals/:id',
-      exact: true,
-      component: UpdateDealPage,
+      path: "/deals/:id",
+      element: <AddDealPage />,
     },
   ],
 };

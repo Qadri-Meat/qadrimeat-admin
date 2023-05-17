@@ -1,106 +1,37 @@
+import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
+import DataTable from "@core/components/ui/DataTable";
+import { Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import AdminLayout from "components/AdminLayout/AdminLayout";
-import AdminBreadcrumbs from "components/AdminBreadcrumbs/AdminBreadcrumbs";
-import { Typography, Grid, Button, makeStyles } from "@material-ui/core";
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-
-import MUIDataTable, { debounceSearchRender } from "mui-datatables";
-import { getBookings, deleteBooking } from "state/ducks/booking/actions";
 import { useDispatch, useSelector } from "react-redux";
-import CheckIcon from "@material-ui/icons/Check";
-import ClearIcon from "@material-ui/icons/Clear";
-import { pick } from "helpers/pick";
-const useStyles = makeStyles((theme) => ({
-  my3: {
-    margin: "1.3rem 0",
-  },
-  mb0: {
-    marginBottom: 0,
-  },
-  mRight: {
-    marginRight: ".85rem",
-  },
-  mLeft: {
-    marginRight: ".85rem",
-  },
-  p1: {
-    padding: ".85rem",
-  },
-}));
-
-const AllBookingsPage = (props) => {
-  const { history, location } = props;
+import { useNavigate } from "react-router-dom";
+import { deleteBooking, getBookings } from "store/booking";
+import CheckIcon from "@mui/icons-material/Check";
+import ClearIcon from "@mui/icons-material/Clear";
+import ToggleButton from "@mui/material/ToggleButton";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import { useLocation } from "react-router-dom";
+import { pick } from "helper/pick";
+const AllBookingsPage = () => {
+  const location = useLocation();
   const { type = "retail", paid } = pick(location.search);
-  const classes = useStyles();
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [selectedPage, setSelectedPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [search, setSearch] = useState("");
-  const [selectedBookings, setSelectedBookings] = useState([]);
-
-  const { results, page, totalResults } = useSelector((state) => state.booking);
-
+  const [page, setPage] = useState("");
+  const data = useSelector((state) => state.booking);
   const { user: authUser } = useSelector((state) => state.auth);
-
+  const query = `${page}${paid !== undefined ? `&isPaid=${paid}` : ""}`;
   useEffect(() => {
     if (authUser) {
-      const query = `?page=${selectedPage}&limit=${limit}&sortBy=createdAt:desc&type=${type}${
-        paid !== undefined ? `&isPaid=${paid}` : ""
-      }${search !== "" ? `&search=${search}` : ""}`;
       dispatch(getBookings(query));
     } else {
-      history.push("/login");
+      navigate("/login");
     }
-  }, [history, authUser, dispatch, selectedPage, limit, paid, type, search]);
+  }, [dispatch, authUser, navigate, paid, type, page, query]);
 
-  const handleDeleteBookings = async () => {
-    selectedBookings.forEach((item) => {
-      dispatch(deleteBooking(results[item.index].id));
-    });
+  const onDelete = async (value) => {
+    await dispatch(deleteBooking(value));
+    dispatch(getBookings(query)); // re-fetch the user data
   };
-
-  const options = {
-    filterType: "checkbox",
-    count: totalResults,
-    page: page,
-    serverSide: true,
-    customSearchRender: debounceSearchRender(2000),
-    onRowClick: (rowData, rowState) => {
-      console.log(rowState.rowIndex);
-      history.push(`/bookings/${results[rowState.rowIndex].id}`);
-    },
-    onTableChange: (action, tableState) => {
-      const { selectedRows } = tableState;
-      switch (action) {
-        case "rowsSelect":
-          setSelectedBookings(selectedRows.data);
-          break;
-        case "rowDelete":
-          handleDeleteBookings();
-          break;
-        case "changePage":
-          setSelectedPage(tableState.page + 1);
-          break;
-        case "changeRowsPerPage":
-          setLimit(tableState.rowsPerPage);
-          setSelectedPage(1);
-          break;
-        case "search":
-          setSearch(
-            tableState.searchText !== undefined &&
-              tableState.searchText !== null
-              ? tableState.searchText
-              : ""
-          );
-          break;
-        default:
-          break;
-      }
-    },
-  };
-
   const columns = [
     {
       name: "phone",
@@ -114,8 +45,11 @@ const AllBookingsPage = (props) => {
       label: "Name",
       options: {
         filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value.firstName + " " + value.lastName}</>;
+        customBodyRender: (values, tableMeta, updateValue) => {
+          if (!values || !values.firstName) {
+            return "";
+          }
+          return <>{values.firstName + " " + (values.lastName || "")}</>;
         },
       },
     },
@@ -134,45 +68,12 @@ const AllBookingsPage = (props) => {
         },
       },
     },
-    // {
-    //   name: 'deliveryTime',
-    //   label: 'Delivery Time',
-    //   options: {
-    //     filter: false,
-    //     customBodyRender: (value, tableMeta, updateValue) => {
-    //       return (
-    //         <>
-    //           {new Date(value).toLocaleDateString()},{' '}
-    //           {new Date(value).toLocaleTimeString()}
-    //         </>
-    //       );
-    //     },
-    //   },
-    // },
     {
       name: "totalPrice",
       label: "TOTAL",
       options: {
         filter: true,
         sort: false,
-      },
-    },
-    {
-      name: "totalPrice",
-      label: "Balance",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowIndex } = tableMeta;
-          var totalPaid = results[rowIndex].transactions.reduce(function (
-            a,
-            b
-          ) {
-            return a + b.amount;
-          },
-          0);
-          return <>{value - totalPaid}</>;
-        },
       },
     },
     {
@@ -185,22 +86,12 @@ const AllBookingsPage = (props) => {
         },
       },
     },
-    {
-      name: "deliveredAt",
-      label: "Delivered",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-        },
-      },
-    },
   ];
 
   return (
     <AdminLayout>
-      <Grid container className={classes.my3} alignItems="center">
-        <Grid item className={classes.mRight}>
+      <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
+        <Grid item>
           <Typography variant="h5" component="h1">
             Bookings
           </Typography>
@@ -216,7 +107,7 @@ const AllBookingsPage = (props) => {
         >
           <Grid item>
             <Button
-              onClick={() => history.push("/bookings/add-booking")}
+              onClick={() => navigate("/bookings/add-booking")}
               variant="outlined"
               color="primary"
               size="small"
@@ -233,7 +124,7 @@ const AllBookingsPage = (props) => {
               size="small"
               exclusive
               onChange={(event, value) => {
-                history.push(
+                navigate(
                   `/bookings?type=${type}${
                     value !== undefined && value !== null
                       ? `&paid=${value}`
@@ -245,33 +136,22 @@ const AllBookingsPage = (props) => {
               <ToggleButton value="true">Paid</ToggleButton>
               <ToggleButton value="false">No Paid</ToggleButton>
             </ToggleButtonGroup>
-            <ToggleButtonGroup
-              color="primary"
-              value={type}
-              size="small"
-              exclusive
-              onChange={(event, value) => {
-                history.push(
-                  `/bookings?type=${
-                    value !== undefined && value !== null
-                      ? `${value}`
-                      : `${type}`
-                  }`
-                );
-              }}
-            >
-              <ToggleButton value="online">Online</ToggleButton>
-              <ToggleButton value="retail">Retail</ToggleButton>
-            </ToggleButtonGroup>
           </Grid>
         </Grid>
       </Grid>
-      <AdminBreadcrumbs path={history} />
-      <MUIDataTable
-        title={"Bookings List"}
-        data={results}
+      <DataTable
+        title={"Booking List"}
+        data={data}
         columns={columns}
-        options={options}
+        setQuery={setPage}
+        onEdit={
+          authUser?.role === "user"
+            ? null
+            : (value) => {
+                navigate(`/bookings/${value}`);
+              }
+        }
+        onDelete={authUser?.role === "user" ? null : onDelete}
       />
     </AdminLayout>
   );
