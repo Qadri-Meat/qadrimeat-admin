@@ -8,9 +8,9 @@ const initialState = {
 
 export const loginUser = createAsyncThunk(
   "auth/login",
-  async (data, { rejectWithValue }) => {
+  async ({ email, password }, { rejectWithValue }) => {
     try {
-      const res = await AuthService.login(data.email, data.password);
+      const res = await AuthService.login(email, password);
       TokenService.setUserData(res.data.user);
       TokenService.setTokens(res.data.tokens);
       return res.data;
