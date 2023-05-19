@@ -31,8 +31,6 @@ export const getBooking = createAsyncThunk(
       return {
         loading: false,
         selectedBooking: { ...res.data, totalPaid: totalPaid1 || 0 },
-        // details: res.data,
-        // totalPaid: totalPaid1 || 0,
       };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -41,7 +39,7 @@ export const getBooking = createAsyncThunk(
 );
 
 export const getBookingItems = createAsyncThunk(
-  "booking/get",
+  "booking/getByID",
   async ({ day, deal }, { rejectWithValue }) => {
     try {
       const res = await BookingService.getBookingItems(day, deal);
@@ -72,7 +70,7 @@ export const createBooking = createAsyncThunk(
 );
 
 export const updateBooking = createAsyncThunk(
-  "booking/updateDeal",
+  "booking/updateBooking",
   async ({ id, data }, { rejectWithValue }) => {
     try {
       await BookingService.updateById({ id, data });
@@ -84,7 +82,7 @@ export const updateBooking = createAsyncThunk(
 );
 
 export const deleteTransaction = createAsyncThunk(
-  "booking/updateDeal",
+  "booking/delete Transections",
   async ({ id1, id2 }, { rejectWithValue }) => {
     try {
       await BookingService.deleteTransaction(id1, id2);
@@ -95,7 +93,7 @@ export const deleteTransaction = createAsyncThunk(
   }
 );
 export const addTransaction = createAsyncThunk(
-  "booking/updateDeal",
+  "booking/add Transections",
   async ({ id, data }, { rejectWithValue }) => {
     console.log(id, data);
     try {
@@ -108,7 +106,7 @@ export const addTransaction = createAsyncThunk(
 );
 
 export const deleteBooking = createAsyncThunk(
-  "booking/delete",
+  "booking/delete Booking",
   async (id, { rejectWithValue }) => {
     try {
       await BookingService.delete(id);

@@ -3,25 +3,26 @@ import { Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteDeal, getDeals } from "store/deal";
+import { deleteDeal, getDeals, resetDeal } from "store/deal";
 import DataTable from "@core/components/ui/DataTable";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
+import withAuth from "hooks/withAuth";
 const AllDealsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
   const data = useSelector((state) => state.deal);
+  const { success } = data;
   const { user: authUser } = useSelector((state) => state.auth);
   useEffect(() => {
-    if (authUser) {
-      dispatch(getDeals(query));
+    if (success) {
+      dispatch(resetDeal());
     } else {
-      navigate("/login");
+      dispatch(getDeals(query));
     }
-  }, [navigate, dispatch, query, authUser]);
+  }, [navigate, dispatch, query, success]);
   const onDelete = async (value) => {
-    await dispatch(deleteDeal(value));
-    dispatch(getDeals(query)); // re-fetch the Deals data
+    dispatch(deleteDeal(value));
   };
 
   const columns = [
@@ -95,4 +96,4 @@ const AllDealsPage = () => {
   );
 };
 
-export default AllDealsPage;
+export default withAuth(AllDealsPage);
