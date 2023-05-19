@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { getUser } from "store/user";
 import { pick } from "helper/pick";
+import withAuth from "hooks/withAuth";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,20 +37,16 @@ const Profile = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const classes = useStyles();
-  const { user: authUser } = useSelector((state) => state.auth);
   const { details, success } = useSelector((state) => state.user);
 
   useEffect(() => {
     if (success) {
       navigate(`/profile?id=${id}`);
     }
-    if (authUser) {
-      dispatch(getUser(id));
-    } else {
-      navigate("/login");
-    }
-  }, [authUser, dispatch, navigate, id, success]);
-
+  }, [navigate, id, success]);
+  useEffect(() => {
+    dispatch(getUser(id));
+  }, [dispatch, id]);
   return (
     <AdminLayout>
       <Grid container spacing={3}>
@@ -100,4 +97,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default withAuth(Profile);

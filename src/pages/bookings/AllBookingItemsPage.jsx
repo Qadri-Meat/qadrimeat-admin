@@ -17,6 +17,7 @@ import {
   Typography,
 } from "@mui/material";
 import { pick } from "helper/pick";
+import withAuth from "hooks/withAuth";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -30,16 +31,12 @@ const AllBookingItemsPage = () => {
   const dispatch = useDispatch();
   const { bookingItems } = useSelector((state) => state.booking);
   const { results } = useSelector((state) => state.deal);
-  const { user: authUser } = useSelector((state) => state.auth);
+
   useEffect(() => {
-    if (authUser) {
-      const query = `limit=${100}&page=${1}`;
-      dispatch(getBookingItems({ day, deal }));
-      dispatch(getDeals(query));
-    } else {
-      navigate("/login");
-    }
-  }, [navigate, authUser, dispatch, day, deal]);
+    const query = `limit=${100}&page=${1}`;
+    dispatch(getBookingItems({ day, deal }));
+    dispatch(getDeals(query));
+  }, [navigate, dispatch, day, deal]);
 
   return (
     <AdminLayout>
@@ -160,4 +157,4 @@ const AllBookingItemsPage = () => {
   );
 };
 
-export default AllBookingItemsPage;
+export default withAuth(AllBookingItemsPage);

@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
 import { getDeal } from "store/deal";
 import DealForm from "./components/DealForm";
+import withAuth from "hooks/withAuth";
 
 const AddDealPage = () => {
   const params = useParams();
@@ -39,4 +40,4 @@ const AddDealPage = () => {
   );
 };
 
-export default AddDealPage;
+export default withAuth(AddDealPage);

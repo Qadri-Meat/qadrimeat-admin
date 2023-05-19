@@ -6,25 +6,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getBooking } from "store/booking";
 import { addAllToCart } from "store/cart";
+import withAuth from "hooks/withAuth";
 const UpdateBookingPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { success, selectedBooking } = useSelector((state) => state.booking);
-  const { user: authUser } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   useEffect(() => {
-    if (authUser) {
-      if (success) {
-        navigate(`/bookings/${id}`);
-      } else if (!selectedBooking) {
-        dispatch(getBooking(id));
-      } else if (selectedBooking) {
-        dispatch(addAllToCart(selectedBooking.bookingItems));
-      }
-    } else {
-      navigate("/login");
+    if (success) {
+      navigate(`/bookings/${id}`);
+    } else if (!selectedBooking) {
+      dispatch(getBooking(id));
+    } else if (selectedBooking) {
+      dispatch(addAllToCart(selectedBooking.bookingItems));
     }
-  }, [navigate, success, authUser, id, selectedBooking, dispatch]);
+  }, [navigate, success, id, selectedBooking, dispatch]);
 
   return (
     <AdminLayout>
@@ -46,4 +42,4 @@ const UpdateBookingPage = () => {
   );
 };
 
-export default UpdateBookingPage;
+export default withAuth(UpdateBookingPage);
