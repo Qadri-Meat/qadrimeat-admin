@@ -1,4 +1,9 @@
-import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  isAnyOf,
+  createAction,
+} from "@reduxjs/toolkit";
 import BookingService from "services/BookingService";
 
 const initialState = {};
@@ -114,10 +119,15 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
+export const resetBooking = createAction({ type: "booking/reset" });
+
 const bookingSlice = createSlice({
   name: "bookings",
   initialState,
   extraReducers: (builder) => {
+    builder.addCase(resetBooking, (state, action) => {
+      return initialState;
+    });
     builder.addMatcher(
       isAnyOf(
         getBookings.pending,
