@@ -1,8 +1,13 @@
-import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  isAnyOf,
+  createAction,
+} from "@reduxjs/toolkit";
 import ExpenseService from "services/ExpenseServices";
 const initialState = {};
 export const getExpenses = createAsyncThunk(
-  "users/getAll",
+  "Expense/getAll",
   async (params, { rejectWithValue }) => {
     try {
       const res = await ExpenseService.getAll(params);
@@ -14,7 +19,7 @@ export const getExpenses = createAsyncThunk(
 );
 
 export const getExpense = createAsyncThunk(
-  "users/get",
+  "Expense/get",
   async (id, { rejectWithValue }) => {
     try {
       const res = await ExpenseService.get(id);
@@ -26,7 +31,7 @@ export const getExpense = createAsyncThunk(
 );
 
 export const createExpense = createAsyncThunk(
-  "users/create",
+  "Expense/create",
   async (data, { rejectWithValue }) => {
     try {
       await ExpenseService.create(data);
@@ -39,7 +44,7 @@ export const createExpense = createAsyncThunk(
 );
 
 export const updateExpense = createAsyncThunk(
-  "users/updateUser",
+  "expense/updateExpense",
   async ({ id, data }, { rejectWithValue }) => {
     console.log(id, data);
     try {
@@ -52,7 +57,7 @@ export const updateExpense = createAsyncThunk(
 );
 
 export const deleteExpense = createAsyncThunk(
-  "user/delete",
+  "expense/delete",
   async (id, { rejectWithValue }) => {
     try {
       await ExpenseService.delete(id);
@@ -62,16 +67,22 @@ export const deleteExpense = createAsyncThunk(
     }
   }
 );
+export const resetExpense = createAction("deal/reset");
+
 const expenseSlice = createSlice({
-  name: "users",
+  name: "expense",
   initialState,
   extraReducers: (builder) => {
+    builder.addCase(resetExpense, (state, action) => {
+      return initialState;
+    });
     builder.addMatcher(
       isAnyOf(
         getExpenses.pending,
         getExpense.pending,
         createExpense.pending,
-        updateExpense.pending
+        updateExpense.pending,
+        deleteExpense.pending
       ),
       (state, action) => {
         state.loading = true;
@@ -82,7 +93,8 @@ const expenseSlice = createSlice({
         getExpenses.fulfilled,
         getExpense.fulfilled,
         createExpense.fulfilled,
-        updateExpense.fulfilled
+        updateExpense.fulfilled,
+        deleteExpense.fulfilled
       ),
       (state, action) => {
         return action.payload;
@@ -93,7 +105,8 @@ const expenseSlice = createSlice({
         getExpenses.rejected,
         getExpense.rejected,
         createExpense.rejected,
-        updateExpense.rejected
+        updateExpense.rejected,
+        deleteExpense.rejected
       ),
       (state, action) => {
         state.loading = false;
