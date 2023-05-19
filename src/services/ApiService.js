@@ -43,6 +43,7 @@ export default class ApiService {
     }
     return Promise.reject(error);
   };
+
   refreshToken = async () => {
     try {
       const refreshToken = TokenService.getRefreshToken();
