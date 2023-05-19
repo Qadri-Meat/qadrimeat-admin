@@ -13,18 +13,21 @@ import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
 import withAuth from "hooks/withAuth";
 const AllBookingsPage = () => {
-  const location = useLocation();
-  const { paid } = pick(location.search);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const location = useLocation();
+  const { paid } = pick(location.search);
+
   const [query, setQuery] = useState("");
+
   const data = useSelector((state) => state.booking);
   const { success } = data;
   const { user: authUser } = useSelector((state) => state.auth);
 
   useEffect(() => {
     if (success) {
-      dispatch(resetBooking);
+      dispatch(resetBooking());
     } else {
       dispatch(
         getBookings(`${query}${paid !== undefined ? `&isPaid=${paid}` : ""}`)
@@ -35,6 +38,7 @@ const AllBookingsPage = () => {
   const onDelete = async (value) => {
     dispatch(deleteBooking(value));
   };
+
   const columns = [
     {
       name: "phone",

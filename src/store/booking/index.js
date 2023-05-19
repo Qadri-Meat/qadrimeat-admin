@@ -119,7 +119,7 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
-export const resetBooking = createAction({ type: "booking/reset" });
+export const resetBooking = createAction("booking/reset");
 
 const bookingSlice = createSlice({
   name: "bookings",
@@ -133,7 +133,8 @@ const bookingSlice = createSlice({
         getBookings.pending,
         getBooking.pending,
         createBooking.pending,
-        updateBooking.pending
+        updateBooking.pending,
+        deleteBooking.pending
       ),
       (state, action) => {
         state.loading = true;
@@ -144,7 +145,8 @@ const bookingSlice = createSlice({
         getBookings.fulfilled,
         getBooking.fulfilled,
         createBooking.fulfilled,
-        updateBooking.fulfilled
+        updateBooking.fulfilled,
+        deleteBooking.fulfilled
       ),
       (state, action) => {
         return action.payload;
@@ -155,7 +157,8 @@ const bookingSlice = createSlice({
         getBookings.rejected,
         getBooking.rejected,
         createBooking.rejected,
-        updateBooking.rejected
+        updateBooking.rejected,
+        deleteBooking.rejected
       ),
       (state, action) => {
         state.loading = false;
