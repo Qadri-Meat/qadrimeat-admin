@@ -10,15 +10,7 @@ class AuthService extends ApiService {
   login(email, password) {
     return this.instance.post(`/v1/auth/login`, { email, password });
   }
-
-  /**
-   * Refreshes the user's access token with the provided refresh token
-   * @param {string} refreshToken - User's refresh token
-   * @returns {Promise}
-   */
-  refreshToken(refreshToken) {
-    return this.instance.post(`/v1/auth/refresh-token`, { refreshToken });
-  }
 }
 
-export default new AuthService();
+const authService = new AuthService();
+export default authService;
