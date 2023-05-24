@@ -6,6 +6,7 @@ import UserForm from "./components/UserForm";
 import { getUser } from "store/user";
 import { Grid, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import withAuth from "hooks/withAuth";
 
 const AddUserPage = () => {
   const params = useParams();
@@ -40,4 +41,4 @@ const AddUserPage = () => {
   );
 };
 
-export default AddUserPage;
+export default withAuth(AddUserPage);

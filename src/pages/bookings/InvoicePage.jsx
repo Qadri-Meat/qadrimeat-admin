@@ -5,21 +5,17 @@ import { getBooking } from "store/booking";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDiscountPrice } from "helper/product";
 import { Avatar } from "@mui/material";
+import withAuth from "hooks/withAuth";
 const InvoicePage = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { user: authUser } = useSelector((state) => state.auth);
   const { selectedBooking } = useSelector((state) => state.booking);
   const navigate = useNavigate();
   useEffect(() => {
-    if (authUser) {
-      if (!selectedBooking || selectedBooking.id !== id) {
-        dispatch(getBooking(id));
-      }
-    } else {
-      navigate("/login");
+    if (!selectedBooking || selectedBooking.id !== id) {
+      dispatch(getBooking(id));
     }
-  }, [authUser, selectedBooking, id, dispatch, navigate]);
+  }, [selectedBooking, id, dispatch, navigate]);
   return (
     <>
       {!selectedBooking ? (
@@ -330,4 +326,4 @@ const InvoicePage = (props) => {
   );
 };
 
-export default InvoicePage;
+export default withAuth(InvoicePage);

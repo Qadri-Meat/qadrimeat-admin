@@ -1,27 +1,28 @@
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 import DataTable from "@core/components/ui/DataTable";
 import { Button, Grid, Typography } from "@mui/material";
+import withAuth from "hooks/withAuth";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteExpense, getExpenses } from "store/expense";
+import { deleteExpense, getExpenses, resetExpense } from "store/expense";
 const AllExpensesPage = () => {
   const [selectedPage, setSelectedPage] = useState(1);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const query = `?page=${selectedPage}`;
-  const { user: authUser } = useSelector((state) => state.auth);
+
   const data = useSelector((state) => state.expense);
+  const { success } = data;
   useEffect(() => {
-    if (authUser) {
-      dispatch(getExpenses(query));
+    if (success) {
+      dispatch(resetExpense());
     } else {
-      navigate("/login");
+      dispatch(getExpenses(query));
     }
-  }, [authUser, dispatch, navigate, query]);
+  }, [success, dispatch, navigate, query]);
   const onDelete = async (value) => {
-    await dispatch(deleteExpense(value));
-    dispatch(getExpenses(query)); // re-fetch the user data
+    dispatch(deleteExpense(value));
   };
   const columns = [
     {
@@ -96,4 +97,4 @@ const AllExpensesPage = () => {
   );
 };
 
-export default AllExpensesPage;
+export default withAuth(AllExpensesPage);

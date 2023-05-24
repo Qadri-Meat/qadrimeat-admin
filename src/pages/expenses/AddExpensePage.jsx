@@ -6,6 +6,7 @@ import ExpenseForm from "./components/ExpenseForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getExpense } from "store/expense";
+import withAuth from "hooks/withAuth";
 
 const AddExpensePage = () => {
   const params = useParams();
@@ -40,4 +41,4 @@ const AddExpensePage = () => {
   );
 };
 
-export default AddExpensePage;
+export default withAuth(AddExpensePage);

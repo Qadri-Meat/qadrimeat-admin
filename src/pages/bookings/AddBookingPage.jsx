@@ -4,21 +4,17 @@ import BookingForm from "./components/BookingForm";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import withAuth from "hooks/withAuth";
 const AddBookingPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { success, selectedBooking } = useSelector((state) => state.booking);
-  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    if (user) {
-      if (success) {
-        navigate(`/bookings/${selectedBooking.id}`);
-      }
-    } else {
-      navigate("/login");
+    if (success) {
+      navigate(`/bookings/${selectedBooking.id}`);
     }
-  }, [success, dispatch, navigate, user, selectedBooking]);
+  }, [success, dispatch, navigate, selectedBooking]);
 
   return (
     <AdminLayout>
@@ -36,4 +32,4 @@ const AddBookingPage = () => {
   );
 };
 
-export default AddBookingPage;
+export default withAuth(AddBookingPage);

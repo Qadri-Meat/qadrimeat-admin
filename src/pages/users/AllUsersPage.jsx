@@ -4,26 +4,26 @@ import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "@core/components/ui/DataTable";
-import { getUsers } from "store/user";
+import { getUsers, resetUsers } from "store/user";
 import { Button, Grid, Typography } from "@mui/material";
 import { deleteUser } from "store/user";
+import withAuth from "hooks/withAuth";
 const AllUsersPage = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
 
   const data = useSelector((state) => state.user);
-  const { user: authUser } = useSelector((state) => state.auth);
+  const { success } = data;
   useEffect(() => {
-    if (authUser) {
-      dispatch(getUsers(query));
+    if (success) {
+      dispatch(resetUsers());
     } else {
-      navigate("/login");
+      dispatch(getUsers(query));
     }
-  }, [authUser, dispatch, query, navigate]);
+  }, [success, dispatch, query, navigate]);
   const onDelete = async (value) => {
-    await dispatch(deleteUser(value));
-    dispatch(getUsers(query)); // re-fetch the user data
+    dispatch(deleteUser(value));
   };
   const columns = [
     {
@@ -78,4 +78,4 @@ const AllUsersPage = (props) => {
   );
 };
 
-export default AllUsersPage;
+export default withAuth(AllUsersPage);

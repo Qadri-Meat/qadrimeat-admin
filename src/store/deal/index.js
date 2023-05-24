@@ -1,4 +1,9 @@
-import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  isAnyOf,
+  createAction,
+} from "@reduxjs/toolkit";
 import DealService from "services/DealService";
 
 const initialState = {};
@@ -38,7 +43,6 @@ export const createDeal = createAsyncThunk(
     }
   }
 );
-
 export const updateDeal = createAsyncThunk(
   "deal/updateDeal",
   async ({ id, data }, { rejectWithValue }) => {
@@ -51,19 +55,6 @@ export const updateDeal = createAsyncThunk(
   }
 );
 
-// export const updateUser = createAsyncThunk(
-//   "users/updateUser",
-//   async (id, data, { rejectWithValue }) => {
-//     console.log(id, data);
-//     try {
-//       await UserService.updateById(id, data);
-//       return { success: true };
-//     } catch (err) {
-//       return rejectWithValue(err.response.data);
-//     }
-//   }
-// );
-
 export const deleteDeal = createAsyncThunk(
   "deal/delete",
   async (id, { rejectWithValue }) => {
@@ -75,17 +66,22 @@ export const deleteDeal = createAsyncThunk(
     }
   }
 );
+export const resetDeal = createAction("deal/reset");
 
-const userSlice = createSlice({
+const dealSlice = createSlice({
   name: "deals",
   initialState,
   extraReducers: (builder) => {
+    builder.addCase(resetDeal, (state, action) => {
+      return initialState;
+    });
     builder.addMatcher(
       isAnyOf(
         getDeals.pending,
         getDeal.pending,
         createDeal.pending,
-        updateDeal.pending
+        updateDeal.pending,
+        deleteDeal.pending
       ),
       (state, action) => {
         state.loading = true;
@@ -96,7 +92,8 @@ const userSlice = createSlice({
         getDeals.fulfilled,
         getDeal.fulfilled,
         createDeal.fulfilled,
-        updateDeal.fulfilled
+        updateDeal.fulfilled,
+        deleteDeal.fulfilled
       ),
       (state, action) => {
         return action.payload;
@@ -107,7 +104,8 @@ const userSlice = createSlice({
         getDeals.rejected,
         getDeal.rejected,
         createDeal.rejected,
-        updateDeal.rejected
+        updateDeal.rejected,
+        deleteDeal.rejected
       ),
       (state, action) => {
         state.loading = false;
@@ -117,5 +115,5 @@ const userSlice = createSlice({
   },
 });
 
-const { reducer } = userSlice;
+const { reducer } = dealSlice;
 export default reducer;

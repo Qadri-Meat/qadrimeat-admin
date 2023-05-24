@@ -1,4 +1,9 @@
-import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  isAnyOf,
+  createAction,
+} from "@reduxjs/toolkit";
 import BookingService from "services/BookingService";
 
 const initialState = {};
@@ -26,8 +31,6 @@ export const getBooking = createAsyncThunk(
       return {
         loading: false,
         selectedBooking: { ...res.data, totalPaid: totalPaid1 || 0 },
-        // details: res.data,
-        // totalPaid: totalPaid1 || 0,
       };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -36,7 +39,7 @@ export const getBooking = createAsyncThunk(
 );
 
 export const getBookingItems = createAsyncThunk(
-  "booking/get",
+  "booking/getByID",
   async ({ day, deal }, { rejectWithValue }) => {
     try {
       const res = await BookingService.getBookingItems(day, deal);
@@ -67,7 +70,7 @@ export const createBooking = createAsyncThunk(
 );
 
 export const updateBooking = createAsyncThunk(
-  "booking/updateDeal",
+  "booking/updateBooking",
   async ({ id, data }, { rejectWithValue }) => {
     try {
       await BookingService.updateById({ id, data });
@@ -79,7 +82,7 @@ export const updateBooking = createAsyncThunk(
 );
 
 export const deleteTransaction = createAsyncThunk(
-  "booking/updateDeal",
+  "booking/delete Transections",
   async ({ id1, id2 }, { rejectWithValue }) => {
     try {
       await BookingService.deleteTransaction(id1, id2);
@@ -90,7 +93,7 @@ export const deleteTransaction = createAsyncThunk(
   }
 );
 export const addTransaction = createAsyncThunk(
-  "booking/updateDeal",
+  "booking/add Transections",
   async ({ id, data }, { rejectWithValue }) => {
     console.log(id, data);
     try {
@@ -103,7 +106,7 @@ export const addTransaction = createAsyncThunk(
 );
 
 export const deleteBooking = createAsyncThunk(
-  "booking/delete",
+  "booking/delete Booking",
   async (id, { rejectWithValue }) => {
     try {
       await BookingService.delete(id);
@@ -114,16 +117,22 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
+export const resetBooking = createAction("booking/reset");
+
 const bookingSlice = createSlice({
   name: "bookings",
   initialState,
   extraReducers: (builder) => {
+    builder.addCase(resetBooking, (state, action) => {
+      return initialState;
+    });
     builder.addMatcher(
       isAnyOf(
         getBookings.pending,
         getBooking.pending,
         createBooking.pending,
-        updateBooking.pending
+        updateBooking.pending,
+        deleteBooking.pending
       ),
       (state, action) => {
         state.loading = true;
@@ -134,7 +143,8 @@ const bookingSlice = createSlice({
         getBookings.fulfilled,
         getBooking.fulfilled,
         createBooking.fulfilled,
-        updateBooking.fulfilled
+        updateBooking.fulfilled,
+        deleteBooking.fulfilled
       ),
       (state, action) => {
         return action.payload;
@@ -145,7 +155,8 @@ const bookingSlice = createSlice({
         getBookings.rejected,
         getBooking.rejected,
         createBooking.rejected,
-        updateBooking.rejected
+        updateBooking.rejected,
+        deleteBooking.rejected
       ),
       (state, action) => {
         state.loading = false;

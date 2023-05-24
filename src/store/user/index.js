@@ -1,4 +1,9 @@
-import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createAsyncThunk,
+  isAnyOf,
+  createAction,
+} from "@reduxjs/toolkit";
 import UserService from "services/UserService";
 const initialState = {};
 
@@ -73,17 +78,22 @@ export const deleteUser = createAsyncThunk(
     }
   }
 );
+export const resetUsers = createAction("users/reset");
 
 const userSlice = createSlice({
   name: "users",
   initialState,
   extraReducers: (builder) => {
+    builder.addCase(resetUsers, (state, action) => {
+      return initialState;
+    });
     builder.addMatcher(
       isAnyOf(
         getUsers.pending,
         getUser.pending,
         createUser.pending,
-        updateUser.pending
+        updateUser.pending,
+        deleteUser.pending
       ),
       (state, action) => {
         state.loading = true;
@@ -94,7 +104,8 @@ const userSlice = createSlice({
         getUsers.fulfilled,
         getUser.fulfilled,
         createUser.fulfilled,
-        updateUser.fulfilled
+        updateUser.fulfilled,
+        deleteUser.fulfilled
       ),
       (state, action) => {
         return action.payload;
@@ -105,7 +116,8 @@ const userSlice = createSlice({
         getUsers.rejected,
         getUser.rejected,
         createUser.rejected,
-        updateUser.rejected
+        updateUser.rejected,
+        deleteUser.rejected
       ),
       (state, action) => {
         state.loading = false;

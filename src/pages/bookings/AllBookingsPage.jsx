@@ -4,34 +4,41 @@ import { Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteBooking, getBookings } from "store/booking";
+import { deleteBooking, getBookings, resetBooking } from "store/booking";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
+import withAuth from "hooks/withAuth";
 const AllBookingsPage = () => {
-  const location = useLocation();
-  const { type = "retail", paid } = pick(location.search);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [page, setPage] = useState("");
+
+  const location = useLocation();
+  const { paid } = pick(location.search);
+
+  const [query, setQuery] = useState("");
+
   const data = useSelector((state) => state.booking);
+  const { success } = data;
   const { user: authUser } = useSelector((state) => state.auth);
-  const query = `${page}${paid !== undefined ? `&isPaid=${paid}` : ""}`;
+
   useEffect(() => {
-    if (authUser) {
-      dispatch(getBookings(query));
+    if (success) {
+      dispatch(resetBooking());
     } else {
-      navigate("/login");
+      dispatch(
+        getBookings(`${query}${paid !== undefined ? `&isPaid=${paid}` : ""}`)
+      );
     }
-  }, [dispatch, authUser, navigate, paid, type, page, query]);
+  }, [dispatch, paid, query, success]);
 
   const onDelete = async (value) => {
-    await dispatch(deleteBooking(value));
-    dispatch(getBookings(query)); // re-fetch the user data
+    dispatch(deleteBooking(value));
   };
+
   const columns = [
     {
       name: "phone",
@@ -125,9 +132,9 @@ const AllBookingsPage = () => {
               exclusive
               onChange={(event, value) => {
                 navigate(
-                  `/bookings?type=${type}${
+                  `/bookings${
                     value !== undefined && value !== null
-                      ? `&paid=${value}`
+                      ? `?paid=${value}`
                       : ""
                   }`
                 );
@@ -143,7 +150,7 @@ const AllBookingsPage = () => {
         title={"Booking List"}
         data={data}
         columns={columns}
-        setQuery={setPage}
+        setQuery={setQuery}
         onEdit={
           authUser?.role === "user"
             ? null
@@ -157,4 +164,4 @@ const AllBookingsPage = () => {
   );
 };
 
-export default AllBookingsPage;
+export default withAuth(AllBookingsPage);

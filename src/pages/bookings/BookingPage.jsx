@@ -15,17 +15,12 @@ import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 const BookingPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { user: authUser } = useSelector((state) => state.auth);
   const { selectedBooking } = useSelector((state) => state.booking);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (authUser) {
-      dispatch(getBooking(id));
-    } else {
-      navigate("/login");
-    }
-  }, [authUser, dispatch, id, navigate]);
+    dispatch(getBooking(id));
+  }, [dispatch, id, navigate]);
 
   const columns = [
     {

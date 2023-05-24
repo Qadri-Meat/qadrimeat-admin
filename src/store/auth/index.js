@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, isAnyOf } from "@reduxjs/toolkit";
-import AuthService from "services/AuthService";
+import authService from "services/AuthService";
 import TokenService from "services/TokenService";
 
 const initialState = {
@@ -10,7 +10,7 @@ export const loginUser = createAsyncThunk(
   "auth/login",
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const res = await AuthService.login(email, password);
+      const res = await authService.login(email, password);
       TokenService.setUserData(res.data.user);
       TokenService.setTokens(res.data.tokens);
       return res.data;
