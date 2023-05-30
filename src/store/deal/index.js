@@ -1,18 +1,13 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  isAnyOf,
-  createAction,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import DealService from "services/DealService";
 
 const initialState = {};
 
 export const getDeals = createAsyncThunk(
   "deal/getAll",
-  async (params, { rejectWithValue }) => {
+  async (query, { rejectWithValue }) => {
     try {
-      const res = await DealService.getAll(params);
+      const res = await DealService.getAll(query);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -21,7 +16,7 @@ export const getDeals = createAsyncThunk(
 );
 
 export const getDeal = createAsyncThunk(
-  "deals/get",
+  "deal/get",
   async (id, { rejectWithValue }) => {
     try {
       const res = await DealService.get(id);
@@ -43,6 +38,7 @@ export const createDeal = createAsyncThunk(
     }
   }
 );
+
 export const updateDeal = createAsyncThunk(
   "deal/updateDeal",
   async ({ id, data }, { rejectWithValue }) => {
@@ -66,50 +62,31 @@ export const deleteDeal = createAsyncThunk(
     }
   }
 );
+
 export const resetDeal = createAction("deal/reset");
 
 const dealSlice = createSlice({
-  name: "deals",
+  name: "deal",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(resetDeal, (state, action) => {
-      return initialState;
-    });
+    builder.addCase(resetDeal, (state, action) => initialState);
     builder.addMatcher(
-      isAnyOf(
-        getDeals.pending,
-        getDeal.pending,
-        createDeal.pending,
-        updateDeal.pending,
-        deleteDeal.pending
-      ),
+      (action) => action.type.startsWith("deal"),
       (state, action) => {
-        state.loading = true;
-      }
-    );
-    builder.addMatcher(
-      isAnyOf(
-        getDeals.fulfilled,
-        getDeal.fulfilled,
-        createDeal.fulfilled,
-        updateDeal.fulfilled,
-        deleteDeal.fulfilled
-      ),
-      (state, action) => {
-        return action.payload;
-      }
-    );
-    builder.addMatcher(
-      isAnyOf(
-        getDeals.rejected,
-        getDeal.rejected,
-        createDeal.rejected,
-        updateDeal.rejected,
-        deleteDeal.rejected
-      ),
-      (state, action) => {
-        state.loading = false;
-        state.message = action.payload.message;
+        const [actionType] = action.type.split("/").reverse();
+        switch (actionType) {
+          case "pending":
+            state.loading = true;
+            break;
+          case "fulfilled":
+            return action.payload;
+          case "rejected":
+            state.loading = false;
+            state.message = action.payload.message;
+            break;
+          default:
+            break;
+        }
       }
     );
   },

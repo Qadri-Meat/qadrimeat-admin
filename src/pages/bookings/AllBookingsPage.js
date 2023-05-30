@@ -21,22 +21,30 @@ const AllBookingsPage = () => {
 
   const [query, setQuery] = useState("");
 
-  const data = useSelector((state) => state.booking);
-  const { success } = data;
-  const { user: authUser } = useSelector((state) => state.auth);
+  const { results, totalResults, success } = useSelector(
+    (state) => state.booking
+  );
 
   useEffect(() => {
     if (success) {
       dispatch(resetBooking());
     } else {
       dispatch(
-        getBookings(`${query}${paid !== undefined ? `&isPaid=${paid}` : ""}`)
+        getBookings(`${paid !== undefined ? `isPaid=${paid}&` : ""}${query}`)
       );
     }
   }, [dispatch, paid, query, success]);
 
-  const onDelete = async (value) => {
+  const onDelete = (value) => {
     dispatch(deleteBooking(value));
+  };
+
+  const onEdit = (value) => {
+    navigate(`/bookings/${value}`);
+  };
+
+  const handlePaidToggle = (event, value) => {
+    navigate(`/bookings?paid=${value}`);
   };
 
   const columns = [
@@ -130,15 +138,7 @@ const AllBookingsPage = () => {
               value={paid}
               size="small"
               exclusive
-              onChange={(event, value) => {
-                navigate(
-                  `/bookings${
-                    value !== undefined && value !== null
-                      ? `?paid=${value}`
-                      : ""
-                  }`
-                );
-              }}
+              onChange={handlePaidToggle}
             >
               <ToggleButton value="true">Paid</ToggleButton>
               <ToggleButton value="false">No Paid</ToggleButton>
@@ -148,17 +148,12 @@ const AllBookingsPage = () => {
       </Grid>
       <DataTable
         title={"Booking List"}
-        data={data}
+        results={results}
+        totalResults={totalResults}
         columns={columns}
         setQuery={setQuery}
-        onEdit={
-          authUser?.role === "user"
-            ? null
-            : (value) => {
-                navigate(`/bookings/${value}`);
-              }
-        }
-        onDelete={authUser?.role === "user" ? null : onDelete}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     </AdminLayout>
   );

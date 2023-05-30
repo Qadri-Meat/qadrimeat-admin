@@ -1,16 +1,13 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  isAnyOf,
-  createAction,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import ExpenseService from "services/ExpenseServices";
+
 const initialState = {};
+
 export const getExpenses = createAsyncThunk(
-  "Expense/getAll",
-  async (params, { rejectWithValue }) => {
+  "expense/getAll",
+  async (query, { rejectWithValue }) => {
     try {
-      const res = await ExpenseService.getAll(params);
+      const res = await ExpenseService.getAll(query);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -19,7 +16,7 @@ export const getExpenses = createAsyncThunk(
 );
 
 export const getExpense = createAsyncThunk(
-  "Expense/get",
+  "expense/get",
   async (id, { rejectWithValue }) => {
     try {
       const res = await ExpenseService.get(id);
@@ -31,13 +28,12 @@ export const getExpense = createAsyncThunk(
 );
 
 export const createExpense = createAsyncThunk(
-  "Expense/create",
+  "expense/create",
   async (data, { rejectWithValue }) => {
     try {
       await ExpenseService.create(data);
       return { success: true };
     } catch (err) {
-      console.log("Error is", err.response.data.message);
       return rejectWithValue(err.response.data);
     }
   }
@@ -67,49 +63,31 @@ export const deleteExpense = createAsyncThunk(
     }
   }
 );
-export const resetExpense = createAction("deal/reset");
+
+export const resetExpense = createAction("expense/reset");
 
 const expenseSlice = createSlice({
   name: "expense",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(resetExpense, (state, action) => {
-      return initialState;
-    });
+    builder.addCase(resetExpense, (state, action) => initialState);
     builder.addMatcher(
-      isAnyOf(
-        getExpenses.pending,
-        getExpense.pending,
-        createExpense.pending,
-        updateExpense.pending,
-        deleteExpense.pending
-      ),
+      (action) => action.type.startsWith("expense"),
       (state, action) => {
-        state.loading = true;
-      }
-    );
-    builder.addMatcher(
-      isAnyOf(
-        getExpenses.fulfilled,
-        getExpense.fulfilled,
-        createExpense.fulfilled,
-        updateExpense.fulfilled,
-        deleteExpense.fulfilled
-      ),
-      (state, action) => {
-        return action.payload;
-      }
-    );
-    builder.addMatcher(
-      isAnyOf(
-        getExpenses.rejected,
-        getExpense.rejected,
-        createExpense.rejected,
-        updateExpense.rejected,
-        deleteExpense.rejected
-      ),
-      (state, action) => {
-        state.loading = false;
+        const [actionType] = action.type.split("/").reverse();
+        switch (actionType) {
+          case "pending":
+            state.loading = true;
+            break;
+          case "fulfilled":
+            return action.payload;
+          case "rejected":
+            state.loading = false;
+            state.message = action.payload.message;
+            break;
+          default:
+            break;
+        }
       }
     );
   },

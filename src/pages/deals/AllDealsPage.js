@@ -11,19 +11,30 @@ const AllDealsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
-  const data = useSelector((state) => state.deal);
-  const { success } = data;
   const { user: authUser } = useSelector((state) => state.auth);
+  const { results, totalResults, success } = useSelector((state) => state.deal);
+
   useEffect(() => {
     if (success) {
       dispatch(resetDeal());
     } else {
       dispatch(getDeals(query));
     }
-  }, [navigate, dispatch, query, success]);
-  const onDelete = async (value) => {
-    dispatch(deleteDeal(value));
-  };
+  }, [dispatch, query, success]);
+
+  const onDelete =
+    authUser?.role === "user"
+      ? null
+      : (value) => {
+          dispatch(deleteDeal(value));
+        };
+
+  const onEdit =
+    authUser?.role === "user"
+      ? null
+      : (value) => {
+          navigate(`/deals/${value}`);
+        };
 
   const columns = [
     {
@@ -80,17 +91,12 @@ const AllDealsPage = () => {
       </Grid>
       <DataTable
         title={"Deals List"}
-        data={data}
+        results={results}
+        totalResults={totalResults}
         columns={columns}
         setQuery={setQuery}
-        onEdit={
-          authUser?.role === "user"
-            ? null
-            : (value) => {
-                navigate(`/deals/${value}`);
-              }
-        }
-        onDelete={authUser?.role === "user" ? null : onDelete}
+        onEdit={onEdit}
+        onDelete={onDelete}
       />
     </AdminLayout>
   );

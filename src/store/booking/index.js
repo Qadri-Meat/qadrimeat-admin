@@ -1,9 +1,4 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  isAnyOf,
-  createAction,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import BookingService from "services/BookingService";
 
 const initialState = {};
@@ -38,17 +33,6 @@ export const getBooking = createAsyncThunk(
   }
 );
 
-export const getBookingItems = createAsyncThunk(
-  "booking/getByID",
-  async ({ day, deal }, { rejectWithValue }) => {
-    try {
-      const res = await BookingService.getBookingItems(day, deal);
-      return { bookingItems: res.data };
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
 export const createBooking = createAsyncThunk(
   "booking/create",
   async (data, { rejectWithValue }) => {
@@ -81,30 +65,6 @@ export const updateBooking = createAsyncThunk(
   }
 );
 
-export const deleteTransaction = createAsyncThunk(
-  "booking/delete Transections",
-  async ({ id1, id2 }, { rejectWithValue }) => {
-    try {
-      await BookingService.deleteTransaction(id1, id2);
-      return { success: true };
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
-export const addTransaction = createAsyncThunk(
-  "booking/add Transections",
-  async ({ id, data }, { rejectWithValue }) => {
-    console.log(id, data);
-    try {
-      await BookingService.addTransaction({ id, data });
-      return { success: true };
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
-
 export const deleteBooking = createAsyncThunk(
   "booking/delete Booking",
   async (id, { rejectWithValue }) => {
@@ -117,50 +77,66 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
+export const getBookingItems = createAsyncThunk(
+  "booking/getBookingItems",
+  async ({ day, deal }, { rejectWithValue }) => {
+    try {
+      const res = await BookingService.getBookingItems(day, deal);
+      return { bookingItems: res.data };
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const deleteTransaction = createAsyncThunk(
+  "booking/deleteTransaction",
+  async ({ id1, id2 }, { rejectWithValue }) => {
+    try {
+      await BookingService.deleteTransaction(id1, id2);
+      return { success: true };
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+export const addTransaction = createAsyncThunk(
+  "booking/addTransaction",
+  async ({ id, data }, { rejectWithValue }) => {
+    console.log(id, data);
+    try {
+      await BookingService.addTransaction({ id, data });
+      return { success: true };
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const resetBooking = createAction("booking/reset");
 
 const bookingSlice = createSlice({
-  name: "bookings",
+  name: "booking",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(resetBooking, (state, action) => {
-      return initialState;
-    });
+    builder.addCase(resetBooking, (state, action) => initialState);
     builder.addMatcher(
-      isAnyOf(
-        getBookings.pending,
-        getBooking.pending,
-        createBooking.pending,
-        updateBooking.pending,
-        deleteBooking.pending
-      ),
+      (action) => action.type.startsWith("booking"),
       (state, action) => {
-        state.loading = true;
-      }
-    );
-    builder.addMatcher(
-      isAnyOf(
-        getBookings.fulfilled,
-        getBooking.fulfilled,
-        createBooking.fulfilled,
-        updateBooking.fulfilled,
-        deleteBooking.fulfilled
-      ),
-      (state, action) => {
-        return action.payload;
-      }
-    );
-    builder.addMatcher(
-      isAnyOf(
-        getBookings.rejected,
-        getBooking.rejected,
-        createBooking.rejected,
-        updateBooking.rejected,
-        deleteBooking.rejected
-      ),
-      (state, action) => {
-        state.loading = false;
-        // state.message = action.payload.message;
+        const [actionType] = action.type.split("/").reverse();
+        switch (actionType) {
+          case "pending":
+            state.loading = true;
+            break;
+          case "fulfilled":
+            return action.payload;
+          case "rejected":
+            state.loading = false;
+            state.message = action.payload.message;
+            break;
+          default:
+            break;
+        }
       }
     );
   },

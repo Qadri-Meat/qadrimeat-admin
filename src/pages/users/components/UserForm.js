@@ -10,17 +10,14 @@ import FormInput from "@core/components/forms/FormInput";
 import { Button, Grid, MenuItem } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
-const emailRegExp =
-  /^$|^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-const passwordRegix = /^(?=.*[a-z])(?=.*\d)[A-z\d#$@!%&*?]{8,30}$/;
+import { emailRegix, passwordRegix } from "helper/regix";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
   lastName: yup.string(),
   email: yup
     .string()
-    .matches(emailRegExp, "Enter Valid Email Address")
+    .matches(emailRegix, "Enter Valid Email Address")
     .required(),
   password: yup
     .string()
@@ -31,14 +28,14 @@ const schema = yup.object().shape({
     .required("Password is required")
     .min(4, "Password length should be at least 4 characters")
     .max(12, "Password cannot exceed more than 12 characters"),
-  Cpassword: yup
+  confirmPassword: yup
     .string()
     .oneOf([yup.ref("password")], "Passwords do not match"),
   role: yup.string().required("Role is a required field"),
 });
+
 const UserForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
-  const { user: authUser } = useSelector((state) => state.auth);
   const { message, loading } = useSelector((state) => state.user);
   const {
     register,
@@ -51,17 +48,17 @@ const UserForm = ({ defaultValues }) => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    const postData = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-      role: data.role,
+  const onSubmit = (values) => {
+    const data = {
+      name: values.name,
+      email: values.email,
+      password: values.password,
+      role: values.role,
     };
     if (defaultValues) {
       dispatch(updateUser({ id: defaultValues.id, data }));
     } else {
-      dispatch(createUser(postData));
+      dispatch(createUser(data));
     }
   };
 
@@ -105,31 +102,29 @@ const UserForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("Cpassword")}
-            id="Cpassword"
+            {...register("confirmPassword")}
+            id="confirmPassword"
             type="password"
             label="Confirm Password"
-            name="Cpassword"
-            error={!!errors.Cpassword}
-            helperText={errors?.Cpassword?.message}
+            name="confirmPassword"
+            error={!!errors.confirmPassword}
+            helperText={errors?.confirmPassword?.message}
           />
         </Grid>
-        {authUser?.role === "admin" ? (
-          <Grid item xs={12} md={4}>
-            <SelectInput
-              {...register("role")}
-              id="role"
-              name="role"
-              label="Role"
-              control={control}
-              error={!!errors.role}
-              helperText={errors?.role?.message}
-            >
-              <MenuItem value="admin">Admin</MenuItem>
-              <MenuItem value="user">User</MenuItem>
-            </SelectInput>
-          </Grid>
-        ) : null}
+        <Grid item xs={12} md={4}>
+          <SelectInput
+            {...register("role")}
+            id="role"
+            name="role"
+            label="Role"
+            control={control}
+            error={!!errors.role}
+            helperText={errors?.role?.message}
+          >
+            <MenuItem value="admin">Admin</MenuItem>
+            <MenuItem value="user">User</MenuItem>
+          </SelectInput>
+        </Grid>
 
         <Grid item xs={12} sx={{ textAlign: "center" }}>
           <Button

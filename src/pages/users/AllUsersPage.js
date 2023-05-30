@@ -4,27 +4,34 @@ import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 
 import { useDispatch, useSelector } from "react-redux";
 import DataTable from "@core/components/ui/DataTable";
-import { getUsers, resetUsers } from "store/user";
+import { getUsers, resetUser } from "store/user";
 import { Button, Grid, Typography } from "@mui/material";
 import { deleteUser } from "store/user";
 import withAuth from "hooks/withAuth";
+
 const AllUsersPage = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
 
-  const data = useSelector((state) => state.user);
-  const { success } = data;
+  const { results, totalResults, success } = useSelector((state) => state.user);
+
   useEffect(() => {
     if (success) {
-      dispatch(resetUsers());
+      dispatch(resetUser());
     } else {
       dispatch(getUsers(query));
     }
-  }, [success, dispatch, query, navigate]);
+  }, [success, dispatch, query]);
+
   const onDelete = async (value) => {
     dispatch(deleteUser(value));
   };
+
+  const onEdit = async (value) => {
+    navigate(`/users/${value}`);
+  };
+
   const columns = [
     {
       name: "id",
@@ -65,13 +72,11 @@ const AllUsersPage = (props) => {
       </Grid>
       <DataTable
         title={"Users List"}
-        data={data}
+        results={results}
+        totalResults={totalResults}
         columns={columns}
         setQuery={setQuery}
-        searchIcon={false}
-        onEdit={(value) => {
-          navigate(`/users/${value}`);
-        }}
+        onEdit={onEdit}
         onDelete={onDelete}
       />
     </AdminLayout>
