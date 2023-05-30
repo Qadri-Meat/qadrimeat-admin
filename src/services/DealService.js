@@ -7,7 +7,7 @@ class DealService extends ApiService {
    * @returns {Promise<User>}
    */
   getAll(query) {
-    return this.instance.get(`/v1/deals?${query}`);
+    return this.instance.get(`/v1/deals?${query || ""}`);
   }
 
   /**

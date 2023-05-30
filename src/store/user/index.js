@@ -1,14 +1,10 @@
-import {
-  createSlice,
-  createAsyncThunk,
-  isAnyOf,
-  createAction,
-} from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
 import UserService from "services/UserService";
+
 const initialState = {};
 
 export const getUsers = createAsyncThunk(
-  "users/getAll",
+  "user/getAll",
   async (params, { rejectWithValue }) => {
     try {
       const res = await UserService.getAll(params);
@@ -18,8 +14,9 @@ export const getUsers = createAsyncThunk(
     }
   }
 );
+
 export const getDashboard = createAsyncThunk(
-  "users/getAll",
+  "user/getDashboardData",
   async (params, { rejectWithValue }) => {
     try {
       const res = await UserService.getDashboard();
@@ -31,7 +28,7 @@ export const getDashboard = createAsyncThunk(
 );
 
 export const getUser = createAsyncThunk(
-  "users/get",
+  "user/get",
   async (id, { rejectWithValue }) => {
     try {
       const res = await UserService.get(id);
@@ -41,8 +38,9 @@ export const getUser = createAsyncThunk(
     }
   }
 );
+
 export const createUser = createAsyncThunk(
-  "users/create",
+  "user/create",
   async (data, { rejectWithValue }) => {
     try {
       await UserService.create(data);
@@ -55,11 +53,10 @@ export const createUser = createAsyncThunk(
 );
 
 export const updateUser = createAsyncThunk(
-  "users/updateUser",
+  "user/updateUser",
   async ({ id, data }, { rejectWithValue }) => {
-    console.log(id, data);
     try {
-      await UserService.updateById({ id, data });
+      await UserService.updateById(id, data);
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -78,50 +75,31 @@ export const deleteUser = createAsyncThunk(
     }
   }
 );
-export const resetUsers = createAction("users/reset");
+
+export const resetUser = createAction("user/reset");
 
 const userSlice = createSlice({
-  name: "users",
+  name: "user",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(resetUsers, (state, action) => {
-      return initialState;
-    });
+    builder.addCase(resetUser, (state, action) => initialState);
     builder.addMatcher(
-      isAnyOf(
-        getUsers.pending,
-        getUser.pending,
-        createUser.pending,
-        updateUser.pending,
-        deleteUser.pending
-      ),
+      (action) => action.type.startsWith("user"),
       (state, action) => {
-        state.loading = true;
-      }
-    );
-    builder.addMatcher(
-      isAnyOf(
-        getUsers.fulfilled,
-        getUser.fulfilled,
-        createUser.fulfilled,
-        updateUser.fulfilled,
-        deleteUser.fulfilled
-      ),
-      (state, action) => {
-        return action.payload;
-      }
-    );
-    builder.addMatcher(
-      isAnyOf(
-        getUsers.rejected,
-        getUser.rejected,
-        createUser.rejected,
-        updateUser.rejected,
-        deleteUser.rejected
-      ),
-      (state, action) => {
-        state.loading = false;
-        state.message = action.payload.message;
+        const [actionType] = action.type.split("/").reverse();
+        switch (actionType) {
+          case "pending":
+            state.loading = true;
+            break;
+          case "fulfilled":
+            return action.payload;
+          case "rejected":
+            state.loading = false;
+            state.message = action.payload.message;
+            break;
+          default:
+            break;
+        }
       }
     );
   },

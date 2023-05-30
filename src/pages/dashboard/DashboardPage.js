@@ -13,7 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getDashboard } from "store/user";
-import BookingReportsTable from "./components/BookingRepotTable";
+import BookingReportsTable from "./components/BookingReportsTable";
 import BookingTable from "./components/BookingTable";
 import withAuth from "hooks/withAuth";
 

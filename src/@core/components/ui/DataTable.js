@@ -8,7 +8,8 @@ import EditIcon from "@mui/icons-material/Edit";
 const DataTable = (props) => {
   const {
     title,
-    data,
+    results,
+    totalResults,
     columns,
     setQuery,
     onEdit,
@@ -28,7 +29,7 @@ const DataTable = (props) => {
   }, 1000);
 
   const options = {
-    count: data.totalResults,
+    count: totalResults,
     page: page - 1,
     serverSide: serverSide ?? true,
     filter: false,
@@ -70,7 +71,7 @@ const DataTable = (props) => {
   return (
     <MUIDataTable
       title={title}
-      data={data.results}
+      data={results}
       columns={
         onEdit || onDelete
           ? columns.concat({

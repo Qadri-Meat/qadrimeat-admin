@@ -26,16 +26,17 @@ import { getDeals } from "store/deal";
 
 const AllBookingItemsPage = () => {
   const location = useLocation();
-  const { day = "1", deal } = pick(location.search);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  const { day = "1", deal } = pick(location.search);
+
   const { bookingItems } = useSelector((state) => state.booking);
   const { results } = useSelector((state) => state.deal);
 
   useEffect(() => {
-    const query = `limit=${100}&page=${1}`;
     dispatch(getBookingItems({ day, deal }));
-    dispatch(getDeals(query));
+    dispatch(getDeals());
   }, [navigate, dispatch, day, deal]);
 
   return (
