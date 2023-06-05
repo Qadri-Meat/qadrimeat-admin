@@ -147,6 +147,18 @@ const AllBookingsPage = () => {
             </Button>
           </Grid>
           <Grid item>
+            <InputLabel id="demo-simple-select-label">Year</InputLabel>
+            <Select
+              label="Year"
+              onChange={handleYearChange}
+              variant="outlined"
+              size="small"
+            >
+              <MenuItem value={"2022"}>2022</MenuItem>
+              <MenuItem value={"2023"}>2023</MenuItem>
+            </Select>
+          </Grid>
+          <Grid item>
             <ToggleButtonGroup
               color="primary"
               style={{ marginRight: "10px" }}
@@ -158,17 +170,6 @@ const AllBookingsPage = () => {
               <ToggleButton value="true">Paid</ToggleButton>
               <ToggleButton value="false">No Paid</ToggleButton>
             </ToggleButtonGroup>
-
-            <InputLabel id="demo-simple-select-label">Year</InputLabel>
-            <Select
-              label="Year"
-              onChange={handleYearChange}
-              variant="outlined"
-              size="small"
-            >
-              <MenuItem value={"2022"}>2022</MenuItem>
-              <MenuItem value={"2023"}>2023</MenuItem>
-            </Select>
           </Grid>
         </Grid>
       </Grid>
