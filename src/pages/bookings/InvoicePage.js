@@ -87,8 +87,7 @@ const InvoicePage = (props) => {
                           {/* <strong>Email:</strong>{' '}
                           {selectedBooking.shippingDetails.email}
                           <br /> */}
-                          <strong>Phone:</strong>
-                          {" +"}
+                          <strong>Phone:</strong>{" "}
                           {selectedBooking.shippingDetails.phone}
                           <br />
                           <strong>Address:</strong>{" "}
