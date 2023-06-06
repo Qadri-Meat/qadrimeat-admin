@@ -16,6 +16,14 @@ const InvoicePage = (props) => {
       dispatch(getBooking(id));
     }
   }, [selectedBooking, id, dispatch, navigate]);
+
+  const formatTime = (time) => {
+    const date = new Date();
+    const [hours, minutes] = time.split(":");
+    date.setHours(hours);
+    date.setMinutes(minutes);
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  };
   return (
     <>
       {!selectedBooking ? (
@@ -186,7 +194,11 @@ const InvoicePage = (props) => {
                                   <td>{item.name}</td>
                                   <td>{item.quantity}</td>
                                   <td>{item.isPackage ? item.day : ""}</td>
-                                  <td>{item.isPackage ? item.time : ""}</td>
+                                  <td>
+                                    {item.isPackage
+                                      ? formatTime(item.time)
+                                      : ""}
+                                  </td>
                                   <td>
                                     {item.isPackage ? "Package" : "Non Package"}
                                   </td>
