@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getDiscountPrice } from "helper/product";
 import { Avatar } from "@mui/material";
 import withAuth from "hooks/withAuth";
+import { formatTime } from "helper/formatTime";
 const InvoicePage = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -16,6 +17,7 @@ const InvoicePage = (props) => {
       dispatch(getBooking(id));
     }
   }, [selectedBooking, id, dispatch, navigate]);
+
   return (
     <>
       {!selectedBooking ? (
@@ -85,8 +87,7 @@ const InvoicePage = (props) => {
                           {/* <strong>Email:</strong>{' '}
                           {selectedBooking.shippingDetails.email}
                           <br /> */}
-                          <strong>Phone:</strong>
-                          {" +"}
+                          <strong>Phone:</strong>{" "}
                           {selectedBooking.shippingDetails.phone}
                           <br />
                           <strong>Address:</strong>{" "}
@@ -186,7 +187,11 @@ const InvoicePage = (props) => {
                                   <td>{item.name}</td>
                                   <td>{item.quantity}</td>
                                   <td>{item.isPackage ? item.day : ""}</td>
-                                  <td>{item.isPackage ? item.time : ""}</td>
+                                  <td>
+                                    {item.isPackage
+                                      ? formatTime(item.time)
+                                      : ""}
+                                  </td>
                                   <td>
                                     {item.isPackage ? "Package" : "Non Package"}
                                   </td>

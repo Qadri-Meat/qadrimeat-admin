@@ -11,6 +11,7 @@ import { getBooking } from "store/booking";
 import { getDiscountPrice } from "helper/product";
 import BookingPageRightPanels from "@core/components/extra/BookingPageRightPanels/BookingPageRightPanels";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
+import { formatTime } from "helper/formatTime";
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -119,7 +120,14 @@ const BookingPage = () => {
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowIndex } = tableMeta;
-          return selectedBooking.bookingItems[rowIndex].isPackage ? value : "";
+          const isPackage = selectedBooking.bookingItems[rowIndex].isPackage;
+
+          if (isPackage) {
+            const formattedTime = formatTime(value);
+            return formattedTime;
+          } else {
+            return "";
+          }
         },
       },
     },
