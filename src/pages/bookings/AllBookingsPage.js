@@ -38,7 +38,7 @@ const AllBookingsPage = () => {
       dispatch(
         getBookings(
           `${paid !== undefined ? `isPaid=${paid}&` : ""}${
-            selectedYear !== "" ? `year=${selectedYear}` : ""
+            selectedYear !== "" ? `year=${selectedYear}&` : ""
           }${query}`
         )
       );
