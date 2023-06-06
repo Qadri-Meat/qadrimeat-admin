@@ -16,7 +16,7 @@ const phoneRegExp = /^(?:\+1)?\s*(?:\d{3}[\s-]?\d{3}[\s-]?\d{4}|\d{11})$/;
 
 const schema = yup.object().shape({
   firstName: yup.string().required(),
-  lastName: yup.string(),
+  lastName: yup.string().required(),
   phone: yup
     .string()
     .required()

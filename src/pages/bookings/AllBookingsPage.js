@@ -16,6 +16,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import FormControl from "@mui/material/FormControl";
+import Box from "@mui/material/Box";
 import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
 import withAuth from "hooks/withAuth";
@@ -146,17 +148,20 @@ const AllBookingsPage = () => {
               Add Booking
             </Button>
           </Grid>
-          <Grid item>
-            <InputLabel id="demo-simple-select-label">Year</InputLabel>
-            <Select
-              label="Year"
-              onChange={handleYearChange}
-              variant="outlined"
-              size="small"
-            >
-              <MenuItem value={"2022"}>2022</MenuItem>
-              <MenuItem value={"2023"}>2023</MenuItem>
-            </Select>
+          <Grid sx={{ marginLeft: "700px" }} item>
+            <Box sx={{ minWidth: 120 }}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">Year</InputLabel>
+                <Select
+                  label="Year"
+                  onChange={handleYearChange}
+                  variant="outlined"
+                >
+                  <MenuItem value={"2022"}>2022</MenuItem>
+                  <MenuItem value={"2023"}>2023</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
           </Grid>
           <Grid item>
             <ToggleButtonGroup
