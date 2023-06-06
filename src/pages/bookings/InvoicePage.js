@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getDiscountPrice } from "helper/product";
 import { Avatar } from "@mui/material";
 import withAuth from "hooks/withAuth";
+import { formatTime } from "helper/formatTime";
 const InvoicePage = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -17,13 +18,6 @@ const InvoicePage = (props) => {
     }
   }, [selectedBooking, id, dispatch, navigate]);
 
-  const formatTime = (time) => {
-    const date = new Date();
-    const [hours, minutes] = time.split(":");
-    date.setHours(hours);
-    date.setMinutes(minutes);
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-  };
   return (
     <>
       {!selectedBooking ? (
