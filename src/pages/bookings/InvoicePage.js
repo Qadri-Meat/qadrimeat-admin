@@ -18,6 +18,12 @@ const InvoicePage = (props) => {
     }
   }, [selectedBooking, id, dispatch, navigate]);
 
+  const printPage = () => {
+    var ButtonControl = document.getElementById("btnprint");
+    ButtonControl.style.visibility = "hidden";
+    window.print();
+  };
+
   return (
     <>
       {!selectedBooking ? (
@@ -55,8 +61,9 @@ const InvoicePage = (props) => {
 
                       <div className="col-md-6 text-right">
                         <button
+                          id="btnprint"
                           className="btn btn-primary hidden-print"
-                          onClick={() => window.print()}
+                          onClick={printPage}
                         >
                           <span
                             className="glyphicon glyphicon-print noprint"
