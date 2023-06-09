@@ -9,11 +9,11 @@ import FormInput from "@core/components/forms/FormInput";
 import { Button, Grid, MenuItem } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
-import { createDeal, updateDeal } from "store/deal";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useState } from "react";
 import Compressor from "compressorjs";
 import CheckBoxInput from "@core/components/forms/CheckBoxInput";
+import { createProducts, updateProducts } from "store/product";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -52,7 +52,7 @@ const schema = yup.object().shape({
 const ProductForm = ({ defaultValues }) => {
   const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
-  const { message, loading } = useSelector((state) => state.deal);
+  const { message, loading } = useSelector((state) => state.product);
   const defaultFormValues = {
     ...defaultValues,
     // Set category as an empty string if it's undefined
@@ -95,13 +95,14 @@ const ProductForm = ({ defaultValues }) => {
     }
   };
   const onSubmit = (data) => {
+    console.log(data);
     data.category = data.category[0];
 
     data.image = files;
     if (defaultValues) {
-      dispatch(updateDeal({ id: defaultValues.id, data }));
+      dispatch(updateProducts({ id: defaultValues.id, data }));
     } else {
-      dispatch(createDeal(data));
+      dispatch(createProducts(data));
     }
   };
   return (
@@ -148,7 +149,7 @@ const ProductForm = ({ defaultValues }) => {
             id="weight"
             type="number"
             label="Weight (KG)"
-            name="stock"
+            name="weight"
             error={!!errors.weight}
             helperText={errors?.weight?.message}
           />
@@ -226,7 +227,7 @@ const ProductForm = ({ defaultValues }) => {
         </Grid>
         <Grid item md={2} xs={12}>
           <CheckBoxInput
-            ref={register}
+            {...register("new")}
             id="new"
             name="new"
             label="New"
@@ -253,7 +254,13 @@ const ProductForm = ({ defaultValues }) => {
             size="large"
             endIcon={<SaveIcon />}
           >
-            {loading ? <Loader /> : defaultValues ? "Update Deal" : "Save Deal"}
+            {loading ? (
+              <Loader />
+            ) : defaultValues ? (
+              "Update Product"
+            ) : (
+              "Save Product"
+            )}
           </Button>
         </Grid>
       </Grid>
