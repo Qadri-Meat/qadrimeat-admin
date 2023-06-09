@@ -4,7 +4,6 @@ import { Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteBooking, getBookings, resetBooking } from "store/booking";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -12,6 +11,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
 import withAuth from "hooks/withAuth";
+import { deleteOrder, getOrders, resetOrder } from "store/order";
 const AllOrderPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -21,32 +21,27 @@ const AllOrderPage = () => {
   const [query, setQuery] = useState("");
 
   const { results, totalResults, success } = useSelector(
-    (state) => state.booking
+    (state) => state.order
   );
 
   useEffect(() => {
     if (success) {
-      dispatch(resetBooking());
+      dispatch(resetOrder());
     } else {
-      dispatch(
-        getBookings(
-          `${paid !== undefined ? `isPaid=${paid}&` : ""} : ""
-          }${query}`
-        )
-      );
+      dispatch(getOrders(query));
     }
   }, [dispatch, paid, query, success]);
 
   const onDelete = (value) => {
-    dispatch(deleteBooking(value));
+    dispatch(deleteOrder(value));
   };
 
   const onEdit = (value) => {
-    navigate(`/bookings/${value}`);
+    navigate(`/orders/${value}`);
   };
 
   const handlePaidToggle = (event, value) => {
-    navigate(`/bookings?paid=${value}`);
+    navigate(`/orders?paid=${value}`);
   };
 
   const columns = [
@@ -71,7 +66,7 @@ const AllOrderPage = () => {
       },
     },
     {
-      name: "createdAt",
+      name: "deliveryTime",
       label: "Delivery Time",
       options: {
         filter: false,
@@ -86,11 +81,18 @@ const AllOrderPage = () => {
       },
     },
     {
-      name: "totalPrice",
+      name: "createdAt",
       label: "Created At",
       options: {
-        filter: true,
-        sort: false,
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <>
+              {new Date(value).toLocaleDateString()},{" "}
+              {new Date(value).toLocaleTimeString()}
+            </>
+          );
+        },
       },
     },
     {
@@ -112,10 +114,20 @@ const AllOrderPage = () => {
       },
     },
     {
-      name: "approvedAt",
+      name: "deliveredAt",
       label: "Delivered",
       options: {
         filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+        },
+      },
+    },
+    {
+      name: "isPaid",
+      label: "Paid",
+      options: {
+        filter: true,
         customBodyRender: (value, tableMeta, updateValue) => {
           return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
         },
@@ -142,7 +154,7 @@ const AllOrderPage = () => {
         >
           <Grid item>
             <Button
-              onClick={() => navigate("/bookings/add-booking")}
+              onClick={() => navigate("/orders/add-order")}
               variant="outlined"
               color="primary"
               size="small"
@@ -167,7 +179,7 @@ const AllOrderPage = () => {
         </Grid>
       </Grid>
       <DataTable
-        title={"Booking List"}
+        title={"Order List"}
         results={results}
         totalResults={totalResults}
         columns={columns}

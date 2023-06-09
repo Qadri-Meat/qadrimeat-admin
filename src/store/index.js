@@ -8,6 +8,7 @@ import deal from "store/deal";
 import booking from "store/booking";
 import expense from "store/expense";
 import product from "store/product";
+import order from "store/order";
 import { cartReducer } from "./cart";
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     deal,
     product,
     booking,
+    order,
     expense,
     reducer: cartReducer,
   },
