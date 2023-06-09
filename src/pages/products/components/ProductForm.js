@@ -13,6 +13,7 @@ import { createDeal, updateDeal } from "store/deal";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useState } from "react";
 import Compressor from "compressorjs";
+import CheckBoxInput from "@core/components/forms/CheckBoxInput";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -27,6 +28,11 @@ const schema = yup.object().shape({
     .required()
     .positive()
     .typeError("Stock is required field"),
+  weight: yup
+    .number()
+    .required()
+    .positive()
+    .typeError("Weight is required field"),
   category: yup
     .mixed()
     .test("isCategoryValid", "Category is a required field", function (value) {
@@ -138,6 +144,17 @@ const ProductForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
+            {...register("weight")}
+            id="weight"
+            type="number"
+            label="Weight (KG)"
+            name="stock"
+            error={!!errors.weight}
+            helperText={errors?.weight?.message}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormInput
             {...register("stock")}
             id="stock"
             type="number"
@@ -145,6 +162,28 @@ const ProductForm = ({ defaultValues }) => {
             name="stock"
             error={!!errors.stock}
             helperText={errors?.stock?.message}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormInput
+            {...register("discount")}
+            id="discount"
+            type="number"
+            label="Discount"
+            name="discount"
+            error={!!errors.discount}
+            helperText={errors?.discount?.message}
+          />
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormInput
+            {...register("saleCount")}
+            id="saleCount"
+            type="number"
+            label="Sale Count"
+            name="discount"
+            error={!!errors.saleCount}
+            helperText={errors?.saleCount?.message}
           />
         </Grid>
         <Grid item xs={12} md={4}>
@@ -184,6 +223,17 @@ const ProductForm = ({ defaultValues }) => {
             <MenuItem value="cow">Cow</MenuItem>
             <MenuItem value="goat">Goat</MenuItem>
           </SelectInput>
+        </Grid>
+        <Grid item md={2} xs={12}>
+          <CheckBoxInput
+            ref={register}
+            id="new"
+            name="new"
+            label="New"
+            control={control}
+            error={!!errors.new}
+            helperText={errors?.new?.message}
+          />
         </Grid>
         <Grid item xs={12}>
           <DropzoneArea
