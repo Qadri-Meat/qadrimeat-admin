@@ -6,6 +6,7 @@ import { Error404PageConfig } from "../pages/errors/404/Error404PageConfig";
 import { Error500PageConfig } from "../pages/errors/500/Error500PageConfig";
 import { ProfilePageConfig } from "../pages/profile/ProfilePageConfig";
 import { ExpensesPageConfig } from "pages/expenses/ExpensesPageConfig";
+import { ProductPageConfig } from "pages/products/ProductPageConfig";
 const routeConfigs = [
   ...DashboardPageConfig.routes,
   ...UsersPageConfig.routes,
@@ -15,6 +16,7 @@ const routeConfigs = [
   ...Error500PageConfig.routes,
   ...ProfilePageConfig.routes,
   ...ExpensesPageConfig.routes,
+  ...ProductPageConfig.routes,
 ];
 
 const routes = [...routeConfigs];
