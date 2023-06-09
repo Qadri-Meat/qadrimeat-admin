@@ -3,11 +3,10 @@ import { Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteDeal } from "store/deal";
 import DataTable from "@core/components/ui/DataTable";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 import withAuth from "hooks/withAuth";
-import { getProducts, resetProduct } from "store/product";
+import { deleteProduct, getProducts, resetProduct } from "store/product";
 const AllProductsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,14 +28,14 @@ const AllProductsPage = () => {
     authUser?.role === "user"
       ? null
       : (value) => {
-          dispatch(deleteDeal(value));
+          dispatch(deleteProduct(value));
         };
 
   const onEdit =
     authUser?.role === "user"
       ? null
       : (value) => {
-          navigate(`/deals/${value}`);
+          navigate(`/product/${value}`);
         };
 
   const columns = [
@@ -83,7 +82,7 @@ const AllProductsPage = () => {
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate("/deals/add-deal")}
+            onClick={() => navigate("/products/add-products")}
             variant="outlined"
             color="primary"
             size="small"

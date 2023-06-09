@@ -9,7 +9,7 @@ export const ProductPageConfig = {
       element: <AllProductsPage />,
     },
     {
-      path: "/product/add-product",
+      path: "/products/add-products",
       exact: true,
       element: <AddProductPage />,
     },
