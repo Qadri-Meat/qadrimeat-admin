@@ -40,10 +40,6 @@ const AllOrderPage = () => {
     navigate(`/orders/${value}`);
   };
 
-  const handlePaidToggle = (event, value) => {
-    navigate(`/orders?paid=${value}`);
-  };
-
   const columns = [
     {
       name: "phone",
@@ -170,10 +166,13 @@ const AllOrderPage = () => {
               value={paid}
               size="small"
               exclusive
-              onChange={handlePaidToggle}
             >
               <ToggleButton value="true">Paid</ToggleButton>
               <ToggleButton value="false">No Paid</ToggleButton>
+            </ToggleButtonGroup>
+            <ToggleButtonGroup color="primary" size="small" exclusive>
+              <ToggleButton value="online">Online</ToggleButton>
+              <ToggleButton value="retail">Retail</ToggleButton>
             </ToggleButtonGroup>
           </Grid>
         </Grid>
