@@ -2,33 +2,29 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const cartSlice = createSlice({
   name: "cart",
-  initialState: {
-    cart: [],
-  },
+  initialState: [],
   reducers: {
     addAllToCart: (state, action) => {
       const items = action.payload.map((item) => {
         const { createdAt, ...newItem } = item;
         return newItem;
       });
-      state.cart = [...state.cart, ...items];
+      state.push(...items);
     },
     addToCart: (state, action) => {
-      const itemInCart = state.cart.find(
-        (item) => item.id === action.payload.id
-      );
+      const itemInCart = state.find((item) => item.id === action.payload.id);
       if (itemInCart) {
         itemInCart.quantity++;
       } else {
-        state.cart.push({ ...action.payload, quantity: 1 });
+        state.push({ ...action.payload, quantity: 1 });
       }
     },
     incrementQuantity: (state, action) => {
-      const item = state.cart.find((item) => item.id === action.payload);
+      const item = state.find((item) => item.id === action.payload);
       item.quantity++;
     },
     decrementQuantity: (state, action) => {
-      const item = state.cart.find((item) => item.id === action.payload);
+      const item = state.find((item) => item.id === action.payload);
       if (item.quantity === 1) {
         item.quantity = 1;
       } else {
@@ -36,30 +32,26 @@ const cartSlice = createSlice({
       }
     },
     removeItem: (state, action) => {
-      const removeItem = state.cart.filter(
-        (item) => item.id !== action.payload
-      );
-      state.cart = removeItem;
+      const removeItem = state.filter((item) => item.id !== action.payload);
+      return removeItem;
     },
     updateCartItemTime: (state, action) => {
       const { id, time } = action.payload;
-      const itemIndex = state.cart.find((item) => item.id === id);
-      itemIndex.time = time;
+      const item = state.find((item) => item.id === id);
+      item.time = time;
     },
-
     updateCartItemDay: (state, action) => {
       const { id, day } = action.payload;
-      const itemIndex = state.cart.find((item) => item.id === id);
-      itemIndex.day = day;
+      const item = state.find((item) => item.id === id);
+      item.day = day;
     },
     updateCartPackage: (state, action) => {
       const { id, isPackage } = action.payload;
-      const itemIndex = state.cart.find((item) => item.id === id);
-      console.log(action.payload);
-      itemIndex.isPackage = isPackage;
+      const item = state.find((item) => item.id === id);
+      item.isPackage = isPackage;
     },
-    reSetCart: (state) => {
-      state.cart = [];
+    reSetCart: () => {
+      return [];
     },
   },
 });

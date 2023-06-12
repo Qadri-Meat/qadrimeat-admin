@@ -30,7 +30,7 @@ const BookingItem = () => {
   const dispatch = useDispatch();
   let cartTotalPrice = 0;
   const { results } = useSelector((state) => state.deal);
-  const items = useSelector((state) => state.reducer.cart);
+  const items = useSelector((state) => state.cart);
   useEffect(() => {
     dispatch(reSetCart());
     const query = `limit=${100}&page=${1}`;

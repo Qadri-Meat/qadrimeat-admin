@@ -30,7 +30,7 @@ const BookingForm = ({ preloadedValues }) => {
   const dispatch = useDispatch();
   let cart1TotalPrice = 0;
   const { error, loading } = useSelector((state) => state.booking);
-  const items = useSelector((state) => state.reducer.cart);
+  const items = useSelector((state) => state.cart);
   let shippingDetails = {
     city: "Lahore, Punjab",
     country: "Pakistan",

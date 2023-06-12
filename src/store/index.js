@@ -19,7 +19,7 @@ export const store = configureStore({
     booking,
     order,
     expense,
-    reducer: cartReducer,
+    cart: cartReducer, // Verify that cartReducer is included under the 'cart' key
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
