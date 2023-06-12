@@ -13,8 +13,7 @@ import { createBooking, updateBooking } from "store/booking";
 import Loader from "@core/components/ui/Loader";
 import Message from "@core/components/ui/Message";
 import OrderItemForm from "./OrderItemForm";
-import { emailRegix } from "helper/regix";
-const phoneRegExp = /^(?:\+1)?\s*(?:\d{3}[\s-]?\d{3}[\s-]?\d{4}|\d{11})$/;
+import { emailRegix, phoneRegExp } from "helper/regix";
 
 const schema = yup.object().shape({
   firstName: yup.string().required(),

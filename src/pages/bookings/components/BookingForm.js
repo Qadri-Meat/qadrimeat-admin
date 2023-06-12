@@ -12,7 +12,7 @@ import { getDiscountPrice } from "helper/product";
 import { createBooking, updateBooking } from "store/booking";
 import Loader from "@core/components/ui/Loader";
 import Message from "@core/components/ui/Message";
-const phoneRegExp = /^(?:\+1)?\s*(?:\d{3}[\s-]?\d{3}[\s-]?\d{4}|\d{11})$/;
+import { phoneRegExp } from "helper/regix";
 
 const schema = yup.object().shape({
   firstName: yup.string().required(),
