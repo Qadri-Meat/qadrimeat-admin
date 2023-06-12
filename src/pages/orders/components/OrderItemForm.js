@@ -163,22 +163,6 @@ const OrderItemForm = () => {
     {
       name: "weight",
       label: "Weight",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowData } = tableMeta;
-          const cartItem = items.filter((item) => {
-            return item.product === rowData[0];
-          })[0];
-          return (
-            <input
-              type="number"
-              value={value}
-              style={{ minWidth: "70px", maxWidth: "70px" }}
-            />
-          );
-        },
-      },
     },
 
     {

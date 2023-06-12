@@ -173,7 +173,7 @@ const AllBookingsPage = () => {
               onChange={handlePaidToggle}
             >
               <ToggleButton value="true">Paid</ToggleButton>
-              <ToggleButton value="false">No Paid</ToggleButton>
+              <ToggleButton value="false">UnPaid</ToggleButton>
             </ToggleButtonGroup>
           </Grid>
         </Grid>
