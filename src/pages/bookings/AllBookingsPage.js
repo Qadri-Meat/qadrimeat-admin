@@ -148,7 +148,7 @@ const AllBookingsPage = () => {
               Add Booking
             </Button>
           </Grid>
-          <Grid sx={{ marginLeft: "700px" }} item>
+          <Grid sx={{ marginLeft: "450px" }} item>
             <Box sx={{ minWidth: 120 }}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">Year</InputLabel>
