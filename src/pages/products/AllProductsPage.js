@@ -35,7 +35,7 @@ const AllProductsPage = () => {
     authUser?.role === "user"
       ? null
       : (value) => {
-          navigate(`/product/${value}`);
+          navigate(`/products/${value}`);
         };
 
   const columns = [

@@ -14,7 +14,7 @@ export const ProductPageConfig = {
       element: <AddProductPage />,
     },
     {
-      path: "/product/:id",
+      path: "/products/:id",
       element: <AddProductPage />,
     },
   ],

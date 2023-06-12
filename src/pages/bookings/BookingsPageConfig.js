@@ -19,15 +19,18 @@ export const BookingPageConfig = {
     },
     {
       path: "/bookings/add-booking",
+      exact: true,
       element: <AddBookingPage />,
     },
     {
       path: "/bookings/:id",
+      exact: true,
       element: <BookingPage />,
     },
 
     {
       path: "/bookings/update-booking/:id",
+      exact: true,
       element: <UpdateBookingPage />,
     },
     {
