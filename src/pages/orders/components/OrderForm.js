@@ -6,22 +6,17 @@ import * as yup from "yup";
 import React, { Fragment, useState } from "react";
 import { useForm } from "react-hook-form";
 import SaveIcon from "@mui/icons-material/Save";
-
 import { useDispatch, useSelector } from "react-redux";
 import { getDiscountPrice } from "helper/product";
-import { createBooking, updateBooking } from "store/booking";
 import Loader from "@core/components/ui/Loader";
 import Message from "@core/components/ui/Message";
+import { phoneRegExp } from "helper/regix";
 import OrderItemForm from "./OrderItemForm";
-import { emailRegix, phoneRegExp } from "helper/regix";
+import { createOrder, updateOrder } from "store/order";
 
 const schema = yup.object().shape({
   firstName: yup.string().required(),
   lastName: yup.string().required(),
-  email: yup
-    .string()
-    .matches(emailRegix, "Enter Valid Email Address")
-    .required(),
   phone: yup
     .string()
     .required()
@@ -34,7 +29,7 @@ const OrderForm = ({ preloadedValues }) => {
   const [itemsError, setItemsError] = useState(false);
   const dispatch = useDispatch();
   let cart1TotalPrice = 0;
-  const { error, loading } = useSelector((state) => state.booking);
+  const { error, loading } = useSelector((state) => state.order);
   const items = useSelector((state) => state.cart);
   let shippingDetails = {
     city: "Lahore, Punjab",
@@ -77,9 +72,9 @@ const OrderForm = ({ preloadedValues }) => {
         ? (cart1TotalPrice += finalDiscountedPrice * item.quantity)
         : (cart1TotalPrice += finalProductPrice * item.quantity);
     });
-    const newBooking = {
+    const newOrder = {
       phone: data.phone,
-      bookingItems: items,
+      orderItems: items,
       shippingDetails: {
         ...data,
         city: "Lahore",
@@ -91,9 +86,9 @@ const OrderForm = ({ preloadedValues }) => {
       deliveryTime: Date.now(),
     };
     if (preloadedValues) {
-      dispatch(updateBooking({ id: preloadedValues.id, data: newBooking }));
+      dispatch(updateOrder({ id: preloadedValues.id, data: newOrder }));
     } else {
-      dispatch(createBooking(newBooking));
+      dispatch(createOrder(newOrder));
     }
   };
 
@@ -123,17 +118,6 @@ const OrderForm = ({ preloadedValues }) => {
               name="lastName"
               error={!!errors.lastName}
               helperText={errors?.lastName?.message}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <FormInput
-              {...register("email")}
-              id="email"
-              type="email"
-              label="Email"
-              name="email"
-              error={!!errors.email}
-              helperText={errors?.email?.message}
             />
           </Grid>
           <Grid item xs={12} md={4}>

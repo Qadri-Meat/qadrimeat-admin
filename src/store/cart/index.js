@@ -54,6 +54,13 @@ const cartSlice = createSlice({
     reSetCart: () => {
       return [];
     },
+    changeWeight: (state, action) => {
+      const { cartItem, weight } = action.payload;
+      const item = state.find((item) => item.id === cartItem.id);
+      if (item) {
+        item.weight = weight;
+      }
+    },
   },
 });
 
@@ -67,5 +74,6 @@ export const {
   updateCartItemDay,
   updateCartItemTime,
   updateCartPackage,
+  changeWeight,
   reSetCart,
 } = cartSlice.actions;

@@ -8,10 +8,10 @@ import {
 } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
+  changeWeight,
   decrementQuantity,
   incrementQuantity,
   reSetCart,
@@ -163,6 +163,25 @@ const OrderItemForm = () => {
     {
       name: "weight",
       label: "Weight",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cartItem = items.filter((item) => item.id === rowData[0])[0];
+          return (
+            <input
+              type="number"
+              value={value}
+              style={{ minWidth: "70px", maxWidth: "70px" }}
+              onChange={(e) => {
+                dispatch(
+                  changeWeight({ cartItem, weight: parseInt(e.target.value) })
+                );
+              }}
+            />
+          );
+        },
+      },
     },
 
     {
@@ -181,11 +200,13 @@ const OrderItemForm = () => {
           );
           const finalProductPrice = cart1Item.price * 1;
           const finalDiscountedPrice = discountedPrice * 1;
+          const priceWithWeight = cart1Item.weight * finalProductPrice;
+
           return (
             <>
               {discountedPrice !== null
                 ? "PKR " + finalDiscountedPrice * cart1Item.quantity
-                : "PKR " + finalProductPrice * cart1Item.quantity}
+                : "PKR " + priceWithWeight * cart1Item.quantity}
             </>
           );
         },
@@ -203,6 +224,21 @@ const OrderItemForm = () => {
       });
     },
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
+      let grandTotal = 0;
+      items.forEach((item) => {
+        const discountedPrice = getDiscountPrice(item.price, item.discount);
+        const finalProductPrice = item.price * 1;
+        const finalDiscountedPrice = discountedPrice * 1;
+        const priceWithWeight = item.weight * finalProductPrice;
+
+        const itemTotal =
+          discountedPrice !== null
+            ? finalDiscountedPrice * item.quantity
+            : priceWithWeight * item.quantity;
+
+        grandTotal += itemTotal;
+      });
+
       return (
         <Box
           sx={{
@@ -215,10 +251,7 @@ const OrderItemForm = () => {
         >
           <Box>
             <Typography variant="h6">Grand Total</Typography>
-            <Typography variant="body1">
-              PKR
-              {" " + cartTotalPrice}
-            </Typography>
+            <Typography variant="body1">PKR {" " + grandTotal}</Typography>
           </Box>
         </Box>
       );
@@ -237,16 +270,13 @@ const OrderItemForm = () => {
           onChange={(event, values) => {
             if (values) {
               const item = {
-                id: uuidv4(),
                 name: values.name,
                 quantity: 1,
                 price: values.price,
                 discount: 0,
+                weight: 1,
                 image: values.image,
-                deal: values.id,
-                day: 1,
-                time: "10:00",
-                isPackage: true,
+                product: values.id,
               };
               dispatch(addToCart(item));
               setSearchBar(Math.random());

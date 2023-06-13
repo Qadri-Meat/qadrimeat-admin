@@ -6,8 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+
 import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
 import withAuth from "hooks/withAuth";
@@ -157,23 +156,6 @@ const AllOrderPage = () => {
             >
               Add Order
             </Button>
-          </Grid>
-
-          <Grid item>
-            <ToggleButtonGroup
-              color="primary"
-              style={{ marginRight: "10px" }}
-              value={paid}
-              size="small"
-              exclusive
-            >
-              <ToggleButton value="true">Paid</ToggleButton>
-              <ToggleButton value="false">No Paid</ToggleButton>
-            </ToggleButtonGroup>
-            <ToggleButtonGroup color="primary" size="small" exclusive>
-              <ToggleButton value="online">Online</ToggleButton>
-              <ToggleButton value="retail">Retail</ToggleButton>
-            </ToggleButtonGroup>
           </Grid>
         </Grid>
       </Grid>
