@@ -61,21 +61,6 @@ const AllOrderPage = () => {
       },
     },
     {
-      name: "deliveryTime",
-      label: "Delivery Time",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return (
-            <>
-              {new Date(value).toLocaleDateString()},{" "}
-              {new Date(value).toLocaleTimeString()}
-            </>
-          );
-        },
-      },
-    },
-    {
       name: "createdAt",
       label: "Created At",
       options: {

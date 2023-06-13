@@ -42,16 +42,33 @@ class OrderService extends ApiService {
    * @returns {Promise<User>}
    */
   updateById({ id, data }) {
-    const { deliveryTime, ...updatedData } = data;
+    const { orderItems, deliveryTime, ...updatedData } = data;
+    if (orderItems && orderItems.length > 0) {
+      const modifiedOrderItems = orderItems.map((orderItem) => {
+        const { id, ...modifiedOrderItem } = orderItem;
+        return modifiedOrderItem;
+      });
+      updatedData.orderItems = modifiedOrderItems;
+    }
     return this.instance.patch(`/v1/orders/${id}`, updatedData);
   }
+
   /**
    * Create a order with the given data
    * @param {object} data - The data to update the order with
    * @returns {Promise<User>}
    */
   create(data) {
-    return this.instance.post(`/v1/orders`, data);
+    const { orderItems, deliveryTime, ...updatedData } = data;
+    if (orderItems && orderItems.length > 0) {
+      const modifiedOrderItems = orderItems.map((orderItem) => {
+        const { id, ...modifiedOrderItem } = orderItem;
+        return modifiedOrderItem;
+      });
+      updatedData.orderItems = modifiedOrderItems;
+    }
+
+    return this.instance.post(`/v1/orders`, updatedData);
   }
   /**
    * Delete a order with the given id

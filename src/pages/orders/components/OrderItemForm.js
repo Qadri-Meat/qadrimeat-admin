@@ -18,6 +18,7 @@ import {
   removeItem,
 } from "store/cart";
 import AddIcon from "@mui/icons-material/Add";
+import { v4 as uuidv4 } from "uuid";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { getDiscountPrice } from "helper/product";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
@@ -270,6 +271,7 @@ const OrderItemForm = () => {
           onChange={(event, values) => {
             if (values) {
               const item = {
+                id: uuidv4(),
                 name: values.name,
                 quantity: 1,
                 price: values.price,
