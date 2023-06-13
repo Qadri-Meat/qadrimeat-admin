@@ -9,13 +9,13 @@ import OrderForm from "./components/OrderForm";
 const AddOrderPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { success, selectedBooking } = useSelector((state) => state.booking);
+  const { success, selectedOrder } = useSelector((state) => state.order);
 
   useEffect(() => {
     if (success) {
-      navigate(`/bookings/${selectedBooking.id}`);
+      navigate(`/orders/${selectedOrder.id}`);
     }
-  }, [success, dispatch, navigate, selectedBooking]);
+  }, [success, dispatch, navigate, selectedOrder]);
 
   return (
     <AdminLayout>
