@@ -93,16 +93,7 @@ const AllOrderPage = () => {
         },
       },
     },
-    {
-      name: "deliveredAt",
-      label: "Delivered",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-        },
-      },
-    },
+
     {
       name: "isPaid",
       label: "Paid",

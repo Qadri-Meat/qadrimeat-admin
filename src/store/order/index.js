@@ -103,7 +103,6 @@ export const deleteTransaction = createAsyncThunk(
 export const addTransaction = createAsyncThunk(
   "Order/addTransaction",
   async ({ id, data }, { rejectWithValue }) => {
-    console.log(id, data);
     try {
       await OrderService.addTransaction({ id, data });
       return { success: true };

@@ -41,7 +41,6 @@ const cartSlice = createSlice({
       item.time = time;
     },
     updateCartItemDay: (state, action) => {
-      console.log(action);
       const { id, day } = action.payload;
       const item = state.find((item) => item.id === id);
       item.day = day;

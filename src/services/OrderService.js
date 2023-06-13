@@ -79,7 +79,6 @@ class OrderService extends ApiService {
     return this.instance.delete(`/v1/orders/${id}`);
   }
   addTransaction({ id, data }) {
-    console.log("in services: ", id, data);
     return this.instance.patch(`/v1/orders/${id}/transactions`, data);
   }
   deleteTransaction(orderId, transactionId) {
