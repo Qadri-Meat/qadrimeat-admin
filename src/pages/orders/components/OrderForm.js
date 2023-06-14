@@ -107,10 +107,8 @@ const OrderForm = ({ preloadedValues }) => {
     };
 
     if (preloadedValues) {
-      console.log("updated order: ", newOrder);
       dispatch(updateOrder({ id: preloadedValues.id, data: newOrder }));
     } else {
-      console.log("new order", newOrder);
       dispatch(createOrder(newOrder));
     }
   };
