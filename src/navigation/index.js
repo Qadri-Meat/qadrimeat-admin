@@ -26,6 +26,14 @@ const navigation = [
         exact: "true",
       },
       {
+        id: "products",
+        title: "Products",
+        type: "item",
+        icon: <InventoryIcon />,
+        url: "/products",
+        exact: "true",
+      },
+      {
         id: "deals",
         title: "Deals",
         type: "item",

@@ -3,8 +3,3 @@ body {
   margin-top: 120px;
   margin-bottom: 120px;
 }
-@media print {
-  .d-print-none {
-    display: none !important;
-  }
-}

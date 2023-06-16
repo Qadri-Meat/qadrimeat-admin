@@ -11,16 +11,16 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteBooking, getBookings, resetBooking } from "store/booking";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
+import { getBookings, resetBooking } from "store/booking";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import FormControl from "@mui/material/FormControl";
-import Box from "@mui/material/Box";
 import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
 import withAuth from "hooks/withAuth";
+import { numberWithCommas } from "helper/numers";
+import FileOpenIcon from "@mui/icons-material/FileOpenOutlined";
+
 const AllBookingsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -48,11 +48,7 @@ const AllBookingsPage = () => {
   }, [dispatch, paid, query, success, selectedYear]);
 
   const onDelete = (value) => {
-    dispatch(deleteBooking(value));
-  };
-
-  const onEdit = (value) => {
-    navigate(`/bookings/${value}`);
+    // dispatch(deleteBooking(value));
   };
 
   const handlePaidToggle = (event, value) => {
@@ -66,6 +62,20 @@ const AllBookingsPage = () => {
   };
 
   const columns = [
+    {
+      name: "id",
+      label: "View",
+      options: {
+        filter: false,
+        customBodyRender: (values, tableMeta, updateValue) => {
+          return (
+            <Button href={`/bookings/${values}`}>
+              <FileOpenIcon />
+            </Button>
+          );
+        },
+      },
+    },
     {
       name: "phone",
       label: "Phone",
@@ -105,17 +115,47 @@ const AllBookingsPage = () => {
       name: "totalPrice",
       label: "TOTAL",
       options: {
-        filter: true,
-        sort: false,
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return <>{numberWithCommas(value)}</>;
+        },
       },
     },
     {
-      name: "approvedAt",
-      label: "Approved",
+      name: "totalPrice",
+      label: "Total Paid",
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+          const { rowIndex } = tableMeta;
+          const totalPaid = results[rowIndex].transactions.reduce(function (
+            a,
+            b
+          ) {
+            return a + b.amount;
+          },
+          0);
+
+          return <>{numberWithCommas(totalPaid)}</>;
+        },
+      },
+    },
+    {
+      name: "totalPrice",
+      label: "Balance",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowIndex } = tableMeta;
+          const totalPaid = results[rowIndex].transactions.reduce(function (
+            a,
+            b
+          ) {
+            return a + b.amount;
+          },
+          0);
+
+          return <>{numberWithCommas(value - totalPaid)}</>;
         },
       },
     },
@@ -148,20 +188,18 @@ const AllBookingsPage = () => {
               Add Booking
             </Button>
           </Grid>
-          <Grid sx={{ marginLeft: "700px" }} item>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Year</InputLabel>
-                <Select
-                  label="Year"
-                  onChange={handleYearChange}
-                  variant="outlined"
-                >
-                  <MenuItem value={"2022"}>2022</MenuItem>
-                  <MenuItem value={"2023"}>2023</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+          <Grid sx={{ marginLeft: "450px" }} item>
+            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-simple-select-label">Year</InputLabel>
+              <Select
+                label="Year"
+                onChange={handleYearChange}
+                variant="outlined"
+              >
+                <MenuItem value={"2022"}>2022</MenuItem>
+                <MenuItem value={"2023"}>2023</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item>
             <ToggleButtonGroup
@@ -173,7 +211,7 @@ const AllBookingsPage = () => {
               onChange={handlePaidToggle}
             >
               <ToggleButton value="true">Paid</ToggleButton>
-              <ToggleButton value="false">No Paid</ToggleButton>
+              <ToggleButton value="false">UnPaid</ToggleButton>
             </ToggleButtonGroup>
           </Grid>
         </Grid>
@@ -184,7 +222,6 @@ const AllBookingsPage = () => {
         totalResults={totalResults}
         columns={columns}
         setQuery={setQuery}
-        onEdit={onEdit}
         onDelete={onDelete}
       />
     </AdminLayout>

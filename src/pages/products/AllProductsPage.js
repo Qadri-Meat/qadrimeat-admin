@@ -3,23 +3,24 @@ import { Button, Grid, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteDeal, getDeals, resetDeal } from "store/deal";
 import DataTable from "@core/components/ui/DataTable";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 import withAuth from "hooks/withAuth";
-import { getImageUrl } from "helper/helpers";
-const AllDealsPage = () => {
+import { deleteProduct, getProducts, resetProduct } from "store/product";
+const AllProductsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
   const { user: authUser } = useSelector((state) => state.auth);
-  const { results, totalResults, success } = useSelector((state) => state.deal);
+  const { results, totalResults, success } = useSelector(
+    (state) => state.product
+  );
 
   useEffect(() => {
     if (success) {
-      dispatch(resetDeal());
+      dispatch(resetProduct());
     } else {
-      dispatch(getDeals(query));
+      dispatch(getProducts(query));
     }
   }, [dispatch, query, success]);
 
@@ -27,14 +28,14 @@ const AllDealsPage = () => {
     authUser?.role === "user"
       ? null
       : (value) => {
-          dispatch(deleteDeal(value));
+          dispatch(deleteProduct(value));
         };
 
   const onEdit =
     authUser?.role === "user"
       ? null
       : (value) => {
-          navigate(`/deals/${value}`);
+          navigate(`/products/${value}`);
         };
 
   const columns = [
@@ -44,7 +45,12 @@ const AllDealsPage = () => {
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return <MemoizedAvatar src={getImageUrl(value)} />;
+          const image = value.length > 0 ? value[0] : "";
+          return (
+            <MemoizedAvatar
+              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
+            />
+          );
         },
       },
     },
@@ -71,22 +77,22 @@ const AllDealsPage = () => {
       <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
         <Grid item>
           <Typography variant="h5" component="h1">
-            Deals
+            Products
           </Typography>
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate("/deals/add-deal")}
+            onClick={() => navigate("/products/add-products")}
             variant="outlined"
             color="primary"
             size="small"
           >
-            Add Deal
+            Add Product
           </Button>
         </Grid>
       </Grid>
       <DataTable
-        title={"Deals List"}
+        title={"Product List"}
         results={results}
         totalResults={totalResults}
         columns={columns}
@@ -98,4 +104,4 @@ const AllDealsPage = () => {
   );
 };
 
-export default withAuth(AllDealsPage);
+export default withAuth(AllProductsPage);

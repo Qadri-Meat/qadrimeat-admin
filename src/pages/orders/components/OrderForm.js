@@ -1,17 +1,17 @@
+import React, { Fragment, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { Alert, Button, Grid } from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
 import Form from "@core/components/forms/Form";
 import FormInput from "@core/components/forms/FormInput";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Alert, Button, Grid } from "@mui/material";
-import * as yup from "yup";
-import React, { Fragment, useState } from "react";
-import { useForm } from "react-hook-form";
-import SaveIcon from "@mui/icons-material/Save";
-import BookingItem from "./BookingItem";
-import { useDispatch, useSelector } from "react-redux";
-import { getDiscountPrice } from "helper/product";
-import { createBooking, updateBooking } from "store/booking";
 import Loader from "@core/components/ui/Loader";
 import Message from "@core/components/ui/Message";
+import OrderItemForm from "./OrderItemForm";
+import { createOrder, updateOrder } from "store/order";
+import { getDiscountPrice } from "helper/product";
 import { phoneRegExp } from "helper/regix";
 
 const schema = yup.object().shape({
@@ -25,24 +25,27 @@ const schema = yup.object().shape({
   postalCode: yup.string(),
   notes: yup.string(),
 });
-const BookingForm = ({ preloadedValues }) => {
+
+const OrderForm = ({ preloadedValues }) => {
   const [itemsError, setItemsError] = useState(false);
   const dispatch = useDispatch();
-  let cart1TotalPrice = 0;
-  const { error, loading } = useSelector((state) => state.booking);
+  const { error, loading } = useSelector((state) => state.order);
   const items = useSelector((state) => state.cart);
+
   let shippingDetails = {
     city: "Lahore, Punjab",
     country: "Pakistan",
     postalCode: "54030",
     discount: 0,
   };
+
   if (preloadedValues !== undefined) {
     shippingDetails = {
       ...preloadedValues.shippingDetails,
       discount: preloadedValues.discount,
     };
   }
+
   const {
     register,
     handleSubmit,
@@ -54,48 +57,66 @@ const BookingForm = ({ preloadedValues }) => {
   });
 
   const onSubmit = (data) => {
+    console.log("items are: ", items);
     if (items.length === 0) {
       setItemsError(true);
       return;
     } else {
       setItemsError(false);
     }
+
     const discount = data.discount;
     delete data.discount;
-    cart1TotalPrice = 0 - Number(discount);
+
+    let cartTotalPrice = 0;
+
     items.forEach((item) => {
       const discountedPrice = getDiscountPrice(item.price, item.discount);
       const finalProductPrice = item.price * 1;
       const finalDiscountedPrice = discountedPrice * 1;
 
-      discountedPrice != null
-        ? (cart1TotalPrice += finalDiscountedPrice * item.quantity)
-        : (cart1TotalPrice += finalProductPrice * item.quantity);
+      // Calculate the price based on the weight
+      let itemPrice = 0;
+      if (item.weight) {
+        itemPrice = item.weight * finalProductPrice;
+        if (discountedPrice != null) {
+          itemPrice = item.weight * finalDiscountedPrice;
+        }
+      } else {
+        itemPrice = finalProductPrice;
+        if (discountedPrice != null) {
+          itemPrice = finalDiscountedPrice;
+        }
+      }
+
+      cartTotalPrice += itemPrice * item.quantity;
     });
-    const newBooking = {
+
+    const newOrder = {
       phone: data.phone,
-      bookingItems: items,
+      orderItems: items,
       shippingDetails: {
         ...data,
         city: "Lahore",
         country: "Pakistan",
       },
       shippingPrice: 0,
-      totalPrice: cart1TotalPrice ? cart1TotalPrice : 0,
+      totalPrice: cartTotalPrice,
       discount,
       deliveryTime: Date.now(),
     };
+
     if (preloadedValues) {
-      dispatch(updateBooking({ id: preloadedValues.id, data: newBooking }));
+      dispatch(updateOrder({ id: preloadedValues.id, data: newOrder }));
     } else {
-      dispatch(createBooking(newBooking));
+      dispatch(createOrder(newOrder));
     }
   };
 
   return (
     <Fragment>
       {error && <Message severity="error">{error}</Message>}
-      <BookingItem />
+      <OrderItemForm />
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
@@ -199,9 +220,9 @@ const BookingForm = ({ preloadedValues }) => {
               {loading ? (
                 <Loader />
               ) : preloadedValues ? (
-                "Update Booking"
+                "Update Order"
               ) : (
-                "Save Booking"
+                "Save Order"
               )}
             </Button>
           </Grid>
@@ -209,11 +230,11 @@ const BookingForm = ({ preloadedValues }) => {
       </Form>
       {itemsError && (
         <Alert style={{ marginTop: "10px" }} severity="error">
-          please select the Deal
+          Please select a product.
         </Alert>
       )}
     </Fragment>
   );
 };
 
-export default BookingForm;
+export default OrderForm;

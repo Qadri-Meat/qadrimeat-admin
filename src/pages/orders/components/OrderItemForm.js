@@ -8,34 +8,31 @@ import {
 } from "@mui/material";
 import MUIDataTable from "mui-datatables";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { useDispatch, useSelector } from "react-redux";
-import { getDeals } from "store/deal";
 import {
   addToCart,
+  changeWeight,
   decrementQuantity,
   incrementQuantity,
   reSetCart,
   removeItem,
-  updateCartItemDay,
-  updateCartItemTime,
-  updateCartPackage,
 } from "store/cart";
 import AddIcon from "@mui/icons-material/Add";
+import { v4 as uuidv4 } from "uuid";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { getDiscountPrice } from "helper/product";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
-import { getImageUrl } from "helper/helpers";
-const BookingItem = () => {
+import { getProducts } from "store/product";
+const OrderItemForm = () => {
   const [searchBar, setSearchBar] = useState(0);
   const dispatch = useDispatch();
   let cartTotalPrice = 0;
-  const { results } = useSelector((state) => state.deal);
+  const { results } = useSelector((state) => state.product);
   const items = useSelector((state) => state.cart);
   useEffect(() => {
     dispatch(reSetCart());
     const query = `limit=${100}&page=${1}`;
-    dispatch(getDeals(query));
+    dispatch(getProducts(query));
   }, [dispatch]);
   const columns = [
     {
@@ -53,7 +50,12 @@ const BookingItem = () => {
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return <MemoizedAvatar src={getImageUrl(value)} />;
+          const image = value.length > 0 ? value[0] : "";
+          return (
+            <MemoizedAvatar
+              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
+            />
+          );
         },
       },
     },
@@ -116,101 +118,7 @@ const BookingItem = () => {
         },
       },
     },
-    {
-      name: "day",
-      label: "Day",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowData } = tableMeta;
-          const cartItem = items.filter((item) => {
-            return item.id === rowData[0];
-          })[0];
-          return (
-            <select
-              name="day"
-              id="day"
-              value={value}
-              hidden={!cartItem.isPackage}
-              onChange={(e) => {
-                dispatch(
-                  updateCartItemDay({
-                    ...cartItem,
-                    day: e.target.value,
-                  })
-                );
-              }}
-            >
-              <option value="1">1</option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-            </select>
-          );
-        },
-      },
-    },
-    {
-      name: "time",
-      label: "Time",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowData } = tableMeta;
-          const cartItem = items.filter((item) => {
-            return item.id === rowData[0];
-          })[0];
-          return (
-            <input
-              type="time"
-              id="appt"
-              name="appt"
-              value={value}
-              hidden={!cartItem.isPackage}
-              onChange={(e) => {
-                dispatch(
-                  updateCartItemTime({ ...cartItem, time: e.target.value })
-                );
-              }}
-            />
-          );
-        },
-      },
-    },
-    {
-      name: "isPackage",
-      label: "Package",
-      options: {
-        filter: false,
-        setCellProps: () => ({
-          style: { minWidth: "50px", maxWidth: "50px" },
-        }),
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowData } = tableMeta;
-          const cart1Item = items.filter((item) => {
-            return item.id === rowData[0];
-          })[0];
-          return (
-            <select
-              name="isPackage"
-              id="isPackage"
-              value={value}
-              style={{ minWidth: "80px", maxWidth: "80px" }}
-              onChange={(e) => {
-                dispatch(
-                  updateCartPackage({
-                    ...cart1Item,
-                    isPackage: e.target.value,
-                  })
-                );
-              }}
-            >
-              <option value="true">Package</option>
-              <option value="false">Non Package</option>
-            </select>
-          );
-        },
-      },
-    },
+
     {
       name: "quantity",
       label: "Quantity",
@@ -252,6 +160,31 @@ const BookingItem = () => {
         },
       },
     },
+
+    {
+      name: "weight",
+      label: "Weight",
+      options: {
+        filter: false,
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const { rowData } = tableMeta;
+          const cartItem = items.filter((item) => item.id === rowData[0])[0];
+          return (
+            <input
+              type="number"
+              value={value}
+              style={{ minWidth: "70px", maxWidth: "70px" }}
+              onChange={(e) => {
+                dispatch(
+                  changeWeight({ cartItem, weight: parseInt(e.target.value) })
+                );
+              }}
+            />
+          );
+        },
+      },
+    },
+
     {
       name: "price",
       label: "Sub Total",
@@ -268,11 +201,13 @@ const BookingItem = () => {
           );
           const finalProductPrice = cart1Item.price * 1;
           const finalDiscountedPrice = discountedPrice * 1;
+          const priceWithWeight = cart1Item.weight * finalProductPrice;
+
           return (
             <>
               {discountedPrice !== null
                 ? "PKR " + finalDiscountedPrice * cart1Item.quantity
-                : "PKR " + finalProductPrice * cart1Item.quantity}
+                : "PKR " + priceWithWeight * cart1Item.quantity}
             </>
           );
         },
@@ -290,6 +225,21 @@ const BookingItem = () => {
       });
     },
     customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
+      let grandTotal = 0;
+      items.forEach((item) => {
+        const discountedPrice = getDiscountPrice(item.price, item.discount);
+        const finalProductPrice = item.price * 1;
+        const finalDiscountedPrice = discountedPrice * 1;
+        const priceWithWeight = item.weight * finalProductPrice;
+
+        const itemTotal =
+          discountedPrice !== null
+            ? finalDiscountedPrice * item.quantity
+            : priceWithWeight * item.quantity;
+
+        grandTotal += itemTotal;
+      });
+
       return (
         <Box
           sx={{
@@ -302,10 +252,7 @@ const BookingItem = () => {
         >
           <Box>
             <Typography variant="h6">Grand Total</Typography>
-            <Typography variant="body1">
-              PKR
-              {" " + cartTotalPrice}
-            </Typography>
+            <Typography variant="body1">PKR {" " + grandTotal}</Typography>
           </Box>
         </Box>
       );
@@ -329,24 +276,22 @@ const BookingItem = () => {
                 quantity: 1,
                 price: values.price,
                 discount: 0,
+                weight: 1,
                 image: values.image,
-                deal: values.id,
-                day: 1,
-                time: "10:00",
-                isPackage: true,
+                product: values.id,
               };
               dispatch(addToCart(item));
               setSearchBar(Math.random());
             }
           }}
           renderInput={(params) => (
-            <TextField {...params} label="Search Deals" />
+            <TextField {...params} label="Search Product" />
           )}
         />
       </Grid>
       <Grid item xs={12}>
         <MUIDataTable
-          title={"Booking Items"}
+          title={"Order Items"}
           columns={columns}
           data={items}
           options={options}
@@ -356,4 +301,4 @@ const BookingItem = () => {
   );
 };
 
-export default BookingItem;
+export default OrderItemForm;

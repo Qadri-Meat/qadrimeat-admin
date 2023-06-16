@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import BookingService from "services/BookingService";
+import OrderService from "services/OrderService";
 
 const initialState = {};
 
-export const getBookings = createAsyncThunk(
-  "booking/getAll",
+export const getOrders = createAsyncThunk(
+  "Orders/getAll",
   async (params, { rejectWithValue }) => {
     try {
-      const res = await BookingService.getAll(params);
+      const res = await OrderService.getAll(params);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -15,17 +15,17 @@ export const getBookings = createAsyncThunk(
   }
 );
 
-export const getBooking = createAsyncThunk(
-  "booking/get",
+export const getOrder = createAsyncThunk(
+  "Order/get",
   async (id, { rejectWithValue }) => {
     try {
-      const res = await BookingService.get(id);
+      const res = await OrderService.get(id);
       const totalPaid1 = res.data.transactions.reduce(function (a, b) {
         return a + b.amount;
       }, 0);
       return {
         loading: false,
-        selectedBooking: { ...res.data, totalPaid: totalPaid1 || 0 },
+        selectedOrder: { ...res.data, totalPaid: totalPaid1 || 0 },
       };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -33,17 +33,17 @@ export const getBooking = createAsyncThunk(
   }
 );
 
-export const createBooking = createAsyncThunk(
-  "booking/create",
+export const createOrder = createAsyncThunk(
+  "Order/create",
   async (data, { rejectWithValue }) => {
     try {
-      const res = await BookingService.create(data);
+      const res = await OrderService.create(data);
       const totalPaid1 = res.data.transactions.reduce(function (a, b) {
         return a + b.amount;
       }, 0);
       return {
         loading: false,
-        selectedBooking: { ...res.data, totalPaid: totalPaid1 || 0 },
+        selectedOrder: { ...res.data, totalPaid: totalPaid1 || 0 },
         success: true,
       };
     } catch (err) {
@@ -53,11 +53,11 @@ export const createBooking = createAsyncThunk(
   }
 );
 
-export const updateBooking = createAsyncThunk(
-  "booking/updateBooking",
+export const updateOrder = createAsyncThunk(
+  "Order/updateOrder",
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      await BookingService.updateById({ id, data });
+      await OrderService.updateById({ id, data });
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -65,11 +65,11 @@ export const updateBooking = createAsyncThunk(
   }
 );
 
-export const deleteBooking = createAsyncThunk(
-  "booking/delete Booking",
+export const deleteOrder = createAsyncThunk(
+  "Order/delete Order",
   async (id, { rejectWithValue }) => {
     try {
-      await BookingService.delete(id);
+      await OrderService.delete(id);
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -77,12 +77,12 @@ export const deleteBooking = createAsyncThunk(
   }
 );
 
-export const getBookingItems = createAsyncThunk(
-  "booking/getBookingItems",
+export const getOrderItems = createAsyncThunk(
+  "Order/getOrderItems",
   async ({ day, deal }, { rejectWithValue }) => {
     try {
-      const res = await BookingService.getBookingItems(day, deal);
-      return { bookingItems: res.data };
+      const res = await OrderService.getOrderItems(day, deal);
+      return { OrderItems: res.data };
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
@@ -90,10 +90,10 @@ export const getBookingItems = createAsyncThunk(
 );
 
 export const deleteTransaction = createAsyncThunk(
-  "booking/deleteTransaction",
+  "Order/deleteTransaction",
   async ({ id1, id2 }, { rejectWithValue }) => {
     try {
-      await BookingService.deleteTransaction(id1, id2);
+      await OrderService.deleteTransaction(id1, id2);
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -101,10 +101,10 @@ export const deleteTransaction = createAsyncThunk(
   }
 );
 export const addTransaction = createAsyncThunk(
-  "booking/addTransaction",
+  "Order/addTransaction",
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      await BookingService.addTransaction({ id, data });
+      await OrderService.addTransaction({ id, data });
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -112,15 +112,15 @@ export const addTransaction = createAsyncThunk(
   }
 );
 
-export const resetBooking = createAction("booking/reset");
+export const resetOrder = createAction("Order/reset");
 
-const bookingSlice = createSlice({
-  name: "booking",
+const orderSlice = createSlice({
+  name: "order",
   initialState,
   extraReducers: (builder) => {
-    builder.addCase(resetBooking, (state, action) => initialState);
+    builder.addCase(resetOrder, (state, action) => initialState);
     builder.addMatcher(
-      (action) => action.type.startsWith("booking"),
+      (action) => action.type.startsWith("Order"),
       (state, action) => {
         const [actionType] = action.type.split("/").reverse();
         switch (actionType) {
@@ -141,5 +141,5 @@ const bookingSlice = createSlice({
   },
 });
 
-const { reducer } = bookingSlice;
+const { reducer } = orderSlice;
 export default reducer;

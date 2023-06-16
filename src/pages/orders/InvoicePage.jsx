@@ -1,32 +1,32 @@
 import { useDispatch, useSelector } from "react-redux";
+import "./styles/invoice.css";
 import { useEffect } from "react";
-import { getBooking } from "store/booking";
 import { useNavigate, useParams } from "react-router-dom";
 import { getDiscountPrice } from "helper/product";
 import { Avatar } from "@mui/material";
 import withAuth from "hooks/withAuth";
 import { formatTime } from "helper/formatTime";
-import { getImageUrl } from "helper/helpers";
-
+import { getOrder } from "store/order";
 const InvoicePage = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { selectedBooking } = useSelector((state) => state.booking);
+  const { selectedOrder } = useSelector((state) => state.order);
   const navigate = useNavigate();
-
   useEffect(() => {
-    if (!selectedBooking || selectedBooking.id !== id) {
-      dispatch(getBooking(id));
+    if (!selectedOrder || selectedOrder.id !== id) {
+      dispatch(getOrder(id));
     }
-  }, [selectedBooking, id, dispatch, navigate]);
+  }, [selectedOrder, id, dispatch, navigate]);
 
   const printPage = () => {
+    var ButtonControl = document.getElementById("btnprint");
+    ButtonControl.style.visibility = "hidden";
     window.print();
   };
 
   return (
     <>
-      {!selectedBooking ? (
+      {!selectedOrder ? (
         <></>
       ) : (
         <div>
@@ -62,52 +62,77 @@ const InvoicePage = (props) => {
                       <div className="col-md-6 text-right">
                         <button
                           id="btnprint"
-                          className="btn btn-primary d-print-none"
+                          className="btn btn-primary hidden-print"
                           onClick={printPage}
                         >
+                          <span
+                            className="glyphicon glyphicon-print noprint"
+                            aria-hidden="true"
+                          ></span>{" "}
                           Print
                         </button>
                         <p className="font-weight-bold mb-1">
-                          Booking # {selectedBooking.id}
+                          Order # {selectedOrder.id}
                         </p>
                         <p className="text-muted">
-                          Date:
-                          {new Date(
-                            selectedBooking.createdAt
-                          ).toLocaleDateString()}
-                          ,{" "}
-                          {new Date(
-                            selectedBooking.createdAt
-                          ).toLocaleTimeString()}
+                          Date: {selectedOrder.createdAt.substring(0, 10)}
                         </p>
                       </div>
                     </div>
 
                     <hr />
-
+                    {/* {selectedOrder.type === 'online' ? ( */}
                     <div className="row">
                       <div className="col-md-6">
                         <p className="font-weight-bold">
                           To:{" "}
-                          {selectedBooking.shippingDetails.firstName +
+                          {selectedOrder.shippingDetails.firstName +
                             " " +
-                            selectedBooking.shippingDetails.lastName}
+                            selectedOrder.shippingDetails.lastName}
                         </p>
                         <p className="text-muted">
+                          {/* <strong>Email:</strong>{' '}
+                          {selectedOrder.shippingDetails.email}
+                          <br /> */}
                           <strong>Phone:</strong>{" "}
-                          {selectedBooking.shippingDetails.phone}
+                          {selectedOrder.shippingDetails.phone}
                           <br />
                           <strong>Address:</strong>{" "}
-                          {selectedBooking.shippingDetails.address},{" "}
-                          {selectedBooking.shippingDetails.city}{" "}
-                          {selectedBooking.shippingDetails.postalCode},{" "}
-                          {selectedBooking.shippingDetails.country}
+                          {selectedOrder.shippingDetails.address},{" "}
+                          {selectedOrder.shippingDetails.city}{" "}
+                          {selectedOrder.shippingDetails.postalCode},{" "}
+                          {selectedOrder.shippingDetails.country}
                           <br />
                           <strong>Note:</strong>{" "}
-                          {selectedBooking.shippingDetails.notes}
+                          {selectedOrder.shippingDetails.notes}
                         </p>
                       </div>
+
+                      {/* <div className="col-md-6 text-right">
+    <p className="font-weight-bold mb-4">Payment Details</p>
+    <p className="mb-1">
+      <span className="text-muted">ID: </span>{' '}
+      {selectedOrder.paymentResult
+        ? selectedOrder.paymentResult.id
+        : ''}
+    </p>
+    <p className="mb-1">
+      <span className="text-muted">Payment Type: </span>
+      {selectedOrder.paymentResult
+        ? selectedOrder.paymentMethod
+        : ''}
+    </p>
+    <p className="mb-1">
+      <span className="text-muted">Email: </span>{' '}
+      {selectedOrder.paymentResult
+        ? selectedOrder.paymentResult.emailAddress
+        : ''}
+    </p>
+  </div> */}
                     </div>
+                    {/* ) : (
+                      <></>
+                    )} */}
 
                     <div className="row ">
                       <div className="col-md-12">
@@ -141,7 +166,7 @@ const InvoicePage = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-                            {selectedBooking.bookingItems.map((item, index) => {
+                            {selectedOrder.orderItems.map((item, index) => {
                               const discountedPrice = getDiscountPrice(
                                 item.price,
                                 item.discount
@@ -153,12 +178,17 @@ const InvoicePage = (props) => {
                                 discountedPrice * 1
                               ).toFixed(2);
                               return (
-                                <tr key={index}>
+                                <tr>
                                   <td>
                                     <Avatar
                                       variant="rounded"
                                       alt={item.name}
-                                      src={getImageUrl(item.image)}
+                                      src={
+                                        item.image.length > 0
+                                          ? process.env.REACT_APP_IMAGE_URL +
+                                            item.image[0]
+                                          : ""
+                                      }
                                     />
                                   </td>
                                   <td>{item.name}</td>
@@ -227,9 +257,9 @@ const InvoicePage = (props) => {
                               <td>
                                 <strong>
                                   Rs{" "}
-                                  {selectedBooking.totalPrice -
-                                    selectedBooking.shippingPrice +
-                                    (selectedBooking.discount || 0)}
+                                  {selectedOrder.totalPrice -
+                                    selectedOrder.shippingPrice +
+                                    (selectedOrder.discount || 0)}
                                 </strong>
                               </td>
                             </tr>
@@ -239,7 +269,7 @@ const InvoicePage = (props) => {
                               </td>
                               <td>
                                 <strong>
-                                  Rs {selectedBooking.shippingPrice}
+                                  Rs {selectedOrder.shippingPrice}
                                 </strong>
                               </td>
                             </tr>
@@ -249,7 +279,7 @@ const InvoicePage = (props) => {
                               </td>
                               <td>
                                 <strong>
-                                  Rs {selectedBooking.discount || 0}
+                                  Rs {selectedOrder.discount || 0}
                                 </strong>
                               </td>
                             </tr>
@@ -258,7 +288,7 @@ const InvoicePage = (props) => {
                                 <strong>Grand Total:</strong>
                               </td>
                               <td>
-                                <strong>Rs {selectedBooking.totalPrice}</strong>
+                                <strong>Rs {selectedOrder.totalPrice}</strong>
                               </td>
                             </tr>
                             <tr>
@@ -266,7 +296,7 @@ const InvoicePage = (props) => {
                                 <strong>Total Paid:</strong>
                               </td>
                               <td>
-                                <strong>Rs {selectedBooking.totalPaid}</strong>
+                                <strong>Rs {selectedOrder.totalPaid}</strong>
                               </td>
                             </tr>
                             <tr>
@@ -276,8 +306,8 @@ const InvoicePage = (props) => {
                               <td>
                                 <strong>
                                   Rs{" "}
-                                  {selectedBooking.totalPrice -
-                                    selectedBooking.totalPaid}
+                                  {selectedOrder.totalPrice -
+                                    selectedOrder.totalPaid}
                                 </strong>
                               </td>
                             </tr>

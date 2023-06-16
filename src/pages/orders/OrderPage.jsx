@@ -2,26 +2,23 @@ import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBread
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
+
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import MUIDataTable from "mui-datatables";
-import { getBooking } from "store/booking";
 import { getDiscountPrice } from "helper/product";
-import BookingPageRightPanels from "@core/components/extra/BookingPageRightPanels/BookingPageRightPanels";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
-import { formatTime } from "helper/formatTime";
-import { getImageUrl } from "helper/helpers";
+import { getOrder } from "store/order";
+import OrderPageRightPanels from "@core/components/extra/OrderPageRightPanels/OrderPageRightPanels";
 
-const BookingPage = () => {
+const OrderPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { selectedBooking } = useSelector((state) => state.booking);
+  const { selectedOrder } = useSelector((state) => state.order);
   const navigate = useNavigate();
 
   useEffect(() => {
-    dispatch(getBooking(id));
+    dispatch(getOrder(id));
   }, [dispatch, id, navigate]);
 
   const columns = [
@@ -31,7 +28,12 @@ const BookingPage = () => {
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return <MemoizedAvatar src={getImageUrl(value)} />;
+          const image = value.length > 0 ? value[0] : "";
+          return (
+            <MemoizedAvatar
+              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
+            />
+          );
         },
       },
     },
@@ -97,46 +99,14 @@ const BookingPage = () => {
       },
     },
     {
-      name: "day",
-      label: "Day",
+      name: "weight",
+      label: "Weight",
       options: {
         filter: true,
         sort: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowIndex } = tableMeta;
-          return selectedBooking.bookingItems[rowIndex].isPackage ? value : "";
-        },
       },
     },
-    {
-      name: "time",
-      label: "Time",
-      options: {
-        filter: true,
-        sort: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          const { rowIndex } = tableMeta;
-          const isPackage = selectedBooking.bookingItems[rowIndex].isPackage;
 
-          if (isPackage) {
-            const formattedTime = formatTime(value);
-            return formattedTime;
-          } else {
-            return "";
-          }
-        },
-      },
-    },
-    {
-      name: "isPackage",
-      label: "Package",
-      options: {
-        filter: false,
-        customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
-        },
-      },
-    },
     {
       name: "price",
       label: "Sub Total",
@@ -186,55 +156,56 @@ const BookingPage = () => {
             <Typography variant="body1">
               Rs
               {" " +
-                selectedBooking.totalPrice -
-                selectedBooking.shippingPrice +
-                (selectedBooking.discount || 0)}
+                selectedOrder.totalPrice -
+                selectedOrder.shippingPrice +
+                (selectedOrder.discount || 0)}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Shipping Price</Typography>
             <Typography variant="body1">
-              Rs{" " + selectedBooking.shippingPrice}
+              Rs{" " + selectedOrder.shippingPrice}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Discount</Typography>
             <Typography variant="body1">
-              Rs{" " + (selectedBooking.discount || 0)}
+              Rs{" " + (selectedOrder.discount || 0)}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Grand Total</Typography>
             <Typography variant="body1">
-              Rs{" " + selectedBooking.totalPrice}
+              Rs{" " + selectedOrder.totalPrice}
             </Typography>
           </Box>
         </Box>
       );
     },
   };
+
   return (
     <AdminLayout>
       <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
         <Grid item>
           <Typography variant="h5" component="h1">
-            Booking Details
+            Orders Details
           </Typography>
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate(`/bookings/update-booking/${id}`)}
+            onClick={() => navigate(`/orders/update-order/${id}`)}
             variant="outlined"
             color="primary"
             size="small"
           >
-            Update Booking
+            Update Order
           </Button>
         </Grid>
         <Grid item>
           <Button
             onClick={() => {
-              window.open(`/bookings/invoice/${id}`, "_blank");
+              window.open(`/orders/invoice/${id}`, "_blank");
             }}
             variant="outlined"
             color="primary"
@@ -245,20 +216,20 @@ const BookingPage = () => {
         </Grid>
       </Grid>
       <AdminBreadcrumbs />
-      {selectedBooking ? (
+      {selectedOrder ? (
         <Grid container spacing={3}>
           <Grid container item md={8} spacing={3}>
             <Grid item xs={12}>
               <MUIDataTable
-                title={"Booking Items"}
-                data={selectedBooking.bookingItems}
+                title={"Order Items"}
+                data={selectedOrder.orderItems}
                 columns={columns}
                 options={options}
               />
             </Grid>
           </Grid>
           <Grid item xs={12} md={4}>
-            <BookingPageRightPanels />
+            <OrderPageRightPanels />
           </Grid>
         </Grid>
       ) : (
@@ -268,4 +239,4 @@ const BookingPage = () => {
   );
 };
 
-export default BookingPage;
+export default OrderPage;
