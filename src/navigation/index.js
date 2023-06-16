@@ -42,14 +42,6 @@ const navigation = [
         exact: "true",
       },
       {
-        id: "orders",
-        title: "Order",
-        type: "item",
-        icon: <ReceiptIcon />,
-        url: "/orders",
-        exact: "true",
-      },
-      {
         id: "bookings",
         title: "Bookings",
         type: "collapse",
