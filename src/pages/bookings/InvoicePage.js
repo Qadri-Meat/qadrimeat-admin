@@ -71,10 +71,14 @@ const InvoicePage = (props) => {
                           Booking # {selectedBooking.id}
                         </p>
                         <p className="text-muted">
-                          Date:{" "}
+                          Date:
                           {new Date(
                             selectedBooking.createdAt
-                          ).toLocaleDateString("en-GB")}
+                          ).toLocaleDateString()}
+                          ,{" "}
+                          {new Date(
+                            selectedBooking.createdAt
+                          ).toLocaleTimeString()}
                         </p>
                       </div>
                     </div>
