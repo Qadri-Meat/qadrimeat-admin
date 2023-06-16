@@ -149,19 +149,17 @@ const AllBookingsPage = () => {
             </Button>
           </Grid>
           <Grid sx={{ marginLeft: "450px" }} item>
-            <Box sx={{ minWidth: 120 }}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Year</InputLabel>
-                <Select
-                  label="Year"
-                  onChange={handleYearChange}
-                  variant="outlined"
-                >
-                  <MenuItem value={"2022"}>2022</MenuItem>
-                  <MenuItem value={"2023"}>2023</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-simple-select-label">Year</InputLabel>
+              <Select
+                label="Year"
+                onChange={handleYearChange}
+                variant="outlined"
+              >
+                <MenuItem value={"2022"}>2022</MenuItem>
+                <MenuItem value={"2023"}>2023</MenuItem>
+              </Select>
+            </FormControl>
           </Grid>
           <Grid item>
             <ToggleButtonGroup
