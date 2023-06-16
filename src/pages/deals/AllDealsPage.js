@@ -7,6 +7,7 @@ import { deleteDeal, getDeals, resetDeal } from "store/deal";
 import DataTable from "@core/components/ui/DataTable";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 import withAuth from "hooks/withAuth";
+import { getImageUrl } from "helper/helpers";
 const AllDealsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -43,12 +44,7 @@ const AllDealsPage = () => {
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          const image = value.length > 0 ? value[0] : "";
-          return (
-            <MemoizedAvatar
-              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
-            />
-          );
+          return <MemoizedAvatar src={getImageUrl(value)} />;
         },
       },
     },

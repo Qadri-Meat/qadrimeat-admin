@@ -7,6 +7,7 @@ import { getDiscountPrice } from "helper/product";
 import { Avatar } from "@mui/material";
 import withAuth from "hooks/withAuth";
 import { formatTime } from "helper/formatTime";
+import { getImageUrl } from "helper/helpers";
 const InvoicePage = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -183,12 +184,7 @@ const InvoicePage = (props) => {
                                     <Avatar
                                       variant="rounded"
                                       alt={item.name}
-                                      src={
-                                        item.image.length > 0
-                                          ? process.env.REACT_APP_IMAGE_URL +
-                                            item.image[0]
-                                          : ""
-                                      }
+                                      src={getImageUrl(item.image)}
                                     />
                                   </td>
                                   <td>{item.name}</td>
