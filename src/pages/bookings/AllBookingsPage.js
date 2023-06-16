@@ -17,10 +17,10 @@ import ClearIcon from "@mui/icons-material/Clear";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import FormControl from "@mui/material/FormControl";
-import Box from "@mui/material/Box";
 import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
 import withAuth from "hooks/withAuth";
+
 const AllBookingsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
