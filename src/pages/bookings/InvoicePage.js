@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import "./styles/invoice.css";
 import { useEffect } from "react";
 import { getBooking } from "store/booking";
 import { useNavigate, useParams } from "react-router-dom";
@@ -7,11 +6,14 @@ import { getDiscountPrice } from "helper/product";
 import { Avatar } from "@mui/material";
 import withAuth from "hooks/withAuth";
 import { formatTime } from "helper/formatTime";
+import { getImageUrl } from "helper/helpers";
+
 const InvoicePage = (props) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedBooking } = useSelector((state) => state.booking);
   const navigate = useNavigate();
+
   useEffect(() => {
     if (!selectedBooking || selectedBooking.id !== id) {
       dispatch(getBooking(id));
@@ -19,8 +21,6 @@ const InvoicePage = (props) => {
   }, [selectedBooking, id, dispatch, navigate]);
 
   const printPage = () => {
-    var ButtonControl = document.getElementById("btnprint");
-    ButtonControl.style.visibility = "hidden";
     window.print();
   };
 
@@ -62,26 +62,29 @@ const InvoicePage = (props) => {
                       <div className="col-md-6 text-right">
                         <button
                           id="btnprint"
-                          className="btn btn-primary hidden-print"
+                          className="btn btn-primary d-print-none"
                           onClick={printPage}
                         >
-                          <span
-                            className="glyphicon glyphicon-print noprint"
-                            aria-hidden="true"
-                          ></span>{" "}
                           Print
                         </button>
                         <p className="font-weight-bold mb-1">
                           Booking # {selectedBooking.id}
                         </p>
                         <p className="text-muted">
-                          Date: {selectedBooking.createdAt.substring(0, 10)}
+                          Date:
+                          {new Date(
+                            selectedBooking.createdAt
+                          ).toLocaleDateString()}
+                          ,{" "}
+                          {new Date(
+                            selectedBooking.createdAt
+                          ).toLocaleTimeString()}
                         </p>
                       </div>
                     </div>
 
                     <hr />
-                    {/* {selectedBooking.type === 'online' ? ( */}
+
                     <div className="row">
                       <div className="col-md-6">
                         <p className="font-weight-bold">
@@ -91,9 +94,6 @@ const InvoicePage = (props) => {
                             selectedBooking.shippingDetails.lastName}
                         </p>
                         <p className="text-muted">
-                          {/* <strong>Email:</strong>{' '}
-                          {selectedBooking.shippingDetails.email}
-                          <br /> */}
                           <strong>Phone:</strong>{" "}
                           {selectedBooking.shippingDetails.phone}
                           <br />
@@ -107,32 +107,7 @@ const InvoicePage = (props) => {
                           {selectedBooking.shippingDetails.notes}
                         </p>
                       </div>
-
-                      {/* <div className="col-md-6 text-right">
-    <p className="font-weight-bold mb-4">Payment Details</p>
-    <p className="mb-1">
-      <span className="text-muted">ID: </span>{' '}
-      {selectedBooking.paymentResult
-        ? selectedBooking.paymentResult.id
-        : ''}
-    </p>
-    <p className="mb-1">
-      <span className="text-muted">Payment Type: </span>
-      {selectedBooking.paymentResult
-        ? selectedBooking.paymentMethod
-        : ''}
-    </p>
-    <p className="mb-1">
-      <span className="text-muted">Email: </span>{' '}
-      {selectedBooking.paymentResult
-        ? selectedBooking.paymentResult.emailAddress
-        : ''}
-    </p>
-  </div> */}
                     </div>
-                    {/* ) : (
-                      <></>
-                    )} */}
 
                     <div className="row ">
                       <div className="col-md-12">
@@ -178,17 +153,12 @@ const InvoicePage = (props) => {
                                 discountedPrice * 1
                               ).toFixed(2);
                               return (
-                                <tr>
+                                <tr key={index}>
                                   <td>
                                     <Avatar
                                       variant="rounded"
                                       alt={item.name}
-                                      src={
-                                        item.image.length > 0
-                                          ? process.env.REACT_APP_IMAGE_URL +
-                                            item.image[0]
-                                          : ""
-                                      }
+                                      src={getImageUrl(item.image)}
                                     />
                                   </td>
                                   <td>{item.name}</td>

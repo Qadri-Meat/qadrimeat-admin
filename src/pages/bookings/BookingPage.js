@@ -12,6 +12,7 @@ import { getDiscountPrice } from "helper/product";
 import BookingPageRightPanels from "@core/components/extra/BookingPageRightPanels/BookingPageRightPanels";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 import { formatTime } from "helper/formatTime";
+import { getImageUrl } from "helper/helpers";
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -30,12 +31,7 @@ const BookingPage = () => {
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          const image = value.length > 0 ? value[0] : "";
-          return (
-            <MemoizedAvatar
-              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
-            />
-          );
+          return <MemoizedAvatar src={getImageUrl(value)} />;
         },
       },
     },

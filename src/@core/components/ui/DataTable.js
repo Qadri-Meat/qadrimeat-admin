@@ -81,7 +81,7 @@ const DataTable = (props) => {
                 download: false,
                 customBodyRender: (value, tableMeta, updateValue) => {
                   return (
-                    <>
+                    <div style={{ minWidth: "50px" }}>
                       {onEdit && (
                         <span
                           onClick={() => {
@@ -100,7 +100,7 @@ const DataTable = (props) => {
                           <DeleteIcon style={{ color: "red" }} />
                         </span>
                       )}
-                    </>
+                    </div>
                   );
                 },
               },
