@@ -144,20 +144,6 @@ const AddOrderPage = () => {
         </Grid>
         <Grid item xs={5}>
           <Card sx={{ maxWidth: 700 }}>
-            {/* <Grid
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "5px",
-              }}
-              item
-              xs={12}
-            >
-              <Button size="small" variant="contained" startIcon={<AddIcon />}>
-                Add Customer
-              </Button>
-              <RestartAltIcon />
-            </Grid> */}
             <CardContent>
               {cartItems.length === 0 ? (
                 <Grid
