@@ -1,29 +1,105 @@
+import React, { useEffect } from "react";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import { Grid, Typography } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  TextField,
+  IconButton,
+  Button,
+  ButtonGroup,
+} from "@mui/material";
 import Card from "@mui/material/Card";
-
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-
-import { useEffect } from "react";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import withAuth from "hooks/withAuth";
+import {
+  addToCart,
+  changeDiscount,
+  changeWeight,
+  decrementQuantity,
+  incrementQuantity,
+  reSetCart,
+  removeItem,
+} from "store/cart";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { createOrder } from "store/order";
 import { getProducts } from "store/product";
-
+import { useNavigate } from "react-router-dom";
+import Loader from "@core/components/ui/Loader";
 const AddOrderPage = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { success, selectedOrder } = useSelector((state) => state.order);
+  const navigate = useNavigate();
   const { results } = useSelector((state) => state.product);
+  const cartItems = useSelector((state) => state.cart);
+  const { success, selectedOrder, loading } = useSelector(
+    (state) => state.order
+  );
+  const handleAddToCart = (product) => {
+    const newItem = {
+      id: product.id,
+      name: product.name,
+      quantity: 1,
+      price: product.price,
+      discount: 0,
+      weight: 1,
+      image: product.image,
+      product: product.id,
+    };
+    dispatch(addToCart(newItem));
+  };
+  const handleRemoveFromCart = (productId) => {
+    dispatch(removeItem(productId));
+  };
+  // Calculate subtotal
+  const subtotal = cartItems.reduce(
+    (total, item) => total + item.price * item.quantity * item.weight,
+    0
+  );
+  // Calculate total discount
+  const totalDiscount = cartItems.reduce(
+    (total, item) => total + item.discount * item.quantity,
+    0
+  );
+  // Calculate payable amount after discount
+  const payableAmount = subtotal - totalDiscount;
+
+  const onSubmit = () => {
+    // Validat
+    const newOrder = {
+      phone: "12345678910",
+      orderItems: cartItems, // Use cartItems from redux state
+      shippingDetails: {
+        phone: "12345678910",
+        firstName: "Qadri",
+        lastName: "Meat",
+        address: "Lahore",
+        city: "Lahore",
+        country: "Pakistan",
+      },
+      shippingPrice: 0,
+      totalPrice: payableAmount,
+      deliveryTime: Date.now(),
+    };
+
+    dispatch(createOrder(newOrder));
+  };
 
   useEffect(() => {
-    const query = `limit=${100}&page=${1}`;
-    dispatch(getProducts(query));
     if (success) {
       navigate(`/orders/${selectedOrder.id}`);
     }
   }, [success, dispatch, navigate, selectedOrder]);
+
+  useEffect(() => {
+    dispatch(reSetCart());
+    const query = `limit=${100}&page=${1}`;
+    dispatch(getProducts(query));
+  }, [dispatch]);
 
   return (
     <AdminLayout>
@@ -34,12 +110,15 @@ const AddOrderPage = () => {
           </Typography>
         </Grid>
       </Grid>
-      <Grid container sx={{ my: 3 }} alignItems="center" spacing={2}>
-        <Grid item xs={8}>
+      <Grid container spacing={1}>
+        <Grid item xs={7}>
           <Grid container spacing={1}>
-            {results.map((product) => (
+            {results?.map((product) => (
               <Grid item xs={3} key={product.id}>
-                <Card sx={{ maxWidth: 200 }}>
+                <Card
+                  sx={{ maxWidth: 200, cursor: "pointer" }}
+                  onClick={() => handleAddToCart(product)}
+                >
                   <CardMedia
                     sx={{ height: 70, margin: 2 }}
                     image={"/meat.png"}
@@ -56,18 +135,198 @@ const AddOrderPage = () => {
             ))}
           </Grid>
         </Grid>
-        <Grid item xs={4}>
-          <Card sx={{ maxWidth: 200 }}>
-            {/* Cart card content goes here */}
+        <Grid item xs={5}>
+          <Card sx={{ maxWidth: 700 }}>
+            {/* <Grid
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "5px",
+              }}
+              item
+              xs={12}
+            >
+              <Button size="small" variant="contained" startIcon={<AddIcon />}>
+                Add Customer
+              </Button>
+              <RestartAltIcon />
+            </Grid> */}
+            <CardContent>
+              {cartItems.length === 0 ? (
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{ justifyContent: "center", alignItems: "center" }}
+                >
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1" align="center">
+                      Cart is empty
+                    </Typography>
+                  </Grid>
+                </Grid>
+              ) : (
+                <>
+                  {cartItems.map((item, index) => (
+                    <React.Fragment key={item.id}>
+                      <Accordion>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls={`panel${index + 1}a-content`}
+                          id={`panel${index + 1}a-header`}
+                        >
+                          <Typography>
+                            {index + 1} {"  "} {item.name}
+                          </Typography>
+                          <Typography
+                            sx={{ marginLeft: "auto" }}
+                            variant="subtitle1"
+                          >
+                            {item.discount !== 0 ? (
+                              <>
+                                <span
+                                  style={{ textDecoration: "line-through" }}
+                                >
+                                  PKR: {item.price}
+                                </span>{" "}
+                                PKR: {item.price - item.discount}
+                              </>
+                            ) : (
+                              `PKR: ${item.price}`
+                            )}
+                          </Typography>
+                        </AccordionSummary>
+
+                        <AccordionDetails>
+                          <Grid container spacing={2}>
+                            <Grid item xs={3}>
+                              <TextField
+                                type="number"
+                                label="Discount"
+                                value={item.discount}
+                                onChange={(e) => {
+                                  dispatch(
+                                    changeDiscount({
+                                      item,
+                                      discount: parseInt(e.target.value),
+                                    })
+                                  );
+                                }}
+                              />
+                            </Grid>
+                            <Grid item xs={3}>
+                              <TextField
+                                type="number"
+                                label="Weight"
+                                onChange={(e) => {
+                                  dispatch(
+                                    changeWeight({
+                                      item,
+                                      weight: parseInt(e.target.value),
+                                    })
+                                  );
+                                }}
+                              />
+                            </Grid>
+                            <Grid
+                              item
+                              xs={3}
+                              sx={{ display: "flex", justifyContent: "center" }}
+                            >
+                              <ButtonGroup size="small" aria-label="quantity">
+                                <Button
+                                  onClick={() => {
+                                    if (item.quantity === 1) {
+                                      dispatch(removeItem(item.id));
+                                    } else {
+                                      dispatch(decrementQuantity(item.id));
+                                    }
+                                  }}
+                                >
+                                  -
+                                </Button>
+                                <Button disabled>{item.quantity}</Button>
+                                <Button
+                                  onClick={() => {
+                                    dispatch(incrementQuantity(item.id));
+                                  }}
+                                >
+                                  +
+                                </Button>
+                              </ButtonGroup>
+                            </Grid>
+                            <Grid
+                              item
+                              xs={3}
+                              sx={{ display: "flex", justifyContent: "center" }}
+                            >
+                              <IconButton
+                                onClick={() => handleRemoveFromCart(item.id)}
+                                aria-label="delete"
+                              >
+                                <DeleteIcon style={{ color: "red" }} />
+                              </IconButton>
+                            </Grid>
+                          </Grid>
+                        </AccordionDetails>
+                      </Accordion>
+                    </React.Fragment>
+                  ))}
+                  <Grid
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginTop: 10,
+                    }}
+                    item
+                    xs={12}
+                  >
+                    <Typography variant="subtitle1"> Subtotal:</Typography>
+                    <Typography variant="subtitle1">
+                      PKR: {subtotal.toFixed(2)}
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    item
+                    xs={12}
+                  >
+                    <Typography variant="subtitle1">Discount:</Typography>
+                    <Typography variant="subtitle1">
+                      PKR: {totalDiscount.toFixed(2)}
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    item
+                    xs={12}
+                  >
+                    <Typography variant="subtitle1">Payable Amount:</Typography>
+                    <Typography variant="subtitle1">
+                      PKR: {payableAmount.toFixed(2)}
+                    </Typography>
+                  </Grid>
+                  {/* Proceed button */}
+                  <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
+                    {loading ? (
+                      <Loader />
+                    ) : (
+                      <Button
+                        onClick={onSubmit}
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                      >
+                        Proceed
+                      </Button>
+                    )}
+                  </Grid>
+                </>
+              )}
+            </CardContent>
           </Card>
         </Grid>
       </Grid>
-
-      {/* <div>
-        <OrderForm />
-      </div> */}
     </AdminLayout>
   );
 };
-
 export default withAuth(AddOrderPage);

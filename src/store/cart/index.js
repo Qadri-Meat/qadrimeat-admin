@@ -54,10 +54,18 @@ const cartSlice = createSlice({
       return [];
     },
     changeWeight: (state, action) => {
-      const { cartItem, weight } = action.payload;
-      const item = state.find((item) => item.id === cartItem.id);
-      if (item) {
-        item.weight = weight;
+      const { item, weight } = action.payload;
+      const itemmm = state.find((items) => items.id === item.id);
+      if (itemmm) {
+        itemmm.weight = weight;
+      }
+    },
+
+    changeDiscount: (state, action) => {
+      const { item, discount } = action.payload;
+      const itemmm = state.find((items) => items.id === item.id);
+      if (itemmm) {
+        itemmm.discount = discount;
       }
     },
   },
@@ -74,5 +82,6 @@ export const {
   updateCartItemTime,
   updateCartPackage,
   changeWeight,
+  changeDiscount,
   reSetCart,
 } = cartSlice.actions;
