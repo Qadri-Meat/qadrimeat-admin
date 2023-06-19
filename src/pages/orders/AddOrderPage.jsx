@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 import {
   Grid,
@@ -39,6 +39,13 @@ const AddOrderPage = () => {
   const { success, selectedOrder, loading } = useSelector(
     (state) => state.order
   );
+
+  const [expanded, setExpanded] = useState(null);
+
+  const handleAccordionChange = (index) => {
+    setExpanded(index === expanded ? null : index);
+  };
+
   const handleAddToCart = (product) => {
     const newItem = {
       id: product.id,
@@ -168,7 +175,10 @@ const AddOrderPage = () => {
                 <>
                   {cartItems.map((item, index) => (
                     <React.Fragment key={item.id}>
-                      <Accordion>
+                      <Accordion
+                        expanded={expanded === index}
+                        onChange={() => handleAccordionChange(index)}
+                      >
                         <AccordionSummary
                           expandIcon={<ExpandMoreIcon />}
                           aria-controls={`panel${index + 1}a-content`}
@@ -200,6 +210,7 @@ const AddOrderPage = () => {
                               <TextField
                                 type="number"
                                 label="Discount"
+                                size="small"
                                 value={item.discount}
                                 onChange={(e) => {
                                   dispatch(
@@ -215,6 +226,7 @@ const AddOrderPage = () => {
                               <TextField
                                 type="number"
                                 label="Weight"
+                                size="small"
                                 onChange={(e) => {
                                   dispatch(
                                     changeWeight({

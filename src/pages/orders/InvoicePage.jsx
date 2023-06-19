@@ -6,7 +6,7 @@ import { getDiscountPrice } from "helper/product";
 import { Avatar } from "@mui/material";
 import withAuth from "hooks/withAuth";
 import { getOrder } from "store/order";
-const InvoicePage = (props) => {
+const InvoicePage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedOrder } = useSelector((state) => state.order);
