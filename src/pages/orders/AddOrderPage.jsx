@@ -71,10 +71,10 @@ const AddOrderPage = () => {
   const onSubmit = () => {
     // Validat
     const newOrder = {
-      phone: "12345678910",
+      phone: "+92 302-4000719",
       orderItems: cartItems, // Use cartItems from redux state
       shippingDetails: {
-        phone: "12345678910",
+        phone: "+92 302-4000719",
         firstName: "Qadri",
         lastName: "Meat",
         address: "Lahore",
@@ -174,9 +174,7 @@ const AddOrderPage = () => {
                           aria-controls={`panel${index + 1}a-content`}
                           id={`panel${index + 1}a-header`}
                         >
-                          <Typography>
-                            {index + 1} {"  "} {item.name}
-                          </Typography>
+                          <Typography>{item.name}</Typography>
                           <Typography
                             sx={{ marginLeft: "auto" }}
                             variant="subtitle1"

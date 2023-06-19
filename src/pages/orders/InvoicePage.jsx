@@ -5,7 +5,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getDiscountPrice } from "helper/product";
 import { Avatar } from "@mui/material";
 import withAuth from "hooks/withAuth";
-import { formatTime } from "helper/formatTime";
 import { getOrder } from "store/order";
 const InvoicePage = (props) => {
   const { id } = useParams();
@@ -155,12 +154,7 @@ const InvoicePage = (props) => {
                               <th className="bbooking-0 text-uppercase small font-weight-bold">
                                 Quantity
                               </th>
-                              <th className="bbooking-0 text-uppercase small font-weight-bold">
-                                Day
-                              </th>
-                              <th className="bbooking-0 text-uppercase small font-weight-bold">
-                                Time
-                              </th>
+
                               <th className="bbooking-0 text-uppercase small font-weight-bold">
                                 Type
                               </th>
@@ -200,12 +194,7 @@ const InvoicePage = (props) => {
                                   </td>
                                   <td>{item.name}</td>
                                   <td>{item.quantity}</td>
-                                  <td>{item.isPackage ? item.day : ""}</td>
-                                  <td>
-                                    {item.isPackage
-                                      ? formatTime(item.time)
-                                      : ""}
-                                  </td>
+
                                   <td>
                                     {item.isPackage ? "Package" : "Non Package"}
                                   </td>
