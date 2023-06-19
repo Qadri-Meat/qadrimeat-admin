@@ -75,7 +75,14 @@ const InvoicePage = (props) => {
                           Order # {selectedOrder.id}
                         </p>
                         <p className="text-muted">
-                          Date: {selectedOrder.createdAt.substring(0, 10)}
+                          Date:
+                          {new Date(
+                            selectedOrder.createdAt
+                          ).toLocaleDateString()}
+                          ,{" "}
+                          {new Date(
+                            selectedOrder.createdAt
+                          ).toLocaleTimeString()}
                         </p>
                       </div>
                     </div>

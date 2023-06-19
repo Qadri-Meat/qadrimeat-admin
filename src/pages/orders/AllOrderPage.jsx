@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import CheckIcon from "@mui/icons-material/Check";
 import ClearIcon from "@mui/icons-material/Clear";
+import FileOpenIcon from "@mui/icons-material/FileOpenOutlined";
 
 import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
@@ -35,11 +36,21 @@ const AllOrderPage = () => {
     dispatch(deleteOrder(value));
   };
 
-  const onEdit = (value) => {
-    navigate(`/orders/${value}`);
-  };
-
   const columns = [
+    {
+      name: "id",
+      label: "View",
+      options: {
+        filter: false,
+        customBodyRender: (values, tableMeta, updateValue) => {
+          return (
+            <Button href={`/orders/${values}`}>
+              <FileOpenIcon />
+            </Button>
+          );
+        },
+      },
+    },
     {
       name: "phone",
       label: "Phone",
@@ -141,7 +152,6 @@ const AllOrderPage = () => {
         totalResults={totalResults}
         columns={columns}
         setQuery={setQuery}
-        onEdit={onEdit}
         onDelete={onDelete}
       />
     </AdminLayout>
