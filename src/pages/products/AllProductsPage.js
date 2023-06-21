@@ -7,6 +7,7 @@ import DataTable from "@core/components/ui/DataTable";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 import withAuth from "hooks/withAuth";
 import { deleteProduct, getProducts, resetProduct } from "store/product";
+import { getImageUrl } from "helper/helpers";
 const AllProductsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -45,12 +46,7 @@ const AllProductsPage = () => {
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          const image = value.length > 0 ? value[0] : "";
-          return (
-            <MemoizedAvatar
-              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
-            />
-          );
+          return <MemoizedAvatar src={getImageUrl(value)} />;
         },
       },
     },
