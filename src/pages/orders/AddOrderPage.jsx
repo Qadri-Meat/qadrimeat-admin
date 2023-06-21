@@ -99,6 +99,20 @@ const AddOrderPage = () => {
     dispatch(createOrder(newOrder));
   };
 
+  const handleDiscountChange = (e, item) => {
+    const discount = parseInt(e.target.value);
+    if (discount >= 0) {
+      dispatch(changeDiscount({ item, discount }));
+    }
+  };
+
+  const handleWeightChange = (e, item) => {
+    const weight = parseInt(e.target.value);
+    if (weight >= 1) {
+      dispatch(changeWeight({ item, weight }));
+    }
+  };
+
   useEffect(() => {
     if (success) {
       navigate(`/orders/${selectedOrder.id}`);
@@ -203,14 +217,7 @@ const AddOrderPage = () => {
                                 label="Discount %"
                                 size="small"
                                 value={item.discount}
-                                onChange={(e) => {
-                                  dispatch(
-                                    changeDiscount({
-                                      item,
-                                      discount: parseInt(e.target.value),
-                                    })
-                                  );
-                                }}
+                                onChange={(e) => handleDiscountChange(e, item)}
                               />
                             </Grid>
                             <Grid item xs={3}>
@@ -218,14 +225,8 @@ const AddOrderPage = () => {
                                 type="number"
                                 label="Weight"
                                 size="small"
-                                onChange={(e) => {
-                                  dispatch(
-                                    changeWeight({
-                                      item,
-                                      weight: parseInt(e.target.value),
-                                    })
-                                  );
-                                }}
+                                value={item.weight}
+                                onChange={(e) => handleWeightChange(e, item)}
                               />
                             </Grid>
                             <Grid
@@ -316,6 +317,7 @@ const AddOrderPage = () => {
                         variant="contained"
                         color="primary"
                         size="large"
+                        disabled={totalDiscount < 0 || subtotal < 1}
                       >
                         Proceed
                       </Button>
