@@ -28,7 +28,7 @@ export const getImageUrl = (value) => {
   const image = value.length > 0 ? value[0] : "";
   if (!isNullOrEmpty(image)) {
     return `${process.env.REACT_APP_IMAGE_URL}${image}`;
+  } else {
+    return "/default.png";
   }
-
-  return null;
 };

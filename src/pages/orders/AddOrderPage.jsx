@@ -31,6 +31,7 @@ import { createOrder } from "store/order";
 import { getProducts } from "store/product";
 import { useNavigate } from "react-router-dom";
 import Loader from "@core/components/ui/Loader";
+import { getImageUrl } from "helper/helpers";
 const AddOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -127,8 +128,8 @@ const AddOrderPage = () => {
                   onClick={() => handleAddToCart(product)}
                 >
                   <CardMedia
-                    sx={{ height: 70, margin: 2 }}
-                    image={"/meat.png"}
+                    sx={{ height: 100 }}
+                    image={getImageUrl(product.image)}
                     title={product.title}
                   />
                   <CardContent sx={{ textAlign: "center" }}>
