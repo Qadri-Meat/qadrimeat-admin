@@ -16,6 +16,7 @@ import {
   ToggleButtonGroup,
   Typography,
 } from "@mui/material";
+import { formatTime } from "helper/formatTime";
 import { pick } from "helper/pick";
 import withAuth from "hooks/withAuth";
 import React, { useEffect } from "react";
@@ -143,7 +144,7 @@ const AllBookingItemsPage = () => {
                   </TableCell>
                   <TableCell align="right">{item.name}</TableCell>
                   <TableCell align="right">{item.quantity}</TableCell>
-                  <TableCell align="right">{item.time}</TableCell>
+                  <TableCell align="right">{formatTime(item.time)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
