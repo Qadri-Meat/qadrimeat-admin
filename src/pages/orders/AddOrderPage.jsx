@@ -185,7 +185,9 @@ const AddOrderPage = () => {
                                 >
                                   PKR: {item.price}
                                 </span>{" "}
-                                PKR: {(item.price * item.discount) / 100}
+                                PKR:{" "}
+                                {item.price -
+                                  (item.price * item.discount) / 100}
                               </>
                             ) : (
                               `PKR: ${item.price}`
