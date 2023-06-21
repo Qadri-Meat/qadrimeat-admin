@@ -70,9 +70,11 @@ const AddOrderPage = () => {
   );
   // Calculate total discount
   const totalDiscount = cartItems.reduce(
-    (total, item) => total + item.discount * item.quantity,
+    (total, item) =>
+      total + ((item.price * item.discount) / 100) * item.quantity,
     0
   );
+
   // Calculate payable amount after discount
   const payableAmount = subtotal - totalDiscount;
 
@@ -183,7 +185,7 @@ const AddOrderPage = () => {
                                 >
                                   PKR: {item.price}
                                 </span>{" "}
-                                PKR: {item.price - item.discount}
+                                PKR: {(item.price * item.discount) / 100}
                               </>
                             ) : (
                               `PKR: ${item.price}`
@@ -196,7 +198,7 @@ const AddOrderPage = () => {
                             <Grid item xs={3}>
                               <TextField
                                 type="number"
-                                label="Discount"
+                                label="Discount %"
                                 size="small"
                                 value={item.discount}
                                 onChange={(e) => {
