@@ -93,6 +93,7 @@ const AddOrderPage = () => {
       },
       shippingPrice: 0,
       totalPrice: payableAmount,
+      discount: totalDiscount,
       deliveryTime: Date.now(),
     };
 
@@ -101,16 +102,14 @@ const AddOrderPage = () => {
 
   const handleDiscountChange = (e, item) => {
     const discount = parseInt(e.target.value);
-    if (discount >= 0) {
-      dispatch(changeDiscount({ item, discount }));
-    }
+
+    dispatch(changeDiscount({ item, discount }));
   };
 
   const handleWeightChange = (e, item) => {
     const weight = parseInt(e.target.value);
-    if (weight >= 1) {
-      dispatch(changeWeight({ item, weight }));
-    }
+
+    dispatch(changeWeight({ item, weight }));
   };
 
   useEffect(() => {
