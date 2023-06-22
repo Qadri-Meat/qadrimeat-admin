@@ -42,12 +42,14 @@ const AddOrderPage = () => {
   );
 
   const [expanded, setExpanded] = useState(null);
+  const [stock, setStock] = useState();
 
   const handleAccordionChange = (index) => {
     setExpanded(index === expanded ? null : index);
   };
 
   const handleAddToCart = (product) => {
+    setStock(product.stock - 1);
     const newItem = {
       id: product.id,
       name: product.name,
@@ -249,15 +251,18 @@ const AddOrderPage = () => {
                                       dispatch(removeItem(item.id));
                                     } else {
                                       dispatch(decrementQuantity(item.id));
+                                      setStock(stock + 1);
                                     }
                                   }}
                                 >
                                   -
                                 </Button>
-                                <Button disabled>{item.quantity}</Button>
+                                <Button>{item.quantity}</Button>
                                 <Button
+                                  disabled={stock <= 0}
                                   onClick={() => {
                                     dispatch(incrementQuantity(item.id));
+                                    setStock(stock - 1);
                                   }}
                                 >
                                   +
@@ -277,6 +282,7 @@ const AddOrderPage = () => {
                               </IconButton>
                             </Grid>
                           </Grid>
+
                           {item.discount < 0 && (
                             <span
                               style={{
@@ -298,6 +304,17 @@ const AddOrderPage = () => {
                             >
                               {" "}
                               Weight cann't be 0 or less than 0{" "}
+                            </span>
+                          )}
+                          {stock <= 0 && (
+                            <span
+                              style={{
+                                color: "red",
+                                fontSize: 12,
+                              }}
+                            >
+                              {" "}
+                              Not enough stock{" "}
                             </span>
                           )}
                         </AccordionDetails>
