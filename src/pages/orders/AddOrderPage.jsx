@@ -28,7 +28,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { createOrder } from "store/order";
-import { getProducts } from "store/product";
+import { getProducts, updateProducts } from "store/product";
 import { useNavigate } from "react-router-dom";
 import Loader from "@core/components/ui/Loader";
 import { getImageUrl } from "helper/helpers";
@@ -57,8 +57,15 @@ const AddOrderPage = () => {
       weight: 1,
       image: product.image,
       product: product.id,
+      stock: product.stock,
     };
+
     dispatch(addToCart(newItem));
+    const updatedProduct = {
+      ...product,
+      stock: product.stock - 1,
+    };
+    dispatch(updateProducts({ id: product.id, updatedProduct }));
   };
   const handleRemoveFromCart = (productId) => {
     dispatch(removeItem(productId));
@@ -233,7 +240,11 @@ const AddOrderPage = () => {
                               xs={3}
                               sx={{ display: "flex", justifyContent: "center" }}
                             >
-                              <ButtonGroup size="small" aria-label="quantity">
+                              <ButtonGroup
+                                sx={{ marginLeft: "30px" }}
+                                size="small"
+                                aria-label="quantity"
+                              >
                                 <Button
                                   onClick={() => {
                                     if (item.quantity === 1) {
@@ -268,6 +279,29 @@ const AddOrderPage = () => {
                               </IconButton>
                             </Grid>
                           </Grid>
+                          {item.discount < 0 && (
+                            <span
+                              style={{
+                                color: "red",
+                                fontSize: 12,
+                              }}
+                            >
+                              {" "}
+                              Discount cann't be less than 0{" "}
+                            </span>
+                          )}
+                          <br />
+                          {item.weight <= 0 && (
+                            <span
+                              style={{
+                                color: "red",
+                                fontSize: 12,
+                              }}
+                            >
+                              {" "}
+                              Weight cann't be less than 0{" "}
+                            </span>
+                          )}
                         </AccordionDetails>
                       </Accordion>
                     </React.Fragment>
