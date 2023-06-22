@@ -57,7 +57,6 @@ const AddOrderPage = () => {
       weight: 1,
       image: product.image,
       product: product.id,
-      stock: product.stock,
     };
 
     dispatch(addToCart(newItem));
@@ -86,7 +85,6 @@ const AddOrderPage = () => {
   const payableAmount = subtotal - totalDiscount;
 
   const onSubmit = () => {
-    // Validat
     const newOrder = {
       phone: "+92 302-4000719",
       orderItems: cartItems, // Use cartItems from redux state
@@ -290,7 +288,7 @@ const AddOrderPage = () => {
                               Discount cann't be less than 0{" "}
                             </span>
                           )}
-                          <br />
+
                           {item.weight <= 0 && (
                             <span
                               style={{
@@ -299,7 +297,7 @@ const AddOrderPage = () => {
                               }}
                             >
                               {" "}
-                              Weight cann't be less than 0{" "}
+                              Weight cann't be 0 or less than 0{" "}
                             </span>
                           )}
                         </AccordionDetails>
