@@ -11,7 +11,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getBookings, resetBooking } from "store/booking";
+import { getBookings, resetBooking, deleteBooking } from "store/booking";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import FormControl from "@mui/material/FormControl";
@@ -48,7 +48,7 @@ const AllBookingsPage = () => {
   }, [dispatch, paid, query, success, selectedYear]);
 
   const onDelete = (value) => {
-    // dispatch(deleteBooking(value));
+    dispatch(deleteBooking(value));
   };
 
   const handlePaidToggle = (event, value) => {
