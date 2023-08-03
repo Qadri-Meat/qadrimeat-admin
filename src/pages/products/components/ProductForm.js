@@ -221,8 +221,8 @@ const ProductForm = ({ defaultValues }) => {
             helperText={errors?.category?.message}
           >
             <MenuItem value="chicken">Chicken</MenuItem>
-            <MenuItem value="cow">Cow</MenuItem>
-            <MenuItem value="goat">Goat</MenuItem>
+            <MenuItem value="beef">Beef</MenuItem>
+            <MenuItem value="mutton">Mutton</MenuItem>
           </SelectInput>
         </Grid>
         <Grid item md={2} xs={12}>
