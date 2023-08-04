@@ -50,6 +50,14 @@ const navigation = [
         exact: "true",
       },
       {
+        id: "orders",
+        title: "POS",
+        type: "item",
+        icon: <InventoryIcon />,
+        url: "/orders/add-order",
+        exact: "true",
+      },
+      {
         id: "bookings",
         title: "Bookings",
         type: "collapse",
