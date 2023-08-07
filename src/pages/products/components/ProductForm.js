@@ -68,32 +68,33 @@ const ProductForm = ({ defaultValues }) => {
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
+  const handleChange = (newFiles) => {
+    const validImages = newFiles.filter((file) =>
+      file.type.startsWith("image/")
+    );
 
-  const handleChange = (files) => {
-    // Check if the file is an image
-    if (files[0] ? files[0].type.startsWith("image/") : []) {
-      // Compress the image
-      new Compressor(files[0], {
-        quality: 0.8,
-        maxWidth: 800,
-        maxHeight: 800,
-        success(result) {
-          // Create a new File object from the compressed image data
-          const compressedFile = new File([result], files[0].name, {
-            type: files[0].type,
-          });
-          // Set the compressed image as the new file
-          setFiles([compressedFile]);
-        },
-        error(err) {
-          console.log(err.message);
-        },
+    const compressedImages = validImages.map((file) => {
+      return new Promise((resolve) => {
+        new Compressor(file, {
+          quality: 0.8,
+          maxWidth: 800,
+          maxHeight: 800,
+          success(result) {
+            resolve(new File([result], file.name, { type: file.type }));
+          },
+          error(err) {
+            console.log(err.message);
+            resolve(file); // If compression fails, use the original file
+          },
+        });
       });
-    } else {
-      // Set the original file if it is not an image
-      setFiles(files);
-    }
+    });
+
+    Promise.all(compressedImages).then((compressedFiles) => {
+      setFiles(compressedFiles);
+    });
   };
+
   const onSubmit = (data) => {
     console.log(data);
     data.category = data.category[0];
