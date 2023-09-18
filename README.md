@@ -1,3 +1,9 @@
+# After cloning the app, follow these steps to get started:
+
+Run the following command to create an environment file: cp .env.example .env. This will create a copy of the env file. After that, add the server link to the .env file.
+Install the required dependencies using Yarn: yarn install.
+Start the application with Yarn: yarn start.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

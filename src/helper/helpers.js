@@ -29,6 +29,5 @@ export const getImageUrl = (value) => {
   if (!isNullOrEmpty(image)) {
     return `${process.env.REACT_APP_API_URL}/v1/${image}`;
   }
-
-  return null;
+  return "/default.png";
 };
