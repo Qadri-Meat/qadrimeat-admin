@@ -23,7 +23,7 @@ const schema = yup.object().shape({
     .string()
     .matches(
       passwordRegix,
-      "Password must be 8 characters, one letter and one number"
+      "Password must be 8 characters and not more then 12, one letter and one number"
     )
     .required("Password is required")
     .min(4, "Password length should be at least 4 characters")
