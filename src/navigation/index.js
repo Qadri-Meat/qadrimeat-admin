@@ -41,14 +41,7 @@ const navigation = [
         url: "/products",
         exact: "true",
       },
-      {
-        id: "deals",
-        title: "Deals",
-        type: "item",
-        icon: <InventoryIcon />,
-        url: "/deals",
-        exact: "true",
-      },
+
       {
         id: "orders",
         title: "Orders",
@@ -81,6 +74,13 @@ const navigation = [
             title: "Booking items",
             type: "item",
             url: "/bookings/booking-items",
+            exact: "true",
+          },
+          {
+            id: "deals",
+            title: "Deals",
+            type: "item",
+            url: "/deals",
             exact: "true",
           },
         ],
