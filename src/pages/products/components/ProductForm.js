@@ -33,6 +33,11 @@ const schema = yup.object().shape({
     .required()
     .positive()
     .typeError("Weight is required field"),
+  saleCount: yup
+    .number()
+    .required()
+    .positive()
+    .typeError("Sale count is required field"),
   category: yup
     .mixed()
     .test("isCategoryValid", "Category is a required field", function (value) {
