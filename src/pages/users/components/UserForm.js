@@ -13,7 +13,7 @@ import SelectInput from "@core/components/forms/SelectInput";
 import { emailRegix, passwordRegix } from "helper/regix";
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
+  name: yup.string().required().max(15),
   lastName: yup.string(),
   email: yup
     .string()
