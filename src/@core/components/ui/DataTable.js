@@ -60,6 +60,7 @@ const DataTable = (props) => {
     sort: false,
     responsive: "simple",
     search: searchIcon,
+    searchText: "Search here...",
 
     onTableChange: (action, tableState) => {
       if (serverSide !== false) {
