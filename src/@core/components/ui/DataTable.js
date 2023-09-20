@@ -4,6 +4,7 @@ import { debounce } from "lodash";
 import { buildURLQuery } from "@core/utils/buildURLQuery";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
+import Swal from "sweetalert2"; // Import SweetAlert2
 
 const DataTable = (props) => {
   const {
@@ -28,6 +29,24 @@ const DataTable = (props) => {
     setQuery(buildURLQuery({ page, limit, search: text == null ? "" : text }));
   }, 1000);
 
+  const handleDelete = (value) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        onDelete(value);
+
+        Swal.fire("Deleted!", "Your file has been deleted.", "success");
+      }
+    });
+  };
+
   const options = {
     count: totalResults,
     page: page - 1,
@@ -41,7 +60,6 @@ const DataTable = (props) => {
     sort: false,
     responsive: "simple",
     search: searchIcon,
-    // standard","vertical","verticalAlways","simple"].
 
     onTableChange: (action, tableState) => {
       if (serverSide !== false) {
@@ -68,6 +86,7 @@ const DataTable = (props) => {
       }
     },
   };
+
   return (
     <MUIDataTable
       title={title}
@@ -94,7 +113,7 @@ const DataTable = (props) => {
                       {onDelete && (
                         <span
                           onClick={() => {
-                            onDelete(value);
+                            handleDelete(value);
                           }}
                         >
                           <DeleteIcon style={{ color: "red" }} />
