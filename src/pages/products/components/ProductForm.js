@@ -12,7 +12,6 @@ import SelectInput from "@core/components/forms/SelectInput";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useState } from "react";
 import Compressor from "compressorjs";
-import CheckBoxInput from "@core/components/forms/CheckBoxInput";
 import { createProducts, updateProducts } from "store/product";
 
 const schema = yup.object().shape({
@@ -230,17 +229,6 @@ const ProductForm = ({ defaultValues }) => {
             <MenuItem value="beef">Beef</MenuItem>
             <MenuItem value="mutton">Mutton</MenuItem>
           </SelectInput>
-        </Grid>
-        <Grid item md={2} xs={12}>
-          <CheckBoxInput
-            {...register("new")}
-            id="new"
-            name="new"
-            label="New"
-            control={control}
-            error={!!errors.new}
-            helperText={errors?.new?.message}
-          />
         </Grid>
         <Grid item xs={12}>
           <DropzoneArea
