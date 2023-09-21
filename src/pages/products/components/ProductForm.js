@@ -36,10 +36,10 @@ const schema = yup.object().shape({
     .number()
     .required("Discount is a required field")
     .typeError("Discount must be a number"),
-  // saleCount: yup
-  //   .number()
-  //   .required("Sale count is a required field")
-  //   .typeError("Sale count must be a number"),
+  saleCount: yup
+    .number()
+    .required("Sale count is a required field")
+    .typeError("Sale count must be a number"),
   category: yup
     .mixed()
     .test("isCategoryValid", "Category is a required field", function (value) {
@@ -190,7 +190,7 @@ const ProductForm = ({ defaultValues }) => {
             id="saleCount"
             type="number"
             label="Sale Count"
-            name="discount"
+            name="saleCount"
             error={!!errors.saleCount}
             helperText={errors?.saleCount?.message}
           />

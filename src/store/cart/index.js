@@ -35,38 +35,28 @@ const cartSlice = createSlice({
       const removeItem = state.filter((item) => item.id !== action.payload);
       return removeItem;
     },
-    updateCartItemTime: (state, action) => {
-      const { id, time } = action.payload;
-      const item = state.find((item) => item.id === id);
-      item.time = time;
-    },
-    updateCartItemDay: (state, action) => {
-      const { id, day } = action.payload;
-      const item = state.find((item) => item.id === id);
-      item.day = day;
-    },
-    updateCartPackage: (state, action) => {
-      const { id, isPackage } = action.payload;
-      const item = state.find((item) => item.id === id);
-      item.isPackage = isPackage;
-    },
-    reSetCart: () => {
+    resetCart: () => {
       return [];
     },
-    changeWeight: (state, action) => {
-      const { item, weight } = action.payload;
-      const itemmm = state.find((items) => items.id === item.id);
-      if (itemmm) {
-        itemmm.weight = weight;
-      }
+    updateQuantity: (state, action) => {
+      const item = state.find((item) => item.id === action.payload.id);
+      item.quantity = action.payload.quantity;
     },
-
-    changeDiscount: (state, action) => {
-      const { item, discount } = action.payload;
-      const itemmm = state.find((items) => items.id === item.id);
-      if (itemmm) {
-        itemmm.discount = discount;
-      }
+    updateDiscount: (state, action) => {
+      const item = state.find((item) => item.id === action.payload.id);
+      item.discount = action.payload.discount;
+    },
+    updateTime: (state, action) => {
+      const item = state.find((item) => item.id === action.payload.id);
+      item.time = action.payload.time;
+    },
+    updateDay: (state, action) => {
+      const item = state.find((item) => item.id === action.payload.id);
+      item.day = action.payload.day;
+    },
+    updatePackage: (state, action) => {
+      const item = state.find((item) => item.id === action.payload.id);
+      item.isPackage = action.payload.isPackage;
     },
   },
 });
@@ -78,10 +68,10 @@ export const {
   incrementQuantity,
   decrementQuantity,
   removeItem,
-  updateCartItemDay,
-  updateCartItemTime,
-  updateCartPackage,
-  changeWeight,
-  changeDiscount,
-  reSetCart,
+  resetCart,
+  updateQuantity,
+  updateDiscount,
+  updateDay,
+  updateTime,
+  updatePackage,
 } = cartSlice.actions;

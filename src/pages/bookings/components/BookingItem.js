@@ -15,11 +15,11 @@ import {
   addToCart,
   decrementQuantity,
   incrementQuantity,
-  reSetCart,
+  resetCart,
   removeItem,
-  updateCartItemDay,
-  updateCartItemTime,
-  updateCartPackage,
+  updateDay,
+  updateTime,
+  updatePackage,
 } from "store/cart";
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -33,7 +33,7 @@ const BookingItem = () => {
   const { results } = useSelector((state) => state.deal);
   const items = useSelector((state) => state.cart);
   useEffect(() => {
-    dispatch(reSetCart());
+    dispatch(resetCart());
     const query = `limit=${100}&page=${1}`;
     dispatch(getDeals(query));
   }, [dispatch]);
@@ -134,7 +134,7 @@ const BookingItem = () => {
               hidden={!cartItem.isPackage}
               onChange={(e) => {
                 dispatch(
-                  updateCartItemDay({
+                  updateDay({
                     ...cartItem,
                     day: e.target.value,
                   })
@@ -167,9 +167,7 @@ const BookingItem = () => {
               value={value}
               hidden={!cartItem.isPackage}
               onChange={(e) => {
-                dispatch(
-                  updateCartItemTime({ ...cartItem, time: e.target.value })
-                );
+                dispatch(updateTime({ ...cartItem, time: e.target.value }));
               }}
             />
           );
@@ -197,7 +195,7 @@ const BookingItem = () => {
               style={{ minWidth: "80px", maxWidth: "80px" }}
               onChange={(e) => {
                 dispatch(
-                  updateCartPackage({
+                  updatePackage({
                     ...cart1Item,
                     isPackage: e.target.value,
                   })
