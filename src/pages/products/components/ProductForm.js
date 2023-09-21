@@ -114,7 +114,13 @@ const ProductForm = ({ defaultValues }) => {
     });
 
     Promise.all(compressedImages).then((compressedFiles) => {
-      setFiles(compressedFiles);
+      if (compressedFiles.length <= 5) {
+        setFiles(compressedFiles);
+      } else {
+        // Show an error message or perform other actions here
+        console.error("You can only upload a maximum of 5 images.");
+        // You can also set an error state and display it in your UI
+      }
     });
   };
 
