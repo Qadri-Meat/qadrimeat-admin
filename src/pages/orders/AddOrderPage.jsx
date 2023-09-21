@@ -114,8 +114,8 @@ const AddOrderPage = () => {
   };
 
   const handleWeightChange = (e, item) => {
-    const weight = parseInt(e.target.value);
-
+    const weight = parseFloat(e.target.value);
+    console.log(weight);
     dispatch(changeWeight({ item, weight }));
   };
 
@@ -231,8 +231,10 @@ const AddOrderPage = () => {
                                 type="number"
                                 label="Weight"
                                 size="small"
-                                value={item.weight}
                                 onChange={(e) => handleWeightChange(e, item)}
+                                inputProps={{
+                                  pattern: "^[0-9]+([.][0-9]{1,2})?$",
+                                }}
                               />
                             </Grid>
                             <Grid
