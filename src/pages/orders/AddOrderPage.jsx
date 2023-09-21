@@ -6,7 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { useDispatch, useSelector } from "react-redux";
 import withAuth from "hooks/withAuth";
-import { addToCart } from "store/cart";
+import { addToCart, updateQuantity } from "store/cart";
 import { createOrder } from "store/order";
 import { getProducts } from "store/product";
 import { useNavigate } from "react-router-dom";
@@ -43,8 +43,10 @@ const AddOrderPage = () => {
     dispatch(addToCart(newItem));
   };
 
-  const handleWeightChange = (item) => {
+  const handleWeightChange = (value, item) => {
     console.log(item);
+    const quantity = (1 / item.weight) * value;
+    dispatch(updateQuantity({ id: item.id, quantity }));
   };
 
   const onSubmit = () => {
@@ -122,7 +124,10 @@ const AddOrderPage = () => {
                       cartItem.discount
                     );
                     const finalProductPrice = cartItem.price.toFixed(2);
-                    const finalDiscountedPrice = discountedPrice.toFixed(2);
+                    console.log(cartItem);
+                    const finalDiscountedPrice = discountedPrice
+                      ? discountedPrice.toFixed(2)
+                      : 0;
 
                     discountedPrice != null
                       ? (cartTotalPrice +=
@@ -131,7 +136,7 @@ const AddOrderPage = () => {
                           finalProductPrice * cartItem.quantity);
                     return (
                       <Card
-                        key={key}
+                        key={cartItem.id}
                         sx={{
                           display: "flex",
                           padding: "10px",
@@ -153,9 +158,11 @@ const AddOrderPage = () => {
                             type="number"
                             label="Weight"
                             size="small"
-                            value={cartItem.weight}
+                            value={cartItem.weight * cartItem.quantity}
                             sx={{ width: "100px", marginRight: "10px" }}
-                            onChange={(e) => handleWeightChange(cartItem)}
+                            onChange={(e) =>
+                              handleWeightChange(e.target.value, cartItem)
+                            }
                             inputProps={{
                               pattern: "^[0-9]+([.][0-9]{1,2})?$",
                             }}
