@@ -76,9 +76,25 @@ const ProductForm = ({ defaultValues }) => {
     resolver: yupResolver(schema),
   });
   const handleChange = (newFiles) => {
-    const validImages = newFiles.filter((file) =>
-      file.type.startsWith("image/")
-    );
+    const validImageExtensions = [".jpg", ".jpeg", ".png", ".gif"];
+    let hasVideo = false;
+
+    const validImages = newFiles.filter((file) => {
+      const fileExtension = file.name
+        .toLowerCase()
+        .substring(file.name.lastIndexOf("."));
+      if (!validImageExtensions.includes(fileExtension)) {
+        hasVideo = true;
+        return false;
+      }
+      return true;
+    });
+
+    if (hasVideo) {
+      // Show an error message or perform other actions here
+      console.error("Invalid file type: Please upload only image files.");
+      // You can also set an error state and display it in your UI
+    }
 
     const compressedImages = validImages.map((file) => {
       return new Promise((resolve) => {
@@ -91,7 +107,7 @@ const ProductForm = ({ defaultValues }) => {
           },
           error(err) {
             console.log(err.message);
-            resolve(file); // If compression fails, use the original file
+            resolve(file);
           },
         });
       });
@@ -241,6 +257,12 @@ const ProductForm = ({ defaultValues }) => {
             filesLimit={5}
             dropzoneText=""
             initialFiles={defaultValues?.image ? [defaultValues.image] : []}
+            acceptedFiles={[
+              "image/jpeg",
+              "image/jpg",
+              "image/png",
+              "image/gif",
+            ]}
           />
         </Grid>
         <Grid item xs={12} sx={{ textAlign: "center" }}>
