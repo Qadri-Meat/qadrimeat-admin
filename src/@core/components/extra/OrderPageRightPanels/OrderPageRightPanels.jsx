@@ -63,7 +63,11 @@ const OrderPageRightPanels = () => {
   }
   return (
     <div>
-      <Accordion defaultExpanded sx={{ marginBottom: "1.3rem" }}>
+      <Accordion
+        defaultExpanded
+        sx={{ marginBottom: "1.3rem" }}
+        disabled={true}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -73,17 +77,6 @@ const OrderPageRightPanels = () => {
           }}
         >
           <Typography>Shipping</Typography>
-          <Button
-            style={{ paddingRight: "10px" }}
-            variant="contained"
-            color="primary"
-            size="small"
-            onClick={() => {
-              showEditDetails(true);
-            }}
-          >
-            Edit Details
-          </Button>
         </AccordionSummary>
         <Divider />
         <AccordionDetails>
@@ -121,6 +114,18 @@ const OrderPageRightPanels = () => {
                   </Message>
                 ) : (
                   <>
+                    <Button
+                      style={{ paddingRight: "10px" }}
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => {
+                        setShowEditDetails(true); // Corrected line
+                      }}
+                    >
+                      Edit Details
+                    </Button>
+
                     {loading ? (
                       <Loader />
                     ) : (

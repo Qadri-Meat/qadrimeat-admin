@@ -42,6 +42,7 @@ const EditOrderDetailsDialog = ({ show, setShow, preloadedValues, id }) => {
 
   const onSubmit = (data) => {
     console.log(data);
+    setShow(false);
   };
 
   const handleClose = () => {
