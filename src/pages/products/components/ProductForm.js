@@ -11,8 +11,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useState } from "react";
-import Compressor from "compressorjs";
 import { createProducts, updateProducts } from "store/product";
+import { getImageUrl, isValidImages } from "helper/helpers";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -56,78 +56,46 @@ const schema = yup.object().shape({
     })
     .nullable(true),
 });
+
 const ProductForm = ({ defaultValues }) => {
-  const [files, setFiles] = useState([]);
-  const [imageFiles, setImageFiles] = useState(defaultValues?.image || []);
   const dispatch = useDispatch();
+  const [files, setFiles] = useState([]);
   const { message, loading } = useSelector((state) => state.product);
-  const defaultFormValues = {
-    ...defaultValues,
-    image: "",
-  };
+
+  const initialFiles = (defaultValues?.image || []).map(
+    (i) => `${getImageUrl(i)}`
+  );
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({
-    defaultValues: defaultFormValues,
+    defaultValues: {
+      name: defaultValues?.name,
+      sku: defaultValues?.sku,
+      price: defaultValues?.price,
+      weight: defaultValues?.weight,
+      stock: defaultValues?.stock,
+      discount: defaultValues?.discount,
+      saleCount: defaultValues?.saleCount,
+      fullDescription: defaultValues?.fullDescription,
+      shortDescription: defaultValues?.shortDescription,
+      category: defaultValues?.category,
+    },
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
+
   const handleChange = (newFiles) => {
-    const validImageExtensions = [".jpg", ".jpeg", ".png", ".gif"];
-    let hasVideo = false;
-
-    const validImages = newFiles.filter((file) => {
-      const fileExtension = file.name
-        .toLowerCase()
-        .substring(file.name.lastIndexOf("."));
-      if (!validImageExtensions.includes(fileExtension)) {
-        hasVideo = true;
-        return false;
-      }
-      return true;
-    });
-
-    if (hasVideo) {
-      // Show an error message or perform other actions here
-      console.error("Invalid file type: Please upload only image files.");
-      // You can also set an error state and display it in your UI
+    if (isValidImages(newFiles)) {
+      setFiles(newFiles);
     }
-
-    const compressedImages = validImages.map((file) => {
-      return new Promise((resolve) => {
-        new Compressor(file, {
-          quality: 0.8,
-          maxWidth: 800,
-          maxHeight: 800,
-          success(result) {
-            resolve(new File([result], file.name, { type: file.type }));
-          },
-          error(err) {
-            console.log(err.message);
-            resolve(file);
-          },
-        });
-      });
-    });
-
-    Promise.all(compressedImages).then((compressedFiles) => {
-      if (compressedFiles.length <= 5) {
-        setFiles(compressedFiles);
-      } else {
-        // Show an error message or perform other actions here
-        console.error("You can only upload a maximum of 5 images.");
-        // You can also set an error state and display it in your UI
-      }
-    });
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     data.category = data.category[0];
-
     data.image = files;
     if (defaultValues) {
       dispatch(updateProducts({ id: defaultValues.id, data }));
@@ -135,6 +103,7 @@ const ProductForm = ({ defaultValues }) => {
       dispatch(createProducts(data));
     }
   };
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       {message && <Message severity="error">{message}</Message>}
@@ -262,7 +231,7 @@ const ProductForm = ({ defaultValues }) => {
             showAlerts={false}
             filesLimit={5}
             dropzoneText=""
-            initialFiles={imageFiles}
+            initialFiles={initialFiles}
             acceptedFiles={[
               "image/jpeg",
               "image/jpg",

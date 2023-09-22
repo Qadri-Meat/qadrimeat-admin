@@ -20,7 +20,7 @@ const AddOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState("limit=100");
 
   const { results } = useSelector((state) => state.product);
   const cartItems = useSelector((state) => state.cart);
@@ -87,7 +87,11 @@ const AddOrderPage = () => {
                 >
                   <CardMedia
                     sx={{ height: 100 }}
-                    image={getImageUrl(product.image)}
+                    image={getImageUrl(
+                      product.image.length > 0
+                        ? product.image[0]
+                        : "/default.png"
+                    )}
                     title={product.title}
                   />
                   <CardContent sx={{ textAlign: "center" }}>

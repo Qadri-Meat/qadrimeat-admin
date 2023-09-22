@@ -40,7 +40,7 @@ export const createProducts = createAsyncThunk(
 );
 
 export const updateProducts = createAsyncThunk(
-  "products/updateDeal",
+  "products/update",
   async ({ id, data }, { rejectWithValue }) => {
     try {
       await ProductService.updateById({ id, data });

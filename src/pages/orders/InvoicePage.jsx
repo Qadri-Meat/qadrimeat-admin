@@ -6,6 +6,7 @@ import { getDiscountPrice } from "helper/product";
 import { Avatar } from "@mui/material";
 import withAuth from "hooks/withAuth";
 import { getOrder } from "store/order";
+import { getImageUrl } from "helper/helpers";
 const InvoicePage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -92,25 +93,25 @@ const InvoicePage = () => {
                       <div className="col-md-6">
                         <p className="font-weight-bold">
                           To:{" "}
-                          {selectedOrder.shippingDetails.firstName +
+                          {selectedOrder.shippingDetails?.firstName +
                             " " +
-                            selectedOrder.shippingDetails.lastName}
+                            selectedOrder.shippingDetails?.lastName}
                         </p>
                         <p className="text-muted">
                           {/* <strong>Email:</strong>{' '}
                           {selectedOrder.shippingDetails.email}
                           <br /> */}
                           <strong>Phone:</strong>{" "}
-                          {selectedOrder.shippingDetails.phone}
+                          {selectedOrder.shippingDetails?.phone}
                           <br />
                           <strong>Address:</strong>{" "}
-                          {selectedOrder.shippingDetails.address},{" "}
-                          {selectedOrder.shippingDetails.city}{" "}
-                          {selectedOrder.shippingDetails.postalCode},{" "}
-                          {selectedOrder.shippingDetails.country}
+                          {selectedOrder.shippingDetails?.address},{" "}
+                          {selectedOrder.shippingDetails?.city}{" "}
+                          {selectedOrder.shippingDetails?.postalCode},{" "}
+                          {selectedOrder.shippingDetails?.country}
                           <br />
                           <strong>Note:</strong>{" "}
-                          {selectedOrder.shippingDetails.notes}
+                          {selectedOrder.shippingDetails?.notes}
                         </p>
                       </div>
 
@@ -184,12 +185,11 @@ const InvoicePage = () => {
                                     <Avatar
                                       variant="rounded"
                                       alt={item.name}
-                                      src={
+                                      src={getImageUrl(
                                         item.image.length > 0
-                                          ? process.env.REACT_APP_IMAGE_URL +
-                                            item.image[0]
-                                          : ""
-                                      }
+                                          ? item.image[0]
+                                          : "/default.png"
+                                      )}
                                     />
                                   </td>
                                   <td>{item.name}</td>

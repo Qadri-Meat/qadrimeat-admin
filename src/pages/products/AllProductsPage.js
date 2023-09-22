@@ -46,7 +46,11 @@ const AllProductsPage = () => {
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return <MemoizedAvatar src={getImageUrl(value)} />;
+          return (
+            <MemoizedAvatar
+              src={getImageUrl(value.length > 0 ? value[0] : "/default.png")}
+            />
+          );
         },
       },
     },
