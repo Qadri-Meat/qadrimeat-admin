@@ -18,7 +18,7 @@ const navigation = [
         exact: "true",
       },
       {
-        id: "bookings",
+        id: "shop",
         title: "Shop",
         type: "collapse",
         icon: <FileCopyIcon />,
@@ -37,7 +37,7 @@ const navigation = [
             exact: "true",
           },
           {
-            id: "orders",
+            id: "pos",
             title: "POS",
             type: "item",
             icon: <InventoryIcon />,

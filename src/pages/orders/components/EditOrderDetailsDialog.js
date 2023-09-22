@@ -15,6 +15,7 @@ import CustomTextField from "@core/components/admin/CustomTextField";
 import Loader from "@core/components/ui/Loader";
 import { Message } from "@mui/icons-material";
 import Form from "@core/components/forms/Form";
+import { updateOrder } from "store/order";
 
 const schema = yup.object().shape({
   firstName: yup.string(),
@@ -39,10 +40,24 @@ const EditOrderDetailsDialog = ({ show, setShow, preloadedValues, id }) => {
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
+  const dispatch = useDispatch();
 
-  const onSubmit = (data) => {
-    console.log(data);
-    setShow(false);
+  const onSubmit = async (data) => {
+    try {
+      await dispatch(
+        updateOrder({
+          id,
+          data: {
+            phone: data.phone,
+            shippingDetails: data,
+          },
+        })
+      );
+      setShow(false);
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleClose = () => {
