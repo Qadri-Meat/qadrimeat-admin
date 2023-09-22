@@ -18,33 +18,20 @@ const navigation = [
         exact: "true",
       },
       {
-        id: "shop",
-        title: "Shop",
-        type: "collapse",
-        icon: <FileCopyIcon />,
-        badge: {
-          title: "2",
-          bg: "#525E8A",
-          fg: "#FFFFFF",
-        },
-        children: [
-          {
-            id: "orders",
-            title: "Orders",
-            type: "item",
-            icon: <InventoryIcon />,
-            url: "/orders",
-            exact: "true",
-          },
-          {
-            id: "pos",
-            title: "POS",
-            type: "item",
-            icon: <InventoryIcon />,
-            url: "/orders/add-order",
-            exact: "true",
-          },
-        ],
+        id: "pos",
+        title: "POS",
+        type: "item",
+        icon: <InventoryIcon />,
+        url: "/orders/add-order",
+        exact: "true",
+      },
+      {
+        id: "orders",
+        title: "Orders",
+        type: "item",
+        icon: <InventoryIcon />,
+        url: "/orders",
+        exact: "true",
       },
 
       {
