@@ -120,6 +120,7 @@ const UserForm = ({ defaultValues }) => {
             control={control}
             error={!!errors.role}
             helperText={errors?.role?.message}
+            disabled={defaultValues && defaultValues.role === "admin"}
           >
             <MenuItem value="admin">Admin</MenuItem>
             <MenuItem value="user">User</MenuItem>
