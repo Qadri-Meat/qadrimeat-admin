@@ -58,11 +58,11 @@ const schema = yup.object().shape({
 });
 const ProductForm = ({ defaultValues }) => {
   const [files, setFiles] = useState([]);
+  const [imageFiles, setImageFiles] = useState(defaultValues?.image || []);
   const dispatch = useDispatch();
   const { message, loading } = useSelector((state) => state.product);
   const defaultFormValues = {
     ...defaultValues,
-    // Set category as an empty string if it's undefined
     image: "",
   };
   const {
@@ -262,7 +262,7 @@ const ProductForm = ({ defaultValues }) => {
             showAlerts={false}
             filesLimit={5}
             dropzoneText=""
-            initialFiles={defaultValues?.image ? [defaultValues.image] : []}
+            initialFiles={imageFiles}
             acceptedFiles={[
               "image/jpeg",
               "image/jpg",
