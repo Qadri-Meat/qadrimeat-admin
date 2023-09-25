@@ -24,10 +24,21 @@ export const isNumber = (value) => {
   return typeof value === "number" && isFinite(value);
 };
 
-export const getImageUrl = (value) => {
-  const image = value.length > 0 ? value[0] : "";
+export const getImageUrl = (image) => {
   if (!isNullOrEmpty(image)) {
     return `${process.env.REACT_APP_API_URL}/v1/${image}`;
   }
   return "/default.png";
+};
+
+export const isValidImages = (files) => {
+  const allowedExtensions = ["jpg", "jpeg", "png", "gif", "bmp"]; // Add more extensions if needed
+  files.forEach((file) => {
+    const fileName = file.name.toLowerCase();
+    const fileExtension = fileName.split(".").pop();
+    if (!allowedExtensions.includes(fileExtension)) {
+      return false;
+    }
+  });
+  return true;
 };

@@ -10,6 +10,7 @@ import { getDiscountPrice } from "helper/product";
 import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 import { getOrder } from "store/order";
 import OrderPageRightPanels from "@core/components/extra/OrderPageRightPanels/OrderPageRightPanels";
+import { getImageUrl } from "helper/helpers";
 
 const OrderPage = () => {
   const { id } = useParams();
@@ -28,10 +29,9 @@ const OrderPage = () => {
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          const image = value.length > 0 ? value[0] : "";
           return (
             <MemoizedAvatar
-              src={image === "" ? "" : process.env.REACT_APP_IMAGE_URL + image}
+              src={getImageUrl(value.length > 0 ? value[0] : "/default.png")}
             />
           );
         },

@@ -18,12 +18,14 @@ import {
   getOrder,
   updateOrder,
 } from "store/order";
+import EditOrderDetailsDialog from "pages/orders/components/EditOrderDetailsDialog";
 const OrderPageRightPanels = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedOrder, loading } = useSelector((state) => state.order);
   const [deliveryTime, setDeliveryTime] = React.useState(null);
   const [amount, setAmount] = React.useState(null);
+  const [showEditDetails, setShowEditDetails] = React.useState(false);
   useEffect(() => {
     if (selectedOrder && !deliveryTime) {
       const date = new Date(selectedOrder.deliveryTime);
@@ -32,7 +34,7 @@ const OrderPageRightPanels = () => {
   }, [dispatch, selectedOrder, deliveryTime]);
   const submitHandler = async () => {
     if (selectedOrder.status === "pending") {
-      await dispatch(
+      dispatch(
         updateOrder({
           id: selectedOrder.id,
           data: {
@@ -41,7 +43,6 @@ const OrderPageRightPanels = () => {
           },
         })
       );
-      dispatch(getOrder(id));
     }
   };
   const handleCreateTransaction = async () => {
@@ -62,11 +63,18 @@ const OrderPageRightPanels = () => {
   }
   return (
     <div>
-      <Accordion defaultExpanded sx={{ marginBottom: "1.3rem" }}>
+      <Accordion
+        defaultExpanded
+        sx={{ marginBottom: "1.3rem" }}
+        disabled={true}
+      >
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
+          IconButtonProps={{
+            onClick: () => {},
+          }}
         >
           <Typography>Shipping</Typography>
         </AccordionSummary>
@@ -74,12 +82,12 @@ const OrderPageRightPanels = () => {
         <AccordionDetails>
           <Grid container>
             <Grid item>
-              {selectedOrder && selectedOrder.shippingDetails ? (
+              {selectedOrder && (
                 <>
                   <p>
                     <strong>Name: </strong>{" "}
-                    {selectedOrder.shippingDetails.firstName}{" "}
-                    {selectedOrder.shippingDetails.lastName}
+                    {selectedOrder.shippingDetails?.firstName}{" "}
+                    {selectedOrder.shippingDetails?.lastName}
                   </p>
                   <p>
                     <strong>Phone: </strong>{" "}
@@ -89,14 +97,12 @@ const OrderPageRightPanels = () => {
                   </p>
                   <p>
                     <strong>Address:</strong>{" "}
-                    {selectedOrder.shippingDetails.address},{" "}
-                    {selectedOrder.shippingDetails.city}{" "}
-                    {selectedOrder.shippingDetails.postalCode},{" "}
-                    {selectedOrder.shippingDetails.country}
+                    {selectedOrder.shippingDetails?.address}{" "}
+                    {selectedOrder.shippingDetails?.city}{" "}
+                    {selectedOrder.shippingDetails?.postalCode}{" "}
+                    {selectedOrder.shippingDetails?.country}
                   </p>
                 </>
-              ) : (
-                <></>
               )}
             </Grid>
             <Grid container>
@@ -108,6 +114,18 @@ const OrderPageRightPanels = () => {
                   </Message>
                 ) : (
                   <>
+                    <Button
+                      style={{ paddingRight: "10px" }}
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                      onClick={() => {
+                        setShowEditDetails(true); // Corrected line
+                      }}
+                    >
+                      Edit Details
+                    </Button>
+
                     {loading ? (
                       <Loader />
                     ) : (
@@ -255,6 +273,12 @@ const OrderPageRightPanels = () => {
           </Grid>
         </AccordionDetails>
       </Accordion>
+      <EditOrderDetailsDialog
+        show={showEditDetails}
+        setShow={setShowEditDetails}
+        id={selectedOrder.id}
+        preloadedValues={selectedOrder.shippingDetails}
+      />
     </div>
   );
 };

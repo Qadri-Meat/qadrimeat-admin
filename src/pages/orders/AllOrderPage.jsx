@@ -153,6 +153,7 @@ const AllOrderPage = () => {
         columns={columns}
         setQuery={setQuery}
         onDelete={onDelete}
+        searchPlaceholder="Search by name or phone number"
       />
     </AdminLayout>
   );

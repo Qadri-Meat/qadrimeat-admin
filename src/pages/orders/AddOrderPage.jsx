@@ -1,135 +1,71 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import {
-  Grid,
-  Typography,
-  TextField,
-  IconButton,
-  Button,
-  ButtonGroup,
-} from "@mui/material";
+import { Grid, Typography, TextField, Button, Box } from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch, useSelector } from "react-redux";
 import withAuth from "hooks/withAuth";
-import {
-  addToCart,
-  changeDiscount,
-  changeWeight,
-  decrementQuantity,
-  incrementQuantity,
-  reSetCart,
-  removeItem,
-} from "store/cart";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { addToCart, updateQuantity } from "store/cart";
 import { createOrder } from "store/order";
-import { getProducts, updateProducts } from "store/product";
+import { getProducts } from "store/product";
 import { useNavigate } from "react-router-dom";
 import Loader from "@core/components/ui/Loader";
 import { getImageUrl } from "helper/helpers";
+import { getDiscountPrice } from "helper/product";
+
 const AddOrderPage = () => {
+  let cartTotalPrice = 0;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const [query, setQuery] = useState("limit=100");
+
   const { results } = useSelector((state) => state.product);
   const cartItems = useSelector((state) => state.cart);
   const { success, selectedOrder, loading } = useSelector(
     (state) => state.order
   );
 
-  const [expanded, setExpanded] = useState(null);
-  const [stock, setStock] = useState();
-
-  const handleAccordionChange = (index) => {
-    setExpanded(index === expanded ? null : index);
-  };
-
   const handleAddToCart = (product) => {
-    setStock(product.stock - 1);
     const newItem = {
       id: product.id,
       name: product.name,
       quantity: 1,
+      weight: product.weight,
       price: product.price,
       discount: 0,
-      weight: 1,
       image: product.image,
       product: product.id,
     };
 
     dispatch(addToCart(newItem));
-    const updatedProduct = {
-      ...product,
-      stock: product.stock - 1,
-    };
-    dispatch(updateProducts({ id: product.id, updatedProduct }));
   };
-  const handleRemoveFromCart = (productId) => {
-    dispatch(removeItem(productId));
-  };
-  // Calculate subtotal
-  const subtotal = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity * item.weight,
-    0
-  );
-  // Calculate total discount
-  const totalDiscount = cartItems.reduce(
-    (total, item) =>
-      total + ((item.price * item.discount) / 100) * item.quantity,
-    0
-  );
 
-  // Calculate payable amount after discount
-  const payableAmount = subtotal - totalDiscount;
+  const handleWeightChange = (value, item) => {
+    console.log(item);
+    const quantity = (1 / item.weight) * value;
+    dispatch(updateQuantity({ id: item.id, quantity }));
+  };
 
   const onSubmit = () => {
     const newOrder = {
-      phone: "+92 302-4000719",
-      orderItems: cartItems, // Use cartItems from redux state
-      shippingDetails: {
-        phone: "+92 302-4000719",
-        firstName: "Qadri",
-        lastName: "Meat",
-        address: "Lahore",
-        city: "Lahore",
-        country: "Pakistan",
-      },
-      shippingPrice: 0,
-      totalPrice: payableAmount,
-      discount: totalDiscount,
+      orderItems: cartItems,
+      totalPrice: cartTotalPrice.toFixed(2),
+      discount: 0,
       deliveryTime: Date.now(),
     };
-
     dispatch(createOrder(newOrder));
-  };
-
-  const handleDiscountChange = (e, item) => {
-    const discount = parseInt(e.target.value);
-
-    dispatch(changeDiscount({ item, discount }));
-  };
-
-  const handleWeightChange = (e, item) => {
-    const weight = parseInt(e.target.value);
-
-    dispatch(changeWeight({ item, weight }));
   };
 
   useEffect(() => {
     if (success) {
       navigate(`/orders/${selectedOrder.id}`);
+    } else {
+      dispatch(getProducts(query));
     }
-  }, [success, dispatch, navigate, selectedOrder]);
-
-  useEffect(() => {
-    dispatch(reSetCart());
-    const query = `limit=${100}&page=${1}`;
-    dispatch(getProducts(query));
-  }, [dispatch]);
+  }, [success, dispatch, navigate, selectedOrder, query]);
 
   return (
     <AdminLayout>
@@ -151,7 +87,11 @@ const AddOrderPage = () => {
                 >
                   <CardMedia
                     sx={{ height: 100 }}
-                    image={getImageUrl(product.image)}
+                    image={getImageUrl(
+                      product.image.length > 0
+                        ? product.image[0]
+                        : "/default.png"
+                    )}
                     title={product.title}
                   />
                   <CardContent sx={{ textAlign: "center" }}>
@@ -182,145 +122,73 @@ const AddOrderPage = () => {
                 </Grid>
               ) : (
                 <>
-                  {cartItems.map((item, index) => (
-                    <React.Fragment key={item.id}>
-                      <Accordion
-                        expanded={expanded === index}
-                        onChange={() => handleAccordionChange(index)}
+                  {cartItems.map((cartItem, key) => {
+                    const discountedPrice = getDiscountPrice(
+                      cartItem.price,
+                      cartItem.discount
+                    );
+                    const finalProductPrice = cartItem.price.toFixed(2);
+                    console.log(cartItem);
+                    const finalDiscountedPrice = discountedPrice
+                      ? discountedPrice.toFixed(2)
+                      : 0;
+
+                    discountedPrice != null
+                      ? (cartTotalPrice +=
+                          finalDiscountedPrice * cartItem.quantity)
+                      : (cartTotalPrice +=
+                          finalProductPrice * cartItem.quantity);
+                    return (
+                      <Card
+                        key={cartItem.id}
+                        sx={{
+                          display: "flex",
+                          padding: "10px",
+                          marginTop: "10px",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                        }}
                       >
-                        <AccordionSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          aria-controls={`panel${index + 1}a-content`}
-                          id={`panel${index + 1}a-header`}
+                        <Typography>
+                          {cartItem.name} X {cartItem.quantity}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                          }}
                         >
-                          <Typography>{item.name}</Typography>
+                          <TextField
+                            type="number"
+                            label="Weight"
+                            size="small"
+                            value={cartItem.weight * cartItem.quantity}
+                            sx={{ width: "100px", marginRight: "10px" }}
+                            onChange={(e) =>
+                              handleWeightChange(e.target.value, cartItem)
+                            }
+                            inputProps={{
+                              pattern: "^[0-9]+([.][0-9]{1,2})?$",
+                            }}
+                          />
                           <Typography
-                            sx={{ marginLeft: "auto" }}
+                            sx={{ marginLeft: "auto", width: "100px" }}
                             variant="subtitle1"
                           >
-                            {item.discount !== 0 ? (
-                              <>
-                                <span
-                                  style={{ textDecoration: "line-through" }}
-                                >
-                                  PKR: {item.price}
-                                </span>{" "}
-                                PKR:{" "}
-                                {item.price -
-                                  (item.price * item.discount) / 100}
-                              </>
-                            ) : (
-                              `PKR: ${item.price}`
-                            )}
+                            {discountedPrice !== null
+                              ? "PKR" +
+                                (
+                                  finalDiscountedPrice * cartItem.quantity
+                                ).toFixed(2)
+                              : "PKR" +
+                                (finalProductPrice * cartItem.quantity).toFixed(
+                                  2
+                                )}
                           </Typography>
-                        </AccordionSummary>
-
-                        <AccordionDetails>
-                          <Grid container spacing={2}>
-                            <Grid item xs={3}>
-                              <TextField
-                                type="number"
-                                label="Discount %"
-                                size="small"
-                                value={item.discount}
-                                onChange={(e) => handleDiscountChange(e, item)}
-                              />
-                            </Grid>
-                            <Grid item xs={3}>
-                              <TextField
-                                type="number"
-                                label="Weight"
-                                size="small"
-                                value={item.weight}
-                                onChange={(e) => handleWeightChange(e, item)}
-                              />
-                            </Grid>
-                            <Grid
-                              item
-                              xs={3}
-                              sx={{ display: "flex", justifyContent: "center" }}
-                            >
-                              <ButtonGroup
-                                sx={{ marginLeft: "30px" }}
-                                size="small"
-                                aria-label="quantity"
-                              >
-                                <Button
-                                  onClick={() => {
-                                    if (item.quantity === 1) {
-                                      dispatch(removeItem(item.id));
-                                    } else {
-                                      dispatch(decrementQuantity(item.id));
-                                      setStock(stock + 1);
-                                    }
-                                  }}
-                                >
-                                  -
-                                </Button>
-                                <Button>{item.quantity}</Button>
-                                <Button
-                                  disabled={stock <= 0}
-                                  onClick={() => {
-                                    dispatch(incrementQuantity(item.id));
-                                    setStock(stock - 1);
-                                  }}
-                                >
-                                  +
-                                </Button>
-                              </ButtonGroup>
-                            </Grid>
-                            <Grid
-                              item
-                              xs={3}
-                              sx={{ display: "flex", justifyContent: "center" }}
-                            >
-                              <IconButton
-                                onClick={() => handleRemoveFromCart(item.id)}
-                                aria-label="delete"
-                              >
-                                <DeleteIcon style={{ color: "red" }} />
-                              </IconButton>
-                            </Grid>
-                          </Grid>
-
-                          {item.discount < 0 && (
-                            <span
-                              style={{
-                                color: "red",
-                                fontSize: 12,
-                              }}
-                            >
-                              {" "}
-                              Discount cann't be less than 0{" "}
-                            </span>
-                          )}
-
-                          {item.weight <= 0 && (
-                            <span
-                              style={{
-                                color: "red",
-                                fontSize: 12,
-                              }}
-                            >
-                              {" "}
-                              Weight cann't be 0 or less than 0{" "}
-                            </span>
-                          )}
-                          {stock <= 0 && (
-                            <span
-                              style={{
-                                color: "red",
-                                fontSize: 12,
-                              }}
-                            >
-                              {" "}
-                              Not enough stock{" "}
-                            </span>
-                          )}
-                        </AccordionDetails>
-                      </Accordion>
-                    </React.Fragment>
-                  ))}
+                        </Box>
+                      </Card>
+                    );
+                  })}
                   <Grid
                     sx={{
                       display: "flex",
@@ -332,7 +200,7 @@ const AddOrderPage = () => {
                   >
                     <Typography variant="subtitle1"> Subtotal:</Typography>
                     <Typography variant="subtitle1">
-                      PKR: {subtotal.toFixed(2)}
+                      PKR: {cartTotalPrice.toFixed(2)}
                     </Typography>
                   </Grid>
                   <Grid
@@ -341,9 +209,7 @@ const AddOrderPage = () => {
                     xs={12}
                   >
                     <Typography variant="subtitle1">Discount:</Typography>
-                    <Typography variant="subtitle1">
-                      PKR: {totalDiscount.toFixed(2)}
-                    </Typography>
+                    <Typography variant="subtitle1">PKR: {0}</Typography>
                   </Grid>
                   <Grid
                     sx={{ display: "flex", justifyContent: "space-between" }}
@@ -352,7 +218,7 @@ const AddOrderPage = () => {
                   >
                     <Typography variant="subtitle1">Payable Amount:</Typography>
                     <Typography variant="subtitle1">
-                      PKR: {payableAmount.toFixed(2)}
+                      PKR: {cartTotalPrice.toFixed(2)}
                     </Typography>
                   </Grid>
                   {/* Proceed button */}
@@ -365,7 +231,7 @@ const AddOrderPage = () => {
                         variant="contained"
                         color="primary"
                         size="large"
-                        disabled={totalDiscount < 0 || subtotal < 1}
+                        disabled={cartTotalPrice.toFixed(2) < 1}
                       >
                         Proceed
                       </Button>

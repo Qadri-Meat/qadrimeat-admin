@@ -74,7 +74,7 @@ const BookingPageRightPanels = () => {
         <AccordionDetails>
           <Grid container>
             <Grid item>
-              {selectedBooking && selectedBooking.shippingDetails ? (
+              {selectedBooking && (
                 <>
                   <p>
                     <strong>Name: </strong>{" "}
@@ -95,8 +95,6 @@ const BookingPageRightPanels = () => {
                     {selectedBooking.shippingDetails.country}
                   </p>
                 </>
-              ) : (
-                <></>
               )}
             </Grid>
             <Grid container>

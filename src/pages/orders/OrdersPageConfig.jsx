@@ -17,12 +17,12 @@ export const OrderPageConfig = {
       element: <AddOrderPage />,
     },
     {
-      path: "/orders/update-order/:id",
-      element: <UpdateOrderPage />,
-    },
-    {
       path: "/orders/invoice/:id",
       element: <InvoicePage />,
+    },
+    {
+      path: "/orders/update-order/:id",
+      element: <UpdateOrderPage />,
     },
 
     {

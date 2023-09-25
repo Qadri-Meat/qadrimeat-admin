@@ -11,9 +11,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
 import { DropzoneArea } from "material-ui-dropzone";
 import { useState } from "react";
-import Compressor from "compressorjs";
-import CheckBoxInput from "@core/components/forms/CheckBoxInput";
 import { createProducts, updateProducts } from "store/product";
+import { getImageUrl, isValidImages } from "helper/helpers";
 
 const schema = yup.object().shape({
   name: yup.string().required(),
@@ -33,6 +32,14 @@ const schema = yup.object().shape({
     .required()
     .positive()
     .typeError("Weight is required field"),
+  discount: yup
+    .number()
+    .required("Discount is a required field")
+    .typeError("Discount must be a number"),
+  saleCount: yup
+    .number()
+    .required("Sale count is a required field")
+    .typeError("Sale count must be a number"),
   category: yup
     .mixed()
     .test("isCategoryValid", "Category is a required field", function (value) {
@@ -49,56 +56,46 @@ const schema = yup.object().shape({
     })
     .nullable(true),
 });
+
 const ProductForm = ({ defaultValues }) => {
-  const [files, setFiles] = useState([]);
   const dispatch = useDispatch();
+  const [files, setFiles] = useState([]);
   const { message, loading } = useSelector((state) => state.product);
-  const defaultFormValues = {
-    ...defaultValues,
-    // Set category as an empty string if it's undefined
-    image: "",
-  };
+
+  const initialFiles = (defaultValues?.image || []).map(
+    (i) => `${getImageUrl(i)}`
+  );
+
   const {
     register,
     handleSubmit,
     control,
     formState: { errors },
   } = useForm({
-    defaultValues: defaultFormValues,
+    defaultValues: {
+      name: defaultValues?.name,
+      sku: defaultValues?.sku,
+      price: defaultValues?.price,
+      weight: defaultValues?.weight,
+      stock: defaultValues?.stock,
+      discount: defaultValues?.discount,
+      saleCount: defaultValues?.saleCount,
+      fullDescription: defaultValues?.fullDescription,
+      shortDescription: defaultValues?.shortDescription,
+      category: defaultValues?.category,
+    },
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
+
   const handleChange = (newFiles) => {
-    const validImages = newFiles.filter((file) =>
-      file.type.startsWith("image/")
-    );
-
-    const compressedImages = validImages.map((file) => {
-      return new Promise((resolve) => {
-        new Compressor(file, {
-          quality: 0.8,
-          maxWidth: 800,
-          maxHeight: 800,
-          success(result) {
-            resolve(new File([result], file.name, { type: file.type }));
-          },
-          error(err) {
-            console.log(err.message);
-            resolve(file); // If compression fails, use the original file
-          },
-        });
-      });
-    });
-
-    Promise.all(compressedImages).then((compressedFiles) => {
-      setFiles(compressedFiles);
-    });
+    if (isValidImages(newFiles)) {
+      setFiles(newFiles);
+    }
   };
 
   const onSubmit = (data) => {
-    console.log(data);
     data.category = data.category[0];
-
     data.image = files;
     if (defaultValues) {
       dispatch(updateProducts({ id: defaultValues.id, data }));
@@ -106,6 +103,7 @@ const ProductForm = ({ defaultValues }) => {
       dispatch(createProducts(data));
     }
   };
+
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       {message && <Message severity="error">{message}</Message>}
@@ -183,7 +181,7 @@ const ProductForm = ({ defaultValues }) => {
             id="saleCount"
             type="number"
             label="Sale Count"
-            name="discount"
+            name="saleCount"
             error={!!errors.saleCount}
             helperText={errors?.saleCount?.message}
           />
@@ -226,17 +224,6 @@ const ProductForm = ({ defaultValues }) => {
             <MenuItem value="mutton">Mutton</MenuItem>
           </SelectInput>
         </Grid>
-        <Grid item md={2} xs={12}>
-          <CheckBoxInput
-            {...register("new")}
-            id="new"
-            name="new"
-            label="New"
-            control={control}
-            error={!!errors.new}
-            helperText={errors?.new?.message}
-          />
-        </Grid>
         <Grid item xs={12}>
           <DropzoneArea
             maxFileSize={5242880}
@@ -244,7 +231,13 @@ const ProductForm = ({ defaultValues }) => {
             showAlerts={false}
             filesLimit={5}
             dropzoneText=""
-            initialFiles={defaultValues?.image ? [defaultValues.image] : []}
+            initialFiles={initialFiles}
+            acceptedFiles={[
+              "image/jpeg",
+              "image/jpg",
+              "image/png",
+              "image/gif",
+            ]}
           />
         </Grid>
         <Grid item xs={12} sx={{ textAlign: "center" }}>
