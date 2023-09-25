@@ -4,7 +4,7 @@ import OrderService from "services/OrderService";
 const initialState = {};
 
 export const getOrders = createAsyncThunk(
-  "Orders/getAll",
+  "order/getAll",
   async (params, { rejectWithValue }) => {
     try {
       const res = await OrderService.getAll(params);
@@ -16,7 +16,7 @@ export const getOrders = createAsyncThunk(
 );
 
 export const getOrder = createAsyncThunk(
-  "Order/get",
+  "order/get",
   async (id, { rejectWithValue }) => {
     try {
       const res = await OrderService.get(id);
@@ -34,7 +34,7 @@ export const getOrder = createAsyncThunk(
 );
 
 export const createOrder = createAsyncThunk(
-  "Order/create",
+  "order/create",
   async (data, { rejectWithValue }) => {
     try {
       const res = await OrderService.create(data);
@@ -54,11 +54,11 @@ export const createOrder = createAsyncThunk(
 );
 
 export const updateOrder = createAsyncThunk(
-  "Order/updateOrder",
+  "order/update",
   async ({ id, data }, { rejectWithValue }) => {
     try {
-      await OrderService.updateById({ id, data });
-      return { success: true };
+      const res = await OrderService.updateById({ id, data });
+      return { success: true, selectedOrder: res.data };
     } catch (err) {
       return rejectWithValue(err.response.data);
     }
@@ -66,7 +66,7 @@ export const updateOrder = createAsyncThunk(
 );
 
 export const deleteOrder = createAsyncThunk(
-  "Order/delete Order",
+  "order/delete",
   async (id, { rejectWithValue }) => {
     try {
       await OrderService.delete(id);
@@ -77,20 +77,8 @@ export const deleteOrder = createAsyncThunk(
   }
 );
 
-export const getOrderItems = createAsyncThunk(
-  "Order/getOrderItems",
-  async ({ day, deal }, { rejectWithValue }) => {
-    try {
-      const res = await OrderService.getOrderItems(day, deal);
-      return { OrderItems: res.data };
-    } catch (err) {
-      return rejectWithValue(err.response.data);
-    }
-  }
-);
-
 export const deleteTransaction = createAsyncThunk(
-  "Order/deleteTransaction",
+  "order/deleteTransaction",
   async ({ id1, id2 }, { rejectWithValue }) => {
     try {
       await OrderService.deleteTransaction(id1, id2);
@@ -101,7 +89,7 @@ export const deleteTransaction = createAsyncThunk(
   }
 );
 export const addTransaction = createAsyncThunk(
-  "Order/addTransaction",
+  "order/addTransaction",
   async ({ id, data }, { rejectWithValue }) => {
     try {
       await OrderService.addTransaction({ id, data });
@@ -112,7 +100,7 @@ export const addTransaction = createAsyncThunk(
   }
 );
 
-export const resetOrder = createAction("Order/reset");
+export const resetOrder = createAction("order/reset");
 
 const orderSlice = createSlice({
   name: "order",
@@ -120,7 +108,7 @@ const orderSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(resetOrder, (state, action) => initialState);
     builder.addMatcher(
-      (action) => action.type.startsWith("Order"),
+      (action) => action.type.startsWith("order"),
       (state, action) => {
         const [actionType] = action.type.split("/").reverse();
         switch (actionType) {

@@ -6,8 +6,8 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { useDispatch, useSelector } from "react-redux";
 import withAuth from "hooks/withAuth";
-import { addAllToCart, addToCart, updateQuantity } from "store/cart";
-import { createOrder, getOrder } from "store/order";
+import { addAllToCart, addToCart, resetCart, updateQuantity } from "store/cart";
+import { createOrder, getOrder, updateOrder } from "store/order";
 import { getProducts } from "store/product";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "@core/components/ui/Loader";
@@ -47,7 +47,6 @@ const UpdateOrderPage = () => {
   };
 
   const handleWeightChange = (value, item) => {
-    console.log(item);
     const quantity = (1 / item.weight) * value;
     dispatch(updateQuantity({ id: item.id, quantity }));
   };
@@ -57,31 +56,29 @@ const UpdateOrderPage = () => {
       orderItems: cartItems,
       totalPrice: cartTotalPrice.toFixed(2),
       discount: 0,
-      deliveryTime: Date.now(),
     };
-    dispatch(createOrder(newOrder));
+    dispatch(updateOrder({ id, data: newOrder }));
   };
+
+  useEffect(() => {
+    dispatch(getProducts(query));
+  }, [dispatch, query]);
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getOrder(id));
+    }
+  }, [dispatch, id]);
 
   useEffect(() => {
     if (success) {
       navigate(`/orders/${selectedOrder.id}`);
-    } else {
-      dispatch(getProducts(query));
+    } else if (selectedOrder) {
+      const { orderItems } = selectedOrder;
+      dispatch(resetCart());
+      dispatch(addAllToCart(orderItems));
     }
-  }, [success, dispatch, navigate, selectedOrder, query]);
-
-  useEffect(() => {
-    dispatch(getOrder(id)).then((response) => {
-      const { payload } = response;
-      if (payload && payload.selectedOrder) {
-        const { selectedOrder } = payload;
-        const { orderItems } = selectedOrder;
-
-        dispatch(addAllToCart(orderItems));
-        console.log(orderItems);
-      }
-    });
-  }, [dispatch, id]);
+  }, [dispatch, selectedOrder, navigate, success]);
 
   return (
     <AdminLayout>
@@ -144,7 +141,6 @@ const UpdateOrderPage = () => {
                       cartItem.discount
                     );
                     const finalProductPrice = cartItem.price.toFixed(2);
-                    console.log(cartItem);
                     const finalDiscountedPrice = discountedPrice
                       ? discountedPrice.toFixed(2)
                       : 0;
@@ -178,6 +174,7 @@ const UpdateOrderPage = () => {
                             type="number"
                             label="Weight"
                             size="small"
+                            defaultValue={cartItem.weight}
                             sx={{ width: "100px", marginRight: "10px" }}
                             onChange={(e) =>
                               handleWeightChange(e.target.value, cartItem)
@@ -237,7 +234,6 @@ const UpdateOrderPage = () => {
                       PKR: {cartTotalPrice.toFixed(2)}
                     </Typography>
                   </Grid>
-                  {/* Proceed button */}
                   <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
                     {loading ? (
                       <Loader />
