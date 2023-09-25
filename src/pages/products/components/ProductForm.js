@@ -34,12 +34,14 @@ const schema = yup.object().shape({
     .typeError("Weight is required field"),
   discount: yup
     .number()
+    .moreThan(-1, "Discount must be a number greater than or equal to zero")
     .required("Discount is a required field")
     .typeError("Discount must be a number"),
   saleCount: yup
     .number()
-    .required("Sale count is a required field")
-    .typeError("Sale count must be a number"),
+    .moreThan(-1, "Discount must be a number greater than or equal to zero")
+    .required("Discount is a required field")
+    .typeError("Discount must be a number"),
   category: yup
     .mixed()
     .test("isCategoryValid", "Category is a required field", function (value) {
