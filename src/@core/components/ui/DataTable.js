@@ -18,6 +18,7 @@ const DataTable = (props) => {
     download,
     serverSide,
     searchIcon,
+    searchPlaceholder,
   } = props;
 
   const [page, setPage] = useState(1);
@@ -60,8 +61,7 @@ const DataTable = (props) => {
     sort: false,
     responsive: "simple",
     search: searchIcon,
-    searchText: "Search here...",
-
+    searchPlaceholder,
     onTableChange: (action, tableState) => {
       if (serverSide !== false) {
         switch (action) {

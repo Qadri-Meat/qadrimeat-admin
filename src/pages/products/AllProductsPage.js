@@ -99,6 +99,7 @@ const AllProductsPage = () => {
         setQuery={setQuery}
         onEdit={onEdit}
         onDelete={onDelete}
+        searchPlaceholder="Search by name"
       />
     </AdminLayout>
   );

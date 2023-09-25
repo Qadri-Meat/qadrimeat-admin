@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import { useDispatch, useSelector } from "react-redux";
 import withAuth from "hooks/withAuth";
 import { addAllToCart, addToCart, resetCart, updateQuantity } from "store/cart";
-import { createOrder, getOrder, updateOrder } from "store/order";
+import { getOrder, updateOrder } from "store/order";
 import { getProducts } from "store/product";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "@core/components/ui/Loader";

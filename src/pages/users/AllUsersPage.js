@@ -78,6 +78,7 @@ const AllUsersPage = (props) => {
         setQuery={setQuery}
         onEdit={onEdit}
         onDelete={onDelete}
+        searchPlaceholder="Search by email"
       />
     </AdminLayout>
   );
