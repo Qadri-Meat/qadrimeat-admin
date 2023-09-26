@@ -43,19 +43,19 @@ const DailyReportTable = ({ deals }) => {
         </TableHead>
         <TableBody>
           <TableRow>
-            <TableCell align="right">w</TableCell>
+            <TableCell align="right">Chicken</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>{" "}
           </TableRow>
           <TableRow>
-            <TableCell align="right">w</TableCell>
+            <TableCell align="right">Mutton</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>{" "}
           </TableRow>
           <TableRow>
-            <TableCell align="right">w</TableCell>
+            <TableCell align="right">Beef</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>{" "}
