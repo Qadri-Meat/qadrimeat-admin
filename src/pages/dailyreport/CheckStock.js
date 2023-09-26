@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { getDashboard } from "store/user";
 import withAuth from "hooks/withAuth";
-import BookingTable from "pages/dashboard/components/BookingTable";
+import DailyReporyTable from "./components/DailyReportTable";
 
 const CheckStock = () => {
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const CheckStock = () => {
         <Grid item xs={12} md={7}>
           <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
             <Typography variant="h5">Total Report</Typography>
-            <BookingTable />
+            <DailyReporyTable />
           </Paper>
         </Grid>
       </Grid>
