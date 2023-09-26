@@ -1,5 +1,5 @@
 import Form from "@core/components/forms/Form";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -9,10 +9,6 @@ import FormInput from "@core/components/forms/FormInput";
 import { Button, Grid, MenuItem } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import SelectInput from "@core/components/forms/SelectInput";
-import { DropzoneArea } from "material-ui-dropzone";
-import { useState } from "react";
-import { createProducts, updateProducts } from "store/product";
-import { getImageUrl, isValidImages } from "helper/helpers";
 
 const schema = yup.object().shape({
   name: yup.string().required().max(20),
@@ -59,14 +55,8 @@ const schema = yup.object().shape({
     .nullable(true),
 });
 
-const ProductForm = ({ defaultValues }) => {
-  const dispatch = useDispatch();
-  const [files, setFiles] = useState([]);
+const AddStockForm = () => {
   const { message, loading } = useSelector((state) => state.product);
-
-  const initialFiles = (defaultValues?.image || []).map(
-    (i) => `${getImageUrl(i)}`
-  );
 
   const {
     register,
@@ -74,37 +64,12 @@ const ProductForm = ({ defaultValues }) => {
     control,
     formState: { errors },
   } = useForm({
-    defaultValues: {
-      name: defaultValues?.name,
-      sku: defaultValues?.sku,
-      price: defaultValues?.price,
-      weight: defaultValues?.weight,
-      stock: defaultValues?.stock,
-      discount: defaultValues?.discount,
-      saleCount: defaultValues?.saleCount,
-      fullDescription: defaultValues?.fullDescription,
-      shortDescription: defaultValues?.shortDescription,
-      category: defaultValues?.category,
-    },
+    defaultValues: {},
     mode: "onBlur",
     resolver: yupResolver(schema),
   });
 
-  const handleChange = (newFiles) => {
-    if (isValidImages(newFiles)) {
-      setFiles(newFiles);
-    }
-  };
-
-  const onSubmit = (data) => {
-    data.category = data.category[0];
-    data.image = files;
-    if (defaultValues) {
-      dispatch(updateProducts({ id: defaultValues.id, data }));
-    } else {
-      dispatch(createProducts(data));
-    }
-  };
+  const onSubmit = (data) => {};
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
@@ -226,22 +191,6 @@ const ProductForm = ({ defaultValues }) => {
             <MenuItem value="mutton">Mutton</MenuItem>
           </SelectInput>
         </Grid>
-        <Grid item xs={12}>
-          <DropzoneArea
-            maxFileSize={5242880}
-            onChange={handleChange}
-            showAlerts={false}
-            filesLimit={5}
-            dropzoneText=""
-            initialFiles={initialFiles}
-            acceptedFiles={[
-              "image/jpeg",
-              "image/jpg",
-              "image/png",
-              "image/gif",
-            ]}
-          />
-        </Grid>
         <Grid item xs={12} sx={{ textAlign: "center" }}>
           <Button
             variant="contained"
@@ -250,13 +199,7 @@ const ProductForm = ({ defaultValues }) => {
             size="large"
             endIcon={<SaveIcon />}
           >
-            {loading ? (
-              <Loader />
-            ) : defaultValues ? (
-              "Update Product"
-            ) : (
-              "Save Product"
-            )}
+            {loading ? <Loader /> : "Save Product"}
           </Button>
         </Grid>
       </Grid>
@@ -264,4 +207,4 @@ const ProductForm = ({ defaultValues }) => {
   );
 };
 
-export default ProductForm;
+export default AddStockForm;
