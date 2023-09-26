@@ -1,17 +1,31 @@
 import React, { useEffect, useState } from "react";
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import { Grid, Typography, TextField, Button, Box } from "@mui/material";
+import {
+  Grid,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  IconButton,
+} from "@mui/material";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import { useDispatch, useSelector } from "react-redux";
 import withAuth from "hooks/withAuth";
-import { addAllToCart, addToCart, resetCart, updateQuantity } from "store/cart";
+import {
+  addAllToCart,
+  addToCart,
+  removeItem,
+  resetCart,
+  updateQuantity,
+} from "store/cart";
 import { getOrder, updateOrder } from "store/order";
 import { getProducts } from "store/product";
 import { useNavigate, useParams } from "react-router-dom";
 import Loader from "@core/components/ui/Loader";
 import { getImageUrl } from "helper/helpers";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { getDiscountPrice } from "helper/product";
 
 const UpdateOrderPage = () => {
@@ -49,6 +63,9 @@ const UpdateOrderPage = () => {
   const handleWeightChange = (value, item) => {
     const quantity = (1 / item.weight) * value;
     dispatch(updateQuantity({ id: item.id, quantity }));
+  };
+  const handleRemoveFromCart = (productId) => {
+    dispatch(removeItem(productId));
   };
 
   const onSubmit = () => {
@@ -199,6 +216,18 @@ const UpdateOrderPage = () => {
                                 )}
                           </Typography>
                         </Box>
+                        <Grid
+                          item
+                          xs={3}
+                          sx={{ display: "flex", justifyContent: "center" }}
+                        >
+                          <IconButton
+                            onClick={() => handleRemoveFromCart(cartItem.id)}
+                            aria-label="delete"
+                          >
+                            <DeleteIcon style={{ color: "red" }} />
+                          </IconButton>
+                        </Grid>
                       </Card>
                     );
                   })}
