@@ -15,7 +15,7 @@ import { createProducts, updateProducts } from "store/product";
 import { getImageUrl, isValidImages } from "helper/helpers";
 
 const schema = yup.object().shape({
-  name: yup.string().required(),
+  name: yup.string().required().max(20),
   sku: yup.string().required(),
   price: yup
     .number()
