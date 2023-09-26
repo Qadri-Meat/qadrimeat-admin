@@ -30,14 +30,32 @@ const DailyReportTable = ({ deals }) => {
               align="right"
               style={{ fontWeight: "bold", color: "#555555" }}
             >
-              Sale
+              Sale Stock
             </TableCell>
 
             <TableCell
               align="right"
               style={{ fontWeight: "bold", color: "#555555" }}
             >
-              Remaining
+              Remaining Stock
+            </TableCell>
+            <TableCell
+              align="right"
+              style={{ fontWeight: "bold", color: "#555555" }}
+            >
+              Purchase Amount
+            </TableCell>
+            <TableCell
+              align="right"
+              style={{ fontWeight: "bold", color: "#555555" }}
+            >
+              Sale Amount
+            </TableCell>
+            <TableCell
+              align="right"
+              style={{ fontWeight: "bold", color: "#555555" }}
+            >
+              Profit
             </TableCell>
           </TableRow>
         </TableHead>
@@ -46,16 +64,25 @@ const DailyReportTable = ({ deals }) => {
             <TableCell align="right">Chicken</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>
+            <TableCell align="right">---</TableCell>
+            <TableCell align="right">---</TableCell>
+            <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>{" "}
           </TableRow>
           <TableRow>
             <TableCell align="right">Mutton</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>
+            <TableCell align="right">---</TableCell>
+            <TableCell align="right">---</TableCell>
+            <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>{" "}
           </TableRow>
           <TableRow>
             <TableCell align="right">Beef</TableCell>
+            <TableCell align="right">---</TableCell>
+            <TableCell align="right">---</TableCell>
+            <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>
             <TableCell align="right">---</TableCell>{" "}
