@@ -12,7 +12,6 @@ import SelectInput from "@core/components/forms/SelectInput";
 import withAuth from "hooks/withAuth";
 
 const schema = yup.object().shape({
-  name: yup.string().required().max(20),
   weight: yup
     .number()
     .required()
@@ -49,24 +48,15 @@ const AddStockForm = () => {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {};
+  const onSubmit = (data) => {
+    console.log(data);
+  };
 
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
       {message && <Message severity="error">{message}</Message>}
 
       <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <FormInput
-            {...register("name")}
-            id="name"
-            type="text"
-            label="Name"
-            name="name"
-            error={!!errors.name}
-            helperText={errors?.name?.message}
-          />
-        </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
             {...register("weight")}
