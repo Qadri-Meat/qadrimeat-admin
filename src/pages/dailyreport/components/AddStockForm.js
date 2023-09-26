@@ -31,6 +31,11 @@ const schema = yup.object().shape({
       return value;
     })
     .nullable(true),
+  amountperkg: yup
+    .number()
+    .required()
+    .positive()
+    .typeError("Amount is required field"),
 });
 
 const AddStockForm = () => {
@@ -55,18 +60,6 @@ const AddStockForm = () => {
 
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
-          <FormInput
-            {...register("weight")}
-            id="weight"
-            type="number"
-            label="Weight (KG)"
-            name="weight"
-            error={!!errors.weight}
-            helperText={errors?.weight?.message}
-          />
-        </Grid>
-
-        <Grid item xs={12} md={4}>
           <SelectInput
             {...register("category")}
             id="category"
@@ -80,6 +73,29 @@ const AddStockForm = () => {
             <MenuItem value="beef">Beef</MenuItem>
             <MenuItem value="mutton">Mutton</MenuItem>
           </SelectInput>
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <FormInput
+            {...register("weight")}
+            id="weight"
+            type="number"
+            label="Weight (KG)"
+            name="weight"
+            error={!!errors.weight}
+            helperText={errors?.weight?.message}
+          />
+        </Grid>
+
+        <Grid item xs={12} md={4}>
+          <FormInput
+            {...register("amountperkg")}
+            id="amountperkg"
+            type="number"
+            label="Amount per (KG)"
+            name="amountperkg"
+            error={!!errors.amountperkg}
+            helperText={errors?.amountperkg?.message}
+          />
         </Grid>
         <Grid item xs={12} sx={{ textAlign: "center" }}>
           <Button
