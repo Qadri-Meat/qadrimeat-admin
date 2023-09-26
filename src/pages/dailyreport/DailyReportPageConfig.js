@@ -1,11 +1,11 @@
-import AddStockForm from "./AddStockForm";
+import AddStockPage from "./AddStockPage";
 import CheckStock from "./CheckStock";
 export const DailyReportPageConfig = {
   routes: [
     {
       path: "/addstock",
       exact: true,
-      element: <AddStockForm />,
+      element: <AddStockPage />,
     },
     {
       path: "/checkstock",
