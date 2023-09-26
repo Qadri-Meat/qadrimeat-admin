@@ -92,6 +92,14 @@ const navigation = [
         url: "/expenses",
         exact: "true",
       },
+      {
+        id: "dailyReport",
+        title: "Daily Report",
+        type: "item",
+        icon: <ReceiptIcon />,
+        url: "/dailyreport",
+        exact: "true",
+      },
     ],
   },
 ];
