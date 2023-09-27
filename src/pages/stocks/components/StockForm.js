@@ -14,7 +14,7 @@ const schema = yup.object().shape({
   amount: yup.string().required(),
   type: yup.string().required("Type is a required field"),
 });
-const ExpenseForm = ({ defaultValues }) => {
+const StockForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.expense);
   const onSubmit = (data) => {
@@ -110,4 +110,4 @@ const ExpenseForm = ({ defaultValues }) => {
   );
 };
 
-export default ExpenseForm;
+export default StockForm;
