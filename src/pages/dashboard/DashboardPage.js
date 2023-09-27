@@ -21,7 +21,9 @@ const DashboardPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { todayReport, reports, deals } = useSelector((state) => state.user);
+  const { todayReport, reports, deals, loading } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     dispatch(getDashboard());
@@ -93,13 +95,17 @@ const DashboardPage = () => {
         <Grid item xs={12} md={5}>
           <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
             <Typography variant="h5">Booking Reports</Typography>
-            {reports ? <BookingReportsTable reports={reports} /> : <></>}
+            {reports ? (
+              <BookingReportsTable reports={reports} loading={loading} />
+            ) : (
+              <></>
+            )}
           </Paper>
         </Grid>
         <Grid item xs={12} md={7}>
           <Paper style={{ padding: 10, marginTop: 15 }} variant="outlined">
             <Typography variant="h5">Total Bookings</Typography>
-            {deals ? <BookingTable deals={deals} /> : <></>}
+            {deals ? <BookingTable deals={deals} loading={loading} /> : <></>}
           </Paper>
         </Grid>
       </Grid>
