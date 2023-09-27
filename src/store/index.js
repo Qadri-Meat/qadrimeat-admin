@@ -9,6 +9,7 @@ import booking from "store/booking";
 import expense from "store/expense";
 import product from "store/product";
 import order from "store/order";
+import stock from "store/stock";
 import { cartReducer } from "./cart";
 export const store = configureStore({
   reducer: {
@@ -19,7 +20,8 @@ export const store = configureStore({
     booking,
     order,
     expense,
-    cart: cartReducer, // Verify that cartReducer is included under the 'cart' key
+    cart: cartReducer,
+    stock, // Verify that cartReducer is included under the 'cart' key
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
