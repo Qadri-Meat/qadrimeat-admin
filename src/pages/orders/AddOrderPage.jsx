@@ -43,7 +43,7 @@ const AddOrderPage = () => {
       quantity: 1,
       weight: product.weight,
       price: product.price,
-      discount: 0,
+      discount: product.discount,
       image: product.image,
       product: product.id,
     };
@@ -173,7 +173,11 @@ const AddOrderPage = () => {
                             type="number"
                             label="Weight"
                             size="small"
-                            value={cartItem.weight * cartItem.quantity}
+                            value={
+                              cartItem.weight * cartItem.quantity === 0
+                                ? ""
+                                : cartItem.weight * cartItem.quantity
+                            }
                             sx={{ width: "100px", marginRight: "10px" }}
                             onChange={(e) =>
                               handleWeightChange(e.target.value, cartItem)
@@ -182,6 +186,7 @@ const AddOrderPage = () => {
                               pattern: "^[0-9]+([.][0-9]{1,2})?$",
                             }}
                           />
+
                           <Typography
                             sx={{ marginLeft: "auto", width: "100px" }}
                             variant="subtitle1"
@@ -232,7 +237,7 @@ const AddOrderPage = () => {
                     xs={12}
                   >
                     <Typography variant="subtitle1">Discount:</Typography>
-                    <Typography variant="subtitle1">PKR: {0}</Typography>
+                    <Typography variant="subtitle1">PKR: {}</Typography>
                   </Grid>
                   <Grid
                     sx={{ display: "flex", justifyContent: "space-between" }}
