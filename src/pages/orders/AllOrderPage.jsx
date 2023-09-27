@@ -12,6 +12,7 @@ import { useLocation } from "react-router-dom";
 import { pick } from "helper/pick";
 import withAuth from "hooks/withAuth";
 import { deleteOrder, getOrders, resetOrder } from "store/order";
+import Loader from "@core/components/ui/Loader";
 const AllOrderPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const AllOrderPage = () => {
   const { paid } = pick(location.search);
   const [query, setQuery] = useState("");
 
-  const { results, totalResults, success } = useSelector(
+  const { results, totalResults, success, loading } = useSelector(
     (state) => state.order
   );
 
@@ -146,15 +147,19 @@ const AllOrderPage = () => {
           </Grid>
         </Grid>
       </Grid>
-      <DataTable
-        title={"Order List"}
-        results={results}
-        totalResults={totalResults}
-        columns={columns}
-        setQuery={setQuery}
-        onDelete={onDelete}
-        searchPlaceholder="Search by name or phone number"
-      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <DataTable
+          title={"Order List"}
+          results={results}
+          totalResults={totalResults}
+          columns={columns}
+          setQuery={setQuery}
+          onDelete={onDelete}
+          searchPlaceholder="Search by name or phone number"
+        />
+      )}
     </AdminLayout>
   );
 };
