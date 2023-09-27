@@ -29,7 +29,7 @@ const AllStocksPage = () => {
   };
 
   const onEdit = (value) => {
-    navigate(`/expenses/${value}`);
+    navigate(`/stock/${value}`);
   };
 
   const columns = [
@@ -91,7 +91,7 @@ const AllStocksPage = () => {
         </Grid>
       </Grid>
       <DataTable
-        title={"Expense List"}
+        title={"Stock List"}
         columns={columns}
         results={results}
         totalResults={totalResults}
