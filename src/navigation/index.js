@@ -125,7 +125,7 @@ const navigation = [
         title: "Stock",
         type: "item",
         icon: <ReceiptIcon />,
-        url: "",
+        url: "/stocks",
         exact: "true",
       },
     ],

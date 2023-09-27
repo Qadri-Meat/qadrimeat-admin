@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteExpense, getExpenses, resetExpense } from "store/expense";
 
-const AllExpensesPage = () => {
+const AllStocksPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
@@ -67,7 +67,7 @@ const AllExpensesPage = () => {
       <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
         <Grid item>
           <Typography variant="h5" component="h1">
-            Expenses
+            Stocks
           </Typography>
         </Grid>
         <Grid
@@ -80,12 +80,12 @@ const AllExpensesPage = () => {
         >
           <Grid item>
             <Button
-              onClick={() => navigate("/expenses/add-expenses")}
+              onClick={() => navigate("/stock/add-stock")}
               variant="outlined"
               color="primary"
               size="small"
             >
-              Add Expense
+              Add Stock
             </Button>
           </Grid>
         </Grid>
@@ -103,4 +103,4 @@ const AllExpensesPage = () => {
   );
 };
 
-export default withAuth(AllExpensesPage);
+export default withAuth(AllStocksPage);

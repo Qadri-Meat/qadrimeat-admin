@@ -9,6 +9,7 @@ import { ExpensesPageConfig } from "pages/expenses/ExpensesPageConfig";
 import { ProductPageConfig } from "pages/products/ProductPageConfig";
 import { OrderPageConfig } from "pages/orders/OrdersPageConfig";
 import { DailyReportPageConfig } from "pages/dailyreport/DailyReportPageConfig";
+import { StocksPageConfig } from "pages/stocks/StockPageConfig";
 const routeConfigs = [
   ...DashboardPageConfig.routes,
   ...UsersPageConfig.routes,
@@ -18,6 +19,7 @@ const routeConfigs = [
   ...Error500PageConfig.routes,
   ...ProfilePageConfig.routes,
   ...ExpensesPageConfig.routes,
+  ...StocksPageConfig.routes,
   ...ProductPageConfig.routes,
   ...OrderPageConfig.routes,
   ...DailyReportPageConfig.routes,

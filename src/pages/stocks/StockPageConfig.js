@@ -1,16 +1,18 @@
+import AddStockForm from "pages/dailyreport/components/AddStockForm";
 import AddExpensePage from "./AddStockPage";
-import AllExpensesPage from "./AllStockPage";
-export const ExpensesPageConfig = {
+import AllStockPage from "./AllStockPage";
+import AddStockPage from "./AddStockPage";
+export const StocksPageConfig = {
   routes: [
     {
-      path: "/expenses",
+      path: "/stocks",
       exact: true,
-      element: <AllExpensesPage />,
+      element: <AllStockPage />,
     },
     {
-      path: "/expenses/:id",
+      path: "/stock/:id",
       exact: true,
-      element: <AddExpensePage />,
+      element: <AddStockPage />,
     },
   ],
 };

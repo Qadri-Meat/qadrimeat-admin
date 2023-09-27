@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getExpense } from "store/expense";
 import withAuth from "hooks/withAuth";
 
-const AddExpensePage = () => {
+const AddStockPage = () => {
   const params = useParams();
   const userId = params.id;
   const navigate = useNavigate();
@@ -19,7 +19,7 @@ const AddExpensePage = () => {
   }, [dispatch, userId]);
   useEffect(() => {
     if (success) {
-      navigate("/expenses");
+      navigate("/stocks");
     }
   }, [dispatch, success, navigate]);
   return (
@@ -41,4 +41,4 @@ const AddExpensePage = () => {
   );
 };
 
-export default withAuth(AddExpensePage);
+export default withAuth(AddStockPage);
