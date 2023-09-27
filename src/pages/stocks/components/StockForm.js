@@ -98,9 +98,9 @@ const StockForm = ({ defaultValues }) => {
               {loading ? (
                 <Loader />
               ) : defaultValues ? (
-                "Update Expense"
+                "Update Stock"
               ) : (
-                "Save Expense"
+                "Save Stock"
               )}
             </Button>
           </Grid>
