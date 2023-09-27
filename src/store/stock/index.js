@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import ExpenseService from "services/ExpenseServices";
+import StockService from "services/StockService";
 
 const initialState = {};
 
@@ -7,7 +7,7 @@ export const getStocks = createAsyncThunk(
   "stocks/getAll",
   async (query, { rejectWithValue }) => {
     try {
-      const res = await ExpenseService.getAll(query);
+      const res = await StockService.getAll(query);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -19,7 +19,7 @@ export const getStock = createAsyncThunk(
   "stocks/get",
   async (id, { rejectWithValue }) => {
     try {
-      const res = await ExpenseService.get(id);
+      const res = await StockService.get(id);
       return { details: res.data };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -31,7 +31,7 @@ export const AddStock = createAsyncThunk(
   "stocks/create",
   async (data, { rejectWithValue }) => {
     try {
-      await ExpenseService.create(data);
+      await StockService.create(data);
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -44,7 +44,7 @@ export const updateStock = createAsyncThunk(
   async ({ id, data }, { rejectWithValue }) => {
     console.log(id, data);
     try {
-      await ExpenseService.updateById({ id, data });
+      await StockService.updateById({ id, data });
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -56,7 +56,7 @@ export const deleteStock = createAsyncThunk(
   "stocks/delete",
   async (id, { rejectWithValue }) => {
     try {
-      await ExpenseService.delete(id);
+      await StockService.delete(id);
       return { success: true };
     } catch (err) {
       return rejectWithValue(err.response.data);
