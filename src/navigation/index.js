@@ -120,6 +120,14 @@ const navigation = [
           },
         ],
       },
+      {
+        id: "stock",
+        title: "Stock",
+        type: "item",
+        icon: <ReceiptIcon />,
+        url: "",
+        exact: "true",
+      },
     ],
   },
 ];
