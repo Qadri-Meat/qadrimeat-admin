@@ -1,5 +1,3 @@
-import AddStockForm from "pages/dailyreport/components/AddStockForm";
-import AddExpensePage from "./AddStockPage";
 import AllStockPage from "./AllStockPage";
 import AddStockPage from "./AddStockPage";
 export const StocksPageConfig = {
