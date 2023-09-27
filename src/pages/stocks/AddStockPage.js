@@ -28,7 +28,7 @@ const AddStockPage = () => {
         <Grid container sx={{ my: 3 }} alignItems="center">
           <Grid item>
             <Typography variant="h5" component="h1">
-              {details ? "Update Expense" : "Add Expense"}
+              {details ? "Update Stock" : "Add Stock"}
             </Typography>
           </Grid>
         </Grid>
