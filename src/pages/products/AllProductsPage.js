@@ -8,12 +8,13 @@ import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
 import withAuth from "hooks/withAuth";
 import { deleteProduct, getProducts, resetProduct } from "store/product";
 import { getImageUrl } from "helper/helpers";
+import Loader from "@core/components/ui/Loader";
 const AllProductsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
   const { user: authUser } = useSelector((state) => state.auth);
-  const { results, totalResults, success } = useSelector(
+  const { results, totalResults, success, loading } = useSelector(
     (state) => state.product
   );
 
@@ -91,16 +92,20 @@ const AllProductsPage = () => {
           </Button>
         </Grid>
       </Grid>
-      <DataTable
-        title={"Product List"}
-        results={results}
-        totalResults={totalResults}
-        columns={columns}
-        setQuery={setQuery}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        searchPlaceholder="Search by name"
-      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <DataTable
+          title={"Product List"}
+          results={results}
+          totalResults={totalResults}
+          columns={columns}
+          setQuery={setQuery}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          searchPlaceholder="Search by name"
+        />
+      )}
     </AdminLayout>
   );
 };
