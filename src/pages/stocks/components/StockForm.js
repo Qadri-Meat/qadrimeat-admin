@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import SaveIcon from "@mui/icons-material/Save";
 import Loader from "@core/components/ui/Loader";
 import { useDispatch, useSelector } from "react-redux";
-import { createExpense, updateExpense } from "store/expense";
+import { AddStock, updateStock } from "store/stock";
 const schema = yup.object().shape({
   weight: yup
     .number()
@@ -41,14 +41,14 @@ const StockForm = ({ defaultValues }) => {
   const { loading } = useSelector((state) => state.expense);
   const onSubmit = (data) => {
     const postData = {
-      description: data.description,
+      weight: data.weight,
+      type: data.category,
       amount: data.amount,
-      type: data.type,
     };
     if (defaultValues) {
-      dispatch(updateExpense({ id: defaultValues.id, data }));
+      dispatch(updateStock({ id: defaultValues.id, data }));
     } else {
-      dispatch(createExpense(postData));
+      dispatch(AddStock(postData));
     }
   };
   const {
