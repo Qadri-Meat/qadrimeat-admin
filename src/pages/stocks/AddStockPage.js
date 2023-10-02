@@ -2,11 +2,11 @@ import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBread
 import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
 import { Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
-import ExpenseForm from "./components/StockForm";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { getExpense } from "store/expense";
 import withAuth from "hooks/withAuth";
+import StockForm from "./components/StockForm";
 
 const AddStockPage = () => {
   const params = useParams();
@@ -34,7 +34,7 @@ const AddStockPage = () => {
         </Grid>
         <AdminBreadcrumbs />
         <div>
-          <ExpenseForm defaultValues={details} key={details ? details.id : 1} />
+          <StockForm defaultValues={details} key={details ? details.id : 1} />
         </div>
       </AdminLayout>
     </>
