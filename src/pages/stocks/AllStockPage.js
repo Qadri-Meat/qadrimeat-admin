@@ -13,7 +13,7 @@ const AllStocksPage = () => {
   const [query, setQuery] = useState("");
 
   const { results, totalResults, success } = useSelector(
-    (state) => state.expense
+    (state) => state.stock
   );
 
   useEffect(() => {
