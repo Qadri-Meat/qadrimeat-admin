@@ -8,7 +8,6 @@ import { ProfilePageConfig } from "../pages/profile/ProfilePageConfig";
 import { ExpensesPageConfig } from "pages/expenses/ExpensesPageConfig";
 import { ProductPageConfig } from "pages/products/ProductPageConfig";
 import { OrderPageConfig } from "pages/orders/OrdersPageConfig";
-import { DailyReportPageConfig } from "pages/dailyreport/DailyReportPageConfig";
 import { StocksPageConfig } from "pages/stocks/StockPageConfig";
 const routeConfigs = [
   ...DashboardPageConfig.routes,
@@ -22,7 +21,6 @@ const routeConfigs = [
   ...StocksPageConfig.routes,
   ...ProductPageConfig.routes,
   ...OrderPageConfig.routes,
-  ...DailyReportPageConfig.routes,
 ];
 
 const routes = [...routeConfigs];

@@ -93,34 +93,6 @@ const navigation = [
         exact: "true",
       },
       {
-        id: "dailyreport",
-        title: "Daily Report",
-        type: "collapse",
-        icon: <FileCopyIcon />,
-        badge: {
-          title: "2",
-          bg: "#525E8A",
-          fg: "#FFFFFF",
-        },
-        children: [
-          {
-            id: "addstock",
-            title: "Add Stock",
-            type: "item",
-            icon: <ReceiptIcon />,
-            url: "/addstock",
-            exact: "true",
-          },
-          {
-            id: "checkstock",
-            title: "Check Stock",
-            type: "item",
-            url: "/checkstock",
-            exact: "true",
-          },
-        ],
-      },
-      {
         id: "stock",
         title: "Stock",
         type: "item",
