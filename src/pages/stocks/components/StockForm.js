@@ -30,7 +30,7 @@ const schema = yup.object().shape({
       return value;
     })
     .nullable(true),
-  amountperkg: yup
+  price: yup
     .number()
     .required()
     .positive()
@@ -42,8 +42,8 @@ const StockForm = ({ defaultValues }) => {
   const onSubmit = (data) => {
     const postData = {
       weight: data.weight,
-      type: data.category,
-      amount: data.amount,
+      price: data.amount,
+      category: data.category,
     };
     if (defaultValues) {
       dispatch(updateStock({ id: defaultValues.id, data }));
@@ -97,13 +97,13 @@ const StockForm = ({ defaultValues }) => {
 
           <Grid item xs={12} md={4}>
             <FormInput
-              {...register("amountperkg")}
-              id="amountperkg"
+              {...register("price")}
+              id="price"
               type="number"
               label="Amount per (KG)"
-              name="amountperkg"
-              error={!!errors.amountperkg}
-              helperText={errors?.amountperkg?.message}
+              name="price"
+              error={!!errors.price}
+              helperText={errors?.price?.message}
             />
           </Grid>
           <Grid item xs={12} sx={{ textAlign: "center" }}>
@@ -114,7 +114,13 @@ const StockForm = ({ defaultValues }) => {
               size="large"
               endIcon={<SaveIcon />}
             >
-              {loading ? <Loader /> : "Save Stock"}
+              {loading ? (
+                <Loader />
+              ) : defaultValues ? (
+                "Update Stock"
+              ) : (
+                "Save Stock"
+              )}
             </Button>
           </Grid>
         </Grid>
