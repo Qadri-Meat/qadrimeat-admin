@@ -43,6 +43,8 @@ const StockForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { loading } = useSelector((state) => state.stock);
+
   const {
     register,
     handleSubmit,
@@ -50,23 +52,21 @@ const StockForm = ({ defaultValues }) => {
     formState: { errors },
   } = useForm({
     mode: "onBlur",
-    defaultValues: {
-      ...defaultValues,
-    },
+    defaultValues,
     resolver: yupResolver(schema),
   });
-  const { loading } = useSelector((state) => state.expense);
+
   const onSubmit = (data) => {
     console.log(data);
     const postData = {
       weight: data.weight,
       price: data.price,
-      category: data.category,
+      category: data.category[0],
     };
-    if (defaultValues) {
-      dispatch(updateStock({ id: defaultValues.id, data }));
+    if (!defaultValues) {
+      dispatch(AddStock(data));
     } else {
-      dispatch(AddStock(postData));
+      dispatch(updateStock({ id: defaultValues.id, data: postData }));
     }
     navigate("/stocks");
   };

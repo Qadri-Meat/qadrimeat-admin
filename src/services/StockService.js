@@ -36,9 +36,9 @@ class StockService extends ApiService {
    */
   updateById({ id, data }) {
     const postData = {
-      description: data.description,
-      amount: data.amount,
-      type: data.type,
+      weight: data.weight,
+      price: data.price,
+      category: data.category,
     };
     return this.instance.patch(`/v1/stocks/${id}`, postData);
   }

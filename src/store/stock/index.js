@@ -42,7 +42,7 @@ export const AddStock = createAsyncThunk(
 export const updateStock = createAsyncThunk(
   "stocks/updateStock",
   async ({ id, data }, { rejectWithValue }) => {
-    console.log(id, data);
+    console.log("in index", id, data);
     try {
       await StockService.updateById({ id, data });
       return { success: true };

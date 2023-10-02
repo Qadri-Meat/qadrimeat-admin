@@ -4,24 +4,28 @@ import { Grid, Typography } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { getExpense } from "store/expense";
 import withAuth from "hooks/withAuth";
 import StockForm from "./components/StockForm";
+import { getStock } from "store/stock";
 
 const AddStockPage = () => {
   const params = useParams();
-  const userId = params.id;
+  const stockId = params.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const { details, success } = useSelector((state) => state.stock);
+
   useEffect(() => {
-    if (userId !== "") dispatch(getExpense(userId));
-  }, [dispatch, userId]);
+    if (stockId !== "") dispatch(getStock(stockId));
+  }, [dispatch, stockId]);
+
   useEffect(() => {
     if (success) {
       navigate("/stocks");
     }
   }, [dispatch, success, navigate]);
+
   return (
     <>
       <AdminLayout>
