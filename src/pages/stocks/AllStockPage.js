@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { deleteExpense, getExpenses, resetExpense } from "store/expense";
+import { deleteStock, getStocks, resetStock } from "store/stock";
 
 const AllStocksPage = () => {
   const navigate = useNavigate();
@@ -18,14 +19,14 @@ const AllStocksPage = () => {
 
   useEffect(() => {
     if (success) {
-      dispatch(resetExpense());
+      dispatch(resetStock());
     } else {
-      dispatch(getExpenses(query));
+      dispatch(getStocks(query));
     }
   }, [success, dispatch, query]);
 
   const onDelete = (value) => {
-    dispatch(deleteExpense(value));
+    dispatch(deleteStock(value));
   };
 
   const onEdit = (value) => {
