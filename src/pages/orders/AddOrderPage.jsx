@@ -229,6 +229,19 @@ const AddOrderPage = () => {
                       item
                       xs={12}
                     >
+                      <Typography variant="subtitle1"> Total Items:</Typography>
+                      <Typography variant="subtitle1">
+                        {cartItems.length}
+                      </Typography>
+                    </Grid>
+                    <Grid
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                      item
+                      xs={12}
+                    >
                       <Typography variant="subtitle1"> Subtotal:</Typography>
                       <Typography variant="subtitle1">
                         PKR: {cartTotalPrice.toFixed(2)}
@@ -253,7 +266,7 @@ const AddOrderPage = () => {
                       <Typography variant="subtitle1">
                         PKR: {cartTotalPrice.toFixed(2)}
                       </Typography>
-                    </Grid>
+                    </Grid>{" "}
                     {/* Proceed button */}
                     <Grid
                       container
