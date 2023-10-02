@@ -9,6 +9,8 @@ import SaveIcon from "@mui/icons-material/Save";
 import Loader from "@core/components/ui/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { AddStock, updateStock } from "store/stock";
+import { useNavigate } from "react-router-dom";
+
 const schema = yup.object().shape({
   weight: yup
     .number()
@@ -36,21 +38,11 @@ const schema = yup.object().shape({
     .positive()
     .typeError("Amount is required field"),
 });
+
 const StockForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.expense);
-  const onSubmit = (data) => {
-    const postData = {
-      weight: data.weight,
-      price: data.amount,
-      category: data.category,
-    };
-    if (defaultValues) {
-      dispatch(updateStock({ id: defaultValues.id, data }));
-    } else {
-      dispatch(AddStock(postData));
-    }
-  };
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -63,6 +55,21 @@ const StockForm = ({ defaultValues }) => {
     },
     resolver: yupResolver(schema),
   });
+  const { loading } = useSelector((state) => state.expense);
+  const onSubmit = (data) => {
+    console.log(data);
+    const postData = {
+      weight: data.weight,
+      price: data.price,
+      category: data.category,
+    };
+    if (defaultValues) {
+      dispatch(updateStock({ id: defaultValues.id, data }));
+    } else {
+      dispatch(AddStock(postData));
+    }
+    navigate("/stocks");
+  };
 
   return (
     <>
