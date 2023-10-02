@@ -5,7 +5,6 @@ import withAuth from "hooks/withAuth";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteExpense, getExpenses, resetExpense } from "store/expense";
 import { deleteStock, getStocks, resetStock } from "store/stock";
 
 const AllStocksPage = () => {
@@ -39,12 +38,16 @@ const AllStocksPage = () => {
       label: "Id",
     },
     {
-      name: "description",
-      label: "Description",
+      name: "category",
+      label: "Category",
     },
     {
-      name: "amount",
-      label: "Amount",
+      name: "weight",
+      label: "Weight",
+    },
+    {
+      name: "price",
+      label: "Amount(per KG)",
     },
     {
       name: "createdAt",
