@@ -10,9 +10,31 @@ import Loader from "@core/components/ui/Loader";
 import { useDispatch, useSelector } from "react-redux";
 import { createExpense, updateExpense } from "store/expense";
 const schema = yup.object().shape({
-  description: yup.string().required(),
-  amount: yup.string().required(),
-  type: yup.string().required("Type is a required field"),
+  weight: yup
+    .number()
+    .required()
+    .positive()
+    .typeError("Weight is required field"),
+  category: yup
+    .mixed()
+    .test("isCategoryValid", "Category is a required field", function (value) {
+      return (
+        value !== undefined &&
+        (typeof value === "string" || Array.isArray(value))
+      );
+    })
+    .transform(function (value, originalValue) {
+      if (originalValue && typeof originalValue === "string") {
+        return [originalValue];
+      }
+      return value;
+    })
+    .nullable(true),
+  amountperkg: yup
+    .number()
+    .required()
+    .positive()
+    .typeError("Amount is required field"),
 });
 const StockForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
@@ -47,45 +69,42 @@ const StockForm = ({ defaultValues }) => {
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
-            <FormInput
-              {...register("description")}
-              id="description"
-              type="text"
-              label="Description"
-              name="description"
-              error={!!errors.description}
-              helperText={errors?.description?.message}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <FormInput
-              {...register("amount")}
-              id="amount"
-              type="number"
-              label="Amount"
-              name="amount"
-              error={!!errors.amount}
-              helperText={errors?.amount?.message}
-            />
-          </Grid>
-          <Grid item xs={12} md={4}>
             <SelectInput
-              {...register("type")}
-              id="type"
-              name="type"
-              label="Type"
+              {...register("category")}
+              id="category"
+              name="category"
+              label="Category"
               control={control}
-              error={!!errors.type}
-              helperText={errors?.type?.message}
+              error={!!errors.category}
+              helperText={errors?.category?.message}
             >
-              <MenuItem value="booking">Qurbani</MenuItem>
-              <MenuItem value="order">Order</MenuItem>
-              {/* <MenuItem value="Labor_costs">Labor costs</MenuItem>
-              <MenuItem value="Raw_material">Raw materials</MenuItem>
-              <MenuItem value="Equipment">Equipment and supplies</MenuItem>
-              <MenuItem value="Utilities">Utilities</MenuItem>
-              <MenuItem value="Marketing">Marketing and advertising</MenuItem> */}
+              <MenuItem value="chicken">Chicken</MenuItem>
+              <MenuItem value="beef">Beef</MenuItem>
+              <MenuItem value="mutton">Mutton</MenuItem>
             </SelectInput>
+          </Grid>
+          <Grid item xs={12} md={4}>
+            <FormInput
+              {...register("weight")}
+              id="weight"
+              type="number"
+              label="Weight (KG)"
+              name="weight"
+              error={!!errors.weight}
+              helperText={errors?.weight?.message}
+            />
+          </Grid>
+
+          <Grid item xs={12} md={4}>
+            <FormInput
+              {...register("amountperkg")}
+              id="amountperkg"
+              type="number"
+              label="Amount per (KG)"
+              name="amountperkg"
+              error={!!errors.amountperkg}
+              helperText={errors?.amountperkg?.message}
+            />
           </Grid>
           <Grid item xs={12} sx={{ textAlign: "center" }}>
             <Button
@@ -95,13 +114,7 @@ const StockForm = ({ defaultValues }) => {
               size="large"
               endIcon={<SaveIcon />}
             >
-              {loading ? (
-                <Loader />
-              ) : defaultValues ? (
-                "Update Stock"
-              ) : (
-                "Save Stock"
-              )}
+              {loading ? <Loader /> : "Save Stock"}
             </Button>
           </Grid>
         </Grid>
