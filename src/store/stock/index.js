@@ -40,7 +40,7 @@ export const AddStock = createAsyncThunk(
 );
 
 export const updateStock = createAsyncThunk(
-  "stocks/updateExpense",
+  "stocks/updateStock",
   async ({ id, data }, { rejectWithValue }) => {
     console.log(id, data);
     try {
@@ -64,15 +64,15 @@ export const deleteStock = createAsyncThunk(
   }
 );
 
-export const resetStock = createAction("expense/reset");
+export const resetStock = createAction("stock/reset");
 
 const stocksSlice = createSlice({
-  name: "expense",
+  name: "stock",
   initialState,
   extraReducers: (builder) => {
     builder.addCase(resetStock, (state, action) => initialState);
     builder.addMatcher(
-      (action) => action.type.startsWith("expense"),
+      (action) => action.type.startsWith("stock"),
       (state, action) => {
         const [actionType] = action.type.split("/").reverse();
         switch (actionType) {
