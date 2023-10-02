@@ -13,7 +13,7 @@ const AddStockPage = () => {
   const userId = params.id;
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { details, success } = useSelector((state) => state.expense);
+  const { details, success } = useSelector((state) => state.stock);
   useEffect(() => {
     if (userId !== "") dispatch(getExpense(userId));
   }, [dispatch, userId]);
