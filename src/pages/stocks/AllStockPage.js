@@ -1,16 +1,16 @@
-import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import DataTable from "@core/components/ui/DataTable";
-import { Button, Grid, Typography } from "@mui/material";
-import withAuth from "hooks/withAuth";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { deleteStock, getStocks, resetStock } from "store/stock";
+import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
+import DataTable from '@core/components/ui/DataTable';
+import { Button, Grid, Typography } from '@mui/material';
+import withAuth from 'hooks/withAuth';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { deleteStock, getStocks, resetStock } from 'store/stock';
 
 const AllStocksPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   const { results, totalResults, success } = useSelector(
     (state) => state.stock
@@ -34,30 +34,30 @@ const AllStocksPage = () => {
 
   const columns = [
     {
-      name: "id",
-      label: "Id",
+      name: 'id',
+      label: 'Id',
     },
     {
-      name: "category",
-      label: "Category",
+      name: 'category',
+      label: 'Category',
     },
     {
-      name: "weight",
-      label: "Weight",
+      name: 'weight',
+      label: 'Weight',
     },
     {
-      name: "price",
-      label: "Amount(per KG)",
+      name: 'price',
+      label: 'Amount(per KG)',
     },
     {
-      name: "createdAt",
-      label: "Date Added",
+      name: 'createdAt',
+      label: 'Date Added',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <>
-              {new Date(value).toLocaleDateString()},{" "}
+              {new Date(value).toLocaleDateString()},{' '}
               {new Date(value).toLocaleTimeString()}
             </>
           );
@@ -84,7 +84,7 @@ const AllStocksPage = () => {
         >
           <Grid item>
             <Button
-              onClick={() => navigate("/stock/add-stock")}
+              onClick={() => navigate('/stock/add-stock')}
               variant="outlined"
               color="primary"
               size="small"
@@ -95,7 +95,7 @@ const AllStocksPage = () => {
         </Grid>
       </Grid>
       <DataTable
-        title={"Stock List"}
+        title={'Stock List'}
         columns={columns}
         results={results}
         totalResults={totalResults}
