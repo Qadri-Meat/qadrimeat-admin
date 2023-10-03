@@ -33,13 +33,12 @@ const DataTable = (props) => {
   useEffect(() => {
     const startDateObj = new Date(startDate);
     const endDateObj = new Date(endDate);
-
-    // Format the dates in the desired format
     const formattedStartDate = startDateObj.toISOString();
     const formattedEndDate = endDateObj.toISOString();
-
-    console.log(formattedStartDate, formattedEndDate);
-  }, [startDate, endDate, setQuery]);
+    const query = `startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+    const newURL = `${window.location.pathname}?${query}`;
+    window.history.pushState(null, null, newURL);
+  }, [startDate, endDate, page, limit, search]);
 
   const debouncedSearch = debounce(async (text) => {
     setSearch(text == null ? '' : text);
@@ -94,6 +93,8 @@ const DataTable = (props) => {
                 page: tableState.page + 1,
                 limit,
                 search,
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
               })
             );
             break;
@@ -105,6 +106,8 @@ const DataTable = (props) => {
                 page: 1,
                 limit: tableState.rowsPerPage,
                 search,
+                startDate: startDate.toISOString(),
+                endDate: endDate.toISOString(),
               })
             );
             break;
