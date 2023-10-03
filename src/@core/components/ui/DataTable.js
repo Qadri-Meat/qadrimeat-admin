@@ -31,14 +31,14 @@ const DataTable = (props) => {
   const [endDate, setEndDate] = useState(new Date());
 
   useEffect(() => {
-    console.log(startDate, endDate);
-    //2023-10-02T11:07:14.399Z
-    // setQuery(
-    //   buildURLQuery({
-    //     startDate,
-    //     endDate,
-    //   })
-    // );
+    const startDateObj = new Date(startDate);
+    const endDateObj = new Date(endDate);
+
+    // Format the dates in the desired format
+    const formattedStartDate = startDateObj.toISOString();
+    const formattedEndDate = endDateObj.toISOString();
+
+    console.log(formattedStartDate, formattedEndDate);
   }, [startDate, endDate, setQuery]);
 
   const debouncedSearch = debounce(async (text) => {

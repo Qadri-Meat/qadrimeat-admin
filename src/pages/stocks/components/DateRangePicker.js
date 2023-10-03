@@ -34,7 +34,7 @@ export default function DateRangePicker({
         id="start-date-picker"
         label="Start Date"
         type="date"
-        defaultValue={startDate.toISOString().split('T')[0]}
+        // defaultValue={startDate.toISOString().split('T')[0]}
         onChange={(e) =>
           handleStartDateChange(new Date(e.target.value))
         }
@@ -48,7 +48,7 @@ export default function DateRangePicker({
         id="end-date-picker"
         label="End Date"
         type="date"
-        defaultValue={endDate.toISOString().split('T')[0]}
+        // defaultValue={endDate.toISOString().split('T')[0]}
         onChange={(e) =>
           handleEndDateChange(new Date(e.target.value))
         }
