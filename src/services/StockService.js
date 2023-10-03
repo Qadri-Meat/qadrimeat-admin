@@ -1,0 +1,76 @@
+import ApiService from "./ApiService";
+
+class StockService extends ApiService {
+  /**
+   * Get all users with optional query parameters
+   * @param {string} query - Optional query parameters
+   * @returns {Promise<User>}
+   */
+  getAll(query) {
+    return this.instance.get(`/v1/stocks?${query}`);
+  }
+
+  /**
+   * Get a user by their ID
+   * @param {ObjectId} id - The ID of the user to get
+   * @returns {Promise<User>}
+   */
+  get(id) {
+    return this.instance.get(`/v1/stocks/${id}`);
+  }
+
+  /**
+   * Update the current user with the given data
+   * @param {object} data - The data to update the user with
+   * @returns {Promise<User>}
+   */
+  update(data) {
+    return this.instance.patch("/v1/stocks", data);
+  }
+
+  /**
+   * Update a user with the given ID with the given data
+   * @param {object} data - The data to update the user with
+   * @param {ObjectId} id - The ID of the user to update
+   * @returns {Promise<User>}
+   */
+  updateById({ id, data }) {
+    const postData = {
+      weight: data.weight,
+      price: data.price,
+      category: data.category,
+    };
+    return this.instance.patch(`/v1/stocks/${id}`, postData);
+  }
+  /**
+   * Create a user with the given data
+   * @param {object} data - The data to update the user with
+   * @returns {Promise<User>}
+   */
+  create(data) {
+    const formData = new FormData();
+    Object.entries(data).forEach((entry) => {
+      const [key, value] = entry;
+      if (key === "image") {
+        value.forEach((item) => {
+          formData.append(key, item);
+        });
+      } else {
+        formData.append(key, value);
+      }
+    });
+    return this.instance.post(`/v1/stocks`, formData);
+  }
+  /**
+   * Delete a user with the given id
+   *  @param {ObjectId} id - The ID of the user to delete
+   * @returns {Promise<User>}
+   */
+  delete(id) {
+    return this.instance.delete(`/v1/stocks/${id}`);
+  }
+}
+
+const userServiceInstance = new StockService();
+
+export default userServiceInstance;

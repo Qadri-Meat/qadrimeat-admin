@@ -89,7 +89,7 @@ const EditOrderDetailsDialog = ({ show, setShow, preloadedValues, id }) => {
           />
           <CustomTextField
             id="phone"
-            type="text"
+            type="number"
             label="Phone"
             name="phone"
             errors={errors.phone}

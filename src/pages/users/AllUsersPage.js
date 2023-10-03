@@ -8,13 +8,16 @@ import { getUsers, resetUser } from "store/user";
 import { Button, Grid, Typography } from "@mui/material";
 import { deleteUser } from "store/user";
 import withAuth from "hooks/withAuth";
+import Loader from "@core/components/ui/Loader";
 
 const AllUsersPage = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
 
-  const { results, totalResults, success } = useSelector((state) => state.user);
+  const { results, totalResults, success, loading } = useSelector(
+    (state) => state.user
+  );
 
   useEffect(() => {
     if (success) {
@@ -70,16 +73,20 @@ const AllUsersPage = (props) => {
           </Button>
         </Grid>
       </Grid>
-      <DataTable
-        title={"Users List"}
-        results={results}
-        totalResults={totalResults}
-        columns={columns}
-        setQuery={setQuery}
-        onEdit={onEdit}
-        onDelete={onDelete}
-        searchPlaceholder="Search by email"
-      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <DataTable
+          title={"Users List"}
+          results={results}
+          totalResults={totalResults}
+          columns={columns}
+          setQuery={setQuery}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          searchPlaceholder="Search by email"
+        />
+      )}
     </AdminLayout>
   );
 };

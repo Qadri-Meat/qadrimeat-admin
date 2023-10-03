@@ -22,11 +22,6 @@ const schema = yup.object().shape({
     .required()
     .positive()
     .typeError("Price is required field"),
-  stock: yup
-    .number()
-    .required()
-    .positive()
-    .typeError("Stock is required field"),
   weight: yup
     .number()
     .required()
@@ -79,7 +74,6 @@ const ProductForm = ({ defaultValues }) => {
       sku: defaultValues?.sku,
       price: defaultValues?.price,
       weight: defaultValues?.weight,
-      stock: defaultValues?.stock,
       discount: defaultValues?.discount,
       saleCount: defaultValues?.saleCount,
       fullDescription: defaultValues?.fullDescription,
@@ -153,17 +147,6 @@ const ProductForm = ({ defaultValues }) => {
             name="weight"
             error={!!errors.weight}
             helperText={errors?.weight?.message}
-          />
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <FormInput
-            {...register("stock")}
-            id="stock"
-            type="number"
-            label="Stock"
-            name="stock"
-            error={!!errors.stock}
-            helperText={errors?.stock?.message}
           />
         </Grid>
         <Grid item xs={12} md={4}>
