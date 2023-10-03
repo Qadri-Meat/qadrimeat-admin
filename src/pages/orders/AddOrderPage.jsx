@@ -29,6 +29,7 @@ const AddOrderPage = () => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState('limit=100');
+  console.log(setQuery);
 
   const { results } = useSelector((state) => state.product);
   const cartItems = useSelector((state) => state.cart);
