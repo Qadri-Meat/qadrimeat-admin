@@ -1,5 +1,5 @@
-import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import DataTable from "@core/components/ui/DataTable";
+import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
+import DataTable from '@core/components/ui/DataTable';
 import {
   Button,
   Grid,
@@ -7,19 +7,19 @@ import {
   MenuItem,
   Select,
   Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { getBookings, resetBooking } from "store/booking";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import FormControl from "@mui/material/FormControl";
-import { useLocation } from "react-router-dom";
-import { pick } from "helper/pick";
-import withAuth from "hooks/withAuth";
-import { numberWithCommas } from "helper/numers";
-import FileOpenIcon from "@mui/icons-material/FileOpenOutlined";
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { getBookings, resetBooking } from 'store/booking';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import FormControl from '@mui/material/FormControl';
+import { useLocation } from 'react-router-dom';
+import { pick } from 'helper/pick';
+import withAuth from 'hooks/withAuth';
+import { numberWithCommas } from 'helper/numers';
+import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
 
 const AllBookingsPage = () => {
   const navigate = useNavigate();
@@ -27,9 +27,9 @@ const AllBookingsPage = () => {
 
   const location = useLocation();
   const { paid } = pick(location.search);
-  const [query, setQuery] = useState("");
-  const [selectedYear, setSelectedYear] = useState("");
-  const { results, totalResults, success } = useSelector(
+  const [query, setQuery] = useState('');
+  const [selectedYear, setSelectedYear] = useState('');
+  const { results, totalResults, success, loading } = useSelector(
     (state) => state.booking
   );
 
@@ -39,8 +39,8 @@ const AllBookingsPage = () => {
     } else {
       dispatch(
         getBookings(
-          `${paid !== undefined ? `isPaid=${paid}&` : ""}${
-            selectedYear !== "" ? `year=${selectedYear}&` : ""
+          `${paid !== undefined ? `isPaid=${paid}&` : ''}${
+            selectedYear !== '' ? `year=${selectedYear}&` : ''
           }${query}`
         )
       );
@@ -63,8 +63,8 @@ const AllBookingsPage = () => {
 
   const columns = [
     {
-      name: "id",
-      label: "View",
+      name: 'id',
+      label: 'View',
       options: {
         filter: false,
         customBodyRender: (values, tableMeta, updateValue) => {
@@ -77,34 +77,36 @@ const AllBookingsPage = () => {
       },
     },
     {
-      name: "phone",
-      label: "Phone",
+      name: 'phone',
+      label: 'Phone',
       options: {
         filter: false,
       },
     },
     {
-      name: "shippingDetails",
-      label: "Name",
+      name: 'shippingDetails',
+      label: 'Name',
       options: {
         filter: false,
         customBodyRender: (values, tableMeta, updateValue) => {
           if (!values || !values.firstName) {
-            return "";
+            return '';
           }
-          return <>{values.firstName + " " + (values.lastName || "")}</>;
+          return (
+            <>{values.firstName + ' ' + (values.lastName || '')}</>
+          );
         },
       },
     },
     {
-      name: "createdAt",
-      label: "Created At",
+      name: 'createdAt',
+      label: 'Created At',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <>
-              {new Date(value).toLocaleDateString()},{" "}
+              {new Date(value).toLocaleDateString()},{' '}
               {new Date(value).toLocaleTimeString()}
             </>
           );
@@ -112,8 +114,8 @@ const AllBookingsPage = () => {
       },
     },
     {
-      name: "totalPrice",
-      label: "TOTAL",
+      name: 'totalPrice',
+      label: 'TOTAL',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -122,38 +124,36 @@ const AllBookingsPage = () => {
       },
     },
     {
-      name: "totalPrice",
-      label: "Total Paid",
+      name: 'totalPrice',
+      label: 'Total Paid',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowIndex } = tableMeta;
-          const totalPaid = results[rowIndex].transactions.reduce(function (
-            a,
-            b
-          ) {
-            return a + b.amount;
-          },
-          0);
+          const totalPaid = results[rowIndex].transactions.reduce(
+            function (a, b) {
+              return a + b.amount;
+            },
+            0
+          );
 
           return <>{numberWithCommas(totalPaid)}</>;
         },
       },
     },
     {
-      name: "totalPrice",
-      label: "Balance",
+      name: 'totalPrice',
+      label: 'Balance',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowIndex } = tableMeta;
-          const totalPaid = results[rowIndex].transactions.reduce(function (
-            a,
-            b
-          ) {
-            return a + b.amount;
-          },
-          0);
+          const totalPaid = results[rowIndex].transactions.reduce(
+            function (a, b) {
+              return a + b.amount;
+            },
+            0
+          );
 
           return <>{numberWithCommas(value - totalPaid)}</>;
         },
@@ -180,7 +180,7 @@ const AllBookingsPage = () => {
         >
           <Grid item>
             <Button
-              onClick={() => navigate("/bookings/add-booking")}
+              onClick={() => navigate('/bookings/add-booking')}
               variant="outlined"
               color="primary"
               size="small"
@@ -188,23 +188,25 @@ const AllBookingsPage = () => {
               Add Booking
             </Button>
           </Grid>
-          <Grid sx={{ marginLeft: "450px" }} item>
+          <Grid sx={{ marginLeft: '450px' }} item>
             <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-              <InputLabel id="demo-simple-select-label">Year</InputLabel>
+              <InputLabel id="demo-simple-select-label">
+                Year
+              </InputLabel>
               <Select
                 label="Year"
                 onChange={handleYearChange}
                 variant="outlined"
               >
-                <MenuItem value={"2022"}>2022</MenuItem>
-                <MenuItem value={"2023"}>2023</MenuItem>
+                <MenuItem value={'2022'}>2022</MenuItem>
+                <MenuItem value={'2023'}>2023</MenuItem>
               </Select>
             </FormControl>
           </Grid>
           <Grid item>
             <ToggleButtonGroup
               color="primary"
-              style={{ marginRight: "10px" }}
+              style={{ marginRight: '10px' }}
               value={paid}
               size="small"
               exclusive
@@ -217,7 +219,8 @@ const AllBookingsPage = () => {
         </Grid>
       </Grid>
       <DataTable
-        title={"Booking List"}
+        loading={loading}
+        title={'Booking List'}
         results={results}
         totalResults={totalResults}
         columns={columns}

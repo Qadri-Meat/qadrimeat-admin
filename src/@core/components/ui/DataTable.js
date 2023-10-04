@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import DateRangePicker from 'pages/stocks/components/DateRangePicker';
+import Loader from './Loader';
 
 const DataTable = (props) => {
   const {
@@ -20,6 +21,7 @@ const DataTable = (props) => {
     serverSide,
     searchIcon,
     searchPlaceholder,
+    loading,
   } = props;
 
   const [page, setPage] = useState(1);
@@ -129,50 +131,54 @@ const DataTable = (props) => {
         endDate={endDate}
         setEndDate={setEndDate}
       />
-      <MUIDataTable
-        title={title}
-        data={results}
-        columns={
-          onEdit || onDelete
-            ? columns.concat({
-                name: 'id',
-                label: 'Actions',
-                options: {
-                  download: false,
-                  customBodyRender: (
-                    value,
-                    tableMeta,
-                    updateValue
-                  ) => {
-                    return (
-                      <div style={{ minWidth: '50px' }}>
-                        {onEdit && (
-                          <span
-                            onClick={() => {
-                              onEdit(value);
-                            }}
-                          >
-                            <EditIcon />
-                          </span>
-                        )}
-                        {onDelete && (
-                          <span
-                            onClick={() => {
-                              handleDelete(value);
-                            }}
-                          >
-                            <DeleteIcon style={{ color: 'red' }} />
-                          </span>
-                        )}
-                      </div>
-                    );
+      {loading ? (
+        <Loader />
+      ) : (
+        <MUIDataTable
+          title={title}
+          data={results}
+          columns={
+            onEdit || onDelete
+              ? columns.concat({
+                  name: 'id',
+                  label: 'Actions',
+                  options: {
+                    download: false,
+                    customBodyRender: (
+                      value,
+                      tableMeta,
+                      updateValue
+                    ) => {
+                      return (
+                        <div style={{ minWidth: '50px' }}>
+                          {onEdit && (
+                            <span
+                              onClick={() => {
+                                onEdit(value);
+                              }}
+                            >
+                              <EditIcon />
+                            </span>
+                          )}
+                          {onDelete && (
+                            <span
+                              onClick={() => {
+                                handleDelete(value);
+                              }}
+                            >
+                              <DeleteIcon style={{ color: 'red' }} />
+                            </span>
+                          )}
+                        </div>
+                      );
+                    },
                   },
-                },
-              })
-            : columns
-        }
-        options={options}
-      />
+                })
+              : columns
+          }
+          options={options}
+        />
+      )}
     </>
   );
 };
