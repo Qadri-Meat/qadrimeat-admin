@@ -24,6 +24,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 const AddOrderPage = () => {
   let cartTotalPrice = 0;
+  let discount = 0;
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -78,6 +79,15 @@ const AddOrderPage = () => {
       dispatch(getProducts(query));
     }
   }, [success, dispatch, navigate, selectedOrder, query]);
+
+  // cartItems.forEach((cartItem) => {
+  //   const discountedPrice = getDiscountPrice(
+  //     cartItem.price,
+  //     cartItem.discount
+  //   );
+  //   console.log('dis', discountedPrice);
+  //   discount += parseFloat(discountedPrice);
+  // });
 
   return (
     <AdminLayout>
@@ -301,7 +311,7 @@ const AddOrderPage = () => {
                           Discount:
                         </Typography>
                         <Typography variant="subtitle1">
-                          PKR: {}
+                          PKR: {discount}
                         </Typography>
                       </Grid>
                       <Grid

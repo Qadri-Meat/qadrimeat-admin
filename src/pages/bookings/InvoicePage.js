@@ -1,12 +1,12 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import { getBooking } from "store/booking";
-import { useNavigate, useParams } from "react-router-dom";
-import { getDiscountPrice } from "helper/product";
-import { Avatar } from "@mui/material";
-import withAuth from "hooks/withAuth";
-import { formatTime } from "helper/formatTime";
-import { getImageUrl } from "helper/helpers";
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getBooking } from 'store/booking';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getDiscountPrice } from 'helper/product';
+import { Avatar } from '@mui/material';
+import withAuth from 'hooks/withAuth';
+import { formatTime } from 'helper/formatTime';
+import { getImageUrl } from 'helper/helpers';
 
 const InvoicePage = (props) => {
   const { id } = useParams();
@@ -47,14 +47,16 @@ const InvoicePage = (props) => {
                         <h2>Qadri Meat</h2>
                         <div>
                           <p className="text-muted">
-                            <strong>Email:</strong> qadrimeat@gmail.com
+                            <strong>Email:</strong>{' '}
+                            qadrimeat@gmail.com
                             <br />
                             <strong>Phone:</strong> +92 302-4000719
                             <br />
                             <strong>PTCL:</strong> 042-38651881
                             <br />
-                            <strong>Address:</strong> Street 113, Sector 11 N
-                            Dha Phase 1, Lahore, Punjab , Pakistan
+                            <strong>Address:</strong> Street 113,
+                            Sector 11 N Dha Phase 1, Lahore, Punjab ,
+                            Pakistan
                           </p>
                         </div>
                       </div>
@@ -75,7 +77,7 @@ const InvoicePage = (props) => {
                           {new Date(
                             selectedBooking.createdAt
                           ).toLocaleDateString()}
-                          ,{" "}
+                          ,{' '}
                           {new Date(
                             selectedBooking.createdAt
                           ).toLocaleTimeString()}
@@ -88,22 +90,22 @@ const InvoicePage = (props) => {
                     <div className="row">
                       <div className="col-md-6">
                         <p className="font-weight-bold">
-                          To:{" "}
+                          To:{' '}
                           {selectedBooking.shippingDetails.firstName +
-                            " " +
+                            ' ' +
                             selectedBooking.shippingDetails.lastName}
                         </p>
                         <p className="text-muted">
-                          <strong>Phone:</strong>{" "}
+                          <strong>Phone:</strong>{' '}
                           {selectedBooking.shippingDetails.phone}
                           <br />
-                          <strong>Address:</strong>{" "}
-                          {selectedBooking.shippingDetails.address},{" "}
-                          {selectedBooking.shippingDetails.city}{" "}
-                          {selectedBooking.shippingDetails.postalCode},{" "}
-                          {selectedBooking.shippingDetails.country}
+                          <strong>Address:</strong>{' '}
+                          {selectedBooking.shippingDetails.address},{' '}
+                          {selectedBooking.shippingDetails.city}{' '}
+                          {selectedBooking.shippingDetails.postalCode}
+                          , {selectedBooking.shippingDetails.country}
                           <br />
-                          <strong>Note:</strong>{" "}
+                          <strong>Note:</strong>{' '}
                           {selectedBooking.shippingDetails.notes}
                         </p>
                       </div>
@@ -141,76 +143,89 @@ const InvoicePage = (props) => {
                             </tr>
                           </thead>
                           <tbody>
-                            {selectedBooking.bookingItems.map((item, index) => {
-                              const discountedPrice = getDiscountPrice(
-                                item.price,
-                                item.discount
-                              );
-                              const finalProductPrice = (
-                                item.price * 1
-                              ).toFixed(2);
-                              const finalDiscountedPrice = (
-                                discountedPrice * 1
-                              ).toFixed(2);
-                              return (
-                                <tr key={index}>
-                                  <td>
-                                    <Avatar
-                                      variant="rounded"
-                                      alt={item.name}
-                                      src={getImageUrl(item.image)}
-                                    />
-                                  </td>
-                                  <td>{item.name}</td>
-                                  <td>{item.quantity}</td>
-                                  <td>{item.isPackage ? item.day : ""}</td>
-                                  <td>
-                                    {item.isPackage
-                                      ? formatTime(item.time)
-                                      : ""}
-                                  </td>
-                                  <td>
-                                    {item.isPackage ? "Package" : "Non Package"}
-                                  </td>
-                                  <td>
-                                    <>
-                                      {discountedPrice !== null ? (
-                                        <>
-                                          <span
-                                            style={{
-                                              textDecoration: "line-through",
-                                              color: "gray",
-                                            }}
-                                          >
-                                            {"PKR " + finalProductPrice}
+                            {selectedBooking.bookingItems.map(
+                              (item, index) => {
+                                const discountedPrice =
+                                  getDiscountPrice(
+                                    item.price,
+                                    item.discount
+                                  );
+                                const finalProductPrice = (
+                                  item.price * 1
+                                ).toFixed(2);
+                                const finalDiscountedPrice = (
+                                  discountedPrice * 1
+                                ).toFixed(2);
+                                return (
+                                  <tr key={index}>
+                                    <td>
+                                      <Avatar
+                                        variant="rounded"
+                                        alt={item.name}
+                                        src={getImageUrl(item.image)}
+                                      />
+                                    </td>
+                                    <td>{item.name}</td>
+                                    <td>{item.quantity}</td>
+                                    <td>
+                                      {item.isPackage ? item.day : ''}
+                                    </td>
+                                    <td>
+                                      {item.isPackage
+                                        ? formatTime(item.time)
+                                        : ''}
+                                    </td>
+                                    <td>
+                                      {item.isPackage
+                                        ? 'Package'
+                                        : 'Non Package'}
+                                    </td>
+                                    <td>
+                                      <>
+                                        {discountedPrice !== null ? (
+                                          <>
+                                            <span
+                                              style={{
+                                                textDecoration:
+                                                  'line-through',
+                                                color: 'gray',
+                                              }}
+                                            >
+                                              {'PKR ' +
+                                                finalProductPrice}
+                                            </span>
+                                            <span className="amount">
+                                              {'    PKR ' +
+                                                finalDiscountedPrice}
+                                            </span>
+                                          </>
+                                        ) : (
+                                          <span>
+                                            {'PKR ' +
+                                              finalProductPrice}
                                           </span>
-                                          <span className="amount">
-                                            {"    PKR " + finalDiscountedPrice}
-                                          </span>
-                                        </>
-                                      ) : (
-                                        <span>
-                                          {"PKR " + finalProductPrice}
-                                        </span>
-                                      )}
-                                    </>
-                                  </td>
-                                  <td>
-                                    <>
-                                      {discountedPrice !== null
-                                        ? "PKR " +
-                                          (
-                                            finalDiscountedPrice * item.quantity
-                                          ).toFixed(2)
-                                        : "PKR " +
-                                          (
-                                            finalProductPrice * item.quantity
-                                          ).toFixed(2)}
-                                    </>
-                                  </td>
-                                </tr>
-                              );
-                            })}
+                                        )}
+                                      </>
+                                    </td>
+                                    <td>
+                                      <>
+                                        {discountedPrice !== null
+                                          ? 'PKR ' +
+                                            (
+                                              finalDiscountedPrice *
+                                              item.quantity
+                                            ).toFixed(2)
+                                          : 'PKR ' +
+                                            (
+                                              finalProductPrice *
+                                              item.quantity
+                                            ).toFixed(2)}
+                                      </>
+                                    </td>
+                                  </tr>
+                                );
+                              }
+                            )}
                           </tbody>
                         </table>
                       </div>
@@ -226,7 +241,7 @@ const InvoicePage = (props) => {
                               </td>
                               <td>
                                 <strong>
-                                  Rs{" "}
+                                  Rs{' '}
                                   {selectedBooking.totalPrice -
                                     selectedBooking.shippingPrice +
                                     (selectedBooking.discount || 0)}
@@ -258,7 +273,9 @@ const InvoicePage = (props) => {
                                 <strong>Grand Total:</strong>
                               </td>
                               <td>
-                                <strong>Rs {selectedBooking.totalPrice}</strong>
+                                <strong>
+                                  Rs {selectedBooking.totalPrice}
+                                </strong>
                               </td>
                             </tr>
                             <tr>
@@ -266,7 +283,9 @@ const InvoicePage = (props) => {
                                 <strong>Total Paid:</strong>
                               </td>
                               <td>
-                                <strong>Rs {selectedBooking.totalPaid}</strong>
+                                <strong>
+                                  Rs {selectedBooking.totalPaid}
+                                </strong>
                               </td>
                             </tr>
                             <tr>
@@ -275,7 +294,7 @@ const InvoicePage = (props) => {
                               </td>
                               <td>
                                 <strong>
-                                  Rs{" "}
+                                  Rs{' '}
                                   {selectedBooking.totalPrice -
                                     selectedBooking.totalPaid}
                                 </strong>
@@ -291,7 +310,7 @@ const InvoicePage = (props) => {
             </div>
 
             <div className="text-dark mt-2 mb-2 text-center small">
-              by :{" "}
+              by :{' '}
               <a
                 className="text-dark"
                 target="_blank"
