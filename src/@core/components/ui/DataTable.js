@@ -29,18 +29,18 @@ const DataTable = (props) => {
   const [search, setSearch] = useState('');
 
   // Initialize start and end dates with default values
-  const [startDate, setStartDate] = useState(new Date('2022-01-01'));
-  const [endDate, setEndDate] = useState(new Date());
+  // const [startDate, setStartDate] = useState(new Date('2022-01-01'));
+  // const [endDate, setEndDate] = useState(new Date());
 
-  useEffect(() => {
-    const startDateObj = new Date(startDate);
-    const endDateObj = new Date(endDate);
-    const formattedStartDate = startDateObj.toISOString();
-    const formattedEndDate = endDateObj.toISOString();
-    const query = `startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
-    const newURL = `${window.location.pathname}?${query}`;
-    window.history.pushState(null, null, newURL);
-  }, [startDate, endDate, page, limit, search]);
+  // useEffect(() => {
+  //   const startDateObj = new Date(startDate);
+  //   const endDateObj = new Date(endDate);
+  //   const formattedStartDate = startDateObj.toISOString();
+  //   const formattedEndDate = endDateObj.toISOString();
+  //   const query = `startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
+  //   const newURL = `${window.location.pathname}?${query}`;
+  //   window.history.pushState(null, null, newURL);
+  // }, [startDate, endDate, page, limit, search]);
 
   const debouncedSearch = debounce(async (text) => {
     setSearch(text == null ? '' : text);
@@ -95,8 +95,8 @@ const DataTable = (props) => {
                 page: tableState.page + 1,
                 limit,
                 search,
-                startDate: startDate.toISOString(),
-                endDate: endDate.toISOString(),
+                // startDate: startDate.toISOString(),
+                // endDate: endDate.toISOString(),
               })
             );
             break;
@@ -108,8 +108,8 @@ const DataTable = (props) => {
                 page: 1,
                 limit: tableState.rowsPerPage,
                 search,
-                startDate: startDate.toISOString(),
-                endDate: endDate.toISOString(),
+                // startDate: startDate.toISOString(),
+                // endDate: endDate.toISOString(),
               })
             );
             break;
@@ -125,12 +125,12 @@ const DataTable = (props) => {
 
   return (
     <>
-      <DateRangePicker
+      {/* <DateRangePicker
         startDate={startDate}
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-      />
+      /> */}
       {loading ? (
         <Loader />
       ) : (
