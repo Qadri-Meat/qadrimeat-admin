@@ -260,7 +260,7 @@ const OrderPageRightPanels = () => {
                     id="amount"
                     label="Amount"
                     type="number"
-                    value={amount}
+                    value={amount === null ? 0 : amount}
                     onChange={(e) => {
                       if (
                         selectedOrder.totalPrice -
