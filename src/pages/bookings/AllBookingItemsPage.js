@@ -1,5 +1,6 @@
-import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
-import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
+import AdminBreadcrumbs from '@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs';
+import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
+import Loader from '@core/components/ui/Loader';
 import {
   Button,
   FormControl,
@@ -15,24 +16,26 @@ import {
   ToggleButton,
   ToggleButtonGroup,
   Typography,
-} from "@mui/material";
-import { formatTime } from "helper/formatTime";
-import { pick } from "helper/pick";
-import withAuth from "hooks/withAuth";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useLocation, useNavigate } from "react-router-dom";
-import { getBookingItems } from "store/booking";
-import { getDeals } from "store/deal";
+} from '@mui/material';
+import { formatTime } from 'helper/formatTime';
+import { pick } from 'helper/pick';
+import withAuth from 'hooks/withAuth';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { getBookingItems } from 'store/booking';
+import { getDeals } from 'store/deal';
 
 const AllBookingItemsPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { day = "1", deal } = pick(location.search);
+  const { day = '1', deal } = pick(location.search);
 
-  const { bookingItems } = useSelector((state) => state.booking);
+  const { bookingItems, loading } = useSelector(
+    (state) => state.booking
+  );
   const { results } = useSelector((state) => state.deal);
 
   useEffect(() => {
@@ -85,7 +88,7 @@ const AllBookingItemsPage = () => {
                 name="deal"
                 variant="outlined"
                 label="Deal"
-                style={{ width: "300px" }}
+                style={{ width: '300px' }}
                 onChange={(event) => {
                   navigate(
                     `/bookings/booking-items?day=${day}&deal=${event.target.value}`
@@ -104,7 +107,7 @@ const AllBookingItemsPage = () => {
             onChange={(event, value) => {
               navigate(
                 `/bookings/booking-items?day=${value}${
-                  deal ? `&deal=${deal}` : ""
+                  deal ? `&deal=${deal}` : ''
                 }`
               );
             }}
@@ -121,39 +124,52 @@ const AllBookingItemsPage = () => {
       </FormControl>
 
       <TableContainer>
-        <Table style={{ tableLayout: "fixed" }} aria-label="simple table">
-          <TableRow>
-            <TableCell>Booking</TableCell>
-            <TableCell align="right">Name</TableCell>
-            <TableCell align="right">Quantity</TableCell>
-            <TableCell align="right">Time</TableCell>
-          </TableRow>
-          {bookingItems && bookingItems.length > 0 ? (
-            <TableBody>
-              {bookingItems.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell component="th" scope="row">
-                    <Button
-                      onClick={() => navigate(`/bookings/${item.id}`)}
-                      variant="outlined"
-                      color="primary"
-                      size="small"
-                    >
-                      Open Booking
-                    </Button>
-                  </TableCell>
-                  <TableCell align="right">{item.name}</TableCell>
-                  <TableCell align="right">{item.quantity}</TableCell>
-                  <TableCell align="right">{formatTime(item.time)}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          ) : (
-            <TableBody>
-              <TableRow>No Items</TableRow>
-            </TableBody>
-          )}
-        </Table>
+        {loading ? (
+          <Loader />
+        ) : (
+          <Table
+            style={{ tableLayout: 'fixed' }}
+            aria-label="simple table"
+          >
+            <TableRow>
+              <TableCell>Booking</TableCell>
+              <TableCell align="right">Name</TableCell>
+              <TableCell align="right">Quantity</TableCell>
+              <TableCell align="right">Time</TableCell>
+            </TableRow>
+            {bookingItems && bookingItems.length > 0 ? (
+              <TableBody>
+                {bookingItems.map((item) => (
+                  <TableRow key={item.id}>
+                    <TableCell component="th" scope="row">
+                      <Button
+                        onClick={() =>
+                          navigate(`/bookings/${item.id}`)
+                        }
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                      >
+                        Open Booking
+                      </Button>
+                    </TableCell>
+                    <TableCell align="right">{item.name}</TableCell>
+                    <TableCell align="right">
+                      {item.quantity}
+                    </TableCell>
+                    <TableCell align="right">
+                      {formatTime(item.time)}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            ) : (
+              <TableBody>
+                <TableRow>No Items</TableRow>
+              </TableBody>
+            )}
+          </Table>
+        )}
       </TableContainer>
     </AdminLayout>
   );
