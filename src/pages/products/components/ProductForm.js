@@ -1,18 +1,18 @@
-import Form from "@core/components/forms/Form";
-import { useDispatch, useSelector } from "react-redux";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Loader from "@core/components/ui/Loader";
-import Message from "@core/components/ui/Message";
-import FormInput from "@core/components/forms/FormInput";
-import { Button, Grid, MenuItem } from "@mui/material";
-import SaveIcon from "@mui/icons-material/Save";
-import SelectInput from "@core/components/forms/SelectInput";
-import { DropzoneArea } from "material-ui-dropzone";
-import { useState } from "react";
-import { createProducts, updateProducts } from "store/product";
-import { getImageUrl, isValidImages } from "helper/helpers";
+import Form from '@core/components/forms/Form';
+import { useDispatch, useSelector } from 'react-redux';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Loader from '@core/components/ui/Loader';
+import Message from '@core/components/ui/Message';
+import FormInput from '@core/components/forms/FormInput';
+import { Button, Grid, MenuItem } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
+import SelectInput from '@core/components/forms/SelectInput';
+import { DropzoneArea } from 'material-ui-dropzone';
+import { useState } from 'react';
+import { createProducts, updateProducts } from 'store/product';
+import { getImageUrl, isValidImages } from 'helper/helpers';
 
 const schema = yup.object().shape({
   name: yup.string().required().max(20),
@@ -21,32 +21,42 @@ const schema = yup.object().shape({
     .number()
     .required()
     .positive()
-    .typeError("Price is required field"),
+    .typeError('Price is required field'),
   weight: yup
     .number()
     .required()
     .positive()
-    .typeError("Weight is required field"),
+    .typeError('Weight is required field'),
   discount: yup
     .number()
-    .moreThan(-1, "Discount must be a number greater than or equal to zero")
-    .required("Discount is a required field")
-    .typeError("Discount must be a number"),
+    .moreThan(
+      -1,
+      'Discount must be a number greater than or equal to zero'
+    )
+    .required('Discount is a required field')
+    .typeError('Discount must be a number'),
   saleCount: yup
     .number()
-    .moreThan(-1, "Discount must be a number greater than or equal to zero")
-    .required("Discount is a required field")
-    .typeError("Discount must be a number"),
+    .moreThan(
+      -1,
+      'Sale count must be a number greater than or equal to zero'
+    )
+    .required('Sale count is a required field')
+    .typeError('Sale count must be a number'),
   category: yup
     .mixed()
-    .test("isCategoryValid", "Category is a required field", function (value) {
-      return (
-        value !== undefined &&
-        (typeof value === "string" || Array.isArray(value))
-      );
-    })
+    .test(
+      'isCategoryValid',
+      'Category is a required field',
+      function (value) {
+        return (
+          value !== undefined &&
+          (typeof value === 'string' || Array.isArray(value))
+        );
+      }
+    )
     .transform(function (value, originalValue) {
-      if (originalValue && typeof originalValue === "string") {
+      if (originalValue && typeof originalValue === 'string') {
         return [originalValue];
       }
       return value;
@@ -80,7 +90,7 @@ const ProductForm = ({ defaultValues }) => {
       shortDescription: defaultValues?.shortDescription,
       category: defaultValues?.category,
     },
-    mode: "onBlur",
+    mode: 'onBlur',
     resolver: yupResolver(schema),
   });
 
@@ -107,7 +117,7 @@ const ProductForm = ({ defaultValues }) => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("name")}
+            {...register('name')}
             id="name"
             type="text"
             label="Name"
@@ -118,7 +128,7 @@ const ProductForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("sku")}
+            {...register('sku')}
             id="sku"
             type="text"
             label="SKU"
@@ -129,7 +139,7 @@ const ProductForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("price")}
+            {...register('price')}
             id="price"
             type="number"
             label="Price"
@@ -140,7 +150,7 @@ const ProductForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("weight")}
+            {...register('weight')}
             id="weight"
             type="number"
             label="Weight (KG)"
@@ -151,7 +161,7 @@ const ProductForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("discount")}
+            {...register('discount')}
             id="discount"
             type="number"
             label="Discount"
@@ -162,7 +172,7 @@ const ProductForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("saleCount")}
+            {...register('saleCount')}
             id="saleCount"
             type="number"
             label="Sale Count"
@@ -173,7 +183,7 @@ const ProductForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("fullDescription")}
+            {...register('fullDescription')}
             id="fullDescription"
             type="fullDescription"
             label="Full Description"
@@ -184,7 +194,7 @@ const ProductForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("shortDescription")}
+            {...register('shortDescription')}
             id="shortDescription"
             type="shortDescription"
             label="Short Description"
@@ -196,7 +206,7 @@ const ProductForm = ({ defaultValues }) => {
 
         <Grid item xs={12} md={4}>
           <SelectInput
-            {...register("category")}
+            {...register('category')}
             id="category"
             name="category"
             label="Category"
@@ -218,14 +228,14 @@ const ProductForm = ({ defaultValues }) => {
             dropzoneText=""
             initialFiles={initialFiles}
             acceptedFiles={[
-              "image/jpeg",
-              "image/jpg",
-              "image/png",
-              "image/gif",
+              'image/jpeg',
+              'image/jpg',
+              'image/png',
+              'image/gif',
             ]}
           />
         </Grid>
-        <Grid item xs={12} sx={{ textAlign: "center" }}>
+        <Grid item xs={12} sx={{ textAlign: 'center' }}>
           <Button
             variant="contained"
             color="primary"
@@ -236,9 +246,9 @@ const ProductForm = ({ defaultValues }) => {
             {loading ? (
               <Loader />
             ) : defaultValues ? (
-              "Update Product"
+              'Update Product'
             ) : (
-              "Save Product"
+              'Save Product'
             )}
           </Button>
         </Grid>
