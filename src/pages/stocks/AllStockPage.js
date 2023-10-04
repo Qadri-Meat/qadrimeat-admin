@@ -12,7 +12,7 @@ const AllStocksPage = () => {
   const dispatch = useDispatch();
   const [query, setQuery] = useState('');
 
-  const { results, totalResults, success } = useSelector(
+  const { results, totalResults, success, loading } = useSelector(
     (state) => state.stock
   );
 
@@ -95,6 +95,7 @@ const AllStocksPage = () => {
         </Grid>
       </Grid>
       <DataTable
+        loading={loading}
         title={'Stock List'}
         columns={columns}
         results={results}
