@@ -1,19 +1,25 @@
-import Form from "@core/components/forms/Form";
-import FormInput from "@core/components/forms/FormInput";
-import SelectInput from "@core/components/forms/SelectInput";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Button, Grid, MenuItem } from "@mui/material";
-import { useForm } from "react-hook-form";
-import SaveIcon from "@mui/icons-material/Save";
-import Loader from "@core/components/ui/Loader";
-import { useDispatch, useSelector } from "react-redux";
-import { createExpense, updateExpense } from "store/expense";
+import Form from '@core/components/forms/Form';
+import FormInput from '@core/components/forms/FormInput';
+import SelectInput from '@core/components/forms/SelectInput';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Button, Grid, MenuItem } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import SaveIcon from '@mui/icons-material/Save';
+import Loader from '@core/components/ui/Loader';
+import { useDispatch, useSelector } from 'react-redux';
+import { createExpense, updateExpense } from 'store/expense';
+
 const schema = yup.object().shape({
   description: yup.string().required(),
-  amount: yup.string().required(),
-  type: yup.string().required("Type is a required field"),
+  amount: yup
+    .number()
+    .required()
+    .positive('Amount must be a positive number')
+    .moreThan(0, 'Amount must be greater than zero'),
+  type: yup.string().required('Type is a required field'),
 });
+
 const ExpenseForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.expense);
@@ -35,7 +41,7 @@ const ExpenseForm = ({ defaultValues }) => {
     control,
     formState: { errors },
   } = useForm({
-    mode: "onBlur",
+    mode: 'onBlur',
     defaultValues: {
       ...defaultValues,
     },
@@ -48,7 +54,7 @@ const ExpenseForm = ({ defaultValues }) => {
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <FormInput
-              {...register("description")}
+              {...register('description')}
               id="description"
               type="text"
               label="Description"
@@ -59,7 +65,7 @@ const ExpenseForm = ({ defaultValues }) => {
           </Grid>
           <Grid item xs={12} md={4}>
             <FormInput
-              {...register("amount")}
+              {...register('amount')}
               id="amount"
               type="number"
               label="Amount"
@@ -70,7 +76,7 @@ const ExpenseForm = ({ defaultValues }) => {
           </Grid>
           <Grid item xs={12} md={4}>
             <SelectInput
-              {...register("type")}
+              {...register('type')}
               id="type"
               name="type"
               label="Type"
@@ -87,7 +93,7 @@ const ExpenseForm = ({ defaultValues }) => {
               <MenuItem value="Marketing">Marketing and advertising</MenuItem> */}
             </SelectInput>
           </Grid>
-          <Grid item xs={12} sx={{ textAlign: "center" }}>
+          <Grid item xs={12} sx={{ textAlign: 'center' }}>
             <Button
               variant="contained"
               color="primary"
@@ -98,9 +104,9 @@ const ExpenseForm = ({ defaultValues }) => {
               {loading ? (
                 <Loader />
               ) : defaultValues ? (
-                "Update Expense"
+                'Update Expense'
               ) : (
-                "Save Expense"
+                'Save Expense'
               )}
             </Button>
           </Grid>
