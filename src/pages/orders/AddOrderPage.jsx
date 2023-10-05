@@ -7,6 +7,11 @@ import {
   Button,
   Box,
   IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  InputAdornment,
 } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -21,6 +26,7 @@ import Loader from '@core/components/ui/Loader';
 import { getImageUrl } from 'helper/helpers';
 import { getDiscountPrice } from 'helper/product';
 import DeleteIcon from '@mui/icons-material/Delete';
+import SearchIcon from '@mui/icons-material/Search';
 
 const AddOrderPage = () => {
   let cartTotalPrice = 0;
@@ -96,6 +102,37 @@ const AddOrderPage = () => {
           <Typography variant="h5" component="h1">
             Add New Order
           </Typography>
+        </Grid>
+        <Grid sx={{ marginLeft: '450px' }} item>
+          <FormControl sx={{ m: 1, minWidth: 150 }} size="large">
+            <InputLabel id="demo-simple-select-label">
+              Category
+            </InputLabel>
+            <Select
+              label="Year"
+              // onChange={handleYearChange}
+              variant="outlined"
+            >
+              <MenuItem value={'chicken'}>Chicken</MenuItem>
+              <MenuItem value={'mutton'}>Mutton</MenuItem>
+              <MenuItem value={'beef'}>Beef</MenuItem>
+            </Select>
+          </FormControl>
+        </Grid>
+        <Grid sx={{ marginLeft: '450px' }} item>
+          <FormControl sx={{ m: 1, minWidth: 150 }} size="large">
+            <TextField
+              label="Search"
+              variant="outlined"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </FormControl>
         </Grid>
       </Grid>
       {loading ? (
