@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
+import React, { useEffect, useState } from 'react';
+import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import {
   Grid,
   Typography,
@@ -7,26 +7,26 @@ import {
   Button,
   Box,
   IconButton,
-} from "@mui/material";
-import Card from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import { useDispatch, useSelector } from "react-redux";
-import withAuth from "hooks/withAuth";
+} from '@mui/material';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import { useDispatch, useSelector } from 'react-redux';
+import withAuth from 'hooks/withAuth';
 import {
   addAllToCart,
   addToCart,
   removeItem,
   resetCart,
   updateQuantity,
-} from "store/cart";
-import { getOrder, updateOrder } from "store/order";
-import { getProducts } from "store/product";
-import { useNavigate, useParams } from "react-router-dom";
-import Loader from "@core/components/ui/Loader";
-import { getImageUrl } from "helper/helpers";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { getDiscountPrice } from "helper/product";
+} from 'store/cart';
+import { getOrder, updateOrder } from 'store/order';
+import { getProducts } from 'store/product';
+import { useNavigate, useParams } from 'react-router-dom';
+import Loader from '@core/components/ui/Loader';
+import { getImageUrl } from 'helper/helpers';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { getDiscountPrice } from 'helper/product';
 
 const UpdateOrderPage = () => {
   let cartTotalPrice = 0;
@@ -36,7 +36,7 @@ const UpdateOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [query, setQuery] = useState("limit=100");
+  const [query, setQuery] = useState('limit=100');
 
   const { results } = useSelector((state) => state.product);
   const cartItems = useSelector((state) => state.cart);
@@ -112,7 +112,7 @@ const UpdateOrderPage = () => {
             {results?.map((product) => (
               <Grid item xs={3} key={product.id}>
                 <Card
-                  sx={{ maxWidth: 200, cursor: "pointer" }}
+                  sx={{ maxWidth: 200, cursor: 'pointer' }}
                   onClick={() => handleAddToCart(product)}
                 >
                   <CardMedia
@@ -120,13 +120,18 @@ const UpdateOrderPage = () => {
                     image={getImageUrl(
                       product.image.length > 0
                         ? product.image[0]
-                        : "/default.png"
+                        : '/default.png'
                     )}
                     title={product.title}
                   />
-                  <CardContent sx={{ textAlign: "center" }}>
-                    <Typography variant="body1">{product.name}</Typography>
-                    <Typography variant="body2" sx={{ fontWeight: "bold" }}>
+                  <CardContent sx={{ textAlign: 'center' }}>
+                    <Typography variant="body1">
+                      {product.name}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{ fontWeight: 'bold' }}
+                    >
                       PKR: {product.price}
                     </Typography>
                   </CardContent>
@@ -142,7 +147,10 @@ const UpdateOrderPage = () => {
                 <Grid
                   container
                   spacing={2}
-                  sx={{ justifyContent: "center", alignItems: "center" }}
+                  sx={{
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}
                 >
                   <Grid item xs={12}>
                     <Typography variant="subtitle1" align="center">
@@ -157,7 +165,8 @@ const UpdateOrderPage = () => {
                       cartItem.price,
                       cartItem.discount
                     );
-                    const finalProductPrice = cartItem.price.toFixed(2);
+                    const finalProductPrice =
+                      cartItem.price.toFixed(2);
                     const finalDiscountedPrice = discountedPrice
                       ? discountedPrice.toFixed(2)
                       : 0;
@@ -171,11 +180,11 @@ const UpdateOrderPage = () => {
                       <Card
                         key={cartItem.id}
                         sx={{
-                          display: "flex",
-                          padding: "10px",
-                          marginTop: "10px",
-                          alignItems: "center",
-                          justifyContent: "space-between",
+                          display: 'flex',
+                          padding: '10px',
+                          marginTop: '10px',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
                         }}
                       >
                         <Typography>
@@ -183,8 +192,8 @@ const UpdateOrderPage = () => {
                         </Typography>
                         <Box
                           sx={{
-                            display: "flex",
-                            alignItems: "center",
+                            display: 'flex',
+                            alignItems: 'center',
                           }}
                         >
                           <TextField
@@ -192,40 +201,59 @@ const UpdateOrderPage = () => {
                             label="Weight"
                             size="small"
                             defaultValue={cartItem.weight}
-                            sx={{ width: "100px", marginRight: "10px" }}
+                            sx={{
+                              width: '100px',
+                              marginRight: '10px',
+                            }}
                             onChange={(e) =>
-                              handleWeightChange(e.target.value, cartItem)
+                              handleWeightChange(
+                                e.target.value,
+                                cartItem
+                              )
                             }
                             inputProps={{
-                              pattern: "^[0-9]+([.][0-9]{1,2})?$",
+                              pattern: '^[0-9]+([.][0-9]{1,2})?$',
                             }}
                           />
 
                           <Typography
-                            sx={{ marginLeft: "auto", width: "100px" }}
+                            sx={{
+                              marginLeft: 'auto',
+                              width: '100px',
+                            }}
                             variant="subtitle1"
                           >
-                            {discountedPrice !== null
-                              ? "PKR" +
-                                (
-                                  finalDiscountedPrice * cartItem.quantity
-                                ).toFixed(2)
-                              : "PKR" +
-                                (finalProductPrice * cartItem.quantity).toFixed(
-                                  2
-                                )}
+                            {discountedPrice !== null ? (
+                              <>
+                                <span className="amount old">
+                                  {'PKR' + finalProductPrice}
+                                </span>
+                                <span className="amount">
+                                  {'PKR' + finalDiscountedPrice}
+                                </span>
+                              </>
+                            ) : (
+                              <span className="amount">
+                                {'PKR' + finalProductPrice}
+                              </span>
+                            )}
                           </Typography>
                         </Box>
                         <Grid
                           item
                           xs={3}
-                          sx={{ display: "flex", justifyContent: "center" }}
+                          sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                          }}
                         >
                           <IconButton
-                            onClick={() => handleRemoveFromCart(cartItem.id)}
+                            onClick={() =>
+                              handleRemoveFromCart(cartItem.id)
+                            }
                             aria-label="delete"
                           >
-                            <DeleteIcon style={{ color: "red" }} />
+                            <DeleteIcon style={{ color: 'red' }} />
                           </IconButton>
                         </Grid>
                       </Card>
@@ -233,37 +261,56 @@ const UpdateOrderPage = () => {
                   })}
                   <Grid
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
+                      display: 'flex',
+                      justifyContent: 'space-between',
                       marginTop: 10,
                     }}
                     item
                     xs={12}
                   >
-                    <Typography variant="subtitle1"> Subtotal:</Typography>
+                    <Typography variant="subtitle1">
+                      {' '}
+                      Subtotal:
+                    </Typography>
                     <Typography variant="subtitle1">
                       PKR: {cartTotalPrice.toFixed(2)}
                     </Typography>
                   </Grid>
                   <Grid
-                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}
                     item
                     xs={12}
                   >
-                    <Typography variant="subtitle1">Discount:</Typography>
-                    <Typography variant="subtitle1">PKR: {0}</Typography>
+                    <Typography variant="subtitle1">
+                      Discount:
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      PKR: {0}
+                    </Typography>
                   </Grid>
                   <Grid
-                    sx={{ display: "flex", justifyContent: "space-between" }}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}
                     item
                     xs={12}
                   >
-                    <Typography variant="subtitle1">Payable Amount:</Typography>
+                    <Typography variant="subtitle1">
+                      Payable Amount:
+                    </Typography>
                     <Typography variant="subtitle1">
                       PKR: {cartTotalPrice.toFixed(2)}
                     </Typography>
                   </Grid>
-                  <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
+                  <Grid
+                    container
+                    justifyContent="center"
+                    sx={{ marginTop: 3 }}
+                  >
                     {loading ? (
                       <Loader />
                     ) : (
