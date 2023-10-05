@@ -1,18 +1,22 @@
-import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import DataTable from "@core/components/ui/DataTable";
-import { Button, Grid, Typography } from "@mui/material";
-import withAuth from "hooks/withAuth";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { deleteExpense, getExpenses, resetExpense } from "store/expense";
+import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
+import DataTable from '@core/components/ui/DataTable';
+import { Button, Grid, Typography } from '@mui/material';
+import withAuth from 'hooks/withAuth';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import {
+  deleteExpense,
+  getExpenses,
+  resetExpense,
+} from 'store/expense';
 
 const AllExpensesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
-  const { results, totalResults, success } = useSelector(
+  const { results, totalResults, success, loading } = useSelector(
     (state) => state.expense
   );
 
@@ -34,26 +38,26 @@ const AllExpensesPage = () => {
 
   const columns = [
     {
-      name: "id",
-      label: "Id",
+      name: 'id',
+      label: 'Id',
     },
     {
-      name: "description",
-      label: "Description",
+      name: 'description',
+      label: 'Description',
     },
     {
-      name: "amount",
-      label: "Amount",
+      name: 'amount',
+      label: 'Amount',
     },
     {
-      name: "createdAt",
-      label: "Date Added",
+      name: 'createdAt',
+      label: 'Date Added',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <>
-              {new Date(value).toLocaleDateString()},{" "}
+              {new Date(value).toLocaleDateString()},{' '}
               {new Date(value).toLocaleTimeString()}
             </>
           );
@@ -80,7 +84,7 @@ const AllExpensesPage = () => {
         >
           <Grid item>
             <Button
-              onClick={() => navigate("/expenses/add-expenses")}
+              onClick={() => navigate('/expenses/add-expenses')}
               variant="outlined"
               color="primary"
               size="small"
@@ -91,7 +95,8 @@ const AllExpensesPage = () => {
         </Grid>
       </Grid>
       <DataTable
-        title={"Expense List"}
+        loading={loading}
+        title={'Expense List'}
         columns={columns}
         results={results}
         totalResults={totalResults}

@@ -1,28 +1,30 @@
-import * as React from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Box, Button, Divider, Grid, TextField } from "@mui/material";
-import Message from "@core/components/ui/Message";
-import { useDispatch, useSelector } from "react-redux";
-import SaveIcon from "@mui/icons-material/Save";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Loader from "@core/components/ui/Loader";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import * as React from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Box, Button, Divider, Grid, TextField } from '@mui/material';
+import Message from '@core/components/ui/Message';
+import { useDispatch, useSelector } from 'react-redux';
+import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Loader from '@core/components/ui/Loader';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   addTransaction,
   deleteTransaction,
   getOrder,
   updateOrder,
-} from "store/order";
-import EditOrderDetailsDialog from "pages/orders/components/EditOrderDetailsDialog";
+} from 'store/order';
+import EditOrderDetailsDialog from 'pages/orders/components/EditOrderDetailsDialog';
 const OrderPageRightPanels = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { selectedOrder, loading } = useSelector((state) => state.order);
+  const { selectedOrder, loading } = useSelector(
+    (state) => state.order
+  );
   const [deliveryTime, setDeliveryTime] = React.useState(null);
   const [amount, setAmount] = React.useState(null);
   const [showEditDetails, setShowEditDetails] = React.useState(false);
@@ -33,12 +35,12 @@ const OrderPageRightPanels = () => {
     }
   }, [dispatch, selectedOrder, deliveryTime]);
   const submitHandler = async () => {
-    if (selectedOrder.status === "pending") {
+    if (selectedOrder.status === 'pending') {
       dispatch(
         updateOrder({
           id: selectedOrder.id,
           data: {
-            status: "approved",
+            status: 'approved',
             approvedAt: new Date(),
           },
         })
@@ -51,11 +53,11 @@ const OrderPageRightPanels = () => {
         id: selectedOrder.id,
         data: {
           amount,
-          paymentMethod: "cash",
+          paymentMethod: 'cash',
         },
       })
     );
-    setAmount("");
+    setAmount('');
     dispatch(getOrder(id));
   };
   if (!selectedOrder) {
@@ -65,7 +67,7 @@ const OrderPageRightPanels = () => {
     <div>
       <Accordion
         defaultExpanded
-        sx={{ marginBottom: "1.3rem" }}
+        sx={{ marginBottom: '1.3rem' }}
         disabled={true}
       >
         <AccordionSummary
@@ -85,21 +87,21 @@ const OrderPageRightPanels = () => {
               {selectedOrder && (
                 <>
                   <p>
-                    <strong>Name: </strong>{" "}
-                    {selectedOrder.shippingDetails?.firstName}{" "}
+                    <strong>Name: </strong>{' '}
+                    {selectedOrder.shippingDetails?.firstName}{' '}
                     {selectedOrder.shippingDetails?.lastName}
                   </p>
                   <p>
-                    <strong>Phone: </strong>{" "}
+                    <strong>Phone: </strong>{' '}
                     <a href={`tel:${selectedOrder.phone}`}>
                       {selectedOrder.phone}
                     </a>
                   </p>
                   <p>
-                    <strong>Address:</strong>{" "}
-                    {selectedOrder.shippingDetails?.address}{" "}
-                    {selectedOrder.shippingDetails?.city}{" "}
-                    {selectedOrder.shippingDetails?.postalCode}{" "}
+                    <strong>Address:</strong>{' '}
+                    {selectedOrder.shippingDetails?.address}{' '}
+                    {selectedOrder.shippingDetails?.city}{' '}
+                    {selectedOrder.shippingDetails?.postalCode}{' '}
                     {selectedOrder.shippingDetails?.country}
                   </p>
                 </>
@@ -107,15 +109,18 @@ const OrderPageRightPanels = () => {
             </Grid>
             <Grid container>
               <Grid item container justify="space-around">
-                {selectedOrder && selectedOrder.status === "approved" ? (
+                {selectedOrder &&
+                selectedOrder.status === 'approved' ? (
                   <Message severity="success">
-                    Approved at{" "}
-                    {new Date(selectedOrder.approvedAt).toLocaleDateString()}
+                    Approved at{' '}
+                    {new Date(
+                      selectedOrder.approvedAt
+                    ).toLocaleDateString()}
                   </Message>
                 ) : (
                   <>
                     <Button
-                      style={{ paddingRight: "10px" }}
+                      style={{ paddingRight: '10px' }}
                       variant="contained"
                       color="primary"
                       size="small"
@@ -134,10 +139,12 @@ const OrderPageRightPanels = () => {
                         color="primary"
                         size="large"
                         onClick={submitHandler}
+                        style={{ marginLeft: '10px' }}
                       >
-                        {selectedOrder && selectedOrder.status === "approved"
-                          ? "Mark Delivered"
-                          : "Mark Approved"}
+                        {selectedOrder &&
+                        selectedOrder.status === 'approved'
+                          ? 'Mark Delivered'
+                          : 'Mark Approved'}
                       </Button>
                     )}
                   </>
@@ -159,12 +166,13 @@ const OrderPageRightPanels = () => {
         <AccordionDetails>
           <Grid container>
             <Grid item xs={12}>
-              {selectedOrder && selectedOrder.transactions.length > 0 ? (
-                <div style={{ width: "100%" }}>
+              {selectedOrder &&
+              selectedOrder.transactions.length > 0 ? (
+                <div style={{ width: '100%' }}>
                   <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <p>
@@ -180,13 +188,18 @@ const OrderPageRightPanels = () => {
                   {selectedOrder.transactions.map((tran) => (
                     <Box
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
+                        display: 'flex',
+                        justifyContent: 'space-between',
                       }}
                     >
                       <p>
-                        {new Date(tran.createdAt).toLocaleDateString()},{" "}
-                        {new Date(tran.createdAt).toLocaleTimeString()}
+                        {new Date(
+                          tran.createdAt
+                        ).toLocaleDateString()}
+                        ,{' '}
+                        {new Date(
+                          tran.createdAt
+                        ).toLocaleTimeString()}
                       </p>
                       <p>{tran.amount}</p>
                       <Button
@@ -207,8 +220,8 @@ const OrderPageRightPanels = () => {
                   <Divider />
                   <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <p>
@@ -220,8 +233,8 @@ const OrderPageRightPanels = () => {
                   </Box>
                   <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <p>
@@ -230,7 +243,8 @@ const OrderPageRightPanels = () => {
                     <p>
                       <span>
                         {(
-                          selectedOrder.totalPrice - selectedOrder.totalPaid
+                          selectedOrder.totalPrice -
+                          selectedOrder.totalPaid
                         ).toFixed(2)}
                       </span>
                     </p>
@@ -240,15 +254,17 @@ const OrderPageRightPanels = () => {
                 <>No Transactions found</>
               )}
               <>
-                {selectedOrder.totalPaid < selectedOrder.totalPrice ? (
+                {selectedOrder.totalPaid <
+                selectedOrder.totalPrice ? (
                   <TextField
                     id="amount"
                     label="Amount"
                     type="number"
-                    value={amount}
+                    value={amount === null ? 0 : amount}
                     onChange={(e) => {
                       if (
-                        selectedOrder.totalPrice - selectedOrder.totalPaid >=
+                        selectedOrder.totalPrice -
+                          selectedOrder.totalPaid >=
                         e.target.value
                       ) {
                         setAmount(e.target.value);
@@ -260,7 +276,7 @@ const OrderPageRightPanels = () => {
                           endIcon={<SaveIcon />}
                           onClick={handleCreateTransaction}
                         >
-                          {loading ? <Loader /> : "Add"}
+                          {loading ? <Loader /> : 'Add'}
                         </Button>
                       ),
                     }}

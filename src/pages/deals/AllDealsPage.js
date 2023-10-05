@@ -1,19 +1,21 @@
-import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import { Button, Grid, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { deleteDeal, getDeals, resetDeal } from "store/deal";
-import DataTable from "@core/components/ui/DataTable";
-import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
-import withAuth from "hooks/withAuth";
-import { getImageUrl } from "helper/helpers";
+import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
+import { Button, Grid, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { deleteDeal, getDeals, resetDeal } from 'store/deal';
+import DataTable from '@core/components/ui/DataTable';
+import MemoizedAvatar from '@core/components/extra/MemoizedAvatar';
+import withAuth from 'hooks/withAuth';
+import { getImageUrl } from 'helper/helpers';
 const AllDealsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const { user: authUser } = useSelector((state) => state.auth);
-  const { results, totalResults, success } = useSelector((state) => state.deal);
+  const { results, totalResults, success, loading } = useSelector(
+    (state) => state.deal
+  );
 
   useEffect(() => {
     if (success) {
@@ -24,14 +26,14 @@ const AllDealsPage = () => {
   }, [dispatch, query, success]);
 
   const onDelete =
-    authUser?.role === "user"
+    authUser?.role === 'user'
       ? null
       : (value) => {
           dispatch(deleteDeal(value));
         };
 
   const onEdit =
-    authUser?.role === "user"
+    authUser?.role === 'user'
       ? null
       : (value) => {
           navigate(`/deals/${value}`);
@@ -39,8 +41,8 @@ const AllDealsPage = () => {
 
   const columns = [
     {
-      name: "image",
-      label: "Image",
+      name: 'image',
+      label: 'Image',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -49,20 +51,20 @@ const AllDealsPage = () => {
       },
     },
     {
-      name: "name",
-      label: "Name",
+      name: 'name',
+      label: 'Name',
     },
     {
-      name: "sku",
-      label: "SKU",
+      name: 'sku',
+      label: 'SKU',
     },
     {
-      name: "price",
-      label: "Price",
+      name: 'price',
+      label: 'Price',
     },
     {
-      name: "stock",
-      label: "Stock",
+      name: 'stock',
+      label: 'Stock',
     },
   ];
 
@@ -76,7 +78,7 @@ const AllDealsPage = () => {
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate("/deals/add-deal")}
+            onClick={() => navigate('/deals/add-deal')}
             variant="outlined"
             color="primary"
             size="small"
@@ -86,7 +88,8 @@ const AllDealsPage = () => {
         </Grid>
       </Grid>
       <DataTable
-        title={"Deals List"}
+        loading={loading}
+        title={'Deals List'}
         results={results}
         totalResults={totalResults}
         columns={columns}
