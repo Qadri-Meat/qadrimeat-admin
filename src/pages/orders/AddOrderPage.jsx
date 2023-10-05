@@ -12,6 +12,7 @@ import {
   Select,
   MenuItem,
   InputAdornment,
+  Pagination,
 } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -43,6 +44,13 @@ const AddOrderPage = () => {
   const { success, selectedOrder, loading } = useSelector(
     (state) => state.order
   );
+  const productsPerPage = 8; // Change this number as needed
+  const [currentPage, setCurrentPage] = useState(1);
+  const displayProducts = () => {
+    const startIndex = (currentPage - 1) * productsPerPage;
+    const endIndex = startIndex + productsPerPage;
+    return results?.slice(startIndex, endIndex);
+  };
 
   const handleAddToCart = (product) => {
     const newItem = {
@@ -143,42 +151,55 @@ const AddOrderPage = () => {
         <Loader />
       ) : (
         <Grid container spacing={1}>
-          <Grid item xs={7}>
-            <Grid container spacing={1}>
-              {results?.map((product) => (
-                <Grid item xs={3} key={product.id}>
-                  <Card
-                    sx={{ maxWidth: 200, cursor: 'pointer' }}
-                    onClick={() => handleAddToCart(product)}
-                  >
-                    <CardMedia
-                      sx={{ height: 100 }}
-                      image={getImageUrl(
-                        product.image.length > 0
-                          ? product.image[0]
-                          : '/default.png'
-                      )}
-                      title={product.title}
-                    />
-                    <CardContent sx={{ textAlign: 'center' }}>
-                      <Typography variant="body1">
-                        {product.name}
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ fontWeight: 'bold' }}
+          <Grid item xs={8}>
+            <div>
+              <Grid item xs={7}>
+                <Grid container spacing={1}>
+                  {displayProducts()?.map((product) => (
+                    <Grid item xs={3} key={product.id}>
+                      <Card
+                        sx={{ maxWidth: 200, cursor: 'pointer' }}
+                        onClick={() => handleAddToCart(product)}
                       >
-                        PKR: {product.price}
-                      </Typography>
-                    </CardContent>
-                  </Card>
+                        <CardMedia
+                          sx={{ height: 100 }}
+                          image={getImageUrl(
+                            product.image.length > 0
+                              ? product.image[0]
+                              : '/default.png'
+                          )}
+                          title={product.title}
+                        />
+                        <CardContent sx={{ textAlign: 'center' }}>
+                          <Typography variant="body1">
+                            {product.name}
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            sx={{ fontWeight: 'bold' }}
+                          >
+                            PKR: {product.price}
+                          </Typography>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  ))}
                 </Grid>
-              ))}
-            </Grid>
+              </Grid>
+
+              <Pagination
+                count={Math.ceil(
+                  (results?.length || 0) / productsPerPage
+                )}
+                page={currentPage}
+                onChange={(event, page) => setCurrentPage(page)}
+                color="primary"
+              />
+            </div>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={4}>
             <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              <Card sx={{ maxWidth: 700 }}>
+              <Card sx={{ maxWidth: 500 }}>
                 <CardContent>
                   {cartItems.length === 0 ? (
                     <Grid
