@@ -48,7 +48,7 @@ const AllBookingsPage = () => {
   }, [dispatch, paid, query, success, selectedYear]);
 
   const onDelete = (value) => {
-    // dispatch(deleteBooking(value));
+    dispatch(deleteBooking(value));
   };
 
   const handlePaidToggle = (event, value) => {
