@@ -67,7 +67,10 @@ const AddOrderPage = () => {
     const quantity = (1 / item.weight) * value;
     dispatch(updateQuantity({ id: item.id, quantity }));
   };
-
+  const handleInputChange = (event) => {
+    const newValue = event.target.value;
+    console.log(newValue);
+  };
   const onSubmit = () => {
     const newOrder = {
       orderItems: cartItems,
@@ -103,14 +106,14 @@ const AddOrderPage = () => {
             Add New Order
           </Typography>
         </Grid>
-        <Grid sx={{ marginLeft: '450px' }} item>
-          <FormControl sx={{ m: 1, minWidth: 150 }} size="large">
+        <Grid item sx={{ marginLeft: '20px' }}>
+          <FormControl sx={{ minWidth: 150 }} size="large">
             <InputLabel id="demo-simple-select-label">
               Category
             </InputLabel>
             <Select
-              label="Year"
-              // onChange={handleYearChange}
+              labelId="demo-simple-select-label"
+              label="Category"
               variant="outlined"
             >
               <MenuItem value={'chicken'}>Chicken</MenuItem>
@@ -124,6 +127,7 @@ const AddOrderPage = () => {
             <TextField
               label="Search"
               variant="outlined"
+              onChange={handleInputChange}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
