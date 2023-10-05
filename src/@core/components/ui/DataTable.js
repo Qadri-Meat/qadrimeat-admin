@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MUIDataTable from 'mui-datatables';
 import { debounce } from 'lodash';
 import { buildURLQuery } from '@core/utils/buildURLQuery';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'; // Import SweetAlert2
-import DateRangePicker from 'pages/stocks/components/DateRangePicker';
 import Loader from './Loader';
 
 const DataTable = (props) => {

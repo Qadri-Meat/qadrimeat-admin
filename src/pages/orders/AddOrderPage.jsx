@@ -1,30 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import {
   Grid,
   Typography,
   TextField,
   Button,
-  Box,
   IconButton,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  InputAdornment,
-  Pagination,
 } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import { useDispatch, useSelector } from 'react-redux';
 import withAuth from 'hooks/withAuth';
-import { addToCart, removeItem, updateQuantity } from 'store/cart';
+import { removeItem, updateQuantity } from 'store/cart';
 import { createOrder } from 'store/order';
-import { getProducts } from 'store/product';
 import { useNavigate } from 'react-router-dom';
 import Loader from '@core/components/ui/Loader';
-import { getImageUrl } from 'helper/helpers';
 import { getDiscountPrice } from 'helper/product';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ProductsGrid from './components/ProductsGrid';
