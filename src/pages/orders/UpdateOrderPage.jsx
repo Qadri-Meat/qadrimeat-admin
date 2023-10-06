@@ -5,17 +5,14 @@ import {
   Typography,
   TextField,
   Button,
-  Box,
   IconButton,
 } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import { useDispatch, useSelector } from 'react-redux';
 import withAuth from 'hooks/withAuth';
 import {
   addAllToCart,
-  addToCart,
   removeItem,
   resetCart,
   updateQuantity,
@@ -24,7 +21,6 @@ import { getOrder, updateOrder } from 'store/order';
 import { getProducts } from 'store/product';
 import { useNavigate, useParams } from 'react-router-dom';
 import Loader from '@core/components/ui/Loader';
-import { getImageUrl } from 'helper/helpers';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDiscountPrice } from 'helper/product';
 import ProductsGrid from './components/ProductsGrid';
@@ -40,27 +36,11 @@ const UpdateOrderPage = () => {
 
   const [query, setQuery] = useState('limit=8');
 
-  const { results } = useSelector((state) => state.product);
   const cartItems = useSelector((state) => state.cart);
 
   const { success, selectedOrder, loading } = useSelector(
     (state) => state.order
   );
-
-  const handleAddToCart = (product) => {
-    const newItem = {
-      id: product.id,
-      name: product.name,
-      quantity: 1,
-      weight: product.weight,
-      price: product.price,
-      discount: 0,
-      image: product.image,
-      product: product.id,
-    };
-
-    dispatch(addToCart(newItem));
-  };
 
   const handleWeightChange = (value, item) => {
     const quantity = (1 / item.weight) * value;
@@ -112,39 +92,6 @@ const UpdateOrderPage = () => {
         <Grid item xs={8} spacing={1}>
           <ProductsGrid />
         </Grid>
-        {/* <Grid item xs={7}>
-          <Grid container spacing={1}>
-            {results?.map((product) => (
-              <Grid item xs={3} key={product.id}>
-                <Card
-                  sx={{ maxWidth: 200, cursor: 'pointer' }}
-                  onClick={() => handleAddToCart(product)}
-                >
-                  <CardMedia
-                    sx={{ height: 100 }}
-                    image={getImageUrl(
-                      product.image.length > 0
-                        ? product.image[0]
-                        : '/default.png'
-                    )}
-                    title={product.title}
-                  />
-                  <CardContent sx={{ textAlign: 'center' }}>
-                    <Typography variant="body1">
-                      {product.name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{ fontWeight: 'bold' }}
-                    >
-                      PKR: {product.price}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Grid> */}
         <Grid item xs={4}>
           <Card sx={{ maxWidth: 700 }}>
             <CardContent>
@@ -362,173 +309,6 @@ const UpdateOrderPage = () => {
                     )}
                   </Grid>
                 </>
-                // <>
-                //   {cartItems.map((cartItem, key) => {
-                //     const discountedPrice = getDiscountPrice(
-                //       cartItem.price,
-                //       cartItem.discount
-                //     );
-                //     const finalProductPrice =
-                //       cartItem.price.toFixed(2);
-                //     const finalDiscountedPrice = discountedPrice
-                //       ? discountedPrice.toFixed(2)
-                //       : 0;
-
-                //     discountedPrice != null
-                //       ? (cartTotalPrice +=
-                //           finalDiscountedPrice * cartItem.quantity)
-                //       : (cartTotalPrice +=
-                //           finalProductPrice * cartItem.quantity);
-                //     return (
-                //       <Card
-                //         key={cartItem.id}
-                //         sx={{
-                //           display: 'flex',
-                //           padding: '10px',
-                //           marginTop: '10px',
-                //           alignItems: 'center',
-                //           justifyContent: 'space-between',
-                //         }}
-                //       >
-                //         <Typography>
-                //           {cartItem.name} X {cartItem.quantity}
-                //         </Typography>
-                //         <Box
-                //           sx={{
-                //             display: 'flex',
-                //             alignItems: 'center',
-                //           }}
-                //         >
-                //           <TextField
-                //             type="number"
-                //             label="Weight"
-                //             size="small"
-                //             defaultValue={cartItem.weight}
-                //             sx={{
-                //               width: '100px',
-                //               marginRight: '10px',
-                //             }}
-                //             onChange={(e) =>
-                //               handleWeightChange(
-                //                 e.target.value,
-                //                 cartItem
-                //               )
-                //             }
-                //             inputProps={{
-                //               pattern: '^[0-9]+([.][0-9]{1,2})?$',
-                //             }}
-                //           />
-
-                //           <Typography
-                //             sx={{
-                //               marginLeft: 'auto',
-                //               width: '100px',
-                //             }}
-                //             variant="subtitle1"
-                //           >
-                //             {discountedPrice !== null ? (
-                //               <>
-                //                 <span className="amount old">
-                //                   {'PKR' + finalProductPrice}
-                //                 </span>
-                //                 <span className="amount">
-                //                   {'PKR' + finalDiscountedPrice}
-                //                 </span>
-                //               </>
-                //             ) : (
-                //               <span className="amount">
-                //                 {'PKR' + finalProductPrice}
-                //               </span>
-                //             )}
-                //           </Typography>
-                //         </Box>
-                //         <Grid
-                //           item
-                //           xs={3}
-                //           sx={{
-                //             display: 'flex',
-                //             justifyContent: 'center',
-                //           }}
-                //         >
-                //           <IconButton
-                //             onClick={() =>
-                //               handleRemoveFromCart(cartItem.id)
-                //             }
-                //             aria-label="delete"
-                //           >
-                //             <DeleteIcon style={{ color: 'red' }} />
-                //           </IconButton>
-                //         </Grid>
-                //       </Card>
-                //     );
-                //   })}
-                //   <Grid
-                //     sx={{
-                //       display: 'flex',
-                //       justifyContent: 'space-between',
-                //       marginTop: 10,
-                //     }}
-                //     item
-                //     xs={12}
-                //   >
-                //     <Typography variant="subtitle1">
-                //       {' '}
-                //       Subtotal:
-                //     </Typography>
-                //     <Typography variant="subtitle1">
-                //       PKR: {cartTotalPrice.toFixed(2)}
-                //     </Typography>
-                //   </Grid>
-                //   <Grid
-                //     sx={{
-                //       display: 'flex',
-                //       justifyContent: 'space-between',
-                //     }}
-                //     item
-                //     xs={12}
-                //   >
-                //     <Typography variant="subtitle1">
-                //       Discount:
-                //     </Typography>
-                //     <Typography variant="subtitle1">
-                //       PKR: {0}
-                //     </Typography>
-                //   </Grid>
-                //   <Grid
-                //     sx={{
-                //       display: 'flex',
-                //       justifyContent: 'space-between',
-                //     }}
-                //     item
-                //     xs={12}
-                //   >
-                //     <Typography variant="subtitle1">
-                //       Payable Amount:
-                //     </Typography>
-                //     <Typography variant="subtitle1">
-                //       PKR: {cartTotalPrice.toFixed(2)}
-                //     </Typography>
-                //   </Grid>
-                //   <Grid
-                //     container
-                //     justifyContent="center"
-                //     sx={{ marginTop: 3 }}
-                //   >
-                //     {loading ? (
-                //       <Loader />
-                //     ) : (
-                //       <Button
-                //         onClick={onSubmit}
-                //         variant="contained"
-                //         color="primary"
-                //         size="large"
-                //         disabled={cartTotalPrice.toFixed(2) < 1}
-                //       >
-                //         Update Order
-                //       </Button>
-                //     )}
-                //   </Grid>
-                // </>
               )}
             </CardContent>
           </Card>
