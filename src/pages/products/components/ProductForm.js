@@ -43,7 +43,12 @@ const schema = yup.object().shape({
       'Sale count must be a number greater than or equal to zero'
     )
     .required('Sale count is a required field')
+
     .typeError('Sale count must be a number'),
+  image: yup
+    .array()
+    .required('At least one image is required')
+    .max(5, 'You can only upload up to 5 images'),
   category: yup
     .mixed()
     .test(
@@ -56,6 +61,7 @@ const schema = yup.object().shape({
         );
       }
     )
+
     .transform(function (value, originalValue) {
       if (originalValue && typeof originalValue === 'string') {
         return [originalValue];
@@ -70,6 +76,8 @@ const ProductForm = ({ defaultValues }) => {
   const [files, setFiles] = useState([]);
   const [showAlert, setShowAlert] = useState(false);
   const { message, loading } = useSelector((state) => state.product);
+
+  const [errorMessage, setErrorMessage] = useState('');
 
   const initialFiles = (defaultValues?.image || []).map(
     (i) => `${getImageUrl(i)}`
@@ -100,9 +108,10 @@ const ProductForm = ({ defaultValues }) => {
     if (isValidImages(newFiles)) {
       if (newFiles.length <= 5) {
         setFiles(newFiles);
+        setErrorMessage(''); // Clear any previous error message
       } else {
-        setShowAlert(true);
-        setFiles([]);
+        setFiles([]); // Clear the files
+        setErrorMessage('You can only upload up to 5 images!'); // Set the error message
       }
     }
   };
@@ -239,22 +248,32 @@ const ProductForm = ({ defaultValues }) => {
               <MenuItem value="mutton">Mutton</MenuItem>
             </SelectInput>
           </Grid>
-          <Grid item xs={12}>
-            <DropzoneArea
-              maxFileSize={5242880}
-              onChange={handleChange}
-              showAlerts={false}
-              filesLimit={5}
-              dropzoneText=""
-              initialFiles={initialFiles}
-              acceptedFiles={[
-                'image/jpeg',
-                'image/jpg',
-                'image/png',
-                'image/gif',
-              ]}
-            />
-          </Grid>
+          <DropzoneArea
+            maxFileSize={5242880}
+            {...register('image')}
+            onChange={handleChange}
+            showAlerts={false}
+            filesLi
+            Lmit={5} // Limit to 5 files
+            dropzoneText=""
+            initialFiles={initialFiles}
+            acceptedFiles={[
+              'image/jpeg',
+              'image/jpg',
+              'image/png',
+              'image/gif',
+            ]}
+            onLimitExceed={(files) => {
+              setShowAlert(true);
+              setFiles([]);
+            }}
+          />
+          {showAlert && (
+            <Message severity="error">
+              You can only upload up to 5 images!
+            </Message>
+          )}
+
           <Grid item xs={12} sx={{ textAlign: 'center' }}>
             <Button
               variant="contained"
