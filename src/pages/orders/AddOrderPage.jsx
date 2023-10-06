@@ -196,7 +196,23 @@ const AddOrderPage = () => {
                                 inputProps={{
                                   pattern: '^[0-9]+([.][0-9]{1,2})?$',
                                 }}
+                                onInput={(e) => {
+                                  e.preventDefault();
+                                  const input =
+                                    e.target.value.replace(
+                                      /[^0-9.]/g,
+                                      ''
+                                    );
+                                  if (
+                                    input !== '' &&
+                                    parseFloat(input) < 0
+                                  ) {
+                                    return;
+                                  }
+                                  e.target.value = input;
+                                }}
                               />
+
                               <IconButton
                                 onClick={() =>
                                   handleRemoveFromCart(cartItem.id)
