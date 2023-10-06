@@ -1,19 +1,8 @@
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import DataTable from '@core/components/ui/DataTable';
-import {
-  Button,
-  FormControl,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material';
+import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
@@ -22,13 +11,13 @@ import { pick } from 'helper/pick';
 import withAuth from 'hooks/withAuth';
 import { deleteOrder, getOrders, resetOrder } from 'store/order';
 import Loader from '@core/components/ui/Loader';
+import OrderPageHeading from './components/OrderPageHeading';
+
 const AllOrderPage = () => {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const { paid } = pick(location.search);
   const [query, setQuery] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
 
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.order
@@ -44,14 +33,6 @@ const AllOrderPage = () => {
 
   const onDelete = (value) => {
     dispatch(deleteOrder(value));
-  };
-  const handleYearChange = (event) => {
-    const year = event.target.value;
-    setSelectedYear(year);
-    // navigate(`/bookings?year=${year}`);
-  };
-  const handlePaidToggle = (event, value) => {
-    // navigate(`/bookings?paid=${value}`);
   };
 
   const columns = [
@@ -147,7 +128,8 @@ const AllOrderPage = () => {
 
   return (
     <AdminLayout>
-      <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
+      <OrderPageHeading />
+      {/* <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
         <Grid item>
           <Typography variant="h5" component="h1">
             Orders
@@ -200,7 +182,7 @@ const AllOrderPage = () => {
             </ToggleButtonGroup>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
       {loading ? (
         <Loader />
       ) : (
