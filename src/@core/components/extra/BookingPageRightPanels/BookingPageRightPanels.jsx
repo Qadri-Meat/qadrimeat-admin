@@ -1,27 +1,29 @@
-import * as React from "react";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Box, Button, Divider, Grid, TextField } from "@mui/material";
-import Message from "@core/components/ui/Message";
-import { useDispatch, useSelector } from "react-redux";
+import * as React from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Box, Button, Divider, Grid, TextField } from '@mui/material';
+import Message from '@core/components/ui/Message';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   addTransaction,
   deleteTransaction,
   getBooking,
   updateBooking,
-} from "store/booking";
-import SaveIcon from "@mui/icons-material/Save";
-import DeleteIcon from "@mui/icons-material/Delete";
-import Loader from "@core/components/ui/Loader";
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+} from 'store/booking';
+import SaveIcon from '@mui/icons-material/Save';
+import DeleteIcon from '@mui/icons-material/Delete';
+import Loader from '@core/components/ui/Loader';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 const BookingPageRightPanels = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { selectedBooking, loading } = useSelector((state) => state.booking);
+  const { selectedBooking, loading } = useSelector(
+    (state) => state.booking
+  );
   const [deliveryTime, setDeliveryTime] = React.useState(null);
   const [amount, setAmount] = React.useState(null);
   useEffect(() => {
@@ -31,12 +33,12 @@ const BookingPageRightPanels = () => {
     }
   }, [dispatch, selectedBooking, deliveryTime]);
   const submitHandler = async () => {
-    if (selectedBooking.status === "pending") {
+    if (selectedBooking.status === 'pending') {
       await dispatch(
         updateBooking({
           id: selectedBooking.id,
           data: {
-            status: "approved",
+            status: 'approved',
             approvedAt: new Date(),
           },
         })
@@ -50,11 +52,11 @@ const BookingPageRightPanels = () => {
         id: selectedBooking.id,
         data: {
           amount,
-          paymentMethod: "cash",
+          paymentMethod: 'cash',
         },
       })
     );
-    setAmount("");
+    setAmount('');
     dispatch(getBooking(id));
   };
   if (!selectedBooking) {
@@ -62,7 +64,7 @@ const BookingPageRightPanels = () => {
   }
   return (
     <div>
-      <Accordion defaultExpanded sx={{ marginBottom: "1.3rem" }}>
+      <Accordion defaultExpanded sx={{ marginBottom: '1.3rem' }}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
@@ -77,21 +79,21 @@ const BookingPageRightPanels = () => {
               {selectedBooking && (
                 <>
                   <p>
-                    <strong>Name: </strong>{" "}
-                    {selectedBooking.shippingDetails.firstName}{" "}
+                    <strong>Name: </strong>{' '}
+                    {selectedBooking.shippingDetails.firstName}{' '}
                     {selectedBooking.shippingDetails.lastName}
                   </p>
                   <p>
-                    <strong>Phone: </strong>{" "}
+                    <strong>Phone: </strong>{' '}
                     <a href={`tel:${selectedBooking.phone}`}>
                       {selectedBooking.phone}
                     </a>
                   </p>
                   <p>
-                    <strong>Address:</strong>{" "}
-                    {selectedBooking.shippingDetails.address},{" "}
-                    {selectedBooking.shippingDetails.city}{" "}
-                    {selectedBooking.shippingDetails.postalCode},{" "}
+                    <strong>Address:</strong>{' '}
+                    {selectedBooking.shippingDetails.address},{' '}
+                    {selectedBooking.shippingDetails.city}{' '}
+                    {selectedBooking.shippingDetails.postalCode},{' '}
                     {selectedBooking.shippingDetails.country}
                   </p>
                 </>
@@ -99,10 +101,13 @@ const BookingPageRightPanels = () => {
             </Grid>
             <Grid container>
               <Grid item container justify="space-around">
-                {selectedBooking && selectedBooking.status === "approved" ? (
+                {selectedBooking &&
+                selectedBooking.status === 'approved' ? (
                   <Message severity="success">
-                    Approved at{" "}
-                    {new Date(selectedBooking.approvedAt).toLocaleDateString()}
+                    Approved at{' '}
+                    {new Date(
+                      selectedBooking.approvedAt
+                    ).toLocaleDateString()}
                   </Message>
                 ) : (
                   <>
@@ -116,9 +121,9 @@ const BookingPageRightPanels = () => {
                         onClick={submitHandler}
                       >
                         {selectedBooking &&
-                        selectedBooking.status === "approved"
-                          ? "Mark Delivered"
-                          : "Mark Approved"}
+                        selectedBooking.status === 'approved'
+                          ? 'Mark Delivered'
+                          : 'Mark Approved'}
                       </Button>
                     )}
                   </>
@@ -140,12 +145,13 @@ const BookingPageRightPanels = () => {
         <AccordionDetails>
           <Grid container>
             <Grid item xs={12}>
-              {selectedBooking && selectedBooking.transactions.length > 0 ? (
-                <div style={{ width: "100%" }}>
+              {selectedBooking &&
+              selectedBooking.transactions.length > 0 ? (
+                <div style={{ width: '100%' }}>
                   <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <p>
@@ -161,13 +167,18 @@ const BookingPageRightPanels = () => {
                   {selectedBooking.transactions.map((tran) => (
                     <Box
                       sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
+                        display: 'flex',
+                        justifyContent: 'space-between',
                       }}
                     >
                       <p>
-                        {new Date(tran.createdAt).toLocaleDateString()},{" "}
-                        {new Date(tran.createdAt).toLocaleTimeString()}
+                        {new Date(
+                          tran.createdAt
+                        ).toLocaleDateString()}
+                        ,{' '}
+                        {new Date(
+                          tran.createdAt
+                        ).toLocaleTimeString()}
                       </p>
                       <p>{tran.amount}</p>
                       <Button
@@ -188,8 +199,8 @@ const BookingPageRightPanels = () => {
                   <Divider />
                   <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <p>
@@ -201,8 +212,8 @@ const BookingPageRightPanels = () => {
                   </Box>
                   <Box
                     sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                   >
                     <p>
@@ -211,7 +222,8 @@ const BookingPageRightPanels = () => {
                     <p>
                       <span>
                         {(
-                          selectedBooking.totalPrice - selectedBooking.totalPaid
+                          selectedBooking.totalPrice -
+                          selectedBooking.totalPaid
                         ).toFixed(2)}
                       </span>
                     </p>
@@ -221,7 +233,8 @@ const BookingPageRightPanels = () => {
                 <>No Transactions found</>
               )}
               <>
-                {selectedBooking.totalPaid < selectedBooking.totalPrice ? (
+                {selectedBooking.totalPaid <
+                selectedBooking.totalPrice ? (
                   <TextField
                     id="amount"
                     label="Amount"
@@ -242,7 +255,7 @@ const BookingPageRightPanels = () => {
                           endIcon={<SaveIcon />}
                           onClick={handleCreateTransaction}
                         >
-                          {loading ? <Loader /> : "Add"}
+                          {loading ? <Loader /> : 'Add'}
                         </Button>
                       ),
                     }}

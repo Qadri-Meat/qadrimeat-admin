@@ -11,7 +11,7 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { useDispatch, useSelector } from 'react-redux';
 import withAuth from 'hooks/withAuth';
-import { removeItem, updateQuantity } from 'store/cart';
+import { removeItem, resetCart, updateQuantity } from 'store/cart';
 import { createOrder } from 'store/order';
 import { useNavigate } from 'react-router-dom';
 import Loader from '@core/components/ui/Loader';
@@ -36,7 +36,6 @@ const AddOrderPage = () => {
   };
 
   const handleWeightChange = (value, item) => {
-    console.log(item);
     const quantity = (1 / item.weight) * value;
     dispatch(updateQuantity({ id: item.id, quantity }));
   };
@@ -49,6 +48,8 @@ const AddOrderPage = () => {
       deliveryTime: Date.now(),
     };
     dispatch(createOrder(newOrder));
+    console.log('in the process handle function');
+    dispatch(resetCart());
   };
 
   useEffect(() => {
@@ -113,7 +114,6 @@ const AddOrderPage = () => {
                         );
                         const finalProductPrice =
                           cartItem.price.toFixed(2);
-                        console.log(cartItem);
                         const finalDiscountedPrice = discountedPrice
                           ? discountedPrice.toFixed(2)
                           : 0;
