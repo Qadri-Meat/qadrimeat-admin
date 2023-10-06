@@ -27,16 +27,18 @@ import Loader from '@core/components/ui/Loader';
 import { getImageUrl } from 'helper/helpers';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { getDiscountPrice } from 'helper/product';
+import ProductsGrid from './components/ProductsGrid';
 
 const UpdateOrderPage = () => {
   let cartTotalPrice = 0;
+  let totalPrice = 0;
 
   const { id } = useParams();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [query, setQuery] = useState('limit=100');
+  const [query, setQuery] = useState('limit=8');
 
   const { results } = useSelector((state) => state.product);
   const cartItems = useSelector((state) => state.cart);
@@ -102,12 +104,15 @@ const UpdateOrderPage = () => {
       <Grid container sx={{ my: 3 }} alignItems="center">
         <Grid item>
           <Typography variant="h5" component="h1">
-            Add New Order
+            Add New Orderup
           </Typography>
         </Grid>
       </Grid>
       <Grid container spacing={1}>
-        <Grid item xs={7}>
+        <Grid item xs={8} spacing={1}>
+          <ProductsGrid />
+        </Grid>
+        {/* <Grid item xs={7}>
           <Grid container spacing={1}>
             {results?.map((product) => (
               <Grid item xs={3} key={product.id}>
@@ -139,8 +144,8 @@ const UpdateOrderPage = () => {
               </Grid>
             ))}
           </Grid>
-        </Grid>
-        <Grid item xs={5}>
+        </Grid> */}
+        <Grid item xs={4}>
           <Card sx={{ maxWidth: 700 }}>
             <CardContent>
               {cartItems.length === 0 ? (
@@ -176,56 +181,36 @@ const UpdateOrderPage = () => {
                           finalDiscountedPrice * cartItem.quantity)
                       : (cartTotalPrice +=
                           finalProductPrice * cartItem.quantity);
+
+                    totalPrice +=
+                      finalProductPrice * cartItem.quantity;
                     return (
                       <Card
                         key={cartItem.id}
                         sx={{
-                          display: 'flex',
                           padding: '10px',
                           marginTop: '10px',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
                         }}
                       >
-                        <Typography>
-                          {cartItem.name} X {cartItem.quantity}
-                        </Typography>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                          }}
+                        {/* 1st Row: Title and Price */}
+                        <Grid
+                          container
+                          justifyContent="space-between"
+                          alignItems="center"
+                          sx={{ marginBottom: '10px' }}
                         >
-                          <TextField
-                            type="number"
-                            label="Weight"
-                            size="small"
-                            defaultValue={cartItem.weight}
-                            sx={{
-                              width: '100px',
-                              marginRight: '10px',
-                            }}
-                            onChange={(e) =>
-                              handleWeightChange(
-                                e.target.value,
-                                cartItem
-                              )
-                            }
-                            inputProps={{
-                              pattern: '^[0-9]+([.][0-9]{1,2})?$',
-                            }}
-                          />
-
-                          <Typography
-                            sx={{
-                              marginLeft: 'auto',
-                              width: '100px',
-                            }}
-                            variant="subtitle1"
-                          >
+                          <Typography>
+                            {cartItem.name} X {cartItem.quantity}
+                          </Typography>
+                          <Typography variant="subtitle1">
                             {discountedPrice !== null ? (
                               <>
-                                <span className="amount old">
+                                <span
+                                  style={{
+                                    textDecoration: 'line-through',
+                                    marginRight: '5px',
+                                  }}
+                                >
                                   {'PKR' + finalProductPrice}
                                 </span>
                                 <span className="amount">
@@ -238,15 +223,49 @@ const UpdateOrderPage = () => {
                               </span>
                             )}
                           </Typography>
-                        </Box>
+                        </Grid>
+
+                        {/* 2nd Row: Weight Field and Delete Button */}
                         <Grid
-                          item
-                          xs={3}
-                          sx={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                          }}
+                          container
+                          justifyContent="space-between"
+                          alignItems="center"
                         >
+                          <TextField
+                            type="number"
+                            label="Weight"
+                            size="small"
+                            value={
+                              cartItem.weight * cartItem.quantity ===
+                              0
+                                ? ''
+                                : cartItem.weight * cartItem.quantity
+                            }
+                            onChange={(e) =>
+                              handleWeightChange(
+                                e.target.value,
+                                cartItem
+                              )
+                            }
+                            inputProps={{
+                              pattern: '^[0-9]+([.][0-9]{1,2})?$',
+                            }}
+                            onInput={(e) => {
+                              e.preventDefault();
+                              const input = e.target.value.replace(
+                                /[^0-9.]/g,
+                                ''
+                              );
+                              if (
+                                input !== '' &&
+                                parseFloat(input) < 0
+                              ) {
+                                return;
+                              }
+                              e.target.value = input;
+                            }}
+                          />
+
                           <IconButton
                             onClick={() =>
                               handleRemoveFromCart(cartItem.id)
@@ -264,6 +283,22 @@ const UpdateOrderPage = () => {
                       display: 'flex',
                       justifyContent: 'space-between',
                       marginTop: 10,
+                    }}
+                    item
+                    xs={12}
+                  >
+                    <Typography variant="subtitle1">
+                      {' '}
+                      Total Items:
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {cartItems.length}
+                    </Typography>
+                  </Grid>
+                  <Grid
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
                     }}
                     item
                     xs={12}
@@ -288,7 +323,7 @@ const UpdateOrderPage = () => {
                       Discount:
                     </Typography>
                     <Typography variant="subtitle1">
-                      PKR: {0}
+                      PKR: {totalPrice - cartTotalPrice}
                     </Typography>
                   </Grid>
                   <Grid
@@ -305,7 +340,8 @@ const UpdateOrderPage = () => {
                     <Typography variant="subtitle1">
                       PKR: {cartTotalPrice.toFixed(2)}
                     </Typography>
-                  </Grid>
+                  </Grid>{' '}
+                  {/* Proceed button */}
                   <Grid
                     container
                     justifyContent="center"
@@ -321,11 +357,178 @@ const UpdateOrderPage = () => {
                         size="large"
                         disabled={cartTotalPrice.toFixed(2) < 1}
                       >
-                        Update Order
+                        Proceed
                       </Button>
                     )}
                   </Grid>
                 </>
+                // <>
+                //   {cartItems.map((cartItem, key) => {
+                //     const discountedPrice = getDiscountPrice(
+                //       cartItem.price,
+                //       cartItem.discount
+                //     );
+                //     const finalProductPrice =
+                //       cartItem.price.toFixed(2);
+                //     const finalDiscountedPrice = discountedPrice
+                //       ? discountedPrice.toFixed(2)
+                //       : 0;
+
+                //     discountedPrice != null
+                //       ? (cartTotalPrice +=
+                //           finalDiscountedPrice * cartItem.quantity)
+                //       : (cartTotalPrice +=
+                //           finalProductPrice * cartItem.quantity);
+                //     return (
+                //       <Card
+                //         key={cartItem.id}
+                //         sx={{
+                //           display: 'flex',
+                //           padding: '10px',
+                //           marginTop: '10px',
+                //           alignItems: 'center',
+                //           justifyContent: 'space-between',
+                //         }}
+                //       >
+                //         <Typography>
+                //           {cartItem.name} X {cartItem.quantity}
+                //         </Typography>
+                //         <Box
+                //           sx={{
+                //             display: 'flex',
+                //             alignItems: 'center',
+                //           }}
+                //         >
+                //           <TextField
+                //             type="number"
+                //             label="Weight"
+                //             size="small"
+                //             defaultValue={cartItem.weight}
+                //             sx={{
+                //               width: '100px',
+                //               marginRight: '10px',
+                //             }}
+                //             onChange={(e) =>
+                //               handleWeightChange(
+                //                 e.target.value,
+                //                 cartItem
+                //               )
+                //             }
+                //             inputProps={{
+                //               pattern: '^[0-9]+([.][0-9]{1,2})?$',
+                //             }}
+                //           />
+
+                //           <Typography
+                //             sx={{
+                //               marginLeft: 'auto',
+                //               width: '100px',
+                //             }}
+                //             variant="subtitle1"
+                //           >
+                //             {discountedPrice !== null ? (
+                //               <>
+                //                 <span className="amount old">
+                //                   {'PKR' + finalProductPrice}
+                //                 </span>
+                //                 <span className="amount">
+                //                   {'PKR' + finalDiscountedPrice}
+                //                 </span>
+                //               </>
+                //             ) : (
+                //               <span className="amount">
+                //                 {'PKR' + finalProductPrice}
+                //               </span>
+                //             )}
+                //           </Typography>
+                //         </Box>
+                //         <Grid
+                //           item
+                //           xs={3}
+                //           sx={{
+                //             display: 'flex',
+                //             justifyContent: 'center',
+                //           }}
+                //         >
+                //           <IconButton
+                //             onClick={() =>
+                //               handleRemoveFromCart(cartItem.id)
+                //             }
+                //             aria-label="delete"
+                //           >
+                //             <DeleteIcon style={{ color: 'red' }} />
+                //           </IconButton>
+                //         </Grid>
+                //       </Card>
+                //     );
+                //   })}
+                //   <Grid
+                //     sx={{
+                //       display: 'flex',
+                //       justifyContent: 'space-between',
+                //       marginTop: 10,
+                //     }}
+                //     item
+                //     xs={12}
+                //   >
+                //     <Typography variant="subtitle1">
+                //       {' '}
+                //       Subtotal:
+                //     </Typography>
+                //     <Typography variant="subtitle1">
+                //       PKR: {cartTotalPrice.toFixed(2)}
+                //     </Typography>
+                //   </Grid>
+                //   <Grid
+                //     sx={{
+                //       display: 'flex',
+                //       justifyContent: 'space-between',
+                //     }}
+                //     item
+                //     xs={12}
+                //   >
+                //     <Typography variant="subtitle1">
+                //       Discount:
+                //     </Typography>
+                //     <Typography variant="subtitle1">
+                //       PKR: {0}
+                //     </Typography>
+                //   </Grid>
+                //   <Grid
+                //     sx={{
+                //       display: 'flex',
+                //       justifyContent: 'space-between',
+                //     }}
+                //     item
+                //     xs={12}
+                //   >
+                //     <Typography variant="subtitle1">
+                //       Payable Amount:
+                //     </Typography>
+                //     <Typography variant="subtitle1">
+                //       PKR: {cartTotalPrice.toFixed(2)}
+                //     </Typography>
+                //   </Grid>
+                //   <Grid
+                //     container
+                //     justifyContent="center"
+                //     sx={{ marginTop: 3 }}
+                //   >
+                //     {loading ? (
+                //       <Loader />
+                //     ) : (
+                //       <Button
+                //         onClick={onSubmit}
+                //         variant="contained"
+                //         color="primary"
+                //         size="large"
+                //         disabled={cartTotalPrice.toFixed(2) < 1}
+                //       >
+                //         Update Order
+                //       </Button>
+                //     )}
+                //   </Grid>
+                // </>
               )}
             </CardContent>
           </Card>
