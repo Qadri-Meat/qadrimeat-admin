@@ -13,7 +13,6 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import React, { useState } from 'react';
 import { createProducts, updateProducts } from 'store/product';
 import { getImageUrl, isValidImages } from 'helper/helpers';
-import Swal from 'sweetalert2';
 
 const schema = yup.object().shape({
   name: yup.string().required().max(20),
