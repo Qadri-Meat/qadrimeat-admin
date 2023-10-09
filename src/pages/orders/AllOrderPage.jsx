@@ -1,22 +1,20 @@
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import DataTable from '@core/components/ui/DataTable';
-import { Button, Grid, Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
-
 import { useLocation } from 'react-router-dom';
 import { pick } from 'helper/pick';
 import withAuth from 'hooks/withAuth';
 import { deleteOrder, getOrders, resetOrder } from 'store/order';
 import Loader from '@core/components/ui/Loader';
-const AllOrderPage = () => {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
+import OrderPageHeading from './components/OrderPageHeading';
 
+const AllOrderPage = () => {
+  const dispatch = useDispatch();
   const location = useLocation();
   const { paid } = pick(location.search);
   const [query, setQuery] = useState('');
@@ -130,13 +128,13 @@ const AllOrderPage = () => {
 
   return (
     <AdminLayout>
-      <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
+      <OrderPageHeading />
+      {/* <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
         <Grid item>
           <Typography variant="h5" component="h1">
             Orders
           </Typography>
         </Grid>
-
         <Grid
           item
           container
@@ -155,8 +153,36 @@ const AllOrderPage = () => {
               Add Order
             </Button>
           </Grid>
+          <Grid sx={{ marginLeft: '450px' }} item>
+            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
+              <InputLabel id="demo-simple-select-label">
+                Year
+              </InputLabel>
+              <Select
+                label="Year"
+                onChange={handleYearChange}
+                variant="outlined"
+              >
+                <MenuItem value={'2022'}>2022</MenuItem>
+                <MenuItem value={'2023'}>2023</MenuItem>
+              </Select>
+            </FormControl>
+          </Grid>
+          <Grid item>
+            <ToggleButtonGroup
+              color="primary"
+              style={{ marginRight: '10px' }}
+              value={paid}
+              size="small"
+              exclusive
+              onChange={handlePaidToggle}
+            >
+              <ToggleButton value="true">Paid</ToggleButton>
+              <ToggleButton value="false">UnPaid</ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
       {loading ? (
         <Loader />
       ) : (

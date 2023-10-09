@@ -11,7 +11,11 @@ import {
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getBookings, resetBooking } from 'store/booking';
+import {
+  deleteBooking,
+  getBookings,
+  resetBooking,
+} from 'store/booking';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import FormControl from '@mui/material/FormControl';

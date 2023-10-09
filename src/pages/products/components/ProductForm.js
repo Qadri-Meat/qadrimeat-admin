@@ -13,7 +13,6 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import React, { useState } from 'react';
 import { createProducts, updateProducts } from 'store/product';
 import { getImageUrl, isValidImages } from 'helper/helpers';
-import Swal from 'sweetalert2'; // Import SweetAlert
 
 const schema = yup.object().shape({
   name: yup.string().required().max(20),
@@ -68,7 +67,6 @@ const schema = yup.object().shape({
 const ProductForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
-  const [showAlert, setShowAlert] = useState(false);
   const { message, loading } = useSelector((state) => state.product);
 
   const initialFiles = (defaultValues?.image || []).map(
@@ -98,22 +96,14 @@ const ProductForm = ({ defaultValues }) => {
 
   const handleChange = (newFiles) => {
     if (isValidImages(newFiles)) {
-      if (newFiles.length <= 5) {
-        setFiles(newFiles);
-      } else {
-        setShowAlert(true);
-        setFiles([]);
-      }
+      setFiles(newFiles);
     }
-  };
-
-  const handleCloseAlert = () => {
-    setShowAlert(false);
   };
 
   const onSubmit = (data) => {
     data.category = data.category[0];
     data.image = files;
+    console.log(data.image);
     if (defaultValues) {
       dispatch(updateProducts({ id: defaultValues.id, data }));
     } else {
@@ -123,14 +113,6 @@ const ProductForm = ({ defaultValues }) => {
 
   return (
     <>
-      {showAlert &&
-        Swal.fire({
-          title: 'Oops...',
-          text: 'You can only upload up to 5 images!',
-          icon: 'error',
-        }).then(() => {
-          handleCloseAlert();
-        })}
       <Form onSubmit={handleSubmit(onSubmit)}>
         {message && <Message severity="error">{message}</Message>}
 
@@ -241,11 +223,8 @@ const ProductForm = ({ defaultValues }) => {
           </Grid>
           <Grid item xs={12}>
             <DropzoneArea
-              maxFileSize={5242880}
+              dropzoneText="Maximum allowed number of files exceeded. Only 3 allowed"
               onChange={handleChange}
-              showAlerts={false}
-              filesLimit={5}
-              dropzoneText=""
               initialFiles={initialFiles}
               acceptedFiles={[
                 'image/jpeg',
