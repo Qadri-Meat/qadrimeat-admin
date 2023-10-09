@@ -13,7 +13,7 @@ import { DropzoneArea } from 'material-ui-dropzone';
 import React, { useState } from 'react';
 import { createProducts, updateProducts } from 'store/product';
 import { getImageUrl, isValidImages } from 'helper/helpers';
-import Swal from 'sweetalert2'; // Import SweetAlert
+import Swal from 'sweetalert2';
 
 const schema = yup.object().shape({
   name: yup.string().required().max(20),
@@ -43,12 +43,7 @@ const schema = yup.object().shape({
       'Sale count must be a number greater than or equal to zero'
     )
     .required('Sale count is a required field')
-
     .typeError('Sale count must be a number'),
-  image: yup
-    .array()
-    .required('At least one image is required')
-    .max(5, 'You can only upload up to 5 images'),
   category: yup
     .mixed()
     .test(
@@ -61,7 +56,6 @@ const schema = yup.object().shape({
         );
       }
     )
-
     .transform(function (value, originalValue) {
       if (originalValue && typeof originalValue === 'string') {
         return [originalValue];
@@ -74,10 +68,7 @@ const schema = yup.object().shape({
 const ProductForm = ({ defaultValues }) => {
   const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
-  const [showAlert, setShowAlert] = useState(false);
   const { message, loading } = useSelector((state) => state.product);
-
-  const [errorMessage, setErrorMessage] = useState('');
 
   const initialFiles = (defaultValues?.image || []).map(
     (i) => `${getImageUrl(i)}`
@@ -106,23 +97,14 @@ const ProductForm = ({ defaultValues }) => {
 
   const handleChange = (newFiles) => {
     if (isValidImages(newFiles)) {
-      if (newFiles.length <= 5) {
-        setFiles(newFiles);
-        setErrorMessage(''); // Clear any previous error message
-      } else {
-        setFiles([]); // Clear the files
-        setErrorMessage('You can only upload up to 5 images!'); // Set the error message
-      }
+      setFiles(newFiles);
     }
-  };
-
-  const handleCloseAlert = () => {
-    setShowAlert(false);
   };
 
   const onSubmit = (data) => {
     data.category = data.category[0];
     data.image = files;
+    console.log(data.image);
     if (defaultValues) {
       dispatch(updateProducts({ id: defaultValues.id, data }));
     } else {
@@ -132,14 +114,6 @@ const ProductForm = ({ defaultValues }) => {
 
   return (
     <>
-      {showAlert &&
-        Swal.fire({
-          title: 'Oops...',
-          text: 'You can only upload up to 5 images!',
-          icon: 'error',
-        }).then(() => {
-          handleCloseAlert();
-        })}
       <Form onSubmit={handleSubmit(onSubmit)}>
         {message && <Message severity="error">{message}</Message>}
 
@@ -248,32 +222,19 @@ const ProductForm = ({ defaultValues }) => {
               <MenuItem value="mutton">Mutton</MenuItem>
             </SelectInput>
           </Grid>
-          <DropzoneArea
-            maxFileSize={5242880}
-            {...register('image')}
-            onChange={handleChange}
-            showAlerts={false}
-            filesLi
-            Lmit={5} // Limit to 5 files
-            dropzoneText=""
-            initialFiles={initialFiles}
-            acceptedFiles={[
-              'image/jpeg',
-              'image/jpg',
-              'image/png',
-              'image/gif',
-            ]}
-            onLimitExceed={(files) => {
-              setShowAlert(true);
-              setFiles([]);
-            }}
-          />
-          {showAlert && (
-            <Message severity="error">
-              You can only upload up to 5 images!
-            </Message>
-          )}
-
+          <Grid item xs={12}>
+            <DropzoneArea
+              dropzoneText="Maximum allowed number of files exceeded. Only 3 allowed"
+              onChange={handleChange}
+              initialFiles={initialFiles}
+              acceptedFiles={[
+                'image/jpeg',
+                'image/jpg',
+                'image/png',
+                'image/gif',
+              ]}
+            />
+          </Grid>
           <Grid item xs={12} sx={{ textAlign: 'center' }}>
             <Button
               variant="contained"
