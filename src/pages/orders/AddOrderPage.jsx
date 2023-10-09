@@ -72,7 +72,7 @@ const AddOrderPage = () => {
       <Grid container sx={{ my: 3 }} alignItems="center">
         <Grid item>
           <Typography variant="h5" component="h1">
-            Add New OrderADD
+            Add New Order
           </Typography>
         </Grid>
       </Grid>
