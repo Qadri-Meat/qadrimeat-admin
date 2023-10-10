@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import MUIDataTable from 'mui-datatables';
 import { debounce } from 'lodash';
 import { buildURLQuery } from '@core/utils/buildURLQuery';
@@ -6,6 +6,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import Loader from './Loader';
+import DateRangePicker from 'pages/stocks/components/DateRangePicker';
+import { isNullOrEmpty } from 'helper/helpers';
 
 const DataTable = (props) => {
   const {
@@ -28,23 +30,29 @@ const DataTable = (props) => {
   const [search, setSearch] = useState('');
 
   // Initialize start and end dates with default values
-  // const [startDate, setStartDate] = useState(new Date('2022-01-01'));
-  // const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
-  // useEffect(() => {
-  //   const startDateObj = new Date(startDate);
-  //   const endDateObj = new Date(endDate);
-  //   const formattedStartDate = startDateObj.toISOString();
-  //   const formattedEndDate = endDateObj.toISOString();
-  //   const query = `startDate=${formattedStartDate}&endDate=${formattedEndDate}`;
-  //   const newURL = `${window.location.pathname}?${query}`;
-  //   window.history.pushState(null, null, newURL);
-  // }, [startDate, endDate, page, limit, search]);
+  useEffect(() => {
+    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate))
+      setQuery(
+        buildURLQuery({
+          startDate,
+          endDate,
+        })
+      );
+  }, [setQuery, startDate, endDate]);
 
   const debouncedSearch = debounce(async (text) => {
     setSearch(text == null ? '' : text);
     setQuery(
-      buildURLQuery({ page, limit, search: text == null ? '' : text })
+      buildURLQuery({
+        page,
+        limit,
+        search: text == null ? '' : text,
+        startDate,
+        endDate,
+      })
     );
   }, 1000);
 
@@ -60,7 +68,6 @@ const DataTable = (props) => {
     }).then((result) => {
       if (result.isConfirmed) {
         onDelete(value);
-
         Swal.fire(
           'Deleted!',
           'Your file has been deleted.',
@@ -94,8 +101,8 @@ const DataTable = (props) => {
                 page: tableState.page + 1,
                 limit,
                 search,
-                // startDate: startDate.toISOString(),
-                // endDate: endDate.toISOString(),
+                startDate,
+                endDate,
               })
             );
             break;
@@ -107,8 +114,8 @@ const DataTable = (props) => {
                 page: 1,
                 limit: tableState.rowsPerPage,
                 search,
-                // startDate: startDate.toISOString(),
-                // endDate: endDate.toISOString(),
+                startDate,
+                endDate,
               })
             );
             break;
@@ -124,12 +131,12 @@ const DataTable = (props) => {
 
   return (
     <>
-      {/* <DateRangePicker
+      <DateRangePicker
         startDate={startDate}
         setStartDate={setStartDate}
         endDate={endDate}
         setEndDate={setEndDate}
-      /> */}
+      />
       {loading ? (
         <Loader />
       ) : (

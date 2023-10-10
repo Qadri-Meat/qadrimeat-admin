@@ -16,7 +16,7 @@ export default function DateRangePicker({
    * @param {Date} date - The new selected start date.
    */
   const handleStartDateChange = (date) => {
-    setStartDate(date);
+    setStartDate(date.toISOString().split('T')[0]);
   };
 
   /**
@@ -24,7 +24,7 @@ export default function DateRangePicker({
    * @param {Date} date - The new selected end date.
    */
   const handleEndDateChange = (date) => {
-    setEndDate(date);
+    setEndDate(date.toISOString().split('T')[0]);
   };
 
   return (

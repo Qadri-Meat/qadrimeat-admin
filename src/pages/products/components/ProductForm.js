@@ -103,7 +103,6 @@ const ProductForm = ({ defaultValues }) => {
   const onSubmit = (data) => {
     data.category = data.category[0];
     data.image = files;
-    console.log(data.image);
     if (defaultValues) {
       dispatch(updateProducts({ id: defaultValues.id, data }));
     } else {
@@ -226,6 +225,8 @@ const ProductForm = ({ defaultValues }) => {
               dropzoneText="Maximum allowed number of files exceeded. Only 3 allowed"
               onChange={handleChange}
               initialFiles={initialFiles}
+              filesLimit={5}
+              maxFileSize={5242880}
               acceptedFiles={[
                 'image/jpeg',
                 'image/jpg',
