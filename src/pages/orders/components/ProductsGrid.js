@@ -61,6 +61,10 @@ const ProductsGrid = () => {
   const handleInputChange = (event) => {
     debouncedSearch(event.target.value);
   };
+  const handlePageChange = (event, page) => {
+    setQuery(`page=${page}&limit=12`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <Grid container spacing={2}>
@@ -132,9 +136,7 @@ const ProductsGrid = () => {
           style={{ margin: 'auto' }}
           count={totalPages}
           page={page}
-          onChange={(event, page) =>
-            setQuery(`page=${page}&limit=12`)
-          }
+          onChange={handlePageChange}
           color="primary"
         />
       </Grid>
