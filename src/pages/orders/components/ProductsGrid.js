@@ -115,13 +115,14 @@ const ProductsGrid = () => {
           >
             <CardMedia
               sx={{ minHeight: 100, objectFit: 'contain' }}
-              image={getImageUrl(
-                product.image.length > 0
-                  ? product.image[0]
+              image={
+                product.image && product.image.length > 0
+                  ? getImageUrl(product.image[0])
                   : '/default.png'
-              )}
+              }
               title={product.title}
             />
+
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography variant="body1">{product.name}</Typography>
               <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
