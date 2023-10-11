@@ -8,13 +8,13 @@ import BookingReportsTable from './components/BookingReportsTable';
 import BookingTable from './components/BookingTable';
 import withAuth from 'hooks/withAuth';
 import BookingPageHeading from './components/BookingPageHeading';
+import StockTable from './components/StockTable';
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
 
-  const { todayReport, reports, deals, loading } = useSelector(
-    (state) => state.user
-  );
+  const { todayReport, reports, deals, loading, stockReport } =
+    useSelector((state) => state.user);
 
   useEffect(() => {
     dispatch(getDashboard());
@@ -50,6 +50,22 @@ const DashboardPage = () => {
             <Typography variant="h5">Total Bookings</Typography>
             {deals ? (
               <BookingTable deals={deals} loading={loading} />
+            ) : (
+              <></>
+            )}
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={8}>
+          <Paper
+            style={{ padding: 10, marginTop: 15 }}
+            variant="outlined"
+          >
+            <Typography variant="h5">Daily Reports</Typography>
+            {stockReport ? (
+              <StockTable
+                stockReport={stockReport}
+                loading={loading}
+              />
             ) : (
               <></>
             )}
