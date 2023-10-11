@@ -16,8 +16,9 @@ const OrderPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { selectedOrder } = useSelector((state) => state.order);
+  const items = selectedOrder?.orderItems || [];
+  let totalPriceWithoutDiscount = 0;
   const navigate = useNavigate();
-
   useEffect(() => {
     dispatch(getOrder(id));
   }, [dispatch, id, navigate]);
@@ -167,14 +168,14 @@ const OrderPage = () => {
             m: 3,
           }}
         >
+          {items.forEach((item) => {
+            totalPriceWithoutDiscount += item.price;
+          })}
           <Box>
-            <Typography variant="h6">Sub Total tr</Typography>
+            <Typography variant="h6">Sub Total</Typography>
             <Typography variant="body1">
               Rs
-              {' ' +
-                selectedOrder.totalPrice -
-                selectedOrder.shippingPrice +
-                (selectedOrder.discount || 0)}
+              {' ' + totalPriceWithoutDiscount}
             </Typography>
           </Box>
           <Box>
@@ -186,7 +187,11 @@ const OrderPage = () => {
           <Box>
             <Typography variant="h6">Discount</Typography>
             <Typography variant="body1">
-              Rs{' ' + (selectedOrder.discount || 0)}
+              Rs
+              {' ' +
+                (
+                  totalPriceWithoutDiscount - selectedOrder.totalPrice
+                ).toFixed(2)}
             </Typography>
           </Box>
           <Box>
