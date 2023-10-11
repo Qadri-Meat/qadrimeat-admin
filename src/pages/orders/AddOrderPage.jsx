@@ -257,7 +257,7 @@ const AddOrderPage = () => {
                           Subtotal:
                         </Typography>
                         <Typography variant="subtitle1">
-                          PKR: {cartTotalPrice.toFixed(2)}
+                          PKR: {totalPrice}
                         </Typography>
                       </Grid>
                       <Grid

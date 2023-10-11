@@ -1,18 +1,18 @@
-import AdminBreadcrumbs from "@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs";
-import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import { Box, Button, Grid, Typography } from "@mui/material";
-import { useNavigate, useParams } from "react-router-dom";
-import CheckIcon from "@mui/icons-material/Check";
-import ClearIcon from "@mui/icons-material/Clear";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-import MUIDataTable from "mui-datatables";
-import { getBooking } from "store/booking";
-import { getDiscountPrice } from "helper/product";
-import BookingPageRightPanels from "@core/components/extra/BookingPageRightPanels/BookingPageRightPanels";
-import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
-import { formatTime } from "helper/formatTime";
-import { getImageUrl } from "helper/helpers";
+import AdminBreadcrumbs from '@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs';
+import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
+import { Box, Button, Grid, Typography } from '@mui/material';
+import { useNavigate, useParams } from 'react-router-dom';
+import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import MUIDataTable from 'mui-datatables';
+import { getBooking } from 'store/booking';
+import { getDiscountPrice } from 'helper/product';
+import BookingPageRightPanels from '@core/components/extra/BookingPageRightPanels/BookingPageRightPanels';
+import MemoizedAvatar from '@core/components/extra/MemoizedAvatar';
+import { formatTime } from 'helper/formatTime';
+import { getImageUrl } from 'helper/helpers';
 
 const BookingPage = () => {
   const { id } = useParams();
@@ -26,8 +26,8 @@ const BookingPage = () => {
 
   const columns = [
     {
-      name: "image",
-      label: "Image",
+      name: 'image',
+      label: 'Image',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -36,24 +36,24 @@ const BookingPage = () => {
       },
     },
     {
-      name: "name",
-      label: "Name",
+      name: 'name',
+      label: 'Name',
       options: {
         filter: true,
         sort: true,
       },
     },
     {
-      name: "price",
-      label: "Price",
+      name: 'price',
+      label: 'Price',
       options: {
         filter: true,
         sort: false,
       },
     },
     {
-      name: "discount",
-      label: "Discount",
+      name: 'discount',
+      label: 'Discount',
       options: {
         filter: true,
         sort: false,
@@ -64,24 +64,29 @@ const BookingPage = () => {
           const discount = cartItem[3];
           const discountedPrice = getDiscountPrice(price, discount);
           const finalProductPrice = (price * 1).toFixed(2);
-          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(
+            2
+          );
 
           return (
             <>
               {discountedPrice !== null ? (
                 <>
                   <span
-                    style={{ textDecoration: "line-through", color: "gray" }}
+                    style={{
+                      textDecoration: 'line-through',
+                      color: 'gray',
+                    }}
                   >
-                    {"PKR " + finalProductPrice}
+                    {'PKR ' + finalProductPrice}
                   </span>
                   <br />
                   <span className="amount">
-                    {"    PKR " + finalDiscountedPrice}
+                    {'    PKR ' + finalDiscountedPrice}
                   </span>
                 </>
               ) : (
-                <span>{"PKR " + finalProductPrice}</span>
+                <span>{'PKR ' + finalProductPrice}</span>
               )}
             </>
           );
@@ -89,47 +94,50 @@ const BookingPage = () => {
       },
     },
     {
-      name: "quantity",
-      label: "Quantity",
+      name: 'quantity',
+      label: 'Quantity',
       options: {
         filter: true,
         sort: false,
       },
     },
     {
-      name: "day",
-      label: "Day",
+      name: 'day',
+      label: 'Day',
       options: {
         filter: true,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowIndex } = tableMeta;
-          return selectedBooking.bookingItems[rowIndex].isPackage ? value : "";
+          return selectedBooking.bookingItems[rowIndex].isPackage
+            ? value
+            : '';
         },
       },
     },
     {
-      name: "time",
-      label: "Time",
+      name: 'time',
+      label: 'Time',
       options: {
         filter: true,
         sort: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           const { rowIndex } = tableMeta;
-          const isPackage = selectedBooking.bookingItems[rowIndex].isPackage;
+          const isPackage =
+            selectedBooking.bookingItems[rowIndex].isPackage;
 
           if (isPackage) {
             const formattedTime = formatTime(value);
             return formattedTime;
           } else {
-            return "";
+            return '';
           }
         },
       },
     },
     {
-      name: "isPackage",
-      label: "Package",
+      name: 'isPackage',
+      label: 'Package',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -138,8 +146,8 @@ const BookingPage = () => {
       },
     },
     {
-      name: "price",
-      label: "Sub Total",
+      name: 'price',
+      label: 'Sub Total',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
@@ -149,12 +157,15 @@ const BookingPage = () => {
           const quantity = cartItem[4];
           const discountedPrice = getDiscountPrice(price, discount);
           const finalProductPrice = (price * 1).toFixed(2);
-          const finalDiscountedPrice = (discountedPrice * 1).toFixed(2);
+          const finalDiscountedPrice = (discountedPrice * 1).toFixed(
+            2
+          );
           return (
             <>
               {discountedPrice !== null
-                ? "PKR " + (finalDiscountedPrice * quantity).toFixed(2)
-                : "PKR " + (finalProductPrice * quantity).toFixed(2)}
+                ? 'PKR ' +
+                  (finalDiscountedPrice * quantity).toFixed(2)
+                : 'PKR ' + (finalProductPrice * quantity).toFixed(2)}
             </>
           );
         },
@@ -163,21 +174,27 @@ const BookingPage = () => {
   ];
 
   const options = {
-    filterType: "checkbox",
+    filterType: 'checkbox',
     selectableRows: false,
     search: false,
     print: false,
     download: false,
     viewColumns: false,
     filter: false,
-    customFooter: (count, page, rowsPerPage, changeRowsPerPage, changePage) => {
+    customFooter: (
+      count,
+      page,
+      rowsPerPage,
+      changeRowsPerPage,
+      changePage
+    ) => {
       return (
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
             m: 3,
           }}
         >
@@ -185,7 +202,7 @@ const BookingPage = () => {
             <Typography variant="h6">Sub Total</Typography>
             <Typography variant="body1">
               Rs
-              {" " +
+              {' ' +
                 selectedBooking.totalPrice -
                 selectedBooking.shippingPrice +
                 (selectedBooking.discount || 0)}
@@ -194,19 +211,19 @@ const BookingPage = () => {
           <Box>
             <Typography variant="h6">Shipping Price</Typography>
             <Typography variant="body1">
-              Rs{" " + selectedBooking.shippingPrice}
+              Rs{' ' + selectedBooking.shippingPrice}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Discount</Typography>
             <Typography variant="body1">
-              Rs{" " + (selectedBooking.discount || 0)}
+              Rs{' ' + (selectedBooking.discount || 0)}
             </Typography>
           </Box>
           <Box>
             <Typography variant="h6">Grand Total</Typography>
             <Typography variant="body1">
-              Rs{" " + selectedBooking.totalPrice}
+              Rs{' ' + selectedBooking.totalPrice}
             </Typography>
           </Box>
         </Box>
@@ -234,7 +251,7 @@ const BookingPage = () => {
         <Grid item>
           <Button
             onClick={() => {
-              window.open(`/bookings/invoice/${id}`, "_blank");
+              window.open(`/bookings/invoice/${id}`, '_blank');
             }}
             variant="outlined"
             color="primary"
@@ -250,7 +267,7 @@ const BookingPage = () => {
           <Grid container item md={8} spacing={3}>
             <Grid item xs={12}>
               <MUIDataTable
-                title={"Booking Items"}
+                title={'Booking Items'}
                 data={selectedBooking.bookingItems}
                 columns={columns}
                 options={options}
