@@ -41,16 +41,23 @@ const OrderPageRightPanels = () => {
 
   const submitHandler = async () => {
     if (selectedOrder.status === 'pending') {
-      dispatch(
-        updateOrder({
-          id: selectedOrder.id,
-          data: {
-            status: 'approved',
-            approvedAt: new Date(),
-          },
-        })
-      );
-      setShowTransactionField(false);
+      try {
+        await dispatch(
+          updateOrder({
+            id: selectedOrder.id,
+            data: {
+              status: 'approved',
+              approvedAt: new Date(),
+            },
+          })
+        );
+        setShowTransactionField(false);
+
+        // Reload the window after the action is complete
+        window.location.reload();
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
   };
 
