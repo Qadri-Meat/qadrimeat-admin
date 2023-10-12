@@ -43,6 +43,10 @@ const AllBookingsPage = () => {
   const onDelete = (value) => {
     dispatch(deleteBooking(value));
   };
+  const handleResetFilter = () => {
+    setQuery('');
+    navigate('/bookings');
+  };
 
   const handlePaidToggle = (event, value) => {
     navigate(`/bookings?paid=${value}`);
@@ -173,6 +177,16 @@ const AllBookingsPage = () => {
               size="small"
             >
               Add Booking
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={handleResetFilter}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Clear Filter
             </Button>
           </Grid>
           <Grid item>
