@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -61,6 +62,11 @@ const ProductsGrid = () => {
   const handleInputChange = (event) => {
     debouncedSearch(event.target.value);
   };
+  const handleResetFilter = () => {
+    setCategory('');
+    debouncedSearch('');
+    setQuery('page=1&limit=12');
+  };
   const handlePageChange = (event, page) => {
     setQuery(`page=${page}&limit=12`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -87,6 +93,16 @@ const ProductsGrid = () => {
                 <MenuItem value={'beef'}>Beef</MenuItem>
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={handleResetFilter}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Clear Filter
+            </Button>
           </Grid>
           <Grid item>
             <FormControl>
