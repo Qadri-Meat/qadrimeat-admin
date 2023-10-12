@@ -1,15 +1,11 @@
 import {
   Button,
-  FormControl,
   Grid,
-  InputLabel,
-  MenuItem,
-  Select,
   ToggleButton,
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { pick } from 'helper/pick';
@@ -17,16 +13,21 @@ import { pick } from 'helper/pick';
 const OrderPageHeading = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [selectedYear, setSelectedYear] = useState('');
   const { paid } = pick(location.search);
-  const handleYearChange = (event) => {
-    const year = event.target.value;
-    console.log(year);
-    setSelectedYear(year);
-    navigate(`/orders?year=${year}`);
-  };
   const handlePaidToggle = (event, value) => {
     navigate(`/orders?paid=${value}`);
+
+    // useEffect(() => {
+    //   if (success) {
+    //     dispatch(resetBooking());
+    //   } else {
+    //     dispatch(
+    //       getBookings(
+    //         `${paid !== undefined ? `isPaid=${paid}&` : ''}${query}`
+    //       )
+    //     );
+    //   }
+    // }, [dispatch, paid, query, success]);
   };
   return (
     <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
@@ -52,21 +53,6 @@ const OrderPageHeading = () => {
           >
             Add Order
           </Button>
-        </Grid>
-        <Grid sx={{ marginLeft: '450px' }} item>
-          <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-            <InputLabel id="demo-simple-select-label">
-              Year
-            </InputLabel>
-            <Select
-              label="Year"
-              onChange={handleYearChange}
-              variant="outlined"
-            >
-              <MenuItem value={'2022'}>2022</MenuItem>
-              <MenuItem value={'2023'}>2023</MenuItem>
-            </Select>
-          </FormControl>
         </Grid>
         <Grid item>
           <ToggleButtonGroup
