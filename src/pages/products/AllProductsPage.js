@@ -1,18 +1,22 @@
-import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
-import { Button, Grid, Typography } from "@mui/material";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import DataTable from "@core/components/ui/DataTable";
-import MemoizedAvatar from "@core/components/extra/MemoizedAvatar";
-import withAuth from "hooks/withAuth";
-import { deleteProduct, getProducts, resetProduct } from "store/product";
-import { getImageUrl } from "helper/helpers";
-import Loader from "@core/components/ui/Loader";
+import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
+import { Button, Grid, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import DataTable from '@core/components/ui/DataTable';
+import MemoizedAvatar from '@core/components/extra/MemoizedAvatar';
+import withAuth from 'hooks/withAuth';
+import {
+  deleteProduct,
+  getProducts,
+  resetProduct,
+} from 'store/product';
+import { getImageUrl } from 'helper/helpers';
+import Loader from '@core/components/ui/Loader';
 const AllProductsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   const { user: authUser } = useSelector((state) => state.auth);
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.product
@@ -27,14 +31,14 @@ const AllProductsPage = () => {
   }, [dispatch, query, success]);
 
   const onDelete =
-    authUser?.role === "user"
+    authUser?.role === 'user'
       ? null
       : (value) => {
           dispatch(deleteProduct(value));
         };
 
   const onEdit =
-    authUser?.role === "user"
+    authUser?.role === 'user'
       ? null
       : (value) => {
           navigate(`/products/${value}`);
@@ -42,34 +46,36 @@ const AllProductsPage = () => {
 
   const columns = [
     {
-      name: "image",
-      label: "Image",
+      name: 'image',
+      label: 'Image',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
           return (
             <MemoizedAvatar
-              src={getImageUrl(value.length > 0 ? value[0] : "/default.png")}
+              src={getImageUrl(
+                value.length > 0 ? value[0] : '/default.png'
+              )}
             />
           );
         },
       },
     },
     {
-      name: "name",
-      label: "Name",
+      name: 'name',
+      label: 'Name',
     },
     {
-      name: "sku",
-      label: "SKU",
+      name: 'sku',
+      label: 'SKU',
     },
     {
-      name: "price",
-      label: "Price",
+      name: 'price',
+      label: 'Price',
     },
     {
-      name: "stock",
-      label: "Stock",
+      name: 'stock',
+      label: 'Stock',
     },
   ];
 
@@ -83,7 +89,7 @@ const AllProductsPage = () => {
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate("/products/add-products")}
+            onClick={() => navigate('/products/add-products')}
             variant="outlined"
             color="primary"
             size="small"
@@ -96,7 +102,7 @@ const AllProductsPage = () => {
         <Loader />
       ) : (
         <DataTable
-          title={"Product List"}
+          title={'Product List'}
           results={results}
           totalResults={totalResults}
           columns={columns}
