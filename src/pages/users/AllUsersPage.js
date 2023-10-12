@@ -1,19 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import AdminLayout from "@core/components/admin/AdminLayout/AdminLayout";
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 
-import { useDispatch, useSelector } from "react-redux";
-import DataTable from "@core/components/ui/DataTable";
-import { getUsers, resetUser } from "store/user";
-import { Button, Grid, Typography } from "@mui/material";
-import { deleteUser } from "store/user";
-import withAuth from "hooks/withAuth";
-import Loader from "@core/components/ui/Loader";
+import { useDispatch, useSelector } from 'react-redux';
+import DataTable from '@core/components/ui/DataTable';
+import { getUsers, resetUser } from 'store/user';
+import { Button, Grid, Typography } from '@mui/material';
+import { deleteUser } from 'store/user';
+import withAuth from 'hooks/withAuth';
+import Loader from '@core/components/ui/Loader';
 
 const AllUsersPage = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
 
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.user
@@ -30,27 +30,30 @@ const AllUsersPage = (props) => {
   const onDelete = async (value) => {
     dispatch(deleteUser(value));
   };
-
+  const handleResetFilter = () => {
+    setQuery('');
+    navigate('/users');
+  };
   const onEdit = async (value) => {
     navigate(`/users/${value}`);
   };
 
   const columns = [
     {
-      name: "id",
-      label: "Id",
+      name: 'id',
+      label: 'Id',
     },
     {
-      name: "name",
-      label: "Name",
+      name: 'name',
+      label: 'Name',
     },
     {
-      name: "email",
-      label: "Email",
+      name: 'email',
+      label: 'Email',
     },
     {
-      name: "role",
-      label: "Role",
+      name: 'role',
+      label: 'Role',
     },
   ];
 
@@ -64,7 +67,7 @@ const AllUsersPage = (props) => {
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate("/users/add-user")}
+            onClick={() => navigate('/users/add-user')}
             variant="outlined"
             color="primary"
             size="small"
@@ -72,12 +75,22 @@ const AllUsersPage = (props) => {
             Add User
           </Button>
         </Grid>
+        <Grid item>
+          <Button
+            onClick={handleResetFilter}
+            variant="outlined"
+            color="primary"
+            size="small"
+          >
+            Clear Filter
+          </Button>
+        </Grid>
       </Grid>
       {loading ? (
         <Loader />
       ) : (
         <DataTable
-          title={"Users List"}
+          title={'Users List'}
           results={results}
           totalResults={totalResults}
           columns={columns}
