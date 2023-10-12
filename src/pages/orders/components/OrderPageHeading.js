@@ -21,11 +21,12 @@ const OrderPageHeading = () => {
   const { paid } = pick(location.search);
   const handleYearChange = (event) => {
     const year = event.target.value;
+    console.log(year);
     setSelectedYear(year);
-    // navigate(`/bookings?year=${year}`);
+    navigate(`/orders?year=${year}`);
   };
   const handlePaidToggle = (event, value) => {
-    // navigate(`/bookings?paid=${value}`);
+    navigate(`/orders?paid=${value}`);
   };
   return (
     <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
