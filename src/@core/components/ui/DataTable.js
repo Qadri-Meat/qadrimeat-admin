@@ -24,6 +24,9 @@ const DataTable = (props) => {
     searchPlaceholder,
     loading,
   } = props;
+  const shouldShowDateRangePicker =
+    !window.location.pathname.endsWith('/users') &&
+    !window.location.pathname.endsWith('/products');
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -131,12 +134,14 @@ const DataTable = (props) => {
 
   return (
     <>
-      <DateRangePicker
-        startDate={startDate}
-        setStartDate={setStartDate}
-        endDate={endDate}
-        setEndDate={setEndDate}
-      />
+      {shouldShowDateRangePicker && (
+        <DateRangePicker
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+        />
+      )}
       {loading ? (
         <Loader />
       ) : (
