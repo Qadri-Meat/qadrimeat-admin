@@ -14,8 +14,8 @@ const schema = yup.object().shape({
   description: yup.string().required(),
   amount: yup
     .number()
-    .required()
-    .positive('Amount must be a positive number')
+    .transform((value) => (Number.isNaN(value) ? null : value))
+    .required('Amount is required field')
     .moreThan(0, 'Amount must be greater than zero'),
   type: yup.string().required('Type is a required field'),
 });

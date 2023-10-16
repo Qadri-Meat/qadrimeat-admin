@@ -41,14 +41,22 @@ const AddOrderPage = () => {
   };
 
   const onSubmit = () => {
+    const itemsToRemove = cartItems.filter(
+      (item) => item.quantity === 0
+    );
+    const itemsToKeep = cartItems.filter((item) => item.quantity > 0);
+    itemsToRemove.forEach((item) => {
+      dispatch(removeItem(item.id));
+    });
+
     const newOrder = {
-      orderItems: cartItems,
+      orderItems: itemsToKeep,
       totalPrice: cartTotalPrice.toFixed(2),
       discount: 0,
       deliveryTime: Date.now(),
     };
+
     dispatch(createOrder(newOrder));
-    console.log('in the process handle function');
     dispatch(resetCart());
   };
 
@@ -72,7 +80,7 @@ const AddOrderPage = () => {
       <Grid container sx={{ my: 3 }} alignItems="center">
         <Grid item>
           <Typography variant="h5" component="h1">
-            Add New OrderADD
+            Add New Order
           </Typography>
         </Grid>
       </Grid>
@@ -257,7 +265,7 @@ const AddOrderPage = () => {
                           Subtotal:
                         </Typography>
                         <Typography variant="subtitle1">
-                          PKR: {cartTotalPrice.toFixed(2)}
+                          PKR: {totalPrice}
                         </Typography>
                       </Grid>
                       <Grid

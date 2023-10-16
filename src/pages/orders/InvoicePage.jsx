@@ -1,12 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
-import "./styles/invoice.css";
-import { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { getDiscountPrice } from "helper/product";
-import { Avatar } from "@mui/material";
-import withAuth from "hooks/withAuth";
-import { getOrder } from "store/order";
-import { getImageUrl } from "helper/helpers";
+import { useDispatch, useSelector } from 'react-redux';
+import './styles/invoice.css';
+import { useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { getDiscountPrice } from 'helper/product';
+import { Avatar } from '@mui/material';
+import withAuth from 'hooks/withAuth';
+import { getOrder } from 'store/order';
+import { getImageUrl } from 'helper/helpers';
+
 const InvoicePage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -17,10 +18,12 @@ const InvoicePage = () => {
       dispatch(getOrder(id));
     }
   }, [selectedOrder, id, dispatch, navigate]);
+  const items = selectedOrder?.orderItems || [];
+  let totalPriceWithoutDiscount = 0;
 
   const printPage = () => {
-    var ButtonControl = document.getElementById("btnprint");
-    ButtonControl.style.visibility = "hidden";
+    var ButtonControl = document.getElementById('btnprint');
+    ButtonControl.style.visibility = 'hidden';
     window.print();
   };
 
@@ -47,14 +50,16 @@ const InvoicePage = () => {
                         <h2>Qadri Meat</h2>
                         <div>
                           <p className="text-muted">
-                            <strong>Email:</strong> qadrimeat@gmail.com
+                            <strong>Email:</strong>{' '}
+                            qadrimeat@gmail.com
                             <br />
                             <strong>Phone:</strong> +92 302-4000719
                             <br />
                             <strong>PTCL:</strong> 042-38651881
                             <br />
-                            <strong>Address:</strong> Street 113, Sector 11 N
-                            Dha Phase 1, Lahore, Punjab , Pakistan
+                            <strong>Address:</strong> Street 113,
+                            Sector 11 N Dha Phase 1, Lahore, Punjab ,
+                            Pakistan
                           </p>
                         </div>
                       </div>
@@ -68,7 +73,7 @@ const InvoicePage = () => {
                           <span
                             className="glyphicon glyphicon-print noprint"
                             aria-hidden="true"
-                          ></span>{" "}
+                          ></span>{' '}
                           Print
                         </button>
                         <p className="font-weight-bold mb-1">
@@ -79,7 +84,7 @@ const InvoicePage = () => {
                           {new Date(
                             selectedOrder.createdAt
                           ).toLocaleDateString()}
-                          ,{" "}
+                          ,{' '}
                           {new Date(
                             selectedOrder.createdAt
                           ).toLocaleTimeString()}
@@ -92,25 +97,25 @@ const InvoicePage = () => {
                     <div className="row">
                       <div className="col-md-6">
                         <p className="font-weight-bold">
-                          To:{" "}
+                          To:{' '}
                           {selectedOrder.shippingDetails?.firstName +
-                            " " +
+                            ' ' +
                             selectedOrder.shippingDetails?.lastName}
                         </p>
                         <p className="text-muted">
                           {/* <strong>Email:</strong>{' '}
                           {selectedOrder.shippingDetails.email}
                           <br /> */}
-                          <strong>Phone:</strong>{" "}
+                          <strong>Phone:</strong>{' '}
                           {selectedOrder.shippingDetails?.phone}
                           <br />
-                          <strong>Address:</strong>{" "}
-                          {selectedOrder.shippingDetails?.address},{" "}
-                          {selectedOrder.shippingDetails?.city}{" "}
-                          {selectedOrder.shippingDetails?.postalCode},{" "}
+                          <strong>Address:</strong>{' '}
+                          {selectedOrder.shippingDetails?.address}{' '}
+                          {selectedOrder.shippingDetails?.city}{' '}
+                          {selectedOrder.shippingDetails?.postalCode}{' '}
                           {selectedOrder.shippingDetails?.country}
                           <br />
-                          <strong>Note:</strong>{" "}
+                          <strong>Note:</strong>{' '}
                           {selectedOrder.shippingDetails?.notes}
                         </p>
                       </div>
@@ -168,80 +173,93 @@ const InvoicePage = () => {
                             </tr>
                           </thead>
                           <tbody>
-                            {selectedOrder.orderItems.map((item, index) => {
-                              const discountedPrice = getDiscountPrice(
-                                item.price,
-                                item.discount
-                              );
-                              const finalProductPrice = (
-                                item.price * 1
-                              ).toFixed(2);
-                              const finalDiscountedPrice = (
-                                discountedPrice * 1
-                              ).toFixed(2);
-                              return (
-                                <tr>
-                                  <td>
-                                    <Avatar
-                                      variant="rounded"
-                                      alt={item.name}
-                                      src={getImageUrl(
-                                        item.image.length > 0
-                                          ? item.image[0]
-                                          : "/default.png"
-                                      )}
-                                    />
-                                  </td>
-                                  <td>{item.name}</td>
-                                  <td>{item.quantity}</td>
+                            {selectedOrder.orderItems.map(
+                              (item, index) => {
+                                const discountedPrice =
+                                  getDiscountPrice(
+                                    item.price,
+                                    item.discount
+                                  );
+                                const finalProductPrice = (
+                                  item.price * 1
+                                ).toFixed(2);
+                                const finalDiscountedPrice = (
+                                  discountedPrice * 1
+                                ).toFixed(2);
+                                return (
+                                  <tr>
+                                    <td>
+                                      <Avatar
+                                        variant="rounded"
+                                        alt={item.name}
+                                        src={getImageUrl(
+                                          item.image.length > 0
+                                            ? item.image[0]
+                                            : '/default.png'
+                                        )}
+                                      />
+                                    </td>
+                                    <td>{item.name}</td>
+                                    <td>{item.quantity}</td>
 
-                                  <td>
-                                    {item.isPackage ? "Package" : "Non Package"}
-                                  </td>
-                                  <td>
-                                    <>
-                                      {discountedPrice !== null ? (
-                                        <>
-                                          <span
-                                            style={{
-                                              textDecoration: "line-through",
-                                              color: "gray",
-                                            }}
-                                          >
-                                            {"PKR " + finalProductPrice}
+                                    <td>
+                                      {item.isPackage
+                                        ? 'Package'
+                                        : 'Non Package'}
+                                    </td>
+                                    <td>
+                                      <>
+                                        {discountedPrice !== null ? (
+                                          <>
+                                            <span
+                                              style={{
+                                                textDecoration:
+                                                  'line-through',
+                                                color: 'gray',
+                                              }}
+                                            >
+                                              {'PKR ' +
+                                                finalProductPrice}
+                                            </span>
+                                            <span className="amount">
+                                              {'    PKR ' +
+                                                finalDiscountedPrice}
+                                            </span>
+                                          </>
+                                        ) : (
+                                          <span>
+                                            {'PKR ' +
+                                              finalProductPrice}
                                           </span>
-                                          <span className="amount">
-                                            {"    PKR " + finalDiscountedPrice}
-                                          </span>
-                                        </>
-                                      ) : (
-                                        <span>
-                                          {"PKR " + finalProductPrice}
-                                        </span>
-                                      )}
-                                    </>
-                                  </td>
-                                  <td>
-                                    <>
-                                      {discountedPrice !== null
-                                        ? "PKR " +
-                                          (
-                                            finalDiscountedPrice * item.quantity
-                                          ).toFixed(2)
-                                        : "PKR " +
-                                          (
-                                            finalProductPrice * item.quantity
-                                          ).toFixed(2)}
-                                    </>
-                                  </td>
-                                </tr>
-                              );
-                            })}
+                                        )}
+                                      </>
+                                    </td>
+                                    <td>
+                                      <>
+                                        {discountedPrice !== null
+                                          ? 'PKR ' +
+                                            (
+                                              finalDiscountedPrice *
+                                              item.quantity
+                                            ).toFixed(2)
+                                          : 'PKR ' +
+                                            (
+                                              finalProductPrice *
+                                              item.quantity
+                                            ).toFixed(2)}
+                                      </>
+                                    </td>
+                                  </tr>
+                                );
+                              }
+                            )}
                           </tbody>
                         </table>
                       </div>
                     </div>
-
+                    {items.forEach((item) => {
+                      totalPriceWithoutDiscount += item.price;
+                    })}
                     <div className="d-flex flex-row-reverse p-2">
                       <div className="px-5">
                         <table>
@@ -252,10 +270,7 @@ const InvoicePage = () => {
                               </td>
                               <td>
                                 <strong>
-                                  Rs{" "}
-                                  {selectedOrder.totalPrice -
-                                    selectedOrder.shippingPrice +
-                                    (selectedOrder.discount || 0)}
+                                  Rs {totalPriceWithoutDiscount}
                                 </strong>
                               </td>
                             </tr>
@@ -275,7 +290,11 @@ const InvoicePage = () => {
                               </td>
                               <td>
                                 <strong>
-                                  Rs {selectedOrder.discount || 0}
+                                  Rs{' '}
+                                  {(
+                                    totalPriceWithoutDiscount -
+                                    selectedOrder.totalPrice
+                                  ).toFixed(2)}
                                 </strong>
                               </td>
                             </tr>
@@ -284,7 +303,9 @@ const InvoicePage = () => {
                                 <strong>Grand Total:</strong>
                               </td>
                               <td>
-                                <strong>Rs {selectedOrder.totalPrice}</strong>
+                                <strong>
+                                  Rs {selectedOrder.totalPrice}
+                                </strong>
                               </td>
                             </tr>
                             <tr>
@@ -292,16 +313,18 @@ const InvoicePage = () => {
                                 <strong>Total Paid:</strong>
                               </td>
                               <td>
-                                <strong>Rs {selectedOrder.totalPaid}</strong>
+                                <strong>
+                                  Rs {selectedOrder.totalPaid}
+                                </strong>
                               </td>
                             </tr>
                             <tr>
                               <td className="pr-3 text-right">
-                                <strong>Balance:</strong>
+                                <strong>Remaining Amount:</strong>
                               </td>
                               <td>
                                 <strong>
-                                  Rs{" "}
+                                  Rs{' '}
                                   {selectedOrder.totalPrice -
                                     selectedOrder.totalPaid}
                                 </strong>
@@ -317,7 +340,7 @@ const InvoicePage = () => {
             </div>
 
             <div className="text-dark mt-2 mb-2 text-center small">
-              by :{" "}
+              by :{' '}
               <a
                 className="text-dark"
                 target="_blank"

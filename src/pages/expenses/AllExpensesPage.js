@@ -19,7 +19,10 @@ const AllExpensesPage = () => {
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.expense
   );
-
+  const handleResetFilter = () => {
+    setQuery('');
+    navigate('/expenses');
+  };
   useEffect(() => {
     if (success) {
       dispatch(resetExpense());
@@ -90,6 +93,16 @@ const AllExpensesPage = () => {
               size="small"
             >
               Add Expense
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={handleResetFilter}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Clear Filter
             </Button>
           </Grid>
         </Grid>

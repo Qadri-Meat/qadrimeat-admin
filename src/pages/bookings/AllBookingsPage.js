@@ -1,13 +1,6 @@
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import DataTable from '@core/components/ui/DataTable';
-import {
-  Button,
-  Grid,
-  InputLabel,
-  MenuItem,
-  Select,
-  Typography,
-} from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +11,6 @@ import {
 } from 'store/booking';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import FormControl from '@mui/material/FormControl';
 import { useLocation } from 'react-router-dom';
 import { pick } from 'helper/pick';
 import withAuth from 'hooks/withAuth';
@@ -32,7 +24,6 @@ const AllBookingsPage = () => {
   const location = useLocation();
   const { paid } = pick(location.search);
   const [query, setQuery] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.booking
   );
@@ -43,26 +34,22 @@ const AllBookingsPage = () => {
     } else {
       dispatch(
         getBookings(
-          `${paid !== undefined ? `isPaid=${paid}&` : ''}${
-            selectedYear !== '' ? `year=${selectedYear}&` : ''
-          }${query}`
+          `${paid !== undefined ? `isPaid=${paid}&` : ''}${query}`
         )
       );
     }
-  }, [dispatch, paid, query, success, selectedYear]);
+  }, [dispatch, paid, query, success]);
 
   const onDelete = (value) => {
     dispatch(deleteBooking(value));
   };
+  const handleResetFilter = () => {
+    setQuery('');
+    navigate('/bookings');
+  };
 
   const handlePaidToggle = (event, value) => {
     navigate(`/bookings?paid=${value}`);
-  };
-
-  const handleYearChange = (event) => {
-    const year = event.target.value;
-    setSelectedYear(year);
-    navigate(`/bookings?year=${year}`);
   };
 
   const columns = [
@@ -192,20 +179,15 @@ const AllBookingsPage = () => {
               Add Booking
             </Button>
           </Grid>
-          <Grid sx={{ marginLeft: '450px' }} item>
-            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-              <InputLabel id="demo-simple-select-label">
-                Year
-              </InputLabel>
-              <Select
-                label="Year"
-                onChange={handleYearChange}
-                variant="outlined"
-              >
-                <MenuItem value={'2022'}>2022</MenuItem>
-                <MenuItem value={'2023'}>2023</MenuItem>
-              </Select>
-            </FormControl>
+          <Grid item>
+            <Button
+              onClick={handleResetFilter}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Clear Filter
+            </Button>
           </Grid>
           <Grid item>
             <ToggleButtonGroup

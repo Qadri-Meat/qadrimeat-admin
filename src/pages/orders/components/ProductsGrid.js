@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -61,6 +62,15 @@ const ProductsGrid = () => {
   const handleInputChange = (event) => {
     debouncedSearch(event.target.value);
   };
+  const handleResetFilter = () => {
+    setCategory('');
+    debouncedSearch('');
+    setQuery('page=1&limit=12');
+  };
+  const handlePageChange = (event, page) => {
+    setQuery(`page=${page}&limit=12`);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <Grid container spacing={2}>
@@ -83,6 +93,16 @@ const ProductsGrid = () => {
                 <MenuItem value={'beef'}>Beef</MenuItem>
               </Select>
             </FormControl>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={handleResetFilter}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Clear Filter
+            </Button>
           </Grid>
           <Grid item>
             <FormControl>
@@ -111,13 +131,14 @@ const ProductsGrid = () => {
           >
             <CardMedia
               sx={{ minHeight: 100, objectFit: 'contain' }}
-              image={getImageUrl(
-                product.image.length > 0
-                  ? product.image[0]
+              image={
+                product.image && product.image.length > 0
+                  ? getImageUrl(product.image[0])
                   : '/default.png'
-              )}
+              }
               title={product.title}
             />
+
             <CardContent sx={{ textAlign: 'center' }}>
               <Typography variant="body1">{product.name}</Typography>
               <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
@@ -132,9 +153,7 @@ const ProductsGrid = () => {
           style={{ margin: 'auto' }}
           count={totalPages}
           page={page}
-          onChange={(event, page) =>
-            setQuery(`page=${page}&limit=12`)
-          }
+          onChange={handlePageChange}
           color="primary"
         />
       </Grid>
