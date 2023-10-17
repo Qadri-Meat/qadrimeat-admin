@@ -48,6 +48,7 @@ const ProductsGrid = () => {
     const newItem = {
       id: product.id,
       name: product.name,
+      category: product.category[0],
       quantity: 1,
       weight: product.weight,
       price: product.price,

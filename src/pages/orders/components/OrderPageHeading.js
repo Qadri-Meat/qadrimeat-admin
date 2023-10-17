@@ -5,16 +5,17 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { pick } from 'helper/pick';
 
-const OrderPageHeading = () => {
+const OrderPageHeading = ({ setQuery }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const { paid } = pick(location.search);
   const handleResetFilter = (event, value) => {
+    setQuery('');
     navigate('/orders');
   };
   const handlePaidToggle = (event, value) => {

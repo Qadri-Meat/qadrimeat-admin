@@ -1,4 +1,4 @@
-import ApiService from "./ApiService";
+import ApiService from './ApiService';
 
 class UserService extends ApiService {
   /**
@@ -7,8 +7,9 @@ class UserService extends ApiService {
    * @returns {Promise<User>}
    */
 
-  getDashboard() {
-    return this.instance.get(`v1/users/dashboard`);
+  getDashboard(query) {
+    console.log('in servise', query);
+    return this.instance.get(`v1/users/dashboard?${query}`);
   }
 
   getAll(query) {
@@ -30,7 +31,7 @@ class UserService extends ApiService {
    * @returns {Promise<User>}
    */
   update(data) {
-    return this.instance.patch("/v1/users", data);
+    return this.instance.patch('/v1/users', data);
   }
 
   /**

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from '@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs';
 import { Grid, Paper, Typography } from '@mui/material';
@@ -13,12 +13,17 @@ import StockTable from './components/StockTable';
 const DashboardPage = () => {
   const dispatch = useDispatch();
 
+  const [query, setQuery] = useState();
+
   const { todayReport, reports, deals, loading, stockReport } =
     useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getDashboard());
-  }, [dispatch]);
+    dispatch(
+      getDashboard({ query: query !== undefined ? query : '' })
+    );
+    console.log(query);
+  }, [dispatch, query]);
 
   return (
     <AdminLayout>
@@ -63,6 +68,7 @@ const DashboardPage = () => {
             <Typography variant="h5">Daily Reports</Typography>
             {stockReport ? (
               <StockTable
+                setQuery={setQuery}
                 stockReport={stockReport}
                 loading={loading}
               />

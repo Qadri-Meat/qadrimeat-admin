@@ -41,14 +41,15 @@ const AddOrderPage = () => {
   };
 
   const onSubmit = () => {
+    console.log('with category', cartItems);
     const itemsToRemove = cartItems.filter(
       (item) => item.quantity === 0
     );
+    console.log(cartItems);
     const itemsToKeep = cartItems.filter((item) => item.quantity > 0);
     itemsToRemove.forEach((item) => {
       dispatch(removeItem(item.id));
     });
-
     const newOrder = {
       orderItems: itemsToKeep,
       totalPrice: cartTotalPrice.toFixed(2),

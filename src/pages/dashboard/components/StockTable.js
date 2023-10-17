@@ -1,4 +1,5 @@
 import Loader from '@core/components/ui/Loader';
+import { buildURLQuery } from '@core/utils/buildURLQuery';
 import {
   Table,
   TableBody,
@@ -7,9 +8,22 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React from 'react';
+import { isNullOrEmpty } from 'helper/helpers';
+import DateRangePicker from 'pages/stocks/components/DateRangePicker';
+import React, { useEffect, useState } from 'react';
 
-const StockTable = ({ stockReport, loading }) => {
+const StockTable = ({ stockReport, loading, setQuery }) => {
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  useEffect(() => {
+    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate))
+      setQuery(
+        buildURLQuery({
+          startDate,
+          endDate,
+        })
+      );
+  }, [setQuery, startDate, endDate]);
   return (
     <TableContainer style={{ padding: '10px' }}>
       {loading ? (
@@ -20,6 +34,12 @@ const StockTable = ({ stockReport, loading }) => {
           aria-label="simple table"
         >
           <TableHead>
+            <DateRangePicker
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+            />
             <TableRow>
               <TableCell
                 align="right"

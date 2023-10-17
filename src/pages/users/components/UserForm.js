@@ -1,37 +1,37 @@
-import Form from "@core/components/forms/Form";
-import { useDispatch, useSelector } from "react-redux";
-import * as yup from "yup";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import Loader from "@core/components/ui/Loader";
-import Message from "@core/components/ui/Message";
-import { createUser, updateUser } from "store/user";
-import FormInput from "@core/components/forms/FormInput";
-import { Button, Grid, MenuItem } from "@mui/material";
-import SaveIcon from "@mui/icons-material/Save";
-import SelectInput from "@core/components/forms/SelectInput";
-import { emailRegix, passwordRegix } from "helper/regix";
+import Form from '@core/components/forms/Form';
+import { useDispatch, useSelector } from 'react-redux';
+import * as yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import Loader from '@core/components/ui/Loader';
+import Message from '@core/components/ui/Message';
+import { createUser, updateUser } from 'store/user';
+import FormInput from '@core/components/forms/FormInput';
+import { Button, Grid, MenuItem } from '@mui/material';
+import SaveIcon from '@mui/icons-material/Save';
+import SelectInput from '@core/components/forms/SelectInput';
+import { emailRegix, passwordRegix } from 'helper/regix';
 
 const schema = yup.object().shape({
   name: yup.string().required().max(15),
   lastName: yup.string(),
   email: yup
     .string()
-    .matches(emailRegix, "Enter Valid Email Address")
+    .matches(emailRegix, 'Enter Valid Email Address')
     .required(),
   password: yup
     .string()
     .matches(
       passwordRegix,
-      "Password must be 8 characters and not more then 12, one letter and one number"
+      'Password must be 8 characters and not more than 12, one letter and one number'
     )
-    .required("Password is required")
-    .min(4, "Password length should be at least 4 characters")
-    .max(12, "Password cannot exceed more than 12 characters"),
+    .required('Password is required')
+    .min(4, 'Password length should be at least 4 characters')
+    .max(12, 'Password cannot exceed more than 12 characters'),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password")], "Passwords do not match"),
-  role: yup.string().required("Role is a required field"),
+    .oneOf([yup.ref('password')], 'Passwords do not match'),
+  role: yup.string().required('Role is a required field'),
 });
 
 const UserForm = ({ defaultValues }) => {
@@ -44,7 +44,7 @@ const UserForm = ({ defaultValues }) => {
     formState: { errors },
   } = useForm({
     defaultValues,
-    mode: "onBlur",
+    mode: 'onBlur',
     resolver: yupResolver(schema),
   });
 
@@ -69,7 +69,7 @@ const UserForm = ({ defaultValues }) => {
       <Grid container spacing={3}>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("name")}
+            {...register('name')}
             id="name"
             type="text"
             label="First Name"
@@ -80,7 +80,7 @@ const UserForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("email")}
+            {...register('email')}
             id="email"
             type="email"
             label="Email"
@@ -91,7 +91,7 @@ const UserForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("password")}
+            {...register('password')}
             id="password"
             type="password"
             label="Password"
@@ -102,7 +102,7 @@ const UserForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <FormInput
-            {...register("confirmPassword")}
+            {...register('confirmPassword')}
             id="confirmPassword"
             type="password"
             label="Confirm Password"
@@ -113,21 +113,21 @@ const UserForm = ({ defaultValues }) => {
         </Grid>
         <Grid item xs={12} md={4}>
           <SelectInput
-            {...register("role")}
+            {...register('role')}
             id="role"
             name="role"
             label="Role"
             control={control}
             error={!!errors.role}
             helperText={errors?.role?.message}
-            disabled={defaultValues && defaultValues.role === "admin"}
+            disabled={defaultValues && defaultValues.role === 'admin'}
           >
             <MenuItem value="admin">Admin</MenuItem>
             <MenuItem value="user">User</MenuItem>
           </SelectInput>
         </Grid>
 
-        <Grid item xs={12} sx={{ textAlign: "center" }}>
+        <Grid item xs={12} sx={{ textAlign: 'center' }}>
           <Button
             variant="contained"
             color="primary"
@@ -135,7 +135,13 @@ const UserForm = ({ defaultValues }) => {
             size="large"
             endIcon={<SaveIcon />}
           >
-            {loading ? <Loader /> : defaultValues ? "Update User" : "Save User"}
+            {loading ? (
+              <Loader />
+            ) : defaultValues ? (
+              'Update User'
+            ) : (
+              'Save User'
+            )}
           </Button>
         </Grid>
       </Grid>

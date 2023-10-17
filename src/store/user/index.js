@@ -1,10 +1,14 @@
-import { createSlice, createAsyncThunk, createAction } from "@reduxjs/toolkit";
-import UserService from "services/UserService";
+import {
+  createSlice,
+  createAsyncThunk,
+  createAction,
+} from '@reduxjs/toolkit';
+import UserService from 'services/UserService';
 
 const initialState = {};
 
 export const getUsers = createAsyncThunk(
-  "user/getAll",
+  'user/getAll',
   async (params, { rejectWithValue }) => {
     try {
       const res = await UserService.getAll(params);
@@ -16,10 +20,13 @@ export const getUsers = createAsyncThunk(
 );
 
 export const getDashboard = createAsyncThunk(
-  "user/getDashboardData",
-  async (params, { rejectWithValue }) => {
+  'user/getDashboardData',
+  async (query, { rejectWithValue }) => {
+    const queryString = Object.keys(query)
+      .map((key) => `${key}=${query[key]}`)
+      .join('&');
     try {
-      const res = await UserService.getDashboard();
+      const res = await UserService.getDashboard(queryString);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -28,7 +35,7 @@ export const getDashboard = createAsyncThunk(
 );
 
 export const getUser = createAsyncThunk(
-  "user/get",
+  'user/get',
   async (id, { rejectWithValue }) => {
     try {
       const res = await UserService.get(id);
@@ -40,20 +47,20 @@ export const getUser = createAsyncThunk(
 );
 
 export const createUser = createAsyncThunk(
-  "user/create",
+  'user/create',
   async (data, { rejectWithValue }) => {
     try {
       await UserService.create(data);
       return { success: true };
     } catch (err) {
-      console.log("Error is", err.response.data.message);
+      console.log('Error is', err.response.data.message);
       return rejectWithValue(err.response.data);
     }
   }
 );
 
 export const updateUser = createAsyncThunk(
-  "user/updateUser",
+  'user/updateUser',
   async ({ id, data }, { rejectWithValue }) => {
     try {
       await UserService.updateById(id, data);
@@ -65,7 +72,7 @@ export const updateUser = createAsyncThunk(
 );
 
 export const deleteUser = createAsyncThunk(
-  "user/delete",
+  'user/delete',
   async (id, { rejectWithValue }) => {
     try {
       await UserService.delete(id);
@@ -76,24 +83,24 @@ export const deleteUser = createAsyncThunk(
   }
 );
 
-export const resetUser = createAction("user/reset");
+export const resetUser = createAction('user/reset');
 
 const userSlice = createSlice({
-  name: "user",
+  name: 'user',
   initialState,
   extraReducers: (builder) => {
     builder.addCase(resetUser, (state, action) => initialState);
     builder.addMatcher(
-      (action) => action.type.startsWith("user"),
+      (action) => action.type.startsWith('user'),
       (state, action) => {
-        const [actionType] = action.type.split("/").reverse();
+        const [actionType] = action.type.split('/').reverse();
         switch (actionType) {
-          case "pending":
+          case 'pending':
             state.loading = true;
             break;
-          case "fulfilled":
+          case 'fulfilled':
             return action.payload;
-          case "rejected":
+          case 'rejected':
             state.loading = false;
             state.message = action.payload.message;
             break;
