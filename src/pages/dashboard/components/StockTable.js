@@ -45,45 +45,53 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                 align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Name
+                Date
               </TableCell>
               <TableCell
                 align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Stock
+                Mutton
               </TableCell>
               <TableCell
                 align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Stock Amount
-              </TableCell>
-
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Sale Stock
+                Chicken
               </TableCell>
 
               <TableCell
                 align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Remaning Stock
+                Beef
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableHead>
+            <TableRow>
+              <TableCell
+                align="right"
+                style={{ fontWeight: 'bold', color: '#555555' }}
+              ></TableCell>
+              <TableCell
+                align="right"
+                style={{ fontWeight: 'bold', color: '#555555' }}
+              >
+                Price || Stock Weight || Sale || Remaning Stock
               </TableCell>
               <TableCell
                 align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Sale Amount
+                Price || Stock Weight || Sale || Remaning Stock
               </TableCell>
+
               <TableCell
                 align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Profits
+                Price || Stock Weight || Sale || Remaning Stock
               </TableCell>
             </TableRow>
           </TableHead>
@@ -91,28 +99,46 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
             <TableBody>
               {stockReport.map((result) => (
                 <TableRow key={result._id}>
-                  <TableCell align="right">
-                    {result.category}
-                  </TableCell>
-                  <TableCell align="right">{result.stock}</TableCell>
-                  <TableCell align="right">
-                    {result.package}
-                  </TableCell>
-                  <TableCell align="right">
-                    {result.nonPackage}
-                  </TableCell>
-                  <TableCell align="right">
-                    {result.stock -
-                      (result.package + result.nonPackage)}
-                  </TableCell>
-                  <TableCell align="right">
-                    {result.stock -
-                      (result.package + result.nonPackage)}
-                  </TableCell>
-                  <TableCell align="right">
-                    {result.stock -
-                      (result.package + result.nonPackage)}
-                  </TableCell>
+                  <TableCell align="right">{result._id}</TableCell>
+                  {result.reports.map((re1, index) =>
+                    re1.category === 'mutton' ? (
+                      <TableCell key={index} align="right">
+                        {re1.stockPurchasedAmount} ||{' '}
+                        {re1.totalWeight} || {re1.totalSale} ||{' '}
+                        {re1.stockAvailableInWeight}
+                      </TableCell>
+                    ) : (
+                      <TableCell key={index} align="right">
+                        -------
+                      </TableCell>
+                    )
+                  )}
+                  {result.reports.map((re1, index) =>
+                    re1.category === 'chicken' ? (
+                      <TableCell key={index} align="right">
+                        {re1.stockPurchasedAmount} ||{' '}
+                        {re1.totalWeight} || {re1.totalSale} ||{' '}
+                        {re1.stockAvailableInWeight}
+                      </TableCell>
+                    ) : (
+                      <TableCell key={index} align="right">
+                        -------
+                      </TableCell>
+                    )
+                  )}
+                  {result.reports.map((re1, index) =>
+                    re1.category === 'beef' ? (
+                      <TableCell key={index} align="right">
+                        {re1.stockPurchasedAmount} ||{' '}
+                        {re1.totalWeight} || {re1.totalSale} ||{' '}
+                        {re1.stockAvailableInWeight}
+                      </TableCell>
+                    ) : (
+                      <TableCell key={index} align="right">
+                        -------
+                      </TableCell>
+                    )
+                  )}
                 </TableRow>
               ))}
             </TableBody>
