@@ -83,7 +83,7 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                 align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Profit
+                Profits
               </TableCell>
             </TableRow>
           </TableHead>
