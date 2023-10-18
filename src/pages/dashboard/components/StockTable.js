@@ -1,6 +1,8 @@
 import Loader from '@core/components/ui/Loader';
 import { buildURLQuery } from '@core/utils/buildURLQuery';
 import {
+  Button,
+  Grid,
   Table,
   TableBody,
   TableCell,
@@ -15,6 +17,10 @@ import React, { useEffect, useState } from 'react';
 const StockTable = ({ stockReport, loading, setQuery }) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+
+  const handleResetFilter = () => {
+    window.location.reload();
+  };
 
   useEffect(() => {
     if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate))
@@ -83,6 +89,17 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
               endDate={endDate}
               setEndDate={setEndDate}
             />
+            <Grid item>
+              <Button
+                onClick={handleResetFilter}
+                variant="outlined"
+                color="primary"
+                size="small"
+                style={{ marginTop: '15px', marginLeft: '30px' }}
+              >
+                Clear Filter
+              </Button>
+            </Grid>
             <TableRow>
               <TableCell
                 align="right"
