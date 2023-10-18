@@ -46,42 +46,6 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
           style={{ tableLayout: 'fixed' }}
           aria-label="simple table"
         >
-          {/* <TableHead>
-            <DateRangePicker
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
-            />
-            <TableRow>
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Date
-              </TableCell>
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Mutton
-              </TableCell>
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Chicken
-              </TableCell>
-
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Beef
-              </TableCell>
-            </TableRow>
-          </TableHead> */}
-
           <TableHead>
             <DateRangePicker
               startDate={startDate}
@@ -102,80 +66,53 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
             </Grid>
             <TableRow>
               <TableCell
-                align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
                 Date
               </TableCell>
 
               <TableCell
-                align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Price || Stock Weight || Sale || Remaning Stock
-              </TableCell>
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Price || Stock Weight || Sale || Remaning Stock
-              </TableCell>
-
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Price || Stock Weight || Sale || Remaning Stock
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Category</TableCell>
+                      <TableCell>Stock</TableCell>
+                      <TableCell>Total Weight Sold</TableCell>
+                      <TableCell>Remaning Stock</TableCell>
+                      <TableCell>Stock Amount</TableCell>
+                      <TableCell>Profit</TableCell>
+                    </TableRow>
+                  </TableHead>
+                </Table>
               </TableCell>
             </TableRow>
           </TableHead>
           {sortedStockReport ? (
             <TableBody>
               {sortedStockReport.map((result) => (
-                <TableRow key={result._id}>
-                  <TableCell align="right">{result._id}</TableCell>
-                  {result.reports.map((re1, index) => {
-                    if (re1.category === 'mutton') {
-                      return (
-                        <TableCell key={index} align="right">
-                          <b>
-                            {re1.category.charAt(0).toUpperCase() +
-                              re1.category.slice(1)}{' '}
-                            ={' '}
-                          </b>
-                          {re1.stockPurchasedAmount} ||{' '}
-                          {re1.totalWeight} || {re1.totalSale} ||{' '}
-                          {re1.stockAvailableInWeight}
-                        </TableCell>
-                      );
-                    } else if (re1.category === 'chicken') {
-                      return (
-                        <TableCell key={index} align="right">
-                          <b>
-                            {re1.category.charAt(0).toUpperCase() +
-                              re1.category.slice(1)}{' '}
-                            ={' '}
-                          </b>
-                          {re1.stockPurchasedAmount} ||{' '}
-                          {re1.totalWeight} || {re1.totalSale} ||{' '}
-                          {re1.stockAvailableInWeight}
-                        </TableCell>
-                      );
-                    } else if (re1.category === 'beef') {
-                      return (
-                        <TableCell key={index} align="right">
-                          <b>
-                            {re1.category.charAt(0).toUpperCase() +
-                              re1.category.slice(1)}{' '}
-                            ={' '}
-                          </b>
-                          {re1.stockPurchasedAmount} ||{' '}
-                          {re1.totalWeight} || {re1.totalSale} ||{' '}
-                          {re1.stockAvailableInWeight}
-                        </TableCell>
-                      );
-                    }
-                  })}
+                <TableRow key={result._id} style={{ width: '100px' }}>
+                  <TableCell>{result._id}</TableCell>
+                  <TableCell>
+                    <Table>
+                      <TableBody>
+                        {result.reports.map((r) => (
+                          <TableRow>
+                            <TableCell>{r.category}</TableCell>
+                            <TableCell>{r.totalWeight}</TableCell>
+                            <TableCell>{r.totalSale}</TableCell>
+                            <TableCell>
+                              {r.stockAvailableInWeight}
+                            </TableCell>
+                            <TableCell>
+                              {r.stockPurchasedAmount}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
