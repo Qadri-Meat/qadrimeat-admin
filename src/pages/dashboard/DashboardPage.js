@@ -19,9 +19,19 @@ const DashboardPage = () => {
     useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(
-      getDashboard({ query: query !== undefined ? query : '' })
-    );
+    if (query === undefined) {
+      const today = new Date();
+      const sevenDaysAgo = new Date(today);
+      sevenDaysAgo.setDate(today.getDate() - 7);
+
+      const startDate = sevenDaysAgo.toISOString().split('T')[0];
+      const endDate = today.toISOString().split('T')[0];
+
+      const newQuery = `startDate=${startDate}&endDate=${endDate}`;
+      dispatch(getDashboard({ query: newQuery }));
+    } else {
+      dispatch(getDashboard({ query }));
+    }
     console.log(query);
   }, [dispatch, query]);
 
