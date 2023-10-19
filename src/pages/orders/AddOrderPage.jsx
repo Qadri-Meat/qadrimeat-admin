@@ -55,6 +55,7 @@ const AddOrderPage = () => {
       totalPrice: cartTotalPrice.toFixed(2),
       discount: 0,
       deliveryTime: Date.now(),
+      type: 'retail',
     };
 
     dispatch(createOrder(newOrder));
