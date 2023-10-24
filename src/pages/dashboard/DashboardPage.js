@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import AdminBreadcrumbs from '@core/components/admin/AdminBreadcrumbs/AdminBreadcrumbs';
 import { Grid, Paper, Typography } from '@mui/material';
@@ -13,12 +13,27 @@ import StockTable from './components/StockTable';
 const DashboardPage = () => {
   const dispatch = useDispatch();
 
+  const [query, setQuery] = useState();
+
   const { todayReport, reports, deals, loading, stockReport } =
     useSelector((state) => state.user);
 
   useEffect(() => {
-    dispatch(getDashboard());
-  }, [dispatch]);
+    if (query === undefined) {
+      const today = new Date();
+      const sevenDaysAgo = new Date(today);
+      sevenDaysAgo.setDate(today.getDate() - 7);
+
+      const startDate = sevenDaysAgo.toISOString().split('T')[0];
+      const endDate = today.toISOString().split('T')[0];
+
+      const newQuery = `startDate=${startDate}&endDate=${endDate}`;
+      dispatch(getDashboard({ query: newQuery }));
+    } else {
+      dispatch(getDashboard({ query }));
+    }
+    console.log(query);
+  }, [dispatch, query]);
 
   return (
     <AdminLayout>
@@ -55,7 +70,7 @@ const DashboardPage = () => {
             )}
           </Paper>
         </Grid>
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={12}>
           <Paper
             style={{ padding: 10, marginTop: 15 }}
             variant="outlined"
@@ -63,6 +78,7 @@ const DashboardPage = () => {
             <Typography variant="h5">Daily Reports</Typography>
             {stockReport ? (
               <StockTable
+                setQuery={setQuery}
                 stockReport={stockReport}
                 loading={loading}
               />

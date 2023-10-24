@@ -15,6 +15,10 @@ const AllStocksPage = () => {
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.stock
   );
+  const handleResetFilter = () => {
+    setQuery('');
+    navigate('/stocks');
+  };
 
   useEffect(() => {
     if (success) {
@@ -90,6 +94,16 @@ const AllStocksPage = () => {
               size="small"
             >
               Add Stock
+            </Button>
+          </Grid>
+          <Grid item>
+            <Button
+              onClick={handleResetFilter}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Clear Filter
             </Button>
           </Grid>
         </Grid>

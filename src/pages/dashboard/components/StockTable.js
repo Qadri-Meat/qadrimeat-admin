@@ -1,5 +1,8 @@
 import Loader from '@core/components/ui/Loader';
+import { buildURLQuery } from '@core/utils/buildURLQuery';
 import {
+  Button,
+  Grid,
   Table,
   TableBody,
   TableCell,
@@ -7,9 +10,33 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
-import React from 'react';
+import { isNullOrEmpty } from 'helper/helpers';
+import DateRangePicker from 'pages/stocks/components/DateRangePicker';
+import React, { useEffect, useState } from 'react';
 
-const StockTable = ({ stockReport, loading }) => {
+const StockTable = ({ stockReport, loading, setQuery }) => {
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+
+  const handleResetFilter = () => {
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate))
+      setQuery(
+        buildURLQuery({
+          startDate,
+          endDate,
+        })
+      );
+  }, [setQuery, startDate, endDate]);
+
+  // Sort the stockReport array by date in descending order
+  const sortedStockReport = stockReport.slice().sort((a, b) => {
+    return new Date(b._id) - new Date(a._id);
+  });
+
   return (
     <TableContainer style={{ padding: '10px' }}>
       {loading ? (
@@ -20,78 +47,71 @@ const StockTable = ({ stockReport, loading }) => {
           aria-label="simple table"
         >
           <TableHead>
+            <DateRangePicker
+              startDate={startDate}
+              setStartDate={setStartDate}
+              endDate={endDate}
+              setEndDate={setEndDate}
+            />
+            <Grid item>
+              <Button
+                onClick={handleResetFilter}
+                variant="outlined"
+                color="primary"
+                size="small"
+                style={{ marginTop: '15px', marginLeft: '30px' }}
+              >
+                Clear Filter
+              </Button>
+            </Grid>
             <TableRow>
               <TableCell
-                align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Name
-              </TableCell>
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Stock
-              </TableCell>
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Stock Amount
+                Date
               </TableCell>
 
               <TableCell
-                align="right"
                 style={{ fontWeight: 'bold', color: '#555555' }}
               >
-                Sale Stock
-              </TableCell>
-
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Remaning Stock
-              </TableCell>
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Sale Amount
-              </TableCell>
-              <TableCell
-                align="right"
-                style={{ fontWeight: 'bold', color: '#555555' }}
-              >
-                Profit
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Category</TableCell>
+                      <TableCell>Stock</TableCell>
+                      <TableCell>Total Weight Sold</TableCell>
+                      <TableCell>Remaning Stock</TableCell>
+                      <TableCell>Stock Amount</TableCell>
+                      <TableCell>Profit</TableCell>
+                    </TableRow>
+                  </TableHead>
+                </Table>
               </TableCell>
             </TableRow>
           </TableHead>
-          {stockReport ? (
+          {sortedStockReport ? (
             <TableBody>
-              {stockReport.map((result) => (
-                <TableRow key={result._id}>
-                  <TableCell align="right">
-                    {result.category}
-                  </TableCell>
-                  <TableCell align="right">{result.stock}</TableCell>
-                  <TableCell align="right">
-                    {result.package}
-                  </TableCell>
-                  <TableCell align="right">
-                    {result.nonPackage}
-                  </TableCell>
-                  <TableCell align="right">
-                    {result.stock -
-                      (result.package + result.nonPackage)}
-                  </TableCell>
-                  <TableCell align="right">
-                    {result.stock -
-                      (result.package + result.nonPackage)}
-                  </TableCell>
-                  <TableCell align="right">
-                    {result.stock -
-                      (result.package + result.nonPackage)}
+              {sortedStockReport.map((result) => (
+                <TableRow key={result._id} style={{ width: '100px' }}>
+                  <TableCell>{result._id}</TableCell>
+                  <TableCell>
+                    <Table>
+                      <TableBody>
+                        {result.reports.map((r) => (
+                          <TableRow>
+                            <TableCell>{r.category}</TableCell>
+                            <TableCell>{r.totalWeight}</TableCell>
+                            <TableCell>{r.totalSale}</TableCell>
+                            <TableCell>
+                              {r.stockAvailableInWeight}
+                            </TableCell>
+                            <TableCell>
+                              {r.stockPurchasedAmount}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
                   </TableCell>
                 </TableRow>
               ))}

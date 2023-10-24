@@ -30,10 +30,6 @@ const AllUsersPage = (props) => {
   const onDelete = async (value) => {
     dispatch(deleteUser(value));
   };
-  const handleResetFilter = () => {
-    setQuery('');
-    navigate('/users');
-  };
   const onEdit = async (value) => {
     navigate(`/users/${value}`);
   };
@@ -73,16 +69,6 @@ const AllUsersPage = (props) => {
             size="small"
           >
             Add User
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            onClick={handleResetFilter}
-            variant="outlined"
-            color="primary"
-            size="small"
-          >
-            Clear Filter
           </Button>
         </Grid>
       </Grid>

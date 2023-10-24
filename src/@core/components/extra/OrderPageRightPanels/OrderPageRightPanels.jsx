@@ -255,7 +255,7 @@ const OrderPageRightPanels = () => {
                       }}
                     >
                       <p>
-                        <strong>Balance: </strong>
+                        <strong>Remaining Amount: </strong>
                       </p>
                       <p>
                         <span>
@@ -277,7 +277,7 @@ const OrderPageRightPanels = () => {
                       id="amount"
                       label="Amount"
                       type="number"
-                      value={amount === null ? 0 : amount}
+                      // value={amount === null ? 0 : amount}
                       onChange={(e) => {
                         if (
                           selectedOrder.totalPrice -

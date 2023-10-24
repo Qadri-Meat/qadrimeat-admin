@@ -1,35 +1,61 @@
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import DataTable from '@core/components/ui/DataTable';
-import { Button } from '@mui/material';
+import {
+  Button,
+  Grid,
+  ToggleButton,
+  ToggleButtonGroup,
+  Typography,
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { pick } from 'helper/pick';
 import withAuth from 'hooks/withAuth';
 import { deleteOrder, getOrders, resetOrder } from 'store/order';
 import Loader from '@core/components/ui/Loader';
-import OrderPageHeading from './components/OrderPageHeading';
 
 const AllOrderPage = () => {
   const dispatch = useDispatch();
   const location = useLocation();
+  const navigate = useNavigate();
   const { paid } = pick(location.search);
   const [query, setQuery] = useState('');
+  const [orderType, setOrderType] = useState('');
 
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.order
   );
+  const handleResetFilter = (event, value) => {
+    setOrderType('');
+    setQuery('');
+    navigate('/orders');
+  };
+  const handlePaidToggle = (event, value) => {
+    navigate(`/orders?paid=${value}`);
+  };
+  const handleOrderType = (event, value) => {
+    setOrderType(value);
+  };
 
   useEffect(() => {
     if (success) {
       dispatch(resetOrder());
     } else {
-      dispatch(getOrders(query));
+      dispatch(
+        getOrders(
+          `${
+            paid !== undefined && orderType !== undefined
+              ? `isPaid=${paid}&type=${orderType}&`
+              : ''
+          }${query}`
+        )
+      );
     }
-  }, [dispatch, paid, query, success]);
+  }, [dispatch, paid, query, success, orderType]);
 
   const onDelete = (value) => {
     dispatch(deleteOrder(value));
@@ -128,8 +154,7 @@ const AllOrderPage = () => {
 
   return (
     <AdminLayout>
-      <OrderPageHeading />
-      {/* <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
+      <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
         <Grid item>
           <Typography variant="h5" component="h1">
             Orders
@@ -153,20 +178,15 @@ const AllOrderPage = () => {
               Add Order
             </Button>
           </Grid>
-          <Grid sx={{ marginLeft: '450px' }} item>
-            <FormControl sx={{ m: 1, minWidth: 100 }} size="small">
-              <InputLabel id="demo-simple-select-label">
-                Year
-              </InputLabel>
-              <Select
-                label="Year"
-                onChange={handleYearChange}
-                variant="outlined"
-              >
-                <MenuItem value={'2022'}>2022</MenuItem>
-                <MenuItem value={'2023'}>2023</MenuItem>
-              </Select>
-            </FormControl>
+          <Grid item>
+            <Button
+              onClick={handleResetFilter}
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Clear Filter
+            </Button>
           </Grid>
           <Grid item>
             <ToggleButtonGroup
@@ -181,12 +201,26 @@ const AllOrderPage = () => {
               <ToggleButton value="false">UnPaid</ToggleButton>
             </ToggleButtonGroup>
           </Grid>
+          <Grid item>
+            <ToggleButtonGroup
+              color="primary"
+              style={{ marginRight: '10px' }}
+              value={orderType}
+              size="small"
+              exclusive
+              onChange={handleOrderType}
+            >
+              <ToggleButton value="online">Online</ToggleButton>
+              <ToggleButton value="retail">Retail</ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
         </Grid>
-      </Grid> */}
+      </Grid>
       {loading ? (
         <Loader />
       ) : (
         <DataTable
+          loading={loading}
           title={'Order List'}
           results={results}
           totalResults={totalResults}
