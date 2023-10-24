@@ -168,36 +168,10 @@ const OrderPage = () => {
             m: 3,
           }}
         >
-          {items.forEach((item) => {
-            totalPriceWithoutDiscount += item.price;
-          })}
-          <Box>
-            <Typography variant="h6">Sub Total</Typography>
-            <Typography variant="body1">
-              Rs
-              {' ' + totalPriceWithoutDiscount}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="h6">Shipping Price</Typography>
-            <Typography variant="body1">
-              Rs{' ' + selectedOrder.shippingPrice}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="h6">Discount</Typography>
-            <Typography variant="body1">
-              Rs
-              {' ' +
-                (
-                  totalPriceWithoutDiscount - selectedOrder.totalPrice
-                ).toFixed(2)}
-            </Typography>
-          </Box>
           <Box>
             <Typography variant="h6">Grand Total</Typography>
             <Typography variant="body1">
-              Rs{' ' + selectedOrder.totalPrice}
+              Rs{' ' + selectedOrder.totalPrice.toFixed(2)}
             </Typography>
           </Box>
         </Box>
