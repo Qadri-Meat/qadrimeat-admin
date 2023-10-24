@@ -73,10 +73,6 @@ const AllProductsPage = () => {
       name: 'price',
       label: 'Price',
     },
-    {
-      name: 'stock',
-      label: 'Stock',
-    },
   ];
 
   return (
