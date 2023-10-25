@@ -99,14 +99,16 @@ const AllOrderPage = () => {
     {
       name: 'shippingDetails',
       label: 'Name',
+
       options: {
         filter: false,
         customBodyRender: (values, tableMeta, updateValue) => {
-          if (!values || !values.firstName) {
-            return '';
-          }
           return (
-            <>{values.firstName + ' ' + (values.lastName || '')}</>
+            <>
+              {(values?.firstName || '-') +
+                ' ' +
+                (values?.lastName || '')}
+            </>
           );
         },
       },

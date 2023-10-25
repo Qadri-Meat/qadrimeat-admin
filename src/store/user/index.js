@@ -22,11 +22,11 @@ export const getUsers = createAsyncThunk(
 export const getDashboard = createAsyncThunk(
   'user/getDashboardData',
   async (query, { rejectWithValue }) => {
-    const queryString = Object.keys(query)
-      .map((key) => `${key}=${query[key]}`)
-      .join('&');
+    const { newQuery } = query; // Destructure the single key
+    const queryString = `${newQuery}`;
+    console.log(queryString); // Log the queryString
     try {
-      const res = await UserService.getDashboard(queryString);
+      const res = await UserService.getDashboard(newQuery);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
