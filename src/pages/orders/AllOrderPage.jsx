@@ -45,15 +45,28 @@ const AllOrderPage = () => {
     if (success) {
       dispatch(resetOrder());
     } else {
-      dispatch(
-        getOrders(
-          `${
-            paid !== undefined && orderType !== undefined
-              ? `isPaid=${paid}&type=${orderType}&`
-              : ''
-          }${query}`
-        )
-      );
+      let url = '';
+      if (paid) {
+        url += `isPaid=${paid}`;
+      }
+      if (orderType) {
+        url += `type=${orderType}`;
+      }
+
+      if (orderType && paid) {
+        if (url) {
+          url = '';
+        }
+        url += `isPaid=${paid}&type=${orderType}`;
+      }
+      if (query) {
+        if (url) {
+          url += '&';
+        }
+        url += query;
+      }
+
+      dispatch(getOrders(url));
     }
   }, [dispatch, paid, query, success, orderType]);
 
