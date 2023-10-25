@@ -25,7 +25,6 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
     if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate)) {
       const query = `startDate=${startDate}&endDate=${endDate}`;
       setQuery(query);
-      console.log('in stock table', query);
     }
   }, [setQuery, startDate, endDate]);
 
@@ -98,7 +97,6 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                             <TableCell>
                               {r.category ? r.category : '----------'}
                             </TableCell>
-
                             <TableCell>
                               {r.stockWeight
                                 ? r.stockWeight
