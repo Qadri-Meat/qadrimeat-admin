@@ -292,7 +292,8 @@ const AddOrderPage = () => {
                           Discount:
                         </Typography>
                         <Typography variant="subtitle1">
-                          PKR: {totalPrice - cartTotalPrice}
+                          PKR:{' '}
+                          {(totalPrice - cartTotalPrice).toFixed(2)}
                         </Typography>
                       </Grid>
                       <Grid
