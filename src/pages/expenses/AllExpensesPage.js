@@ -81,12 +81,13 @@ const AllExpensesPage = () => {
           item
           container
           direction="row"
-          justifyContent="space-between"
+          justifyContent="flex-start"
           alignItems="center"
           xs={10}
         >
           <Grid item>
             <Button
+              style={{ marginRight: '10px' }}
               onClick={() => navigate('/expenses/add-expenses')}
               variant="outlined"
               color="primary"
