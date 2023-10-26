@@ -12,18 +12,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { pick } from 'helper/pick';
+import { useNavigate } from 'react-router-dom';
 import withAuth from 'hooks/withAuth';
 import { deleteOrder, getOrders, resetOrder } from 'store/order';
 import Loader from '@core/components/ui/Loader';
 
 const AllOrderPage = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
-  const { paid } = pick(location.search);
   const [query, setQuery] = useState('');
+
+  const [paid, setPaid] = useState('');
   const [orderType, setOrderType] = useState('');
 
   const { results, totalResults, success, loading } = useSelector(
@@ -35,7 +34,7 @@ const AllOrderPage = () => {
     navigate('/orders');
   };
   const handlePaidToggle = (event, value) => {
-    navigate(`/orders?paid=${value}`);
+    setPaid(value);
   };
   const handleOrderType = (event, value) => {
     setOrderType(value);
