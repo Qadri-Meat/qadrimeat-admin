@@ -85,7 +85,8 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                 <TableRow key={result._id} style={{ width: '100px' }}>
                   <TableCell>
                     {new Date(result.date).toLocaleDateString(
-                      'en-US'
+                      'en-US',
+                      { timeZone: 'UTC' }
                     )}
                   </TableCell>
 
