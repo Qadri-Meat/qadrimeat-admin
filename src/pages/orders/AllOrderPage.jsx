@@ -179,12 +179,13 @@ const AllOrderPage = () => {
           item
           container
           direction="row"
-          justifyContent="space-between"
+          justifyContent="flex-start"
           alignItems="center"
           xs={10}
         >
           <Grid item>
             <Button
+              style={{ marginRight: '10px' }}
               onClick={() => navigate('/orders/add-order')}
               variant="outlined"
               color="primary"
@@ -195,6 +196,7 @@ const AllOrderPage = () => {
           </Grid>
           <Grid item>
             <Button
+              style={{ marginRight: '10px' }}
               onClick={handleResetFilter}
               variant="outlined"
               color="primary"
