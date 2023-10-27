@@ -16,7 +16,6 @@ const AllOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
-  const [showEditDetails, setShowEditDetails] = useState(false);
   const [paid, setPaid] = useState('');
   const [orderType, setOrderType] = useState('');
 
@@ -178,19 +177,6 @@ const AllOrderPage = () => {
                 Add Order
               </Button>
             </Grid>
-            <Grid>
-              <Button
-                style={{ paddingRight: '10px' }}
-                variant="contained"
-                color="primary"
-                size="small"
-                onClick={() => {
-                  setShowEditDetails(true);
-                }}
-              >
-                Filters
-              </Button>
-            </Grid>
           </Grid>
         </Grid>
         {loading ? (
@@ -208,14 +194,6 @@ const AllOrderPage = () => {
           />
         )}
       </AdminLayout>
-      <OrdersFilter
-        setPaid={setPaid}
-        paid={paid}
-        show={showEditDetails}
-        setShow={setShowEditDetails}
-        setQuery={setQuery}
-        setOrderType={setOrderType}
-      />
     </>
   );
 };

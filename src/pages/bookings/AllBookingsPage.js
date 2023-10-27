@@ -9,10 +9,6 @@ import {
   getBookings,
   resetBooking,
 } from 'store/booking';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { useLocation } from 'react-router-dom';
-import { pick } from 'helper/pick';
 import withAuth from 'hooks/withAuth';
 import { numberWithCommas } from 'helper/numers';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
@@ -22,7 +18,6 @@ const AllBookingsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const location = useLocation();
   const [query, setQuery] = useState('');
   const [paid, setPaid] = useState('');
   const [showEditDetails, setShowEditDetails] = useState(false);

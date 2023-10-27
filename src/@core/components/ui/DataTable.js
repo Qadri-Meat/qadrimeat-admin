@@ -4,10 +4,10 @@ import { debounce } from 'lodash';
 import { buildURLQuery } from '@core/utils/buildURLQuery';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import Swal from 'sweetalert2'; // Import SweetAlert2
+import Swal from 'sweetalert2';
 import Loader from './Loader';
-import DateRangePicker from 'pages/stocks/components/DateRangePicker';
-import { isNullOrEmpty } from 'helper/helpers';
+import CustomFilters from './CustomFilters';
+import { Button } from '@mui/material';
 
 const DataTable = (props) => {
   const {
@@ -24,27 +24,23 @@ const DataTable = (props) => {
     searchPlaceholder,
     loading,
   } = props;
-  const shouldShowDateRangePicker =
-    !window.location.pathname.endsWith('/users') &&
-    !window.location.pathname.endsWith('/products');
 
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
   const [search, setSearch] = useState('');
 
-  // Initialize start and end dates with default values
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+
+  const [filters, setFilters] = useState(null);
 
   useEffect(() => {
-    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate))
+    if (filters)
       setQuery(
         buildURLQuery({
-          startDate,
-          endDate,
+          ...filters,
         })
       );
-  }, [setQuery, startDate, endDate]);
+  }, [setQuery, filters]);
 
   const debouncedSearch = debounce(async (text) => {
     setSearch(text == null ? '' : text);
@@ -53,8 +49,7 @@ const DataTable = (props) => {
         page,
         limit,
         search: text == null ? '' : text,
-        startDate,
-        endDate,
+        ...filters,
       })
     );
   }, 1000);
@@ -104,8 +99,7 @@ const DataTable = (props) => {
                 page: tableState.page + 1,
                 limit,
                 search,
-                startDate,
-                endDate,
+                ...filters,
               })
             );
             break;
@@ -117,8 +111,7 @@ const DataTable = (props) => {
                 page: 1,
                 limit: tableState.rowsPerPage,
                 search,
-                startDate,
-                endDate,
+                ...filters,
               })
             );
             break;
@@ -137,50 +130,74 @@ const DataTable = (props) => {
       {loading ? (
         <Loader />
       ) : (
-        <MUIDataTable
-          title={title}
-          data={results}
-          columns={
-            onEdit || onDelete
-              ? columns.concat({
-                  name: 'id',
-                  label: 'Actions',
-                  options: {
-                    download: false,
-                    customBodyRender: (
-                      value,
-                      tableMeta,
-                      updateValue
-                    ) => {
-                      return (
-                        <div style={{ minWidth: '50px' }}>
-                          {onEdit && (
-                            <span
-                              onClick={() => {
-                                onEdit(value);
-                              }}
-                            >
-                              <EditIcon />
-                            </span>
-                          )}
-                          {onDelete && (
-                            <span
-                              onClick={() => {
-                                handleDelete(value);
-                              }}
-                            >
-                              <DeleteIcon style={{ color: 'red' }} />
-                            </span>
-                          )}
-                        </div>
-                      );
+        <>
+          <MUIDataTable
+            title={
+              <>
+                {title}
+                <Button
+                  style={{ paddingRight: '10px', marginLeft: '20px' }}
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  onClick={() => {
+                    setShowFilters(true);
+                  }}
+                >
+                  Filters
+                </Button>
+              </>
+            }
+            data={results}
+            columns={
+              onEdit || onDelete
+                ? columns.concat({
+                    name: 'id',
+                    label: 'Actions',
+                    options: {
+                      download: false,
+                      customBodyRender: (
+                        value,
+                        tableMeta,
+                        updateValue
+                      ) => {
+                        return (
+                          <div style={{ minWidth: '50px' }}>
+                            {onEdit && (
+                              <span
+                                onClick={() => {
+                                  onEdit(value);
+                                }}
+                              >
+                                <EditIcon />
+                              </span>
+                            )}
+                            {onDelete && (
+                              <span
+                                onClick={() => {
+                                  handleDelete(value);
+                                }}
+                              >
+                                <DeleteIcon
+                                  style={{ color: 'red' }}
+                                />
+                              </span>
+                            )}
+                          </div>
+                        );
+                      },
                     },
-                  },
-                })
-              : columns
-          }
-          options={options}
-        />
+                  })
+                : columns
+            }
+            options={options}
+          />
+          <CustomFilters
+            show={showFilters}
+            setShow={setShowFilters}
+            setFilters={setFilters}
+          />
+        </>
       )}
     </>
   );
