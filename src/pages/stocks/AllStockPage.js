@@ -113,17 +113,6 @@ const AllStocksPage = () => {
                 Filters
               </Button>
             </Grid>
-            <Grid item>
-              <Button
-                style={{ marginRight: '10px' }}
-                onClick={handleResetFilter}
-                variant="outlined"
-                color="primary"
-                size="small"
-              >
-                Clear Filter
-              </Button>
-            </Grid>
           </Grid>
         </Grid>
         <DataTable
@@ -138,6 +127,7 @@ const AllStocksPage = () => {
         />
       </AdminLayout>
       <OrdersFilter
+        handleResetFilter={handleResetFilter}
         show={showEditDetails}
         setShow={setShowEditDetails}
         setQuery={setQuery}
