@@ -1,12 +1,6 @@
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import DataTable from '@core/components/ui/DataTable';
-import {
-  Button,
-  Grid,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckIcon from '@mui/icons-material/Check';
@@ -29,17 +23,6 @@ const AllOrderPage = () => {
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.order
   );
-  const handleResetFilter = (event, value) => {
-    setOrderType('');
-    setQuery('');
-    navigate('/orders');
-  };
-  const handlePaidToggle = (event, value) => {
-    setPaid(value);
-  };
-  const handleOrderType = (event, value) => {
-    setOrderType(value);
-  };
 
   useEffect(() => {
     if (success) {
@@ -208,43 +191,6 @@ const AllOrderPage = () => {
                 Filters
               </Button>
             </Grid>
-            {/* <Grid item>
-              <Button
-                style={{ marginRight: '10px' }}
-                onClick={handleResetFilter}
-                variant="outlined"
-                color="primary"
-                size="small"
-              >
-                Clear Filter
-              </Button>
-            </Grid> */}
-            {/* <Grid item>
-              <ToggleButtonGroup
-                color="primary"
-                style={{ marginRight: '10px' }}
-                value={paid}
-                size="small"
-                exclusive
-                onChange={handlePaidToggle}
-              >
-                <ToggleButton value="true">Paid</ToggleButton>
-                <ToggleButton value="false">UnPaid</ToggleButton>
-              </ToggleButtonGroup>
-            </Grid> */}
-            {/* <Grid item>
-              <ToggleButtonGroup
-                color="primary"
-                style={{ marginRight: '10px' }}
-                value={orderType}
-                size="small"
-                exclusive
-                onChange={handleOrderType}
-              >
-                <ToggleButton value="online">Online</ToggleButton>
-                <ToggleButton value="retail">Retail</ToggleButton>
-              </ToggleButtonGroup>
-            </Grid> */}
           </Grid>
         </Grid>
         {loading ? (
@@ -268,8 +214,7 @@ const AllOrderPage = () => {
         show={showEditDetails}
         setShow={setShowEditDetails}
         setQuery={setQuery}
-        orderType={orderType}
-        handleOrderType={handleOrderType}
+        setOrderType={setOrderType}
       />
     </>
   );
