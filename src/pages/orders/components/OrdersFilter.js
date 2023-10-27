@@ -5,7 +5,12 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
-import { Grid, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import {
+  DialogActions,
+  Grid,
+  ToggleButton,
+  ToggleButtonGroup,
+} from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import DateRangePicker from 'pages/stocks/components/DateRangePicker';
 import { buildURLQuery } from '@core/utils/buildURLQuery';
@@ -76,28 +81,6 @@ const OrdersFilter = ({
               endDate={endDate}
               setEndDate={setEndDate}
             />
-            <Grid item>
-              <Button
-                style={{ marginRight: '10px', marginTop: '10px' }}
-                onClick={handleResetFilter}
-                variant="outlined"
-                color="primary"
-                size="small"
-              >
-                Clear Filter
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                style={{ marginRight: '10px', marginTop: '10px' }}
-                onClick={handleclose}
-                variant="outlined"
-                color="primary"
-                size="small"
-              >
-                Close
-              </Button>
-            </Grid>
 
             <Grid item>
               <ToggleButtonGroup
@@ -129,6 +112,30 @@ const OrdersFilter = ({
           </Grid>
         </Grid>
       </DialogContent>
+      <DialogActions>
+        <Grid item>
+          <Button
+            style={{ marginRight: '10px', marginTop: '10px' }}
+            onClick={handleResetFilter}
+            variant="outlined"
+            color="primary"
+            size="small"
+          >
+            Clear Filter
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            style={{ marginRight: '10px', marginTop: '10px' }}
+            onClick={handleclose}
+            variant="outlined"
+            color="primary"
+            size="small"
+          >
+            Close
+          </Button>
+        </Grid>
+      </DialogActions>
     </Dialog>
   );
 };
