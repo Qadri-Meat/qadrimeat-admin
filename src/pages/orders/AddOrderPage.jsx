@@ -94,7 +94,7 @@ const AddOrderPage = () => {
             <ProductsGrid />
           </Grid>
           <Grid item xs={4}>
-            <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
+            <div>
               <Card sx={{ maxWidth: 500 }}>
                 <CardContent>
                   {cartItems.length === 0 ? (
@@ -117,126 +117,136 @@ const AddOrderPage = () => {
                     </Grid>
                   ) : (
                     <>
-                      {cartItems.map((cartItem, key) => {
-                        const discountedPrice = getDiscountPrice(
-                          cartItem.price,
-                          cartItem.discount
-                        );
-                        const finalProductPrice =
-                          cartItem.price.toFixed(2);
-                        const finalDiscountedPrice = discountedPrice
-                          ? discountedPrice.toFixed(2)
-                          : 0;
+                      <div
+                        style={{
+                          maxHeight: '400px',
+                          overflowY: 'auto',
+                        }}
+                      >
+                        {cartItems.map((cartItem, key) => {
+                          const discountedPrice = getDiscountPrice(
+                            cartItem.price,
+                            cartItem.discount
+                          );
+                          const finalProductPrice =
+                            cartItem.price.toFixed(2);
+                          const finalDiscountedPrice = discountedPrice
+                            ? discountedPrice.toFixed(2)
+                            : 0;
 
-                        discountedPrice != null
-                          ? (cartTotalPrice +=
-                              finalDiscountedPrice *
-                              cartItem.quantity)
-                          : (cartTotalPrice +=
-                              finalProductPrice * cartItem.quantity);
+                          discountedPrice != null
+                            ? (cartTotalPrice +=
+                                finalDiscountedPrice *
+                                cartItem.quantity)
+                            : (cartTotalPrice +=
+                                finalProductPrice *
+                                cartItem.quantity);
 
-                        totalPrice +=
-                          finalProductPrice * cartItem.quantity;
-                        return (
-                          <Card
-                            key={cartItem.id}
-                            sx={{
-                              padding: '10px',
-                              marginTop: '10px',
-                            }}
-                          >
-                            {/* 1st Row: Title and Price */}
-                            <Grid
-                              container
-                              justifyContent="space-between"
-                              alignItems="center"
-                              sx={{ marginBottom: '10px' }}
+                          totalPrice +=
+                            finalProductPrice * cartItem.quantity;
+                          return (
+                            <Card
+                              key={cartItem.id}
+                              sx={{
+                                padding: '10px',
+                                marginTop: '10px',
+                              }}
                             >
-                              <Typography>
-                                {cartItem.name} X {cartItem.quantity}
-                              </Typography>
-                              <Typography variant="subtitle1">
-                                {discountedPrice !== null ? (
-                                  <>
-                                    <span
-                                      style={{
-                                        textDecoration:
-                                          'line-through',
-                                        marginRight: '5px',
-                                      }}
-                                    >
+                              {/* 1st Row: Title and Price */}
+                              <Grid
+                                container
+                                justifyContent="space-between"
+                                alignItems="center"
+                                sx={{ marginBottom: '10px' }}
+                              >
+                                <Typography>
+                                  {cartItem.name} X{' '}
+                                  {cartItem.quantity}
+                                </Typography>
+                                <Typography variant="subtitle1">
+                                  {discountedPrice !== null ? (
+                                    <>
+                                      <span
+                                        style={{
+                                          textDecoration:
+                                            'line-through',
+                                          marginRight: '5px',
+                                        }}
+                                      >
+                                        {'PKR' + finalProductPrice}
+                                      </span>
+                                      <span className="amount">
+                                        {'PKR' + finalDiscountedPrice}
+                                      </span>
+                                    </>
+                                  ) : (
+                                    <span className="amount">
                                       {'PKR' + finalProductPrice}
                                     </span>
-                                    <span className="amount">
-                                      {'PKR' + finalDiscountedPrice}
-                                    </span>
-                                  </>
-                                ) : (
-                                  <span className="amount">
-                                    {'PKR' + finalProductPrice}
-                                  </span>
-                                )}
-                              </Typography>
-                            </Grid>
+                                  )}
+                                </Typography>
+                              </Grid>
 
-                            {/* 2nd Row: Weight Field and Delete Button */}
-                            <Grid
-                              container
-                              justifyContent="space-between"
-                              alignItems="center"
-                            >
-                              <TextField
-                                type="number"
-                                label="Weight"
-                                size="small"
-                                value={
-                                  cartItem.weight *
-                                    cartItem.quantity ===
-                                  0
-                                    ? ''
-                                    : cartItem.weight *
-                                      cartItem.quantity
-                                }
-                                onChange={(e) =>
-                                  handleWeightChange(
-                                    e.target.value,
-                                    cartItem
-                                  )
-                                }
-                                inputProps={{
-                                  pattern: '^[0-9]+([.][0-9]{1,2})?$',
-                                }}
-                                onInput={(e) => {
-                                  e.preventDefault();
-                                  const input =
-                                    e.target.value.replace(
-                                      /[^0-9.]/g,
-                                      ''
-                                    );
-                                  if (
-                                    input !== '' &&
-                                    parseFloat(input) < 0
-                                  ) {
-                                    return;
-                                  }
-                                  e.target.value = input;
-                                }}
-                              />
-
-                              <IconButton
-                                onClick={() =>
-                                  handleRemoveFromCart(cartItem.id)
-                                }
-                                aria-label="delete"
+                              {/* 2nd Row: Weight Field and Delete Button */}
+                              <Grid
+                                container
+                                justifyContent="space-between"
+                                alignItems="center"
                               >
-                                <DeleteIcon
-                                  style={{ color: 'red' }}
+                                <TextField
+                                  type="number"
+                                  label="Weight"
+                                  size="small"
+                                  value={
+                                    cartItem.weight *
+                                      cartItem.quantity ===
+                                    0
+                                      ? ''
+                                      : cartItem.weight *
+                                        cartItem.quantity
+                                  }
+                                  onChange={(e) =>
+                                    handleWeightChange(
+                                      e.target.value,
+                                      cartItem
+                                    )
+                                  }
+                                  inputProps={{
+                                    pattern:
+                                      '^[0-9]+([.][0-9]{1,2})?$',
+                                  }}
+                                  onInput={(e) => {
+                                    e.preventDefault();
+                                    const input =
+                                      e.target.value.replace(
+                                        /[^0-9.]/g,
+                                        ''
+                                      );
+                                    if (
+                                      input !== '' &&
+                                      parseFloat(input) < 0
+                                    ) {
+                                      return;
+                                    }
+                                    e.target.value = input;
+                                  }}
                                 />
-                              </IconButton>
-                            </Grid>
-                          </Card>
-                        );
-                      })}
+
+                                <IconButton
+                                  onClick={() =>
+                                    handleRemoveFromCart(cartItem.id)
+                                  }
+                                  aria-label="delete"
+                                >
+                                  <DeleteIcon
+                                    style={{ color: 'red' }}
+                                  />
+                                </IconButton>
+                              </Grid>
+                            </Card>
+                          );
+                        })}
+                      </div>
                       <Grid
                         sx={{
                           display: 'flex',
@@ -282,7 +292,8 @@ const AddOrderPage = () => {
                           Discount:
                         </Typography>
                         <Typography variant="subtitle1">
-                          PKR: {totalPrice - cartTotalPrice}
+                          PKR:{' '}
+                          {(totalPrice - cartTotalPrice).toFixed(2)}
                         </Typography>
                       </Grid>
                       <Grid

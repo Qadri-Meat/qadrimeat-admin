@@ -1,5 +1,4 @@
 import Loader from '@core/components/ui/Loader';
-import { buildURLQuery } from '@core/utils/buildURLQuery';
 import {
   Button,
   Grid,
@@ -23,19 +22,11 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
   };
 
   useEffect(() => {
-    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate))
-      setQuery(
-        buildURLQuery({
-          startDate,
-          endDate,
-        })
-      );
+    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate)) {
+      const query = `startDate=${startDate}&endDate=${endDate}`;
+      setQuery(query);
+    }
   }, [setQuery, startDate, endDate]);
-
-  // Sort the stockReport array by date in descending order
-  const sortedStockReport = stockReport.slice().sort((a, b) => {
-    return new Date(b._id) - new Date(a._id);
-  });
 
   return (
     <TableContainer style={{ padding: '10px' }}>
@@ -82,31 +73,50 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                       <TableCell>Total Weight Sold</TableCell>
                       <TableCell>Remaning Stock</TableCell>
                       <TableCell>Stock Amount</TableCell>
-                      <TableCell>Profit</TableCell>
                     </TableRow>
                   </TableHead>
                 </Table>
               </TableCell>
             </TableRow>
           </TableHead>
-          {sortedStockReport ? (
+          {stockReport ? (
             <TableBody>
-              {sortedStockReport.map((result) => (
+              {stockReport.map((result) => (
                 <TableRow key={result._id} style={{ width: '100px' }}>
-                  <TableCell>{result._id}</TableCell>
+                  <TableCell>
+                    {new Date(result.date).toLocaleDateString(
+                      'en-US',
+                      { timeZone: 'UTC' }
+                    )}
+                  </TableCell>
+
                   <TableCell>
                     <Table>
                       <TableBody>
-                        {result.reports.map((r) => (
+                        {result?.data.map((r) => (
                           <TableRow>
-                            <TableCell>{r.category}</TableCell>
-                            <TableCell>{r.totalWeight}</TableCell>
-                            <TableCell>{r.totalSale}</TableCell>
                             <TableCell>
-                              {r.stockAvailableInWeight}
+                              {r.category ? r.category : '----------'}
                             </TableCell>
                             <TableCell>
-                              {r.stockPurchasedAmount}
+                              {r.stockWeight
+                                ? r.stockWeight
+                                : '----------'}
+                            </TableCell>
+                            <TableCell>
+                              {r.saleWeight
+                                ? r.saleWeight
+                                : '----------'}
+                            </TableCell>
+                            <TableCell>
+                              {r.stockWeight && r.saleWeight
+                                ? r.stockWeight - r.saleWeight
+                                : '----------'}
+                            </TableCell>
+                            <TableCell>
+                              {r.stockPrice
+                                ? r.stockPrice
+                                : '----------'}
                             </TableCell>
                           </TableRow>
                         ))}

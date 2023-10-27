@@ -12,18 +12,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { pick } from 'helper/pick';
+import { useNavigate } from 'react-router-dom';
 import withAuth from 'hooks/withAuth';
 import { deleteOrder, getOrders, resetOrder } from 'store/order';
 import Loader from '@core/components/ui/Loader';
 
 const AllOrderPage = () => {
   const dispatch = useDispatch();
-  const location = useLocation();
   const navigate = useNavigate();
-  const { paid } = pick(location.search);
   const [query, setQuery] = useState('');
+
+  const [paid, setPaid] = useState('');
   const [orderType, setOrderType] = useState('');
 
   const { results, totalResults, success, loading } = useSelector(
@@ -35,7 +34,7 @@ const AllOrderPage = () => {
     navigate('/orders');
   };
   const handlePaidToggle = (event, value) => {
-    navigate(`/orders?paid=${value}`);
+    setPaid(value);
   };
   const handleOrderType = (event, value) => {
     setOrderType(value);
@@ -45,15 +44,28 @@ const AllOrderPage = () => {
     if (success) {
       dispatch(resetOrder());
     } else {
-      dispatch(
-        getOrders(
-          `${
-            paid !== undefined && orderType !== undefined
-              ? `isPaid=${paid}&type=${orderType}&`
-              : ''
-          }${query}`
-        )
-      );
+      let url = '';
+      if (paid) {
+        url += `isPaid=${paid}`;
+      }
+      if (orderType) {
+        url += `type=${orderType}`;
+      }
+
+      if (orderType && paid) {
+        if (url) {
+          url = '';
+        }
+        url += `isPaid=${paid}&type=${orderType}`;
+      }
+      if (query) {
+        if (url) {
+          url += '&';
+        }
+        url += query;
+      }
+
+      dispatch(getOrders(url));
     }
   }, [dispatch, paid, query, success, orderType]);
 
@@ -86,14 +98,16 @@ const AllOrderPage = () => {
     {
       name: 'shippingDetails',
       label: 'Name',
+
       options: {
         filter: false,
         customBodyRender: (values, tableMeta, updateValue) => {
-          if (!values || !values.firstName) {
-            return '';
-          }
           return (
-            <>{values.firstName + ' ' + (values.lastName || '')}</>
+            <>
+              {(values?.firstName || '-') +
+                ' ' +
+                (values?.lastName || '')}
+            </>
           );
         },
       },
@@ -164,12 +178,13 @@ const AllOrderPage = () => {
           item
           container
           direction="row"
-          justifyContent="space-between"
+          justifyContent="flex-start"
           alignItems="center"
           xs={10}
         >
           <Grid item>
             <Button
+              style={{ marginRight: '10px' }}
               onClick={() => navigate('/orders/add-order')}
               variant="outlined"
               color="primary"
@@ -180,6 +195,7 @@ const AllOrderPage = () => {
           </Grid>
           <Grid item>
             <Button
+              style={{ marginRight: '10px' }}
               onClick={handleResetFilter}
               variant="outlined"
               color="primary"

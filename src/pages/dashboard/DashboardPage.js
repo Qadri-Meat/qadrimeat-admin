@@ -28,9 +28,9 @@ const DashboardPage = () => {
       const endDate = today.toISOString().split('T')[0];
 
       const newQuery = `startDate=${startDate}&endDate=${endDate}`;
-      dispatch(getDashboard({ query: newQuery }));
+      dispatch(getDashboard(newQuery));
     } else {
-      dispatch(getDashboard({ query }));
+      dispatch(getDashboard(query));
     }
     console.log(query);
   }, [dispatch, query]);
