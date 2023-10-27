@@ -16,14 +16,16 @@ import { pick } from 'helper/pick';
 import withAuth from 'hooks/withAuth';
 import { numberWithCommas } from 'helper/numers';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
+import OrdersFilter from 'pages/orders/components/OrdersFilter';
 
 const AllBookingsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const location = useLocation();
-  const { paid } = pick(location.search);
   const [query, setQuery] = useState('');
+  const [paid, setPaid] = useState('');
+  const [showEditDetails, setShowEditDetails] = useState(false);
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.booking
   );
@@ -153,69 +155,67 @@ const AllBookingsPage = () => {
   ];
 
   return (
-    <AdminLayout>
-      <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
-        <Grid item>
-          <Typography variant="h5" component="h1">
-            Bookings
-          </Typography>
-        </Grid>
+    <>
+      <AdminLayout>
+        <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
+          <Grid item>
+            <Typography variant="h5" component="h1">
+              Bookings
+            </Typography>
+          </Grid>
 
-        <Grid
-          item
-          container
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          xs={10}
-        >
-          <Grid item>
-            <Button
-              style={{ marginRight: '10px' }}
-              onClick={() => navigate('/bookings/add-booking')}
-              variant="outlined"
-              color="primary"
-              size="small"
-            >
-              Add Booking
-            </Button>
-          </Grid>
-          <Grid item>
-            <Button
-              style={{ marginRight: '10px' }}
-              onClick={handleResetFilter}
-              variant="outlined"
-              color="primary"
-              size="small"
-            >
-              Clear Filter
-            </Button>
-          </Grid>
-          <Grid item>
-            <ToggleButtonGroup
-              color="primary"
-              style={{ marginRight: '10px' }}
-              value={paid}
-              size="small"
-              exclusive
-              onChange={handlePaidToggle}
-            >
-              <ToggleButton value="true">Paid</ToggleButton>
-              <ToggleButton value="false">UnPaid</ToggleButton>
-            </ToggleButtonGroup>
+          <Grid
+            item
+            container
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+            xs={10}
+          >
+            <Grid item>
+              <Button
+                style={{ marginRight: '10px' }}
+                onClick={() => navigate('/bookings/add-booking')}
+                variant="outlined"
+                color="primary"
+                size="small"
+              >
+                Add Booking
+              </Button>
+            </Grid>
+            <Grid>
+              <Button
+                style={{ paddingRight: '10px' }}
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={() => {
+                  setShowEditDetails(true);
+                }}
+              >
+                Filters
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <DataTable
-        loading={loading}
-        title={'Booking List'}
-        results={results}
-        totalResults={totalResults}
-        columns={columns}
+        <DataTable
+          loading={loading}
+          title={'Booking List'}
+          results={results}
+          totalResults={totalResults}
+          columns={columns}
+          setQuery={setQuery}
+          onDelete={onDelete}
+        />
+      </AdminLayout>
+      <OrdersFilter
+        setPaid={setPaid}
+        paid={paid}
+        show={showEditDetails}
+        setShow={setShowEditDetails}
         setQuery={setQuery}
-        onDelete={onDelete}
       />
-    </AdminLayout>
+    </>
   );
 };
 

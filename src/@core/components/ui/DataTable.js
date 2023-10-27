@@ -134,14 +134,6 @@ const DataTable = (props) => {
 
   return (
     <>
-      {shouldShowDateRangePicker && (
-        <DateRangePicker
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-        />
-      )}
       {loading ? (
         <Loader />
       ) : (
