@@ -10,6 +10,7 @@ import {
   Grid,
   ToggleButton,
   ToggleButtonGroup,
+  Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import DateRangePicker from 'pages/stocks/components/DateRangePicker';
@@ -53,15 +54,17 @@ const OrdersFilter = ({
     setShow(false);
   };
   useEffect(() => {
-    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate))
+    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate)) {
       setQuery(
         buildURLQuery({
           startDate,
           endDate,
         })
       );
-    setShow(false);
+      setShow(false); // Close the dialog only when both start and end dates are selected
+    }
   }, [setQuery, startDate, endDate, setShow]);
+
   return (
     <Dialog open={show} onClose={handleClose} fullWidth>
       <DialogTitle>Filter Data</DialogTitle>
@@ -75,6 +78,7 @@ const OrdersFilter = ({
             alignItems="center"
             xs={10}
           >
+            <Typography variant="h6">Date Range</Typography>
             <DateRangePicker
               startDate={startDate}
               setStartDate={setStartDate}
@@ -83,6 +87,7 @@ const OrdersFilter = ({
             />
 
             <Grid item>
+              <Typography variant="h6">Status</Typography>
               <ToggleButtonGroup
                 color="primary"
                 style={{ marginRight: '10px', marginTop: '10px' }}
@@ -97,6 +102,7 @@ const OrdersFilter = ({
               </ToggleButtonGroup>
             </Grid>
             <Grid item>
+              <Typography variant="h6">Order Type</Typography>
               <ToggleButtonGroup
                 color="primary"
                 style={{ marginRight: '10px', marginTop: '10px' }}
