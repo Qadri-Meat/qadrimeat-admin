@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import DateRangePicker from 'pages/stocks/components/DateRangePicker';
 import { buildURLQuery } from '@core/utils/buildURLQuery';
 import { isNullOrEmpty } from 'helper/helpers';
+import { useLocation } from 'react-router-dom';
 
 const OrdersFilter = ({
   show,
@@ -30,6 +31,12 @@ const OrdersFilter = ({
 }) => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
+  const location = useLocation();
+  const pathParts = location.pathname
+    .split('/')
+    .filter((part) => part !== ''); // Split and remove empty parts
+  const lastPartURL = pathParts[pathParts.length - 1]; // Get the last part
+  console.log(lastPartURL);
 
   const navigate = useNavigate();
   const handleClose = () => {
@@ -86,40 +93,51 @@ const OrdersFilter = ({
               endDate={endDate}
               setEndDate={setEndDate}
             />
+            {lastPartURL === 'stocks' ||
+            lastPartURL === 'expenses' ? (
+              ''
+            ) : (
+              <Grid item>
+                <Typography variant="h6">Status</Typography>
+                <ToggleButtonGroup
+                  color="primary"
+                  style={{ marginRight: '10px', marginTop: '10px' }}
+                  value={paid}
+                  size="small"
+                  exclusive
+                  onChange={handlePaidToggle}
+                  xs={10}
+                >
+                  <ToggleButton value="true">Paid</ToggleButton>
+                  <br></br>
+                  <ToggleButton value="false">UnPaid</ToggleButton>
+                </ToggleButtonGroup>
+              </Grid>
+            )}
 
-            <Grid item>
-              <Typography variant="h6">Status</Typography>
-              <ToggleButtonGroup
-                color="primary"
-                style={{ marginRight: '10px', marginTop: '10px' }}
-                value={paid}
-                size="small"
-                exclusive
-                onChange={handlePaidToggle}
-                xs={10}
-              >
-                <ToggleButton value="true">Paid</ToggleButton>
-                <br></br>
-                <ToggleButton value="false">UnPaid</ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
             <br></br>
-            <Grid item>
-              <Typography variant="h6">Order Type</Typography>
-              <ToggleButtonGroup
-                color="primary"
-                style={{ marginRight: '10px', marginTop: '10px' }}
-                value={orderType}
-                size="small"
-                exclusive
-                onChange={handleOrderType}
-                xs={10}
-                l={12}
-              >
-                <ToggleButton value="online">Online</ToggleButton>
-                <ToggleButton value="retail">Retail</ToggleButton>
-              </ToggleButtonGroup>
-            </Grid>
+            {lastPartURL === 'stocks' ||
+            lastPartURL === 'bookings' ||
+            lastPartURL === 'expenses' ? (
+              ''
+            ) : (
+              <Grid item>
+                <Typography variant="h6">Order Type</Typography>
+                <ToggleButtonGroup
+                  color="primary"
+                  style={{ marginRight: '10px', marginTop: '10px' }}
+                  value={orderType}
+                  size="small"
+                  exclusive
+                  onChange={handleOrderType}
+                  xs={10}
+                  l={12}
+                >
+                  <ToggleButton value="online">Online</ToggleButton>
+                  <ToggleButton value="retail">Retail</ToggleButton>
+                </ToggleButtonGroup>
+              </Grid>
+            )}
           </Grid>
         </Grid>
       </DialogContent>
