@@ -12,7 +12,6 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import DateRangePicker from 'pages/stocks/components/DateRangePicker';
 import { buildURLQuery } from '@core/utils/buildURLQuery';
 import { isNullOrEmpty } from 'helper/helpers';
@@ -38,15 +37,12 @@ const OrdersFilter = ({
   const lastPartURL = pathParts[pathParts.length - 1]; // Get the last part
   console.log(lastPartURL);
 
-  const navigate = useNavigate();
   const handleClose = () => {
     setShow(false);
   };
   const handleResetFilter = (event, value) => {
-    setOrderType('');
-    setPaid('');
-    setQuery('');
-    navigate('/orders');
+    window.location.reload();
+
     setShow(false);
   };
   const handleOrderType = (event, value) => {

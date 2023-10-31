@@ -16,6 +16,7 @@ const AllExpensesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState('');
+  const [orderType, setOrderType] = useState('');
   const [showEditDetails, setShowEditDetails] = useState(false);
 
   const { results, totalResults, success, loading } = useSelector(
@@ -129,6 +130,7 @@ const AllExpensesPage = () => {
         show={showEditDetails}
         setShow={setShowEditDetails}
         setQuery={setQuery}
+        setOrderType={setOrderType}
       />
     </>
   );
