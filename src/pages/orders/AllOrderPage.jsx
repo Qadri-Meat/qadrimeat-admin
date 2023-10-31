@@ -215,6 +215,7 @@ const AllOrderPage = () => {
         setShow={setShowEditDetails}
         setQuery={setQuery}
         setOrderType={setOrderType}
+        orderType={orderType}
       />
     </>
   );

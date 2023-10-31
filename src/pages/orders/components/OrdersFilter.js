@@ -44,6 +44,7 @@ const OrdersFilter = ({
   };
   const handleOrderType = (event, value) => {
     setOrderType(value);
+    console.log(orderType);
     setShow(false);
   };
   const handleclose = (event, value) => {
@@ -95,12 +96,14 @@ const OrdersFilter = ({
                 size="small"
                 exclusive
                 onChange={handlePaidToggle}
+                xs={10}
               >
                 <ToggleButton value="true">Paid</ToggleButton>
                 <br></br>
                 <ToggleButton value="false">UnPaid</ToggleButton>
               </ToggleButtonGroup>
             </Grid>
+            <br></br>
             <Grid item>
               <Typography variant="h6">Order Type</Typography>
               <ToggleButtonGroup
@@ -110,6 +113,8 @@ const OrdersFilter = ({
                 size="small"
                 exclusive
                 onChange={handleOrderType}
+                xs={10}
+                l={12}
               >
                 <ToggleButton value="online">Online</ToggleButton>
                 <ToggleButton value="retail">Retail</ToggleButton>
