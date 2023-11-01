@@ -6,7 +6,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'; // Import SweetAlert2
 import Loader from './Loader';
-import DateRangePicker from 'pages/stocks/components/DateRangePicker';
 import { isNullOrEmpty } from 'helper/helpers';
 
 const DataTable = (props) => {
@@ -134,14 +133,6 @@ const DataTable = (props) => {
 
   return (
     <>
-      {shouldShowDateRangePicker && (
-        <DateRangePicker
-          startDate={startDate}
-          setStartDate={setStartDate}
-          endDate={endDate}
-          setEndDate={setEndDate}
-        />
-      )}
       {loading ? (
         <Loader />
       ) : (

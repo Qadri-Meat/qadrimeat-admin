@@ -114,8 +114,8 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                                 : '----------'}
                             </TableCell>
                             <TableCell>
-                              {r.stockPrice
-                                ? r.stockPrice
+                              {r.stockPrice && r.stockWeight
+                                ? r.stockPrice * r.stockWeight
                                 : '----------'}
                             </TableCell>
                           </TableRow>

@@ -1,12 +1,6 @@
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import DataTable from '@core/components/ui/DataTable';
-import {
-  Button,
-  Grid,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material';
+import { Button, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import CheckIcon from '@mui/icons-material/Check';
@@ -16,29 +10,19 @@ import { useNavigate } from 'react-router-dom';
 import withAuth from 'hooks/withAuth';
 import { deleteOrder, getOrders, resetOrder } from 'store/order';
 import Loader from '@core/components/ui/Loader';
+import OrdersFilter from './components/OrdersFilter';
 
 const AllOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
-
+  const [showEditDetails, setShowEditDetails] = useState(false);
   const [paid, setPaid] = useState('');
   const [orderType, setOrderType] = useState('');
 
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.order
   );
-  const handleResetFilter = (event, value) => {
-    setOrderType('');
-    setQuery('');
-    navigate('/orders');
-  };
-  const handlePaidToggle = (event, value) => {
-    setPaid(value);
-  };
-  const handleOrderType = (event, value) => {
-    setOrderType(value);
-  };
 
   useEffect(() => {
     if (success) {
@@ -167,86 +151,73 @@ const AllOrderPage = () => {
   ];
 
   return (
-    <AdminLayout>
-      <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
-        <Grid item>
-          <Typography variant="h5" component="h1">
-            Orders
-          </Typography>
-        </Grid>
-        <Grid
-          item
-          container
-          direction="row"
-          justifyContent="flex-start"
-          alignItems="center"
-          xs={10}
-        >
+    <>
+      <AdminLayout>
+        <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
           <Grid item>
-            <Button
-              style={{ marginRight: '10px' }}
-              onClick={() => navigate('/orders/add-order')}
-              variant="outlined"
-              color="primary"
-              size="small"
-            >
-              Add Order
-            </Button>
+            <Typography variant="h5" component="h1">
+              Orders
+            </Typography>
           </Grid>
-          <Grid item>
-            <Button
-              style={{ marginRight: '10px' }}
-              onClick={handleResetFilter}
-              variant="outlined"
-              color="primary"
-              size="small"
-            >
-              Clear Filter
-            </Button>
-          </Grid>
-          <Grid item>
-            <ToggleButtonGroup
-              color="primary"
-              style={{ marginRight: '10px' }}
-              value={paid}
-              size="small"
-              exclusive
-              onChange={handlePaidToggle}
-            >
-              <ToggleButton value="true">Paid</ToggleButton>
-              <ToggleButton value="false">UnPaid</ToggleButton>
-            </ToggleButtonGroup>
-          </Grid>
-          <Grid item>
-            <ToggleButtonGroup
-              color="primary"
-              style={{ marginRight: '10px' }}
-              value={orderType}
-              size="small"
-              exclusive
-              onChange={handleOrderType}
-            >
-              <ToggleButton value="online">Online</ToggleButton>
-              <ToggleButton value="retail">Retail</ToggleButton>
-            </ToggleButtonGroup>
+          <Grid
+            item
+            container
+            direction="row"
+            justifyContent="flex-start"
+            alignItems="center"
+            xs={10}
+          >
+            <Grid item>
+              <Button
+                style={{ marginRight: '10px' }}
+                onClick={() => navigate('/orders/add-order')}
+                variant="outlined"
+                color="primary"
+                size="small"
+              >
+                Add Order
+              </Button>
+            </Grid>
+            <Grid>
+              <Button
+                style={{ paddingRight: '10px' }}
+                variant="contained"
+                color="primary"
+                size="small"
+                onClick={() => {
+                  setShowEditDetails(true);
+                }}
+              >
+                Filters
+              </Button>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      {loading ? (
-        <Loader />
-      ) : (
-        <DataTable
-          loading={loading}
-          title={'Order List'}
-          results={results}
-          totalResults={totalResults}
-          columns={columns}
-          setQuery={setQuery}
-          onDelete={onDelete}
-          searchPlaceholder="Search by name or phone number"
-        />
-      )}
-    </AdminLayout>
+        {loading ? (
+          <Loader />
+        ) : (
+          <DataTable
+            loading={loading}
+            title={'Order List'}
+            results={results}
+            totalResults={totalResults}
+            columns={columns}
+            setQuery={setQuery}
+            onDelete={onDelete}
+            searchPlaceholder="Search by name or phone number"
+          />
+        )}
+      </AdminLayout>
+      <OrdersFilter
+        setPaid={setPaid}
+        paid={paid}
+        show={showEditDetails}
+        setShow={setShowEditDetails}
+        setQuery={setQuery}
+        setOrderType={setOrderType}
+        orderType={orderType}
+      />
+    </>
   );
 };
 
