@@ -36,7 +36,7 @@ const AllBookingsPage = () => {
     } else {
       dispatch(
         getBookings(
-          `${paid !== undefined ? `isPaid=${paid}&` : ''}${query}`
+          `${paid === undefined ? `isPaid=${paid}&` : ''}${query}`
         )
       );
     }

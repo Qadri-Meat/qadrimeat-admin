@@ -42,7 +42,6 @@ const OrdersFilter = ({
   };
   const handleResetFilter = (event, value) => {
     window.location.reload();
-
     setShow(false);
   };
   const handleOrderType = (event, value) => {

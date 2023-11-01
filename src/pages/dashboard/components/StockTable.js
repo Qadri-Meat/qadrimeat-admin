@@ -21,6 +21,19 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
     window.location.reload();
   };
 
+  function convertUTCDateToLocalDate(date) {
+    var newDate = new Date(
+      date.getTime() + date.getTimezoneOffset() * 60 * 1000
+    );
+
+    var offset = date.getTimezoneOffset() / 60;
+    var hours = date.getHours();
+
+    newDate.setHours(hours - offset);
+
+    return newDate.toLocaleString();
+  }
+
   useEffect(() => {
     if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate)) {
       const query = `startDate=${startDate}&endDate=${endDate}`;
@@ -84,10 +97,7 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
               {stockReport.map((result) => (
                 <TableRow key={result._id} style={{ width: '100px' }}>
                   <TableCell>
-                    {new Date(result.date).toLocaleDateString(
-                      'en-US',
-                      { timeZone: 'UTC' }
-                    )}
+                    {convertUTCDateToLocalDate(new Date(result.date))}
                   </TableCell>
 
                   <TableCell>
