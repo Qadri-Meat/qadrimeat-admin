@@ -33,9 +33,8 @@ const CustomFilter = ({
   const location = useLocation();
   const pathParts = location.pathname
     .split('/')
-    .filter((part) => part !== ''); // Split and remove empty parts
-  const lastPartURL = pathParts[pathParts.length - 1]; // Get the last part
-  console.log(lastPartURL);
+    .filter((part) => part !== '');
+  const lastPartURL = pathParts[pathParts.length - 1];
 
   const handleClose = () => {
     setShow(false);
@@ -46,7 +45,6 @@ const CustomFilter = ({
   };
   const handleOrderType = (event, value) => {
     setOrderType(value);
-    console.log(orderType);
     setShow(false);
   };
   const handleclose = (event, value) => {

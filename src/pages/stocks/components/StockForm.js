@@ -1,32 +1,36 @@
-import Form from "@core/components/forms/Form";
-import FormInput from "@core/components/forms/FormInput";
-import SelectInput from "@core/components/forms/SelectInput";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Button, Grid, MenuItem } from "@mui/material";
-import { useForm } from "react-hook-form";
-import SaveIcon from "@mui/icons-material/Save";
-import Loader from "@core/components/ui/Loader";
-import { useDispatch, useSelector } from "react-redux";
-import { AddStock, updateStock } from "store/stock";
-import { useNavigate } from "react-router-dom";
+import Form from '@core/components/forms/Form';
+import FormInput from '@core/components/forms/FormInput';
+import SelectInput from '@core/components/forms/SelectInput';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { Button, Grid, MenuItem } from '@mui/material';
+import { useForm } from 'react-hook-form';
+import SaveIcon from '@mui/icons-material/Save';
+import Loader from '@core/components/ui/Loader';
+import { useDispatch, useSelector } from 'react-redux';
+import { AddStock, updateStock } from 'store/stock';
+import { useNavigate } from 'react-router-dom';
 
 const schema = yup.object().shape({
   weight: yup
     .number()
     .required()
     .positive()
-    .typeError("Weight is required field"),
+    .typeError('Weight is required field'),
   category: yup
     .mixed()
-    .test("isCategoryValid", "Category is a required field", function (value) {
-      return (
-        value !== undefined &&
-        (typeof value === "string" || Array.isArray(value))
-      );
-    })
+    .test(
+      'isCategoryValid',
+      'Category is a required field',
+      function (value) {
+        return (
+          value !== undefined &&
+          (typeof value === 'string' || Array.isArray(value))
+        );
+      }
+    )
     .transform(function (value, originalValue) {
-      if (originalValue && typeof originalValue === "string") {
+      if (originalValue && typeof originalValue === 'string') {
         return [originalValue];
       }
       return value;
@@ -36,7 +40,7 @@ const schema = yup.object().shape({
     .number()
     .required()
     .positive()
-    .typeError("Amount is required field"),
+    .typeError('Amount is required field'),
 });
 
 const StockForm = ({ defaultValues }) => {
@@ -51,13 +55,12 @@ const StockForm = ({ defaultValues }) => {
     control,
     formState: { errors },
   } = useForm({
-    mode: "onBlur",
+    mode: 'onBlur',
     defaultValues,
     resolver: yupResolver(schema),
   });
 
   const onSubmit = (data) => {
-    console.log(data);
     const postData = {
       weight: data.weight,
       price: data.price,
@@ -68,7 +71,7 @@ const StockForm = ({ defaultValues }) => {
     } else {
       dispatch(updateStock({ id: defaultValues.id, data: postData }));
     }
-    navigate("/stocks");
+    navigate('/stocks');
   };
 
   return (
@@ -77,7 +80,7 @@ const StockForm = ({ defaultValues }) => {
         <Grid container spacing={3}>
           <Grid item xs={12} md={4}>
             <SelectInput
-              {...register("category")}
+              {...register('category')}
               id="category"
               name="category"
               label="Category"
@@ -92,7 +95,7 @@ const StockForm = ({ defaultValues }) => {
           </Grid>
           <Grid item xs={12} md={4}>
             <FormInput
-              {...register("weight")}
+              {...register('weight')}
               id="weight"
               type="number"
               label="Weight (KG)"
@@ -104,7 +107,7 @@ const StockForm = ({ defaultValues }) => {
 
           <Grid item xs={12} md={4}>
             <FormInput
-              {...register("price")}
+              {...register('price')}
               id="price"
               type="number"
               label="Amount per (KG)"
@@ -113,7 +116,7 @@ const StockForm = ({ defaultValues }) => {
               helperText={errors?.price?.message}
             />
           </Grid>
-          <Grid item xs={12} sx={{ textAlign: "center" }}>
+          <Grid item xs={12} sx={{ textAlign: 'center' }}>
             <Button
               variant="contained"
               color="primary"
@@ -124,9 +127,9 @@ const StockForm = ({ defaultValues }) => {
               {loading ? (
                 <Loader />
               ) : defaultValues ? (
-                "Update Stock"
+                'Update Stock'
               ) : (
-                "Save Stock"
+                'Save Stock'
               )}
             </Button>
           </Grid>
