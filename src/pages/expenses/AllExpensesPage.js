@@ -2,7 +2,7 @@ import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import DataTable from '@core/components/ui/DataTable';
 import { Button, Grid, Typography } from '@mui/material';
 import withAuth from 'hooks/withAuth';
-import OrdersFilter from 'pages/orders/components/OrdersFilter';
+import CustomFilter from 'pages/orders/components/CustomFilter';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -126,7 +126,7 @@ const AllExpensesPage = () => {
           onDelete={onDelete}
         />
       </AdminLayout>
-      <OrdersFilter
+      <CustomFilter
         show={showEditDetails}
         setShow={setShowEditDetails}
         setQuery={setQuery}

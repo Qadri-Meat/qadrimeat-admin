@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import withAuth from 'hooks/withAuth';
 import { deleteOrder, getOrders, resetOrder } from 'store/order';
 import Loader from '@core/components/ui/Loader';
-import OrdersFilter from './components/OrdersFilter';
+import CustomFilter from './components/CustomFilter';
 
 const AllOrderPage = () => {
   const dispatch = useDispatch();
@@ -208,7 +208,7 @@ const AllOrderPage = () => {
           />
         )}
       </AdminLayout>
-      <OrdersFilter
+      <CustomFilter
         setPaid={setPaid}
         paid={paid}
         show={showEditDetails}

@@ -17,7 +17,7 @@ import { buildURLQuery } from '@core/utils/buildURLQuery';
 import { isNullOrEmpty } from 'helper/helpers';
 import { useLocation } from 'react-router-dom';
 
-const OrdersFilter = ({
+const CustomFilter = ({
   show,
   setShow,
   preloadedValues,
@@ -164,4 +164,4 @@ const OrdersFilter = ({
   );
 };
 
-export default OrdersFilter;
+export default CustomFilter;

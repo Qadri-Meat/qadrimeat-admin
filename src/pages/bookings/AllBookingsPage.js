@@ -16,7 +16,7 @@ import { pick } from 'helper/pick';
 import withAuth from 'hooks/withAuth';
 import { numberWithCommas } from 'helper/numers';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
-import OrdersFilter from 'pages/orders/components/OrdersFilter';
+import CustomFilter from 'pages/orders/components/CustomFilter';
 
 const AllBookingsPage = () => {
   const navigate = useNavigate();
@@ -208,7 +208,7 @@ const AllBookingsPage = () => {
           onDelete={onDelete}
         />
       </AdminLayout>
-      <OrdersFilter
+      <CustomFilter
         setPaid={setPaid}
         paid={paid}
         show={showEditDetails}
