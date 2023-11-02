@@ -1,16 +1,19 @@
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  Button,
+  Grid,
   Card,
   CardActions,
   CardContent,
-  Grid,
   Typography,
+  Button,
 } from '@mui/material';
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const BookingPageHeading = ({ todayReport }) => {
   const navigate = useNavigate();
+  const { totalBookings, orderSales, bookingSales, expenses } =
+    todayReport || {};
+
   return (
     <Grid container spacing={2}>
       <Grid container spacing={2}>
@@ -21,7 +24,7 @@ const BookingPageHeading = ({ todayReport }) => {
                 Today's Bookings
               </Typography>
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                {todayReport ? todayReport.totalBookings || 0 : 0}
+                {totalBookings || 0}
               </Typography>
             </CardContent>
             <CardActions>
@@ -41,11 +44,7 @@ const BookingPageHeading = ({ todayReport }) => {
                 Today's Sales
               </Typography>
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Rs{' '}
-                {todayReport
-                  ? (todayReport.orderSales || 0) +
-                    (todayReport.bookingSales || 0)
-                  : 0}
+                Rs {orderSales + bookingSales || 0}
               </Typography>
             </CardContent>
             <CardActions>
@@ -61,7 +60,7 @@ const BookingPageHeading = ({ todayReport }) => {
                 Today's Expenses
               </Typography>
               <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                Rs {todayReport ? todayReport.expenses || 0 : 0}
+                Rs {expenses || 0}
               </Typography>
             </CardContent>
             <CardActions>
