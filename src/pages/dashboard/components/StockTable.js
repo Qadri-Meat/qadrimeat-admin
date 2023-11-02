@@ -43,55 +43,34 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
             aria-label="simple table"
           >
             <TableHead>
-              <Grid>
-                <Button
-                  style={{ marginTop: '10px', marginRight: '80px' }}
-                  variant="contained"
-                  color="primary"
-                  size="small"
-                  onClick={() => {
-                    setShowEditDetails(true);
-                  }}
-                >
-                  Filters
-                </Button>
+              <Grid container>
+                <Grid item>
+                  <Button
+                    style={{ marginTop: '10px', marginRight: '80px' }}
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={() => {
+                      setShowEditDetails(true);
+                    }}
+                  >
+                    Filters
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    onClick={handleResetFilter}
+                    variant="outlined"
+                    color="primary"
+                    size="small"
+                    style={{ marginTop: '15px', marginLeft: '30px' }}
+                  >
+                    Clear Filter
+                  </Button>
+                </Grid>
               </Grid>
-              <Grid item>
-                <Button
-                  onClick={handleResetFilter}
-                  variant="outlined"
-                  color="primary"
-                  size="small"
-                  style={{ marginTop: '15px', marginLeft: '30px' }}
-                >
-                  Clear Filter
-                </Button>
-              </Grid>
-
-              <TableRow>
-                <TableCell
-                  style={{ fontWeight: 'bold', color: '#555555' }}
-                >
-                  Date
-                </TableCell>
-
-                <TableCell
-                  style={{ fontWeight: 'bold', color: '#555555' }}
-                >
-                  <Table>
-                    <TableHead>
-                      <TableRow>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Stock</TableCell>
-                        <TableCell>Total Weight Sold</TableCell>
-                        <TableCell>Remaning Stock</TableCell>
-                        <TableCell>Stock Amount</TableCell>
-                      </TableRow>
-                    </TableHead>
-                  </Table>
-                </TableCell>
-              </TableRow>
             </TableHead>
+
             {stockReport ? (
               <TableBody>
                 {stockReport.map((result) => (
