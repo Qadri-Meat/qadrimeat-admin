@@ -13,26 +13,34 @@ import StockTable from './components/StockTable';
 const DashboardPage = () => {
   const dispatch = useDispatch();
 
-  const [query, setQuery] = useState();
+  const [query, setQuery] = useState('');
 
   const { todayReport, reports, deals, loading, stockReport } =
     useSelector((state) => state.user);
 
   useEffect(() => {
-    if (query === undefined) {
-      const today = new Date();
-      const sevenDaysAgo = new Date(today);
-      sevenDaysAgo.setDate(today.getDate() - 7);
+    const fetchDashboardData = async () => {
+      try {
+        if (!query) {
+          const today = new Date();
+          const sevenDaysAgo = new Date(today);
+          sevenDaysAgo.setDate(today.getDate() - 7);
 
-      const startDate = sevenDaysAgo.toISOString().split('T')[0];
-      const endDate = today.toISOString().split('T')[0];
+          const startDate = sevenDaysAgo.toISOString().split('T')[0];
+          const endDate = today.toISOString().split('T')[0];
 
-      const newQuery = `startDate=${startDate}&endDate=${endDate}`;
-      dispatch(getDashboard(newQuery));
-    } else {
-      dispatch(getDashboard(query));
-    }
-    console.log(query);
+          const newQuery = `startDate=${startDate}&endDate=${endDate}`;
+          dispatch(getDashboard(newQuery));
+        } else {
+          dispatch(getDashboard(query));
+        }
+      } catch (error) {
+        // Handle errors here
+        console.error(error);
+      }
+    };
+
+    fetchDashboardData();
   }, [dispatch, query]);
 
   return (
@@ -52,9 +60,7 @@ const DashboardPage = () => {
                 reports={reports}
                 loading={loading}
               />
-            ) : (
-              <></>
-            )}
+            ) : null}
           </Paper>
         </Grid>
         <Grid item xs={12} md={7}>
@@ -65,9 +71,7 @@ const DashboardPage = () => {
             <Typography variant="h5">Total Bookings</Typography>
             {deals ? (
               <BookingTable deals={deals} loading={loading} />
-            ) : (
-              <></>
-            )}
+            ) : null}
           </Paper>
         </Grid>
         <Grid item xs={12} md={12}>
@@ -82,9 +86,7 @@ const DashboardPage = () => {
                 stockReport={stockReport}
                 loading={loading}
               />
-            ) : (
-              <></>
-            )}
+            ) : null}
           </Paper>
         </Grid>
       </Grid>
