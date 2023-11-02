@@ -35,7 +35,7 @@ const CustomFilter = ({
     .split('/')
     .filter((part) => part !== '');
   const lastPartURL = pathParts[pathParts.length - 1];
-
+  console.log(lastPartURL);
   const handleClose = () => {
     setShow(false);
   };
@@ -87,7 +87,8 @@ const CustomFilter = ({
               setEndDate={setEndDate}
             />
             {lastPartURL === 'stocks' ||
-            lastPartURL === 'expenses' ? (
+            lastPartURL === 'expenses' ||
+            typeof lastPartURL === 'undefined' ? (
               ''
             ) : (
               <Grid item>
@@ -111,7 +112,8 @@ const CustomFilter = ({
             <br></br>
             {lastPartURL === 'stocks' ||
             lastPartURL === 'bookings' ||
-            lastPartURL === 'expenses' ? (
+            lastPartURL === 'expenses' ||
+            typeof lastPartURL === 'undefined' ? (
               ''
             ) : (
               <Grid item>
