@@ -35,6 +35,7 @@ const UpdateOrderPage = () => {
   const navigate = useNavigate();
 
   const [query, setQuery] = useState('limit=8');
+  console.log(setQuery);
 
   const cartItems = useSelector((state) => state.cart);
 

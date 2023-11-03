@@ -74,52 +74,83 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
             {stockReport ? (
               <TableBody>
                 {stockReport.map((result) => (
-                  <TableRow
-                    key={result._id}
-                    style={{ width: '100px' }}
-                  >
-                    <TableCell>
-                      {convertUTCDateToLocalDate(
-                        new Date(result.date)
-                      )}
-                    </TableCell>
+                  <>
+                    <TableRow>
+                      <TableCell
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#555555',
+                        }}
+                      >
+                        Date
+                      </TableCell>
 
-                    <TableCell>
-                      <Table>
-                        <TableBody>
-                          {result?.data.map((r) => (
+                      <TableCell
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#555555',
+                        }}
+                      >
+                        <Table>
+                          <TableHead>
                             <TableRow>
-                              <TableCell>
-                                {r.category
-                                  ? r.category
-                                  : '----------'}
-                              </TableCell>
-                              <TableCell>
-                                {r.stockWeight
-                                  ? r.stockWeight
-                                  : '----------'}
-                              </TableCell>
-                              <TableCell>
-                                {r.saleWeight
-                                  ? r.saleWeight
-                                  : '----------'}
-                              </TableCell>
-                              <TableCell>
-                                {r.stockWeight && r.saleWeight
-                                  ? r.stockWeight - r.saleWeight
-                                  : '----------'}
-                              </TableCell>
-                              <TableCell>
-                                {r.stockPrice && r.stockWeight
-                                  ? r.stockPrice * r.stockWeight
-                                  : '----------'}
-                              </TableCell>
+                              <TableCell>Category</TableCell>
+                              <TableCell>Stock</TableCell>
+                              <TableCell>Total Weight Sold</TableCell>
+                              <TableCell>Remaning Stock</TableCell>
+                              <TableCell>Stock Amount</TableCell>
                             </TableRow>
-                          ))}
-                        </TableBody>
-                      </Table>
-                    </TableCell>
-                  </TableRow>
+                          </TableHead>
+                        </Table>
+                      </TableCell>
+                    </TableRow>
+                    <TableRow
+                      key={result._id}
+                      style={{ width: '100px' }}
+                    >
+                      <TableCell>
+                        {convertUTCDateToLocalDate(
+                          new Date(result.date)
+                        )}
+                      </TableCell>
+
+                      <TableCell>
+                        <Table>
+                          <TableBody>
+                            {result?.data.map((r) => (
+                              <TableRow>
+                                <TableCell>
+                                  {r.category
+                                    ? r.category
+                                    : '----------'}
+                                </TableCell>
+                                <TableCell>
+                                  {r.stockWeight
+                                    ? r.stockWeight
+                                    : '----------'}
+                                </TableCell>
+                                <TableCell>
+                                  {r.saleWeight
+                                    ? r.saleWeight
+                                    : '----------'}
+                                </TableCell>
+                                <TableCell>
+                                  {r.stockWeight && r.saleWeight
+                                    ? r.stockWeight - r.saleWeight
+                                    : '----------'}
+                                </TableCell>
+                                <TableCell>
+                                  {r.stockPrice && r.stockWeight
+                                    ? r.stockPrice * r.stockWeight
+                                    : '----------'}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </TableCell>
+                    </TableRow>
+                  </>
                 ))}
               </TableBody>
             ) : (
