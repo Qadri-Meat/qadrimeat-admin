@@ -73,7 +73,7 @@ const EditOrderDetailsDialog = ({
 
   return (
     <Dialog open={show} onClose={handleClose} fullWidth>
-      <DialogTitle>Update Shipping Details</DialogTitle>
+      <DialogTitle>Update Address Details</DialogTitle>
       <DialogContent>
         <Form onSubmit={handleSubmit(onSubmit)}>
           {error && <Message severity="error">{error}</Message>}
