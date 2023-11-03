@@ -209,7 +209,7 @@ const BookingPage = () => {
             </Typography>
           </Box>
           <Box>
-            <Typography variant="h6">Shipping Price</Typography>
+            <Typography variant="h6">Delivery Charges</Typography>
             <Typography variant="body1">
               Rs{' ' + selectedBooking.shippingPrice}
             </Typography>

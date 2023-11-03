@@ -94,7 +94,7 @@ const OrderPageRightPanels = () => {
             onClick: () => {},
           }}
         >
-          <Typography>Shipping</Typography>
+          <Typography>Delivery</Typography>
         </AccordionSummary>
         <Divider />
         <AccordionDetails>
