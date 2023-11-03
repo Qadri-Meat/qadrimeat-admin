@@ -268,7 +268,7 @@ const OrderPageRightPanels = () => {
                     </Box>
                   </div>
                 ) : (
-                  <>No Transactions found</>
+                  <Typography>No Transactions found</Typography>
                 )}
                 <>
                   {selectedOrder.totalPaid <

@@ -230,7 +230,7 @@ const BookingPageRightPanels = () => {
                   </Box>
                 </div>
               ) : (
-                <>No Transactions found</>
+                <Typography>No Transactions found</Typography>
               )}
               <>
                 {selectedBooking.totalPaid <
