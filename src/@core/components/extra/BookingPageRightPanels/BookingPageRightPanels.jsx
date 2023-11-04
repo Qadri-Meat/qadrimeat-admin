@@ -70,7 +70,7 @@ const BookingPageRightPanels = () => {
           aria-controls="panel1a-content"
           id="panel1a-header"
         >
-          <Typography>Shipping</Typography>
+          <Typography>Delivery</Typography>
         </AccordionSummary>
         <Divider />
         <AccordionDetails>
@@ -230,7 +230,7 @@ const BookingPageRightPanels = () => {
                   </Box>
                 </div>
               ) : (
-                <>No Transactions found</>
+                <Typography>No Transactions found</Typography>
               )}
               <>
                 {selectedBooking.totalPaid <

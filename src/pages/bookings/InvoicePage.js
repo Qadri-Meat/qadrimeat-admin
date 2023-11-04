@@ -250,7 +250,7 @@ const InvoicePage = (props) => {
                             </tr>
                             <tr>
                               <td className="pr-3 text-right">
-                                <strong>Shipping Price:</strong>
+                                <strong>Delivery Charges:</strong>
                               </td>
                               <td>
                                 <strong>

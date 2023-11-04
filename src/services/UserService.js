@@ -8,7 +8,6 @@ class UserService extends ApiService {
    */
 
   getDashboard(query) {
-    console.log('in servise', query);
     return this.instance.get(`v1/users/dashboard?${query}`);
   }
 

@@ -41,11 +41,9 @@ const AddOrderPage = () => {
   };
 
   const onSubmit = () => {
-    console.log('with category', cartItems);
     const itemsToRemove = cartItems.filter(
       (item) => item.quantity === 0
     );
-    console.log(cartItems);
     const itemsToKeep = cartItems.filter((item) => item.quantity > 0);
     itemsToRemove.forEach((item) => {
       dispatch(removeItem(item.id));
@@ -67,15 +65,6 @@ const AddOrderPage = () => {
       navigate(`/orders/${selectedOrder.id}`);
     }
   }, [success, dispatch, navigate, selectedOrder]);
-
-  // cartItems.forEach((cartItem) => {
-  //   const discountedPrice = getDiscountPrice(
-  //     cartItem.price,
-  //     cartItem.discount
-  //   );
-  //   console.log('dis', discountedPrice);
-  //   discount += parseFloat(discountedPrice);
-  // });
 
   return (
     <AdminLayout>

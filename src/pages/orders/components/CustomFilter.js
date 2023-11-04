@@ -17,7 +17,7 @@ import { buildURLQuery } from '@core/utils/buildURLQuery';
 import { isNullOrEmpty } from 'helper/helpers';
 import { useLocation } from 'react-router-dom';
 
-const OrdersFilter = ({
+const CustomFilter = ({
   show,
   setShow,
   preloadedValues,
@@ -33,21 +33,18 @@ const OrdersFilter = ({
   const location = useLocation();
   const pathParts = location.pathname
     .split('/')
-    .filter((part) => part !== ''); // Split and remove empty parts
-  const lastPartURL = pathParts[pathParts.length - 1]; // Get the last part
+    .filter((part) => part !== '');
+  const lastPartURL = pathParts[pathParts.length - 1];
   console.log(lastPartURL);
-
   const handleClose = () => {
     setShow(false);
   };
   const handleResetFilter = (event, value) => {
     window.location.reload();
-
     setShow(false);
   };
   const handleOrderType = (event, value) => {
     setOrderType(value);
-    console.log(orderType);
     setShow(false);
   };
   const handleclose = (event, value) => {
@@ -90,7 +87,8 @@ const OrdersFilter = ({
               setEndDate={setEndDate}
             />
             {lastPartURL === 'stocks' ||
-            lastPartURL === 'expenses' ? (
+            lastPartURL === 'expenses' ||
+            typeof lastPartURL === 'undefined' ? (
               ''
             ) : (
               <Grid item>
@@ -114,7 +112,8 @@ const OrdersFilter = ({
             <br></br>
             {lastPartURL === 'stocks' ||
             lastPartURL === 'bookings' ||
-            lastPartURL === 'expenses' ? (
+            lastPartURL === 'expenses' ||
+            typeof lastPartURL === 'undefined' ? (
               ''
             ) : (
               <Grid item>
@@ -165,4 +164,4 @@ const OrdersFilter = ({
   );
 };
 
-export default OrdersFilter;
+export default CustomFilter;

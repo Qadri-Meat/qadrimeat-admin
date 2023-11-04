@@ -9,20 +9,15 @@ import {
   getBookings,
   resetBooking,
 } from 'store/booking';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { useLocation } from 'react-router-dom';
-import { pick } from 'helper/pick';
 import withAuth from 'hooks/withAuth';
 import { numberWithCommas } from 'helper/numers';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
-import OrdersFilter from 'pages/orders/components/OrdersFilter';
+import CustomFilter from 'pages/orders/components/CustomFilter';
 
 const AllBookingsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const location = useLocation();
   const [query, setQuery] = useState('');
   const [paid, setPaid] = useState('');
   const [showEditDetails, setShowEditDetails] = useState(false);
@@ -36,7 +31,7 @@ const AllBookingsPage = () => {
     } else {
       dispatch(
         getBookings(
-          `${paid !== undefined ? `isPaid=${paid}&` : ''}${query}`
+          `${paid === undefined ? `isPaid=${paid}&` : ''}${query}`
         )
       );
     }
@@ -44,14 +39,6 @@ const AllBookingsPage = () => {
 
   const onDelete = (value) => {
     dispatch(deleteBooking(value));
-  };
-  const handleResetFilter = () => {
-    setQuery('');
-    navigate('/bookings');
-  };
-
-  const handlePaidToggle = (event, value) => {
-    navigate(`/bookings?paid=${value}`);
   };
 
   const columns = [
@@ -208,7 +195,7 @@ const AllBookingsPage = () => {
           onDelete={onDelete}
         />
       </AdminLayout>
-      <OrdersFilter
+      <CustomFilter
         setPaid={setPaid}
         paid={paid}
         show={showEditDetails}

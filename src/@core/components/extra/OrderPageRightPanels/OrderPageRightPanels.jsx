@@ -94,7 +94,7 @@ const OrderPageRightPanels = () => {
             onClick: () => {},
           }}
         >
-          <Typography>Shipping</Typography>
+          <Typography>Delivery</Typography>
         </AccordionSummary>
         <Divider />
         <AccordionDetails>
@@ -268,7 +268,7 @@ const OrderPageRightPanels = () => {
                     </Box>
                   </div>
                 ) : (
-                  <>No Transactions found</>
+                  <Typography>No Transactions found</Typography>
                 )}
                 <>
                   {selectedOrder.totalPaid <
