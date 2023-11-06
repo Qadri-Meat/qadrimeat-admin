@@ -3,14 +3,13 @@ import DataTable from '@core/components/ui/DataTable';
 import { Button, Grid, Typography } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import CheckIcon from '@mui/icons-material/Check';
-import ClearIcon from '@mui/icons-material/Clear';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
 import { useNavigate } from 'react-router-dom';
 import withAuth from 'hooks/withAuth';
 import { deleteOrder, getOrders, resetOrder } from 'store/order';
 import Loader from '@core/components/ui/Loader';
 import CustomFilter from './components/CustomFilter';
+import { numberWithCommas } from 'helper/numers';
 
 const AllOrderPage = () => {
   const dispatch = useDispatch();
@@ -128,23 +127,38 @@ const AllOrderPage = () => {
       },
     },
     {
-      name: 'approvedAt',
-      label: 'Approved',
+      name: 'totalPrice',
+      label: 'Total Paid',
       options: {
         filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+          const { rowIndex } = tableMeta;
+          const totalPaid = results[rowIndex].transactions.reduce(
+            function (a, b) {
+              return a + b.amount;
+            },
+            0
+          );
+
+          return <>{numberWithCommas(totalPaid)}</>;
         },
       },
     },
-
     {
-      name: 'isPaid',
-      label: 'Paid',
+      name: 'totalPrice',
+      label: 'Balance',
       options: {
-        filter: true,
+        filter: false,
         customBodyRender: (value, tableMeta, updateValue) => {
-          return <>{value ? <CheckIcon /> : <ClearIcon />}</>;
+          const { rowIndex } = tableMeta;
+          const totalPaid = results[rowIndex].transactions.reduce(
+            function (a, b) {
+              return a + b.amount;
+            },
+            0
+          );
+
+          return <>{numberWithCommas(value - totalPaid)}</>;
         },
       },
     },
