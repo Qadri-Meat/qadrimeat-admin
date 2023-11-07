@@ -14,7 +14,10 @@ import { buildURLQuery } from '@core/utils/buildURLQuery';
 const AllOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [query, setQuery] = useState({ page: 1, limit: 10 });
+  const [query, setQuery] = useState({
+    page: 1,
+    limit: 10,
+  });
 
   const { results, totalResults, loading, success } = useSelector(
     (state) => state.order
