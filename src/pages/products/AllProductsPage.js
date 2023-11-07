@@ -13,10 +13,11 @@ import {
 } from 'store/product';
 import { getImageUrl } from 'helper/helpers';
 import Loader from '@core/components/ui/Loader';
+import { buildURLQuery } from '@core/utils/buildURLQuery';
 const AllProductsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState({ page: 1, limit: 10 });
   const { user: authUser } = useSelector((state) => state.auth);
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.product
@@ -26,7 +27,7 @@ const AllProductsPage = () => {
     if (success) {
       dispatch(resetProduct());
     } else {
-      dispatch(getProducts(query));
+      dispatch(getProducts(buildURLQuery(query)));
     }
   }, [dispatch, query, success]);
 
@@ -102,6 +103,7 @@ const AllProductsPage = () => {
           results={results}
           totalResults={totalResults}
           columns={columns}
+          query={query}
           setQuery={setQuery}
           onEdit={onEdit}
           onDelete={onDelete}
