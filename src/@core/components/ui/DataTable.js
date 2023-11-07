@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import MUIDataTable from 'mui-datatables';
 import { debounce } from 'lodash';
-import { buildURLQuery } from '@core/utils/buildURLQuery';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Swal from 'sweetalert2'; // Import SweetAlert2
-import Loader from './Loader';
-import { isNullOrEmpty } from 'helper/helpers';
+import CustomFilter from 'pages/orders/components/CustomFilter';
+import { Button } from '@mui/material';
 
 const DataTable = (props) => {
   const {
@@ -14,6 +13,7 @@ const DataTable = (props) => {
     results,
     totalResults,
     columns,
+    query,
     setQuery,
     onEdit,
     onDelete,
@@ -21,41 +21,15 @@ const DataTable = (props) => {
     serverSide,
     searchIcon,
     searchPlaceholder,
-    loading,
   } = props;
-  const shouldShowDateRangePicker =
-    !window.location.pathname.endsWith('/users') &&
-    !window.location.pathname.endsWith('/products');
 
-  const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(10);
-  const [search, setSearch] = useState('');
-
-  // Initialize start and end dates with default values
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-
-  useEffect(() => {
-    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate))
-      setQuery(
-        buildURLQuery({
-          startDate,
-          endDate,
-        })
-      );
-  }, [setQuery, startDate, endDate]);
+  const [showFilters, setShowFilters] = useState(false);
 
   const debouncedSearch = debounce(async (text) => {
-    setSearch(text == null ? '' : text);
-    setQuery(
-      buildURLQuery({
-        page,
-        limit,
-        search: text == null ? '' : text,
-        startDate,
-        endDate,
-      })
-    );
+    setQuery({
+      ...query,
+      search: text == null ? '' : text,
+    });
   }, 1000);
 
   const handleDelete = (value) => {
@@ -81,7 +55,7 @@ const DataTable = (props) => {
 
   const options = {
     count: totalResults,
-    page: page - 1,
+    page: query.page - 1,
     serverSide: serverSide ?? true,
     filter: false,
     columns: false,
@@ -97,29 +71,17 @@ const DataTable = (props) => {
       if (serverSide !== false) {
         switch (action) {
           case 'changePage':
-            setPage(tableState.page + 1);
-            setQuery(
-              buildURLQuery({
-                page: tableState.page + 1,
-                limit,
-                search,
-                startDate,
-                endDate,
-              })
-            );
+            setQuery({
+              ...query,
+              page: tableState.page + 1,
+            });
             break;
           case 'changeRowsPerPage':
-            setLimit(tableState.rowsPerPage);
-            setPage(1);
-            setQuery(
-              buildURLQuery({
-                page: 1,
-                limit: tableState.rowsPerPage,
-                search,
-                startDate,
-                endDate,
-              })
-            );
+            setQuery({
+              ...query,
+              page: 1,
+              limit: tableState.rowsPerPage,
+            });
             break;
           case 'search':
             debouncedSearch(tableState.searchText);
@@ -133,54 +95,63 @@ const DataTable = (props) => {
 
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <MUIDataTable
-          title={title}
-          data={results}
-          columns={
-            onEdit || onDelete
-              ? columns.concat({
-                  name: 'id',
-                  label: 'Actions',
-                  options: {
-                    download: false,
-                    customBodyRender: (
-                      value,
-                      tableMeta,
-                      updateValue
-                    ) => {
-                      return (
-                        <div style={{ minWidth: '50px' }}>
-                          {onEdit && (
-                            <span
-                              onClick={() => {
-                                onEdit(value);
-                              }}
-                            >
-                              <EditIcon />
-                            </span>
-                          )}
-                          {onDelete && (
-                            <span
-                              onClick={() => {
-                                handleDelete(value);
-                              }}
-                            >
-                              <DeleteIcon style={{ color: 'red' }} />
-                            </span>
-                          )}
-                        </div>
-                      );
-                    },
+      <MUIDataTable
+        title={
+          <>
+            {title}{' '}
+            <Button onClick={() => setShowFilters(true)}>
+              Filters
+            </Button>
+          </>
+        }
+        data={results}
+        columns={
+          onEdit || onDelete
+            ? columns.concat({
+                name: 'id',
+                label: 'Actions',
+                options: {
+                  download: false,
+                  customBodyRender: (
+                    value,
+                    tableMeta,
+                    updateValue
+                  ) => {
+                    return (
+                      <div style={{ minWidth: '50px' }}>
+                        {onEdit && (
+                          <span
+                            onClick={() => {
+                              onEdit(value);
+                            }}
+                          >
+                            <EditIcon />
+                          </span>
+                        )}
+                        {onDelete && (
+                          <span
+                            onClick={() => {
+                              handleDelete(value);
+                            }}
+                          >
+                            <DeleteIcon style={{ color: 'red' }} />
+                          </span>
+                        )}
+                      </div>
+                    );
                   },
-                })
-              : columns
-          }
-          options={options}
-        />
-      )}
+                },
+              })
+            : columns
+        }
+        options={options}
+      />
+      <CustomFilter
+        show={showFilters}
+        setShow={setShowFilters}
+        query={query}
+        setQuery={setQuery}
+      />
     </>
   );
 };

@@ -9,38 +9,19 @@ import BookingTable from './components/BookingTable';
 import withAuth from 'hooks/withAuth';
 import BookingPageHeading from './components/BookingPageHeading';
 import StockTable from './components/StockTable';
+import { getStartAndEndDateOfWeek } from '@core/utils/getStartAndEndDateOfWeek';
+import { buildURLQuery } from '@core/utils/buildURLQuery';
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
-
-  const [query, setQuery] = useState('');
+  const dates = getStartAndEndDateOfWeek();
+  const [query, setQuery] = useState({ ...dates });
 
   const { todayReport, reports, deals, loading, stockReport } =
     useSelector((state) => state.user);
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        if (!query) {
-          const today = new Date();
-          const sevenDaysAgo = new Date(today);
-          sevenDaysAgo.setDate(today.getDate() - 7);
-
-          const startDate = sevenDaysAgo.toISOString().split('T')[0];
-          const endDate = today.toISOString().split('T')[0];
-
-          const newQuery = `startDate=${startDate}&endDate=${endDate}`;
-          dispatch(getDashboard(newQuery));
-        } else {
-          dispatch(getDashboard(query));
-        }
-      } catch (error) {
-        // Handle errors here
-        console.error(error);
-      }
-    };
-
-    fetchDashboardData();
+    dispatch(getDashboard(buildURLQuery(query)));
   }, [dispatch, query]);
 
   return (
@@ -82,6 +63,7 @@ const DashboardPage = () => {
             <Typography variant="h5">Daily Reports</Typography>
             {stockReport ? (
               <StockTable
+                query={query}
                 setQuery={setQuery}
                 stockReport={stockReport}
                 loading={loading}

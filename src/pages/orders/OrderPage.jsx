@@ -17,6 +17,7 @@ const OrderPage = () => {
   const dispatch = useDispatch();
   const { selectedOrder } = useSelector((state) => state.order);
   const navigate = useNavigate();
+
   useEffect(() => {
     dispatch(getOrder(id));
   }, [dispatch, id, navigate]);

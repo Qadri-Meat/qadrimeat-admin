@@ -1,8 +1,8 @@
 import AdminLayout from '@core/components/admin/AdminLayout/AdminLayout';
 import DataTable from '@core/components/ui/DataTable';
+import { buildURLQuery } from '@core/utils/buildURLQuery';
 import { Button, Grid, Typography } from '@mui/material';
 import withAuth from 'hooks/withAuth';
-import CustomFilter from 'pages/orders/components/CustomFilter';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -16,16 +16,16 @@ const AllExpensesPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [query, setQuery] = useState('');
-  const [showEditDetails, setShowEditDetails] = useState(false);
 
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.expense
   );
+
   useEffect(() => {
     if (success) {
       dispatch(resetExpense());
     } else {
-      dispatch(getExpenses(query));
+      dispatch(getExpenses(buildURLQuery(query)));
     }
   }, [success, dispatch, query]);
 
@@ -95,19 +95,6 @@ const AllExpensesPage = () => {
                 Add Expense
               </Button>
             </Grid>
-            <Grid>
-              <Button
-                style={{ paddingRight: '10px' }}
-                variant="contained"
-                color="primary"
-                size="small"
-                onClick={() => {
-                  setShowEditDetails(true);
-                }}
-              >
-                Filters
-              </Button>
-            </Grid>
           </Grid>
         </Grid>
         <DataTable
@@ -116,16 +103,12 @@ const AllExpensesPage = () => {
           columns={columns}
           results={results}
           totalResults={totalResults}
+          query={query}
           setQuery={setQuery}
           onEdit={onEdit}
           onDelete={onDelete}
         />
       </AdminLayout>
-      <CustomFilter
-        show={showEditDetails}
-        setShow={setShowEditDetails}
-        setQuery={setQuery}
-      />
     </>
   );
 };
