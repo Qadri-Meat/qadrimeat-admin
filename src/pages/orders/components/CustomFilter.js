@@ -42,6 +42,8 @@ const CustomFilter = ({
   const handleResetFilter = (event, value) => {
     setStartDate(''); // Reset the start date
     setEndDate(''); // Reset the end date
+    setPaid('');
+    setOrderType('');
     // window.location.reload();
     setShow(false);
   };
