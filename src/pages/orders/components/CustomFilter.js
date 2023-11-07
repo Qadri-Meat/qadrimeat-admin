@@ -40,7 +40,9 @@ const CustomFilter = ({
     setShow(false);
   };
   const handleResetFilter = (event, value) => {
-    window.location.reload();
+    setStartDate(''); // Reset the start date
+    setEndDate(''); // Reset the end date
+    // window.location.reload();
     setShow(false);
   };
   const handleOrderType = (event, value) => {
@@ -63,6 +65,8 @@ const CustomFilter = ({
         })
       );
       setShow(false); // Close the dialog only when both start and end dates are selected
+    } else {
+      setQuery('');
     }
   }, [setQuery, startDate, endDate, setShow]);
 
@@ -108,7 +112,6 @@ const CustomFilter = ({
                 </ToggleButtonGroup>
               </Grid>
             )}
-
             <br></br>
             {lastPartURL === 'stocks' ||
             lastPartURL === 'bookings' ||
