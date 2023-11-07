@@ -33,6 +33,11 @@ const OrderPageRightPanels = () => {
     useState(true); // Add state to control transaction field visibility
 
   useEffect(() => {
+    if (selectedOrder.totalPaid < selectedOrder.totalPrice) {
+      setShowTransactionField(true);
+    } else {
+      setShowTransactionField(false);
+    }
     if (selectedOrder && !deliveryTime) {
       const date = new Date(selectedOrder.deliveryTime);
       setDeliveryTime(date);
@@ -51,10 +56,10 @@ const OrderPageRightPanels = () => {
             },
           })
         );
-        setShowTransactionField(false);
+        setShowTransactionField(true);
 
         // Reload the window after the action is complete
-        window.location.reload();
+        // window.location.reload();
       } catch (error) {
         console.error('Error:', error);
       }
@@ -271,13 +276,11 @@ const OrderPageRightPanels = () => {
                   <Typography>No Transactions found</Typography>
                 )}
                 <>
-                  {selectedOrder.totalPaid <
-                  selectedOrder.totalPrice ? (
+                  {showTransactionField ? (
                     <TextField
                       id="amount"
                       label="Amount"
                       type="number"
-                      // value={amount === null ? 0 : amount}
                       onChange={(e) => {
                         if (
                           selectedOrder.totalPrice -
@@ -298,9 +301,7 @@ const OrderPageRightPanels = () => {
                         ),
                       }}
                     />
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </>
               </Grid>
             </Grid>
