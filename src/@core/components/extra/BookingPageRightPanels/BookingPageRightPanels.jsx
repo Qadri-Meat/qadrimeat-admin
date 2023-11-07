@@ -24,9 +24,16 @@ const BookingPageRightPanels = () => {
   const { selectedBooking, loading } = useSelector(
     (state) => state.booking
   );
+  const [showTransactionField, setShowTransactionField] =
+    React.useState(true);
   const [deliveryTime, setDeliveryTime] = React.useState(null);
   const [amount, setAmount] = React.useState(null);
   useEffect(() => {
+    if (selectedBooking.totalPaid < selectedBooking.totalPrice) {
+      setShowTransactionField(true);
+    } else {
+      setShowTransactionField(false);
+    }
     if (selectedBooking && !deliveryTime) {
       const date = new Date(selectedBooking.deliveryTime);
       setDeliveryTime(date);
@@ -233,8 +240,7 @@ const BookingPageRightPanels = () => {
                 <Typography>No Transactions found</Typography>
               )}
               <>
-                {selectedBooking.totalPaid <
-                selectedBooking.totalPrice ? (
+                {showTransactionField ? (
                   <TextField
                     id="amount"
                     label="Amount"
