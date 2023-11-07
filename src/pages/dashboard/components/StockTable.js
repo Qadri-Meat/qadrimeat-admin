@@ -12,11 +12,11 @@ import {
 import CustomFilter from 'pages/orders/components/CustomFilter';
 import React, { useState } from 'react';
 
-const StockTable = ({ stockReport, loading, setQuery }) => {
-  const [showEditDetails, setShowEditDetails] = useState(false);
+const StockTable = ({ stockReport, loading, query, setQuery }) => {
+  const [showFilters, setShowFilters] = useState(false);
 
   const handleResetFilter = () => {
-    window.location.reload();
+    setQuery({});
   };
 
   function convertUTCDateToLocalDate(date) {
@@ -51,7 +51,7 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                     color="primary"
                     size="small"
                     onClick={() => {
-                      setShowEditDetails(true);
+                      setShowFilters(true);
                     }}
                   >
                     Filters
@@ -150,8 +150,9 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
       </TableContainer>
       <CustomFilter
         handleResetFilter={handleResetFilter}
-        show={showEditDetails}
-        setShow={setShowEditDetails}
+        show={showFilters}
+        setShow={setShowFilters}
+        query={query}
         setQuery={setQuery}
       />
     </>

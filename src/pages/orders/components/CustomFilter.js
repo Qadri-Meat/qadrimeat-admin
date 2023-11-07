@@ -1,169 +1,87 @@
+import React from 'react';
+import DateRangePicker from 'pages/stocks/components/DateRangePicker';
+import CustomToggle from '@core/components/forms/CustomToggle';
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogTitle,
-} from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
-import {
-  DialogActions,
   Grid,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
 } from '@mui/material';
-import DateRangePicker from 'pages/stocks/components/DateRangePicker';
-import { buildURLQuery } from '@core/utils/buildURLQuery';
-import { isNullOrEmpty } from 'helper/helpers';
-import { useLocation } from 'react-router-dom';
 
-const CustomFilter = ({
-  show,
-  setShow,
-  preloadedValues,
-  id,
-  setOrderType,
-  setQuery,
-  orderType,
-  setPaid,
-  paid,
-}) => {
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
-  const location = useLocation();
-  const pathParts = location.pathname
-    .split('/')
-    .filter((part) => part !== '');
-  const lastPartURL = pathParts[pathParts.length - 1];
-  console.log(lastPartURL);
+const CustomFilter = ({ show, setShow, query, setQuery }) => {
   const handleClose = () => {
     setShow(false);
   };
-  const handleResetFilter = (event, value) => {
-    setStartDate(''); // Reset the start date
-    setEndDate(''); // Reset the end date
-    setPaid('');
-    setOrderType('');
-    // window.location.reload();
+
+  const handleResetFilter = () => {
+    setQuery({ page: 1, limit: 10 });
     setShow(false);
   };
-  const handleOrderType = (event, value) => {
-    setOrderType(value);
-    setShow(false);
-  };
-  const handleclose = (event, value) => {
-    setShow(false);
-  };
-  const handlePaidToggle = (event, value) => {
-    setPaid(value);
-    setShow(false);
-  };
-  useEffect(() => {
-    if (!isNullOrEmpty(startDate) && !isNullOrEmpty(endDate)) {
-      setQuery(
-        buildURLQuery({
-          startDate,
-          endDate,
-        })
-      );
-      setShow(false); // Close the dialog only when both start and end dates are selected
-    } else {
-      setQuery('');
-    }
-  }, [setQuery, startDate, endDate, setShow]);
 
   return (
     <Dialog open={show} onClose={handleClose} fullWidth>
-      <DialogTitle>Filter Data</DialogTitle>
+      <DialogTitle>Filters</DialogTitle>
       <DialogContent>
-        <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
-          <Grid
-            item
-            container
-            direction="row"
-            justifyContent="flex-start"
-            alignItems="center"
-            xs={10}
-          >
-            <Typography variant="h6">Date Range</Typography>
+        <Grid container spacing={2}>
+          <Grid item xs={12}>
+            <Typography variant="body">Date Range</Typography>
             <DateRangePicker
-              startDate={startDate}
-              setStartDate={setStartDate}
-              endDate={endDate}
-              setEndDate={setEndDate}
+              startDate={query.startDate}
+              setStartDate={(startDate) =>
+                setQuery({ ...query, startDate })
+              }
+              endDate={query.endDate}
+              setEndDate={(endDate) =>
+                setQuery({ ...query, endDate })
+              }
             />
-            {lastPartURL === 'stocks' ||
-            lastPartURL === 'expenses' ||
-            typeof lastPartURL === 'undefined' ? (
-              ''
-            ) : (
-              <Grid item>
-                <Typography variant="h6">Status</Typography>
-                <ToggleButtonGroup
-                  color="primary"
-                  style={{ marginRight: '10px', marginTop: '10px' }}
-                  value={paid}
-                  size="small"
-                  exclusive
-                  onChange={handlePaidToggle}
-                  xs={10}
-                >
-                  <ToggleButton value="true">Paid</ToggleButton>
-                  <br></br>
-                  <ToggleButton value="false">UnPaid</ToggleButton>
-                </ToggleButtonGroup>
-              </Grid>
-            )}
-            <br></br>
-            {lastPartURL === 'stocks' ||
-            lastPartURL === 'bookings' ||
-            lastPartURL === 'expenses' ||
-            typeof lastPartURL === 'undefined' ? (
-              ''
-            ) : (
-              <Grid item>
-                <Typography variant="h6">Order Type</Typography>
-                <ToggleButtonGroup
-                  color="primary"
-                  style={{ marginRight: '10px', marginTop: '10px' }}
-                  value={orderType}
-                  size="small"
-                  exclusive
-                  onChange={handleOrderType}
-                  xs={10}
-                  l={12}
-                >
-                  <ToggleButton value="online">Online</ToggleButton>
-                  <ToggleButton value="retail">Retail</ToggleButton>
-                </ToggleButtonGroup>
-              </Grid>
-            )}
+          </Grid>
+          <Grid container item xs={12} spacing={2}>
+            <Grid item>
+              <CustomToggle
+                label="Type"
+                value={query.type}
+                onChange={(value) =>
+                  setQuery({ ...query, type: value })
+                }
+                options={['online', 'retail']}
+              />
+            </Grid>
+            <Grid item>
+              <CustomToggle
+                label="Payment Status"
+                value={query.isPaid}
+                onChange={(value) =>
+                  setQuery({ ...query, isPaid: value })
+                }
+                options={['true', 'false']}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Grid item>
-          <Button
-            style={{ marginRight: '10px', marginTop: '10px' }}
-            onClick={handleResetFilter}
-            variant="outlined"
-            color="primary"
-            size="small"
-          >
-            Clear Filter
-          </Button>
-        </Grid>
-        <Grid item>
-          <Button
-            style={{ marginRight: '10px', marginTop: '10px' }}
-            onClick={handleclose}
-            variant="outlined"
-            color="primary"
-            size="small"
-          >
-            Close
-          </Button>
-        </Grid>
+        <Button
+          style={{ marginRight: '10px', marginTop: '10px' }}
+          onClick={handleResetFilter}
+          variant="outlined"
+          color="primary"
+          size="small"
+        >
+          Clear Filter
+        </Button>
+        <Button
+          style={{ marginRight: '10px', marginTop: '10px' }}
+          onClick={handleClose}
+          variant="outlined"
+          color="primary"
+          size="small"
+        >
+          Close
+        </Button>
       </DialogActions>
     </Dialog>
   );

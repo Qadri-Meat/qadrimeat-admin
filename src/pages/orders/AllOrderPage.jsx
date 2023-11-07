@@ -8,18 +8,15 @@ import { useNavigate } from 'react-router-dom';
 import withAuth from 'hooks/withAuth';
 import { deleteOrder, getOrders, resetOrder } from 'store/order';
 import Loader from '@core/components/ui/Loader';
-import CustomFilter from './components/CustomFilter';
 import { numberWithCommas } from 'helper/numers';
+import { buildURLQuery } from '@core/utils/buildURLQuery';
 
 const AllOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [query, setQuery] = useState('');
-  const [showEditDetails, setShowEditDetails] = useState(false);
-  const [paid, setPaid] = useState('');
-  const [orderType, setOrderType] = useState('');
+  const [query, setQuery] = useState({ page: 1, limit: 10 });
 
-  const { results, totalResults, success, loading } = useSelector(
+  const { results, totalResults, loading, success } = useSelector(
     (state) => state.order
   );
 
@@ -27,30 +24,9 @@ const AllOrderPage = () => {
     if (success) {
       dispatch(resetOrder());
     } else {
-      let url = '';
-      if (paid) {
-        url += `isPaid=${paid}`;
-      }
-      if (orderType) {
-        url += `type=${orderType}`;
-      }
-
-      if (orderType && paid) {
-        if (url) {
-          url = '';
-        }
-        url += `isPaid=${paid}&type=${orderType}`;
-      }
-      if (query) {
-        if (url) {
-          url += '&';
-        }
-        url += query;
-      }
-
-      dispatch(getOrders(url));
+      dispatch(getOrders(buildURLQuery(query)));
     }
-  }, [dispatch, paid, query, success, orderType]);
+  }, [dispatch, query, success]);
 
   const onDelete = (value) => {
     dispatch(deleteOrder(value));
@@ -167,6 +143,7 @@ const AllOrderPage = () => {
   return (
     <>
       <AdminLayout>
+        {loading && <Loader />}
         <Grid container sx={{ my: 3 }} gap={1} alignItems="center">
           <Grid item>
             <Typography variant="h5" component="h1">
@@ -192,45 +169,20 @@ const AllOrderPage = () => {
                 Add Order
               </Button>
             </Grid>
-            <Grid>
-              <Button
-                style={{ paddingRight: '10px' }}
-                variant="contained"
-                color="primary"
-                size="small"
-                onClick={() => {
-                  setShowEditDetails(true);
-                }}
-              >
-                Filters
-              </Button>
-            </Grid>
           </Grid>
         </Grid>
-        {loading ? (
-          <Loader />
-        ) : (
-          <DataTable
-            loading={loading}
-            title={'Order List'}
-            results={results}
-            totalResults={totalResults}
-            columns={columns}
-            setQuery={setQuery}
-            onDelete={onDelete}
-            searchPlaceholder="Search by name or phone number"
-          />
-        )}
+        <DataTable
+          loading={loading}
+          title={'Order List'}
+          results={results}
+          totalResults={totalResults}
+          columns={columns}
+          query={query}
+          setQuery={setQuery}
+          onDelete={onDelete}
+          searchPlaceholder="Search by name or phone number"
+        />
       </AdminLayout>
-      <CustomFilter
-        setPaid={setPaid}
-        paid={paid}
-        show={showEditDetails}
-        setShow={setShowEditDetails}
-        setQuery={setQuery}
-        setOrderType={setOrderType}
-        orderType={orderType}
-      />
     </>
   );
 };

@@ -12,15 +12,14 @@ import {
 import withAuth from 'hooks/withAuth';
 import { numberWithCommas } from 'helper/numers';
 import FileOpenIcon from '@mui/icons-material/FileOpenOutlined';
-import CustomFilter from 'pages/orders/components/CustomFilter';
+import { buildURLQuery } from '@core/utils/buildURLQuery';
 
 const AllBookingsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [query, setQuery] = useState('');
-  const [paid, setPaid] = useState('');
-  const [showEditDetails, setShowEditDetails] = useState(false);
+
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.booking
   );
@@ -29,13 +28,9 @@ const AllBookingsPage = () => {
     if (success) {
       dispatch(resetBooking());
     } else {
-      dispatch(
-        getBookings(
-          `${paid === undefined ? `isPaid=${paid}&` : ''}${query}`
-        )
-      );
+      dispatch(getBookings(buildURLQuery(query)));
     }
-  }, [dispatch, paid, query, success]);
+  }, [dispatch, query, success]);
 
   const onDelete = (value) => {
     dispatch(deleteBooking(value));
@@ -170,19 +165,6 @@ const AllBookingsPage = () => {
                 Add Booking
               </Button>
             </Grid>
-            <Grid>
-              <Button
-                style={{ paddingRight: '10px' }}
-                variant="contained"
-                color="primary"
-                size="small"
-                onClick={() => {
-                  setShowEditDetails(true);
-                }}
-              >
-                Filters
-              </Button>
-            </Grid>
           </Grid>
         </Grid>
         <DataTable
@@ -191,17 +173,11 @@ const AllBookingsPage = () => {
           results={results}
           totalResults={totalResults}
           columns={columns}
+          query={query}
           setQuery={setQuery}
           onDelete={onDelete}
         />
       </AdminLayout>
-      <CustomFilter
-        setPaid={setPaid}
-        paid={paid}
-        show={showEditDetails}
-        setShow={setShowEditDetails}
-        setQuery={setQuery}
-      />
     </>
   );
 };
