@@ -57,7 +57,7 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                     Filters
                   </Button>
                 </Grid>
-                <Grid item>
+                {/* <Grid item>
                   <Button
                     onClick={handleResetFilter}
                     variant="outlined"
@@ -67,7 +67,7 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                   >
                     Clear Filter
                   </Button>
-                </Grid>
+                </Grid> */}
               </Grid>
             </TableHead>
 
