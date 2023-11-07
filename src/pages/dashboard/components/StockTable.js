@@ -57,17 +57,6 @@ const StockTable = ({ stockReport, loading, setQuery }) => {
                     Filters
                   </Button>
                 </Grid>
-                {/* <Grid item>
-                  <Button
-                    onClick={handleResetFilter}
-                    variant="outlined"
-                    color="primary"
-                    size="small"
-                    style={{ marginTop: '15px', marginLeft: '30px' }}
-                  >
-                    Clear Filter
-                  </Button>
-                </Grid> */}
               </Grid>
             </TableHead>
 
