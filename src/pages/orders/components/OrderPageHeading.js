@@ -50,7 +50,7 @@ const OrderPageHeading = ({ setQuery }) => {
       >
         <Grid item>
           <Button
-            onClick={() => navigate('/orders/add-order')}
+            onClick={() => navigate('/orders/add')}
             variant="outlined"
             color="primary"
             size="small"

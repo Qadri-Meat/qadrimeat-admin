@@ -1,4 +1,4 @@
-import ApiService from "./ApiService";
+import ApiService from './ApiService';
 
 class OrderService extends ApiService {
   /**
@@ -13,7 +13,7 @@ class OrderService extends ApiService {
   getorderItems(day, deal) {
     return this.instance.get(
       `/v1/orders/order-items?isPackage=true&day=${day}${
-        deal ? `&deal=${deal}` : ""
+        deal ? `&deal=${deal}` : ''
       }`
     );
   }
@@ -32,7 +32,7 @@ class OrderService extends ApiService {
    * @returns {Promise<User>}
    */
   update(data) {
-    return this.instance.patch("/v1/order/", data);
+    return this.instance.patch('/v1/order/', data);
   }
 
   /**
@@ -59,17 +59,9 @@ class OrderService extends ApiService {
    * @returns {Promise<User>}
    */
   create(data) {
-    const { orderItems, deliveryTime, ...updatedData } = data;
-    if (orderItems && orderItems.length > 0) {
-      const modifiedOrderItems = orderItems.map((orderItem) => {
-        const { id, ...modifiedOrderItem } = orderItem;
-        return modifiedOrderItem;
-      });
-      updatedData.orderItems = modifiedOrderItems;
-    }
-
-    return this.instance.post(`/v1/orders`, updatedData);
+    return this.instance.post(`/v1/orders`, data);
   }
+
   /**
    * Delete a order with the given id
    *  @param {ObjectId} id - The ID of the order to delete

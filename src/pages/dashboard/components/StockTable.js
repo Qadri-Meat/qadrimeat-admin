@@ -12,7 +12,14 @@ import {
 import CustomFilter from 'pages/orders/components/CustomFilter';
 import React, { useState } from 'react';
 
-const StockTable = ({ stockReport, loading, query, setQuery }) => {
+const StockTable = ({
+  stockReport,
+  loading,
+  query,
+  setQuery,
+  showPaymentStatusFilter,
+  showOrderTypeFilter,
+}) => {
   const [showFilters, setShowFilters] = useState(false);
 
   const handleResetFilter = () => {
@@ -149,6 +156,8 @@ const StockTable = ({ stockReport, loading, query, setQuery }) => {
         )}
       </TableContainer>
       <CustomFilter
+        showPaymentStatusFilter={showPaymentStatusFilter}
+        showOrderTypeFilter={showOrderTypeFilter}
         handleResetFilter={handleResetFilter}
         show={showFilters}
         setShow={setShowFilters}

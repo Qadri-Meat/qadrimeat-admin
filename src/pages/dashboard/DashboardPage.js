@@ -9,13 +9,20 @@ import BookingTable from './components/BookingTable';
 import withAuth from 'hooks/withAuth';
 import BookingPageHeading from './components/BookingPageHeading';
 import StockTable from './components/StockTable';
-import { getStartAndEndDateOfWeek } from '@core/utils/getStartAndEndDateOfWeek';
+import { getStartAndEndDateOfPastWeek } from '@core/utils/getStartAndEndDateOfWeek';
+
 import { buildURLQuery } from '@core/utils/buildURLQuery';
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
-  const dates = getStartAndEndDateOfWeek();
+  const dates = getStartAndEndDateOfPastWeek();
   const [query, setQuery] = useState({ ...dates });
+
+  const [showPaymentStatusFilter, setShowPaymentStatusFilter] =
+    useState(false);
+  const [showOrderTypeFilter, setShowOrderTypeFilter] =
+    useState(false);
+  console.log(setShowPaymentStatusFilter, setShowOrderTypeFilter);
 
   const { todayReport, reports, deals, loading, stockReport } =
     useSelector((state) => state.user);
@@ -63,6 +70,8 @@ const DashboardPage = () => {
             <Typography variant="h5">Daily Reports</Typography>
             {stockReport ? (
               <StockTable
+                showPaymentStatusFilter={showPaymentStatusFilter}
+                showOrderTypeFilter={showOrderTypeFilter}
                 query={query}
                 setQuery={setQuery}
                 stockReport={stockReport}

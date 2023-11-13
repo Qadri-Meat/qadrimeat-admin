@@ -11,7 +11,14 @@ import {
   Typography,
 } from '@mui/material';
 
-const CustomFilter = ({ show, setShow, query, setQuery }) => {
+const CustomFilter = ({
+  show,
+  setShow,
+  query,
+  setQuery,
+  showPaymentStatusFilter,
+  showOrderTypeFilter,
+}) => {
   const handleClose = () => {
     setShow(false);
   };
@@ -39,27 +46,36 @@ const CustomFilter = ({ show, setShow, query, setQuery }) => {
               }
             />
           </Grid>
+
           <Grid container item xs={12} spacing={2}>
-            <Grid item>
-              <CustomToggle
-                label="Type"
-                value={query.type}
-                onChange={(value) =>
-                  setQuery({ ...query, type: value })
-                }
-                options={['online', 'retail']}
-              />
-            </Grid>
-            <Grid item>
-              <CustomToggle
-                label="Payment Status"
-                value={query.isPaid}
-                onChange={(value) =>
-                  setQuery({ ...query, isPaid: value })
-                }
-                options={['true', 'false']}
-              />
-            </Grid>
+            {showPaymentStatusFilter ? (
+              <Grid item>
+                <CustomToggle
+                  label="Type"
+                  value={query.type}
+                  onChange={(value) =>
+                    setQuery({ ...query, type: value })
+                  }
+                  options={['online', 'retail']}
+                />
+              </Grid>
+            ) : (
+              ''
+            )}
+            {showOrderTypeFilter ? (
+              <Grid item>
+                <CustomToggle
+                  label="Payment Status"
+                  value={query.isPaid}
+                  onChange={(value) =>
+                    setQuery({ ...query, isPaid: value })
+                  }
+                  options={['true', 'false']}
+                />
+              </Grid>
+            ) : (
+              ''
+            )}
           </Grid>
         </Grid>
       </DialogContent>
