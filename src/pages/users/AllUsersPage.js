@@ -19,6 +19,8 @@ const AllUsersPage = (props) => {
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.user
   );
+  const [showDateFilter, setShowDateFilter] = useState(true);
+  console.log(setShowDateFilter);
 
   useEffect(() => {
     if (success) {
@@ -77,6 +79,7 @@ const AllUsersPage = (props) => {
         <Loader />
       ) : (
         <DataTable
+          showDateFilter={showDateFilter}
           title={'Users List'}
           results={results}
           totalResults={totalResults}
