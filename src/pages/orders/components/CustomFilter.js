@@ -18,6 +18,7 @@ const CustomFilter = ({
   setQuery,
   showPaymentStatusFilter,
   showOrderTypeFilter,
+  showDateFilter,
 }) => {
   const handleClose = () => {
     setShow(false);
@@ -33,19 +34,26 @@ const CustomFilter = ({
       <DialogTitle>Filters</DialogTitle>
       <DialogContent>
         <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant="body">Date Range</Typography>
-            <DateRangePicker
-              startDate={query.startDate}
-              setStartDate={(startDate) =>
-                setQuery({ ...query, startDate })
-              }
-              endDate={query.endDate}
-              setEndDate={(endDate) =>
-                setQuery({ ...query, endDate })
-              }
-            />
-          </Grid>
+          {showDateFilter ? (
+            <p>
+              There's no requirement to apply any filters to this
+              screen.
+            </p>
+          ) : (
+            <Grid item xs={12}>
+              <Typography variant="body">Date Range</Typography>
+              <DateRangePicker
+                startDate={query.startDate}
+                setStartDate={(startDate) =>
+                  setQuery({ ...query, startDate })
+                }
+                endDate={query.endDate}
+                setEndDate={(endDate) =>
+                  setQuery({ ...query, endDate })
+                }
+              />
+            </Grid>
+          )}
 
           <Grid container item xs={12} spacing={2}>
             {showPaymentStatusFilter ? (

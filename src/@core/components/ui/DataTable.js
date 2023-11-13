@@ -23,6 +23,7 @@ const DataTable = (props) => {
     searchPlaceholder,
     showOrderTypeFilter,
     showPaymentStatusFilter,
+    showDateFilter,
   } = props;
 
   const [showFilters, setShowFilters] = useState(false);
@@ -149,6 +150,7 @@ const DataTable = (props) => {
         options={options}
       />
       <CustomFilter
+        showDateFilter={showDateFilter}
         showPaymentStatusFilter={showPaymentStatusFilter}
         showOrderTypeFilter={showOrderTypeFilter}
         show={showFilters}

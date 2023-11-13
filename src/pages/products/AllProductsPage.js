@@ -23,6 +23,9 @@ const AllProductsPage = () => {
     (state) => state.product
   );
 
+  const [showDateFilter, setShowDateFilter] = useState(true);
+  console.log(setShowDateFilter);
+
   useEffect(() => {
     if (success) {
       dispatch(resetProduct());
@@ -99,6 +102,7 @@ const AllProductsPage = () => {
         <Loader />
       ) : (
         <DataTable
+          showDateFilter={showDateFilter}
           title={'Product List'}
           results={results}
           totalResults={totalResults}
