@@ -102,7 +102,13 @@ const DataTable = (props) => {
         title={
           <>
             {title}{' '}
-            <Button onClick={() => setShowFilters(true)}>
+            <Button
+              style={{ marginTop: '10px', marginLeft: '50px' }}
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => setShowFilters(true)}
+            >
               Filters
             </Button>
           </>
