@@ -55,6 +55,7 @@ const CartView = ({ id }) => {
           discount: 0,
         };
         dispatch(updateOrder({ id, data: newOrder }));
+        dispatch(resetCart());
       } else {
         const orderItems = cartItems.map((item) => {
           const i = { ...item };
@@ -70,6 +71,7 @@ const CartView = ({ id }) => {
         };
         console.log(newOrder);
         dispatch(createOrder(newOrder));
+        dispatch(resetCart());
       }
     } else {
       toast.error('Cart is empty');
