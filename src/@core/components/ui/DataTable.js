@@ -103,7 +103,7 @@ const DataTable = (props) => {
           <>
             {title}{' '}
             <Button
-              style={{ marginTop: '10px', marginLeft: '50px' }}
+              style={{ marginLeft: '20px' }}
               variant="contained"
               color="primary"
               size="small"
