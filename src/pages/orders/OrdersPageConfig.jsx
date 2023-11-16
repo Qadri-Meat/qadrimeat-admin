@@ -1,7 +1,7 @@
 import AddOrderPage from './AddOrderPage';
 import AllOrderPage from './AllOrderPage';
-import InvoicePage from './InvoicePage';
 import OrderPage from './OrderPage';
+import ReceiptPage from './ReceiptPage';
 
 export const OrderPageConfig = {
   routes: [
@@ -16,7 +16,7 @@ export const OrderPageConfig = {
     },
     {
       path: '/orders/invoice/:id',
-      element: <InvoicePage />,
+      element: <ReceiptPage />,
     },
     {
       path: '/orders/:id',
