@@ -58,7 +58,7 @@ const DataTable = (props) => {
 
   const options = {
     count: totalResults,
-    page: query.page - 1,
+    page: query?.page - 1,
     serverSide: serverSide ?? true,
     filter: false,
     columns: false,
