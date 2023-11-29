@@ -12,6 +12,7 @@ import StockTable from './components/StockTable';
 import { getStartAndEndDateOfPastWeek } from '@core/utils/getStartAndEndDateOfWeek';
 
 import { buildURLQuery } from '@core/utils/buildURLQuery';
+import ProfitTable from './components/ProfitTable';
 
 const DashboardPage = () => {
   const dispatch = useDispatch();
@@ -22,7 +23,6 @@ const DashboardPage = () => {
     useState(false);
   const [showOrderTypeFilter, setShowOrderTypeFilter] =
     useState(false);
-  console.log(setShowPaymentStatusFilter, setShowOrderTypeFilter);
 
   const { todayReport, reports, deals, loading, stockReport } =
     useSelector((state) => state.user);
@@ -67,18 +67,21 @@ const DashboardPage = () => {
             style={{ padding: 10, marginTop: 15 }}
             variant="outlined"
           >
-            <Typography variant="h5">Daily Reports</Typography>
-            {stockReport ? (
-              <StockTable
-                showPaymentStatusFilter={showPaymentStatusFilter}
-                showOrderTypeFilter={showOrderTypeFilter}
-                query={query}
-                setQuery={setQuery}
-                stockReport={stockReport}
-                loading={loading}
-              />
+            <Typography variant="h5">Profit Table</Typography>
+            {deals ? (
+              <ProfitTable deals={deals} loading={loading} />
             ) : null}
           </Paper>
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <StockTable
+            showPaymentStatusFilter={showPaymentStatusFilter}
+            showOrderTypeFilter={showOrderTypeFilter}
+            query={query}
+            setQuery={setQuery}
+            stockReport={stockReport}
+            loading={loading}
+          />
         </Grid>
       </Grid>
     </AdminLayout>

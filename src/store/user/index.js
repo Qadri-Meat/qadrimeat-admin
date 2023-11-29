@@ -24,6 +24,38 @@ export const getDashboard = createAsyncThunk(
   async (query, { rejectWithValue }) => {
     try {
       const res = await UserService.getDashboard(query);
+
+      const stockReport = res.data;
+      const report = stockReport.stockReport;
+      console.log('report', report);
+      function calculateRemainingAndAddToNextDay(data) {
+        for (let i = 0; i < data.length - 1; i++) {
+          const currentDay = data[i];
+          const nextDay = data[i + 1];
+
+          currentDay.data.forEach((item, index) => {
+            const remainingWeight =
+              item.stockWeight - item.saleWeight;
+
+            if (nextDay) {
+              const nextDayItemIndex = nextDay.data.findIndex(
+                (nextItem) => nextItem.category === item.category
+              );
+
+              if (nextDayItemIndex !== -1) {
+                nextDay.data[nextDayItemIndex].stockWeight +=
+                  remainingWeight;
+              }
+            }
+          });
+        }
+
+        return data;
+      }
+
+      const updatedData = calculateRemainingAndAddToNextDay(report);
+      console.log(updatedData);
+      console.log(JSON.stringify('okolk', updatedData, null, 2));
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
