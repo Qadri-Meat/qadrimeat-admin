@@ -34,6 +34,9 @@ export const getDashboard = createAsyncThunk(
           const nextDay = data[i + 1];
 
           currentDay.data.forEach((item, index) => {
+            if (i === 0) {
+              item.originalStock = item.stockWeight;
+            }
             const remainingWeight =
               item.stockWeight - item.saleWeight;
 
@@ -43,6 +46,8 @@ export const getDashboard = createAsyncThunk(
               );
 
               if (nextDayItemIndex !== -1) {
+                nextDay.data[nextDayItemIndex].originalStock =
+                  nextDay.data[nextDayItemIndex].stockWeight;
                 nextDay.data[nextDayItemIndex].stockWeight +=
                   remainingWeight;
               }

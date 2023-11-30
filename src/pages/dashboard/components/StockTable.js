@@ -228,18 +228,6 @@ const StockTable = ({
                               : r.stockWeight;
                             const remainingStock =
                               totalStock - (r.saleWeight ?? 0);
-
-                            if (prev?.category === 'chicken') {
-                              tempChicken = totalStock;
-                            } else if (prev?.category === 'mutton') {
-                              tempMutton = totalStock;
-                            } else {
-                              tempBeef = totalStock;
-                            }
-
-                            console.log('c', tempChicken);
-                            // console.log('m', tempMutton);
-                            // console.log('b', tempBeef);
                             return (
                               <>
                                 <TableRow key={`${result.id}-${i}`}>
@@ -256,8 +244,7 @@ const StockTable = ({
                                     }}
                                   >
                                     {' '}
-                                    {(r.stockWeight ?? 0) -
-                                      (r.saleWeight ?? 0)}
+                                    {r.originalStock ?? 0}
                                   </TableCell>
                                   <TableCell>
                                     {r.stockWeight ?? '-'}
@@ -274,7 +261,8 @@ const StockTable = ({
                                       width: '168px',
                                     }}
                                   >
-                                    {r.stockWeight ?? '-'}
+                                    {(r.stockWeight ?? 0) -
+                                      (r.saleWeight ?? 0)}
                                   </TableCell>
                                   <TableCell
                                     style={{
