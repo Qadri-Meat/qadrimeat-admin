@@ -10,7 +10,6 @@ import withAuth from 'hooks/withAuth';
 import BookingPageHeading from './components/BookingPageHeading';
 import StockTable from './components/StockTable';
 import { getStartAndEndDateOfPastWeek } from '@core/utils/getStartAndEndDateOfWeek';
-
 import { buildURLQuery } from '@core/utils/buildURLQuery';
 import ProfitTable from './components/ProfitTable';
 

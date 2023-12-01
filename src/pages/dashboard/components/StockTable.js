@@ -10,7 +10,6 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
 import CustomFilter from 'pages/orders/components/CustomFilter';
 import React, { useState } from 'react';
 
@@ -23,43 +22,6 @@ const StockTable = ({
   showOrderTypeFilter,
 }) => {
   const [showFilters, setShowFilters] = useState(false);
-  const uniqueKey = uuidv4();
-  let tempChicken = 0;
-  let tempMutton = 0;
-  let tempBeef = 0;
-  // function calculateRemainingAndAddToNextDay(stockReport) {
-  //   for (let i = 0; i < stockReport.length - 1; i++) {
-  //     const currentDay = stockReport[i];
-  //     const nextDay = stockReport[i + 1];
-
-  //     // Check if currentDay.data is defined before using forEach
-  //     if (currentDay && currentDay.data) {
-  //       stockReport[i].data = currentDay.data.map((item, index) => {
-  //         const remainingWeight = item.stockWeight - item.saleWeight;
-  //         if (nextDay) {
-  //           const nextDayItemIndex = nextDay.data.findIndex(
-  //             (nextItem) => nextItem.category === item.category
-  //           );
-  //           if (nextDayItemIndex !== -1) {
-  //             // Create a new object with updated stockWeight
-  //             return {
-  //               ...nextDay.data[nextDayItemIndex],
-  //               stockWeight:
-  //                 nextDay.data[nextDayItemIndex].stockWeight +
-  //                 remainingWeight,
-  //             };
-  //           }
-  //         }
-  //         return item;
-  //       });
-  //     }
-  //   }
-  //   return stockReport;
-  // }
-
-  // const updatedData =
-  //   calculateRemainingAndAddToNextDay(savedStockReport);
-  // console.log('ok', JSON.stringify(updatedData, null, 2));
 
   const handleResetFilter = () => {
     setQuery({});
@@ -213,21 +175,6 @@ const StockTable = ({
                       <Table>
                         <TableBody>
                           {result?.data.map((r, i) => {
-                            const prev =
-                              index > 0
-                                ? stockReport[index - 1].data.filter(
-                                    (d) => d.category === r.category
-                                  )[0]
-                                : null;
-
-                            const totalStock = prev
-                              ? r.stockWeight +
-                                tempChicken +
-                                ((prev.stockWeight ?? 0) -
-                                  (prev.saleWeight ?? 0))
-                              : r.stockWeight;
-                            const remainingStock =
-                              totalStock - (r.saleWeight ?? 0);
                             return (
                               <>
                                 <TableRow key={`${result.id}-${i}`}>

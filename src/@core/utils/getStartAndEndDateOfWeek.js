@@ -1,7 +1,6 @@
 export const getStartAndEndDateOfPastWeek = () => {
   const currentDate = new Date();
   const endDate = new Date(currentDate);
-  endDate.setDate(currentDate.getDate() - 1); // End date is yesterday
   const startDate = new Date(endDate);
   startDate.setDate(endDate.getDate() - 6); // Start date is 6 days before the end date
 
