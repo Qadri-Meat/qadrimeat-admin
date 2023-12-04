@@ -27,7 +27,6 @@ export const getDashboard = createAsyncThunk(
 
       const stockReport = res.data;
       const report = stockReport.stockReport;
-      console.log('report', report);
       function calculateRemainingAndAddToNextDay(data) {
         for (let i = 0; i < data.length - 1; i++) {
           const currentDay = data[i];
@@ -59,8 +58,6 @@ export const getDashboard = createAsyncThunk(
       }
 
       const updatedData = calculateRemainingAndAddToNextDay(report);
-      console.log(updatedData);
-      console.log(JSON.stringify('okolk', updatedData, null, 2));
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);

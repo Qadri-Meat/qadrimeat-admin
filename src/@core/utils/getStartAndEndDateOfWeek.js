@@ -11,5 +11,3 @@ export const getStartAndEndDateOfPastWeek = () => {
 };
 
 const { startDate, endDate } = getStartAndEndDateOfPastWeek();
-console.log('Start Date:', startDate);
-console.log('End Date:', endDate);
