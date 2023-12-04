@@ -30,7 +30,7 @@ const AddOrderPage = () => {
         </Grid>
       </Grid>
       <Grid container spacing={1}>
-        <Grid item xs={8} spacing={1}>
+        <Grid item xs={8}>
           <ProductsGrid />
         </Grid>
         <Grid item xs={4}>
