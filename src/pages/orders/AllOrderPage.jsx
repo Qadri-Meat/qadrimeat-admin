@@ -14,6 +14,12 @@ import { buildURLQuery } from '@core/utils/buildURLQuery';
 const AllOrderPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [showPaymentStatusFilter, setShowPaymentStatusFilter] =
+    useState(true);
+  const [showOrderTypeFilter, setShowOrderTypeFilter] =
+    useState(true);
+  console.log(setShowPaymentStatusFilter, setShowOrderTypeFilter);
+
   const [query, setQuery] = useState({
     page: 1,
     limit: 10,
@@ -43,7 +49,7 @@ const AllOrderPage = () => {
         filter: false,
         customBodyRender: (values, tableMeta, updateValue) => {
           return (
-            <Button href={`/orders/${values}`}>
+            <Button href={`/orders/details/${values}`}>
               <FileOpenIcon />
             </Button>
           );
@@ -164,7 +170,7 @@ const AllOrderPage = () => {
             <Grid item>
               <Button
                 style={{ marginRight: '10px' }}
-                onClick={() => navigate('/orders/add-order')}
+                onClick={() => navigate('/orders/add')}
                 variant="outlined"
                 color="primary"
                 size="small"
@@ -175,6 +181,8 @@ const AllOrderPage = () => {
           </Grid>
         </Grid>
         <DataTable
+          showPaymentStatusFilter={showPaymentStatusFilter}
+          showOrderTypeFilter={showOrderTypeFilter}
           loading={loading}
           title={'Order List'}
           results={results}

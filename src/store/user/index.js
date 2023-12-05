@@ -24,6 +24,40 @@ export const getDashboard = createAsyncThunk(
   async (query, { rejectWithValue }) => {
     try {
       const res = await UserService.getDashboard(query);
+
+      const stockReport = res.data;
+      const report = stockReport.stockReport;
+      function calculateRemainingAndAddToNextDay(data) {
+        for (let i = 0; i < data.length - 1; i++) {
+          const currentDay = data[i];
+          const nextDay = data[i + 1];
+
+          currentDay.data.forEach((item, index) => {
+            if (i === 0) {
+              item.originalStock = item.stockWeight;
+            }
+            const remainingWeight =
+              item.stockWeight - item.saleWeight;
+
+            if (nextDay) {
+              const nextDayItemIndex = nextDay.data.findIndex(
+                (nextItem) => nextItem.category === item.category
+              );
+
+              if (nextDayItemIndex !== -1) {
+                nextDay.data[nextDayItemIndex].originalStock =
+                  nextDay.data[nextDayItemIndex].stockWeight;
+                nextDay.data[nextDayItemIndex].stockWeight +=
+                  remainingWeight;
+              }
+            }
+          });
+        }
+
+        return data;
+      }
+
+      const updatedData = calculateRemainingAndAddToNextDay(report);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);

@@ -189,7 +189,7 @@ const OrderPage = () => {
         </Grid>
         <Grid item>
           <Button
-            onClick={() => navigate(`/orders/update-order/${id}`)}
+            onClick={() => navigate(`/orders/${id}`)}
             variant="outlined"
             color="primary"
             size="small"

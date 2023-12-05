@@ -18,7 +18,10 @@ const AllBookingsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState({ page: 1, limit: 10 });
+  const [showOrderTypeFilter, setShowOrderTypeFilter] =
+    useState(true);
+  console.log(setShowOrderTypeFilter);
 
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.booking
@@ -168,6 +171,7 @@ const AllBookingsPage = () => {
           </Grid>
         </Grid>
         <DataTable
+          showOrderTypeFilter={showOrderTypeFilter}
           loading={loading}
           title={'Booking List'}
           results={results}

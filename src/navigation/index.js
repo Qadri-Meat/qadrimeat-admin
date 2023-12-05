@@ -22,7 +22,7 @@ const navigation = [
         title: 'POS',
         type: 'item',
         icon: <InventoryIcon />,
-        url: '/orders/add-order',
+        url: '/orders/add',
         exact: 'true',
       },
       {

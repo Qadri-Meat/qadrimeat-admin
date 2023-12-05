@@ -11,11 +11,13 @@ import { getImageUrl } from 'helper/helpers';
 const AllDealsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState({ page: 1, limit: 10 });
   const { user: authUser } = useSelector((state) => state.auth);
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.deal
   );
+  const [showDateFilter, setShowDateFilter] = useState(true);
+  console.log(setShowDateFilter);
 
   useEffect(() => {
     if (success) {
@@ -88,6 +90,7 @@ const AllDealsPage = () => {
         </Grid>
       </Grid>
       <DataTable
+        showDateFilter={showDateFilter}
         loading={loading}
         title={'Deals List'}
         results={results}

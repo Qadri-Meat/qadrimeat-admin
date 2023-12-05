@@ -1,38 +1,27 @@
-import AddOrderPage from "./AddOrderPage";
-import AllOrderPage from "./AllOrderPage";
-import InvoicePage from "./InvoicePage";
-import OrderPage from "./OrderPage";
-import UpdateOrderPage from "./UpdateOrderPage";
+import AddOrderPage from './AddOrderPage';
+import AllOrderPage from './AllOrderPage';
+import OrderPage from './OrderPage';
+import ReceiptPage from './ReceiptPage';
 
 export const OrderPageConfig = {
   routes: [
     {
-      path: "/orders",
+      path: '/orders',
       exact: true,
       element: <AllOrderPage />,
     },
     {
-      path: "/orders/add-order",
-      exact: true,
-      element: <AddOrderPage />,
-    },
-    {
-      path: "/orders/invoice/:id",
-      element: <InvoicePage />,
-    },
-    {
-      path: "/orders/update-order/:id",
-      element: <UpdateOrderPage />,
-    },
-
-    {
-      path: "/orders/:id",
+      path: '/orders/details/:id',
       element: <OrderPage />,
     },
     {
-      path: "/orders/invoice/:id",
+      path: '/orders/invoice/:id',
+      element: <ReceiptPage />,
+    },
+    {
+      path: '/orders/:id',
       exact: true,
-      element: <InvoicePage />,
+      element: <AddOrderPage />,
     },
   ],
 };

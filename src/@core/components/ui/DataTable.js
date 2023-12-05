@@ -21,6 +21,9 @@ const DataTable = (props) => {
     serverSide,
     searchIcon,
     searchPlaceholder,
+    showOrderTypeFilter,
+    showPaymentStatusFilter,
+    showDateFilter,
   } = props;
 
   const [showFilters, setShowFilters] = useState(false);
@@ -55,7 +58,7 @@ const DataTable = (props) => {
 
   const options = {
     count: totalResults,
-    page: query.page - 1,
+    page: query?.page - 1,
     serverSide: serverSide ?? true,
     filter: false,
     columns: false,
@@ -99,7 +102,13 @@ const DataTable = (props) => {
         title={
           <>
             {title}{' '}
-            <Button onClick={() => setShowFilters(true)}>
+            <Button
+              style={{ marginLeft: '20px' }}
+              variant="contained"
+              color="primary"
+              size="small"
+              onClick={() => setShowFilters(true)}
+            >
               Filters
             </Button>
           </>
@@ -147,6 +156,9 @@ const DataTable = (props) => {
         options={options}
       />
       <CustomFilter
+        showDateFilter={showDateFilter}
+        showPaymentStatusFilter={showPaymentStatusFilter}
+        showOrderTypeFilter={showOrderTypeFilter}
         show={showFilters}
         setShow={setShowFilters}
         query={query}

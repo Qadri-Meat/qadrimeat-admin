@@ -11,7 +11,13 @@ import { deleteStock, getStocks, resetStock } from 'store/stock';
 const AllStocksPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState({ page: 1, limit: 10 });
+
+  const [showPaymentStatusFilter, setShowPaymentStatusFilter] =
+    useState(false);
+  const [showOrderTypeFilter, setShowOrderTypeFilter] =
+    useState(false);
+  console.log(setShowPaymentStatusFilter, setShowOrderTypeFilter);
 
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.stock
@@ -98,6 +104,8 @@ const AllStocksPage = () => {
           </Grid>
         </Grid>
         <DataTable
+          showPaymentStatusFilter={showPaymentStatusFilter}
+          showOrderTypeFilter={showOrderTypeFilter}
           loading={loading}
           title={'Stock List'}
           columns={columns}

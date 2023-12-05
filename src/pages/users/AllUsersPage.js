@@ -9,21 +9,24 @@ import { Button, Grid, Typography } from '@mui/material';
 import { deleteUser } from 'store/user';
 import withAuth from 'hooks/withAuth';
 import Loader from '@core/components/ui/Loader';
+import { buildURLQuery } from '@core/utils/buildURLQuery';
 
 const AllUsersPage = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState({ page: 1, limit: 10 });
 
   const { results, totalResults, success, loading } = useSelector(
     (state) => state.user
   );
+  const [showDateFilter, setShowDateFilter] = useState(true);
+  console.log(setShowDateFilter);
 
   useEffect(() => {
     if (success) {
       dispatch(resetUser());
     } else {
-      dispatch(getUsers(query));
+      dispatch(getUsers(buildURLQuery(query)));
     }
   }, [success, dispatch, query]);
 
@@ -76,10 +79,12 @@ const AllUsersPage = (props) => {
         <Loader />
       ) : (
         <DataTable
+          showDateFilter={showDateFilter}
           title={'Users List'}
           results={results}
           totalResults={totalResults}
           columns={columns}
+          query={query}
           setQuery={setQuery}
           onEdit={onEdit}
           onDelete={onDelete}

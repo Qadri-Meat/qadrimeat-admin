@@ -20,28 +20,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addToCart } from 'store/cart';
 import { getProducts } from 'store/product';
 import { debounce } from 'lodash';
+import { buildURLQuery } from '@core/utils/buildURLQuery';
 
 const ProductsGrid = () => {
   const dispatch = useDispatch();
-  const [query, setQuery] = useState('page=1&limit=12');
-  const [category, setCategory] = useState(''); // State to track the selected category
+  const [query, setQuery] = useState({ page: 1, limit: 10 });
   const { results, page, totalPages } = useSelector(
     (state) => state.product
   );
 
   useEffect(() => {
-    // When the category changes, update the query
-    setQuery(`page=1&limit=12${category && `&category=${category}`}`);
-  }, [category]);
-
-  useEffect(() => {
-    dispatch(getProducts(query));
+    dispatch(getProducts(buildURLQuery(query)));
   }, [dispatch, query]);
 
-  const debouncedSearch = debounce(async (text) => {
-    setQuery(
-      `page=1&limit=12${text && text !== '' && `&search=${text}`}`
-    );
+  const debouncedSearch = debounce(async (search) => {
+    setQuery({
+      ...query,
+      search,
+    });
   }, 1000);
 
   const handleAddToCart = (product) => {
@@ -64,12 +60,13 @@ const ProductsGrid = () => {
     debouncedSearch(event.target.value);
   };
   const handleResetFilter = () => {
-    setCategory('');
-    debouncedSearch('');
-    setQuery('page=1&limit=12');
+    setQuery({ page: 1, limit: 10 });
   };
   const handlePageChange = (event, page) => {
-    setQuery(`page=${page}&limit=12`);
+    setQuery({
+      ...query,
+      page,
+    });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -86,8 +83,10 @@ const ProductsGrid = () => {
                 labelId="demo-simple-select-label"
                 label="Category"
                 variant="outlined"
-                value={category} // Bind the selected category
-                onChange={(event) => setCategory(event.target.value)} // Update category when it changes
+                value={query.category}
+                onChange={(e) =>
+                  setQuery({ ...query, category: e.target.value })
+                }
               >
                 <MenuItem value={'chicken'}>Chicken</MenuItem>
                 <MenuItem value={'mutton'}>Mutton</MenuItem>
