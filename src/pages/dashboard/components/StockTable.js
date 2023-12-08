@@ -107,7 +107,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Stock
+                              Opening Stock
                             </TableCell>
                             <TableCell
                               style={{
@@ -123,7 +123,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Total Weight Sold
+                              Sale Sold
                             </TableCell>
 
                             <TableCell
@@ -191,11 +191,14 @@ const StockTable = ({
                                     }}
                                   >
                                     {' '}
-                                    {r.originalStock ?? 0}
+                                    {r.rStock ?? 0}
                                   </TableCell>
                                   <TableCell>
-                                    {r.stockWeight ?? '-'}
+                                    {(r.stockWeight ??
+                                      r.stockWeight: 0) +
+                                      (r.rStock ?? r.rStock: 0)}
                                   </TableCell>
+
                                   <TableCell
                                     style={{
                                       width: '168px',
@@ -208,17 +211,21 @@ const StockTable = ({
                                       width: '168px',
                                     }}
                                   >
-                                    {(r.stockWeight ?? 0) -
-                                      (r.saleWeight ?? 0)}
+                                    {(r.stockWeight !== undefined
+                                      ? r.stockWeight
+                                      : 0) +
+                                      (r.rStock !== undefined
+                                        ? r.rStock
+                                        : 0) -
+                                      r.saleWeight ?? 0}
                                   </TableCell>
                                   <TableCell
                                     style={{
                                       width: '168px',
                                     }}
                                   >
-                                    {r.stockPrice && r.stockWeight
-                                      ? r.stockPrice * r.stockWeight
-                                      : '-'}
+                                    {(r.purchasePrice ?? 0) +
+                                      (r.remainingStockAmount ?? 0)}
                                   </TableCell>
                                   <TableCell
                                     style={{
@@ -232,10 +239,17 @@ const StockTable = ({
                                       width: '168px',
                                     }}
                                   >
-                                    {r.saleWeight && r.stockPrice
-                                      ? r.salePrice -
-                                        r.saleWeight * r.stockPrice
-                                      : '-'}
+                                    {Math.round(
+                                      (r.salePrice ?? 0) -
+                                        ((r.purchasePrice ?? 0) /
+                                          (r.stockWeight !== undefined
+                                            ? r.stockWeight
+                                            : 0) +
+                                          (r.rStock !== undefined
+                                            ? r.rStock
+                                            : 0)) *
+                                          (r.saleWeight ?? 1)
+                                    )}
                                   </TableCell>
                                 </TableRow>
                               </>

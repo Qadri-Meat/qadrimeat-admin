@@ -34,10 +34,12 @@ export const getDashboard = createAsyncThunk(
 
           currentDay.data.forEach((item, index) => {
             if (i === 0) {
-              item.originalStock = item.stockWeight;
+              item.rStock = 0;
+              item.remainingStockAmount = 0;
             }
             const remainingWeight =
               item.stockWeight - item.saleWeight;
+            const remainingStockAmount = item.purchasePrice;
 
             if (nextDay) {
               const nextDayItemIndex = nextDay.data.findIndex(
@@ -45,10 +47,12 @@ export const getDashboard = createAsyncThunk(
               );
 
               if (nextDayItemIndex !== -1) {
+                nextDay.data[nextDayItemIndex].rStock =
+                  remainingWeight;
+                nextDay.data[nextDayItemIndex].remainingStockAmount =
+                  remainingStockAmount;
                 nextDay.data[nextDayItemIndex].originalStock =
                   nextDay.data[nextDayItemIndex].stockWeight;
-                nextDay.data[nextDayItemIndex].stockWeight +=
-                  remainingWeight;
               }
             }
           });
