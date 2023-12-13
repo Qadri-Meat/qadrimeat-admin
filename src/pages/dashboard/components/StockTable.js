@@ -107,7 +107,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Opening Stock
+                              Opening Stock (KG)
                             </TableCell>
                             <TableCell
                               style={{
@@ -115,7 +115,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Total Stock
+                              Purchase Stock (KG)
                             </TableCell>
                             <TableCell
                               style={{
@@ -123,7 +123,39 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Sale Sold
+                              Stock Cost (Rs)
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                borderBottom: 'none',
+                                width: '130px',
+                              }}
+                            >
+                              Total Stock (KG)
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                borderBottom: 'none',
+                                width: '130px',
+                              }}
+                            >
+                              Total Stock Cost (Rs)
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                borderBottom: 'none',
+                                width: '130px',
+                              }}
+                            >
+                              Stock Sold (KG)
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                borderBottom: 'none',
+                                width: '130px',
+                              }}
+                            >
+                              Sale Price (Rs)
                             </TableCell>
 
                             <TableCell
@@ -132,23 +164,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Remaning Stock
-                            </TableCell>
-                            <TableCell
-                              style={{
-                                borderBottom: 'none',
-                                width: '130px',
-                              }}
-                            >
-                              Stock Amount
-                            </TableCell>
-                            <TableCell
-                              style={{
-                                borderBottom: 'none',
-                                width: '130px',
-                              }}
-                            >
-                              Sale Amount
+                              Remaning Stock (KG)
                             </TableCell>
 
                             <TableCell
@@ -157,7 +173,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Profit
+                              Profit (Rs)
                             </TableCell>
                           </TableRow>
                         </TableHead>
@@ -180,22 +196,43 @@ const StockTable = ({
                                 <TableRow key={`${result.id}-${i}`}>
                                   <TableCell
                                     style={{
-                                      width: '168px',
+                                      width: '235px',
                                     }}
                                   >
                                     {r.category ?? '-'}
                                   </TableCell>
                                   <TableCell
                                     style={{
-                                      width: '168px',
+                                      width: '215px',
                                     }}
                                   >
                                     {' '}
                                     {r.rStock ?? 0}
                                   </TableCell>
-                                  <TableCell>
-                                    {(r.stockWeight ??
-                                      r.stockWeight: 0) +
+                                  <TableCell
+                                    style={{
+                                      width: '225px',
+                                    }}
+                                  >
+                                    {' '}
+                                    {(r.stockWeight ?? 0) -
+                                      (r.rStock ?? 0)}
+                                  </TableCell>
+                                  <TableCell
+                                    style={{
+                                      width: '225px',
+                                    }}
+                                  >
+                                    {r.purchasePrice ?? 0}-
+                                    {r.remainingStockAmount ?? 0}
+                                  </TableCell>
+                                  <TableCell
+                                    style={{
+                                      width: '168px',
+                                    }}
+                                  >
+                                    {(r.stockWeight ?? 0) -
+                                      (r.rStock ?? 0) +
                                       (r.rStock ?? r.rStock: 0)}
                                   </TableCell>
 
@@ -204,16 +241,31 @@ const StockTable = ({
                                       width: '168px',
                                     }}
                                   >
-                                    {r.saleWeight ?? '-'}
+                                    {' '}
+                                    {r.purchasePrice ?? 0}
                                   </TableCell>
                                   <TableCell
                                     style={{
                                       width: '168px',
                                     }}
                                   >
-                                    {(r.stockWeight !== undefined
-                                      ? r.stockWeight
-                                      : 0) +
+                                    {r.saleWeight ?? 0}
+                                  </TableCell>
+                                  <TableCell
+                                    style={{
+                                      width: '168px',
+                                    }}
+                                  >
+                                    {r.salePrice ?? 0}
+                                  </TableCell>
+                                  <TableCell
+                                    style={{
+                                      width: '168px',
+                                    }}
+                                  >
+                                    {' '}
+                                    {(r.stockWeight ?? 0) -
+                                      (r.rStock ?? 0) +
                                       (r.rStock !== undefined
                                         ? r.rStock
                                         : 0) -
@@ -224,31 +276,19 @@ const StockTable = ({
                                       width: '168px',
                                     }}
                                   >
-                                    {(r.purchasePrice ?? 0) +
-                                      (r.remainingStockAmount ?? 0)}
-                                  </TableCell>
-                                  <TableCell
-                                    style={{
-                                      width: '168px',
-                                    }}
-                                  >
-                                    {r.salePrice ?? '-'}
-                                  </TableCell>
-                                  <TableCell
-                                    style={{
-                                      width: '168px',
-                                    }}
-                                  >
                                     {Math.round(
-                                      (r.salePrice ?? 0) -
-                                        ((r.purchasePrice ?? 0) /
-                                          (r.stockWeight !== undefined
-                                            ? r.stockWeight
-                                            : 0) +
-                                          (r.rStock !== undefined
-                                            ? r.rStock
-                                            : 0)) *
-                                          (r.saleWeight ?? 1)
+                                      r.salePrice
+                                        ? r.salePrice -
+                                            ((r.purchasePrice ?? 0) /
+                                              (r.stockWeight !==
+                                              undefined
+                                                ? r.stockWeight
+                                                : 0) +
+                                              (r.rStock !== undefined
+                                                ? r.rStock
+                                                : 0)) *
+                                              (r.saleWeight ?? 1)
+                                        : 0
                                     )}
                                   </TableCell>
                                 </TableRow>
