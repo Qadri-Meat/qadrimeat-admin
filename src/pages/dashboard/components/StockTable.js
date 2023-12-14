@@ -182,9 +182,7 @@ const StockTable = ({
                   </TableRow>
                   <TableRow>
                     <TableCell width="200px">
-                      {convertUTCDateToLocalDate(
-                        new Date(result.date)
-                      )}
+                      {new Date(result.date).toLocaleDateString()}
                     </TableCell>
 
                     <TableCell>
@@ -223,8 +221,7 @@ const StockTable = ({
                                       width: '225px',
                                     }}
                                   >
-                                    {r.purchasePrice ?? 0}-
-                                    {r.remainingStockAmount ?? 0}
+                                    {r.purchasePrice ?? 0}
                                   </TableCell>
                                   <TableCell
                                     style={{
@@ -242,7 +239,8 @@ const StockTable = ({
                                     }}
                                   >
                                     {' '}
-                                    {r.purchasePrice ?? 0}
+                                    {(r.purchasePrice ?? 0) +
+                                      (r.remainingStockAmount ?? 0)}
                                   </TableCell>
                                   <TableCell
                                     style={{

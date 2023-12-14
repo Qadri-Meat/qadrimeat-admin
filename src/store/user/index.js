@@ -36,7 +36,14 @@ export const getDashboard = createAsyncThunk(
             if (i === 0) {
               item.rStock = 0;
               item.remainingStockAmount = 0;
+              const profit =
+                item.salePrice -
+                (item.purchasePrice /
+                  (item.stockWeight - item.rStock)) *
+                  item.saleWeight;
+              item.profit = profit;
             }
+
             const remainingWeight =
               item.stockWeight - item.saleWeight;
 
@@ -71,8 +78,6 @@ export const getDashboard = createAsyncThunk(
                   remainingWeight;
                 nextDay.data[nextDayItemIndex].remainingStockAmount =
                   finalRemainingStockAmount;
-                nextDay.data[nextDayItemIndex].originalStock =
-                  nextDay.data[nextDayItemIndex].stockWeight;
               }
             }
           });
@@ -81,7 +86,7 @@ export const getDashboard = createAsyncThunk(
         return data;
       }
 
-      const updatedData = calculateRemainingAndAddToNextDay(report);
+      calculateRemainingAndAddToNextDay(report);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
