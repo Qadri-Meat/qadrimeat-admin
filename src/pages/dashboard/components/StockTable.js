@@ -107,7 +107,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Stock
+                              Opening Stock (KG)
                             </TableCell>
                             <TableCell
                               style={{
@@ -115,7 +115,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Total Stock
+                              Purchase Stock (KG)
                             </TableCell>
                             <TableCell
                               style={{
@@ -123,7 +123,39 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Total Weight Sold
+                              Stock Cost (Rs)
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                borderBottom: 'none',
+                                width: '130px',
+                              }}
+                            >
+                              Total Stock (KG)
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                borderBottom: 'none',
+                                width: '130px',
+                              }}
+                            >
+                              Total Stock Cost (Rs)
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                borderBottom: 'none',
+                                width: '130px',
+                              }}
+                            >
+                              Stock Sold (KG)
+                            </TableCell>
+                            <TableCell
+                              style={{
+                                borderBottom: 'none',
+                                width: '130px',
+                              }}
+                            >
+                              Sale Price (Rs)
                             </TableCell>
 
                             <TableCell
@@ -132,23 +164,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Remaning Stock
-                            </TableCell>
-                            <TableCell
-                              style={{
-                                borderBottom: 'none',
-                                width: '130px',
-                              }}
-                            >
-                              Stock Amount
-                            </TableCell>
-                            <TableCell
-                              style={{
-                                borderBottom: 'none',
-                                width: '130px',
-                              }}
-                            >
-                              Sale Amount
+                              Remaning Stock (KG)
                             </TableCell>
 
                             <TableCell
@@ -157,7 +173,7 @@ const StockTable = ({
                                 width: '130px',
                               }}
                             >
-                              Profit
+                              Profit (Rs)
                             </TableCell>
                           </TableRow>
                         </TableHead>
@@ -166,9 +182,7 @@ const StockTable = ({
                   </TableRow>
                   <TableRow>
                     <TableCell width="200px">
-                      {convertUTCDateToLocalDate(
-                        new Date(result.date)
-                      )}
+                      {new Date(result.date).toLocaleDateString()}
                     </TableCell>
 
                     <TableCell>
@@ -180,28 +194,34 @@ const StockTable = ({
                                 <TableRow key={`${result.id}-${i}`}>
                                   <TableCell
                                     style={{
-                                      width: '168px',
+                                      width: '235px',
                                     }}
                                   >
                                     {r.category ?? '-'}
                                   </TableCell>
                                   <TableCell
                                     style={{
-                                      width: '168px',
+                                      width: '215px',
                                     }}
                                   >
                                     {' '}
-                                    {r.originalStock ?? 0}
-                                  </TableCell>
-                                  <TableCell>
-                                    {r.stockWeight ?? '-'}
+                                    {r.rStock ?? 0}
                                   </TableCell>
                                   <TableCell
                                     style={{
-                                      width: '168px',
+                                      width: '225px',
                                     }}
                                   >
-                                    {r.saleWeight ?? '-'}
+                                    {' '}
+                                    {(r.stockWeight ?? 0) -
+                                      (r.rStock ?? 0)}
+                                  </TableCell>
+                                  <TableCell
+                                    style={{
+                                      width: '225px',
+                                    }}
+                                  >
+                                    {r.purchasePrice ?? 0}
                                   </TableCell>
                                   <TableCell
                                     style={{
@@ -209,33 +229,65 @@ const StockTable = ({
                                     }}
                                   >
                                     {(r.stockWeight ?? 0) -
-                                      (r.saleWeight ?? 0)}
+                                      (r.rStock ?? 0) +
+                                      (r.rStock ?? r.rStock: 0)}
+                                  </TableCell>
+
+                                  <TableCell
+                                    style={{
+                                      width: '168px',
+                                    }}
+                                  >
+                                    {' '}
+                                    {(r.purchasePrice ?? 0) +
+                                      (r.remainingStockAmount ?? 0)}
                                   </TableCell>
                                   <TableCell
                                     style={{
                                       width: '168px',
                                     }}
                                   >
-                                    {r.stockPrice && r.stockWeight
-                                      ? r.stockPrice * r.stockWeight
-                                      : '-'}
+                                    {r.saleWeight ?? 0}
                                   </TableCell>
                                   <TableCell
                                     style={{
                                       width: '168px',
                                     }}
                                   >
-                                    {r.salePrice ?? '-'}
+                                    {r.salePrice ?? 0}
                                   </TableCell>
                                   <TableCell
                                     style={{
                                       width: '168px',
                                     }}
                                   >
-                                    {r.saleWeight && r.stockPrice
-                                      ? r.salePrice -
-                                        r.saleWeight * r.stockPrice
-                                      : '-'}
+                                    {' '}
+                                    {(r.stockWeight ?? 0) -
+                                      (r.rStock ?? 0) +
+                                      (r.rStock !== undefined
+                                        ? r.rStock
+                                        : 0) -
+                                      r.saleWeight ?? 0}
+                                  </TableCell>
+                                  <TableCell
+                                    style={{
+                                      width: '168px',
+                                    }}
+                                  >
+                                    {Math.round(
+                                      r.salePrice
+                                        ? r.salePrice -
+                                            ((r.purchasePrice ?? 0) /
+                                              (r.stockWeight !==
+                                              undefined
+                                                ? r.stockWeight
+                                                : 0) +
+                                              (r.rStock !== undefined
+                                                ? r.rStock
+                                                : 0)) *
+                                              (r.saleWeight ?? 1)
+                                        : 0
+                                    )}
                                   </TableCell>
                                 </TableRow>
                               </>

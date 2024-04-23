@@ -34,21 +34,50 @@ export const getDashboard = createAsyncThunk(
 
           currentDay.data.forEach((item, index) => {
             if (i === 0) {
-              item.originalStock = item.stockWeight;
+              item.rStock = 0;
+              item.remainingStockAmount = 0;
+              const profit =
+                item.salePrice -
+                (item.purchasePrice /
+                  (item.stockWeight - item.rStock)) *
+                  item.saleWeight;
+              item.profit = profit;
             }
+
             const remainingWeight =
               item.stockWeight - item.saleWeight;
 
+            const remainingStockAmount =
+              (item.stockWeight !== 0
+                ? item.purchasePrice / item.stockWeight
+                : item.purchasePrice / 1) * remainingWeight;
+            const finalRemainingStockAmount = isNaN(
+              remainingStockAmount
+            )
+              ? 0
+              : remainingStockAmount;
+
+            console.log(finalRemainingStockAmount);
+
+            if (nextDay) {
+              const nextDayItem = nextDay.data.find(
+                (nextItem) => nextItem.category === item.category
+              );
+
+              if (nextDayItem) {
+                nextDayItem.stockWeight += remainingWeight;
+              }
+            }
             if (nextDay) {
               const nextDayItemIndex = nextDay.data.findIndex(
                 (nextItem) => nextItem.category === item.category
               );
 
               if (nextDayItemIndex !== -1) {
-                nextDay.data[nextDayItemIndex].originalStock =
-                  nextDay.data[nextDayItemIndex].stockWeight;
-                nextDay.data[nextDayItemIndex].stockWeight +=
+                nextDay.data[nextDayItemIndex].rStock =
                   remainingWeight;
+                nextDay.data[nextDayItemIndex].remainingStockAmount =
+                  finalRemainingStockAmount;
               }
             }
           });
@@ -57,7 +86,7 @@ export const getDashboard = createAsyncThunk(
         return data;
       }
 
-      const updatedData = calculateRemainingAndAddToNextDay(report);
+      calculateRemainingAndAddToNextDay(report);
       return res.data;
     } catch (err) {
       return rejectWithValue(err.response.data);
